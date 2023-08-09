@@ -1,0 +1,8 @@
+{
+  "type": "zygzagsmod:transmutation",
+  "input": {
+    "item": "minecraft:pumpkin_seeds"
+  },
+  "output": "minecraft:pumpkin",
+  "rate": "0.75"
+}

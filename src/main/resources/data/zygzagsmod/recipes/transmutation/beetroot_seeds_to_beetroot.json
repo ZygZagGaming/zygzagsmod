@@ -1,0 +1,8 @@
+{
+  "type": "zygzagsmod:transmutation",
+  "input": {
+    "item": "minecraft:beetroot_seeds"
+  },
+  "output": "minecraft:beetroot",
+  "rate": "0.25"
+}

@@ -1,0 +1,15 @@
+{
+  "type": "minecraft:smithing_transform",
+  "base": {
+    "item": "zygzagsmod:iridium_pickaxe"
+  },
+  "addition": {
+    "item": "minecraft:wither_skeleton_skull"
+  },
+"template": {
+    "item": "zygzagsmod:wither_skull_socket_schematic"
+  },
+  "result": {
+    "item": "zygzagsmod:wither_skull_socketed_iridium_pickaxe"
+  }
+}

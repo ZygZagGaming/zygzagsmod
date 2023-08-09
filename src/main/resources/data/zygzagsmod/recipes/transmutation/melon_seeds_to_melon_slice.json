@@ -1,0 +1,8 @@
+{
+  "type": "zygzagsmod:transmutation",
+  "input": {
+    "item": "minecraft:melon_seeds"
+  },
+  "output": "minecraft:melon_slice",
+  "rate": "0.25"
+}

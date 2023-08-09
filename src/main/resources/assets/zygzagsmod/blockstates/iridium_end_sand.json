@@ -1,0 +1,21 @@
+{
+  "variants": {
+    "": [
+      {
+        "model": "zygzagsmod:block/iridium_end_sand"
+      },
+      {
+        "model": "zygzagsmod:block/iridium_end_sand",
+        "y": 90
+      },
+      {
+        "model": "zygzagsmod:block/iridium_end_sand",
+        "y": 180
+      },
+      {
+        "model": "zygzagsmod:block/iridium_end_sand",
+        "y": 270
+      }
+    ]
+  }
+}

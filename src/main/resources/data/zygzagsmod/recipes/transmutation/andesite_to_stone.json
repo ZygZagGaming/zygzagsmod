@@ -1,0 +1,8 @@
+{
+  "type": "zygzagsmod:transmutation",
+  "input": {
+    "item": "minecraft:andesite"
+  },
+  "output": "minecraft:stone",
+  "rate": "0.75"
+}

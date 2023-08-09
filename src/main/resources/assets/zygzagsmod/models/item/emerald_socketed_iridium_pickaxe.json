@@ -1,0 +1,6 @@
+{
+  "parent": "item/handheld",
+  "textures": {
+    "layer0": "zygzagsmod:item/pickaxe/emerald_socketed_iridium_pickaxe"
+  }
+}

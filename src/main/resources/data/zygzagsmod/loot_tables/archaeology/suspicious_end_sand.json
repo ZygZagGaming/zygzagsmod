@@ -1,0 +1,68 @@
+{
+  "type": "minecraft:archaeology",
+  "pools": [
+    {
+      "bonus_rolls": 0.0,
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "name": "zygzagsmod:iridium_plating",
+          "weight": 3
+        },
+        {
+          "type": "minecraft:item",
+          "name": "minecraft:shulker_shell",
+          "weight": 5
+        },
+        {
+          "type": "minecraft:item",
+          "name": "zygzagsmod:raw_iridium",
+          "weight": 8
+        },
+        {
+          "type": "minecraft:item",
+          "name": "minecraft:diamond",
+          "weight": 5
+        },
+        {
+          "type": "minecraft:item",
+          "name": "zygzagsmod:iridium_helmet_blueprint"
+        },
+        {
+          "type": "minecraft:item",
+          "name": "zygzagsmod:iridium_chestplate_blueprint"
+        },
+        {
+          "type": "minecraft:item",
+          "name": "zygzagsmod:iridium_leggings_blueprint"
+        },
+        {
+          "type": "minecraft:item",
+          "name": "zygzagsmod:iridium_boots_blueprint"
+        },
+        {
+          "type": "minecraft:item",
+          "name": "zygzagsmod:iridium_sword_blueprint"
+        },
+        {
+          "type": "minecraft:item",
+          "name": "zygzagsmod:iridium_pickaxe_blueprint"
+        },
+        {
+          "type": "minecraft:item",
+          "name": "zygzagsmod:iridium_axe_blueprint"
+        },
+        {
+          "type": "minecraft:item",
+          "name": "zygzagsmod:iridium_shovel_blueprint"
+        },
+        {
+          "type": "minecraft:item",
+          "name": "zygzagsmod:iridium_hoe_blueprint"
+        }
+      ],
+      "rolls": 1
+    }
+  ],
+  "random_sequence": "zygzagsmod:archaeology/suspicious_end_sand"
+}

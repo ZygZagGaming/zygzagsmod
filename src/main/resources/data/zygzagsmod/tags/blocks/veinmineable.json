@@ -1,0 +1,14 @@
+{
+  "values": [
+    "minecraft:sand",
+    "minecraft:dirt",
+    "minecraft:clay",
+    "minecraft:grass_block",
+    "minecraft:gravel",
+    "minecraft:red_sand",
+    "minecraft:coarse_dirt",
+    "minecraft:podzol",
+    "minecraft:mycelium",
+    "zygzagsmod:end_sand"
+  ]
+}

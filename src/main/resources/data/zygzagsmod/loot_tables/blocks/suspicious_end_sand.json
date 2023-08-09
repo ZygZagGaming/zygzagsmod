@@ -1,0 +1,21 @@
+{
+  "type": "block",
+  "pools": [
+    {
+      "rolls": 1,
+      "entries": [
+        {
+          "type": "item",
+          "weight": 1,
+          "name": "zygzagsmod:end_sand",
+          "functions": [
+            {
+              "function": "set_count",
+              "count": 1
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

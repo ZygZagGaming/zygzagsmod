@@ -1,0 +1,31 @@
+{
+  "type": "zygzagsmod:executioner",
+  "conditions": [
+    {
+      "condition": "minecraft:entity_properties",
+      "entity": "this",
+      "predicate": {
+        "type": "minecraft:skeleton"
+      }
+    },
+    {
+      "condition": "minecraft:entity_properties",
+      "entity": "killer",
+      "predicate": {
+        "equipment": {
+          "mainhand": {
+            "items": [
+              "zygzagsmod:skull_socketed_iridium_axe"
+            ]
+          }
+        }
+      }
+    },
+    {
+      "condition": "minecraft:random_chance_with_looting",
+      "chance": 0.1,
+      "looting_multiplier": 0.05
+    }
+  ],
+  "item_to_drop": "minecraft:skeleton_skull"
+}

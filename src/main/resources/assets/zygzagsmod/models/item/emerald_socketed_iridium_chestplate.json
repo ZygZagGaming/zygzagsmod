@@ -1,0 +1,6 @@
+{
+  "parent": "item/handheld",
+  "textures": {
+    "layer0": "zygzagsmod:item/chestplate/emerald_socketed_iridium_chestplate"
+  }
+}

@@ -1,0 +1,8 @@
+{
+  "type": "zygzagsmod:transmutation",
+  "input": {
+    "item": "minecraft:calcite"
+  },
+  "output": "minecraft:bone_meal",
+  "rate": "0.5"
+}

@@ -1,0 +1,36 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "ingredients": [
+    {
+      "item": "minecraft:glass_bottle"
+    },
+    {
+      "item": "minecraft:gunpowder"
+    },
+    {
+      "item": "minecraft:glass_bottle"
+    },
+    {
+      "item": "minecraft:gunpowder"
+    },
+    {
+      "item": "minecraft:diamond"
+    },
+    {
+      "item": "minecraft:gunpowder"
+    },
+    {
+      "item": "minecraft:glass_bottle"
+    },
+    {
+      "item": "minecraft:gunpowder"
+    },
+    {
+      "item": "minecraft:glass_bottle"
+    }
+  ],
+  "result": {
+    "item": "zygzagsmod:transmutation_charge",
+    "count": 4
+  }
+}

@@ -1,0 +1,8 @@
+{
+  "type": "zygzagsmod:transmutation",
+  "input": {
+    "item": "minecraft:rotten_flesh"
+  },
+  "output": "minecraft:leather",
+  "rate": "0.25"
+}

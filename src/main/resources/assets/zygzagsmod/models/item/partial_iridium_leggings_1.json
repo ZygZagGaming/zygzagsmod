@@ -1,0 +1,6 @@
+{
+  "parent": "item/generated",
+  "textures": {
+    "layer0": "zygzagsmod:item/leggings/iridium_leggings_5"
+  }
+}

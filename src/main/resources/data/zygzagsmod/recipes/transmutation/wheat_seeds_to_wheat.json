@@ -1,0 +1,8 @@
+{
+  "type": "zygzagsmod:transmutation",
+  "input": {
+    "item": "minecraft:wheat_seeds"
+  },
+  "output": "minecraft:wheat",
+  "rate": "0.25"
+}

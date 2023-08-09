@@ -1,0 +1,28 @@
+{
+  "end_sand_break": {
+    "sounds": [
+      "zygzagsmod:endsand1",
+      "zygzagsmod:endsand2",
+      "zygzagsmod:endsand3",
+      "zygzagsmod:endsand4"
+    ]
+  },
+  "end_sand_dissipate": {
+    "sounds": [
+      "zygzagsmod:endsand1",
+      "zygzagsmod:endsand2",
+      "zygzagsmod:endsand3",
+      "zygzagsmod:endsand4"
+    ],
+    "subtitle": "subtitles.block.end_sand.dissipate"
+  },
+  "end_sand_reform": {
+    "sounds": [
+      "zygzagsmod:endsandreverse1",
+      "zygzagsmod:endsandreverse2",
+      "zygzagsmod:endsandreverse3",
+      "zygzagsmod:endsandreverse4"
+    ],
+    "subtitle": "subtitles.block.end_sand.reform"
+  }
+}

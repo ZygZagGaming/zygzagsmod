@@ -1,0 +1,13 @@
+{
+  "replace": false,
+  "entries": [
+    "zygzagsmod:executioner/wither_skeleton",
+    "zygzagsmod:executioner/creeper",
+    "zygzagsmod:executioner/ender_dragon",
+    "zygzagsmod:executioner/player",
+    "zygzagsmod:executioner/skeleton",
+    "zygzagsmod:executioner/zombie",
+    "zygzagsmod:misc/shovel_smelt",
+    "zygzagsmod:misc/wither_pickaxe_no_drop"
+  ]
+}

@@ -1,0 +1,15 @@
+{
+  "type": "minecraft:smithing_transform",
+  "base": {
+    "item": "zygzagsmod:iridium_scepter"
+  },
+  "addition": {
+    "item": "minecraft:diamond"
+  },
+"template": {
+    "item": "zygzagsmod:diamond_socket_schematic"
+  },
+  "result": {
+    "item": "zygzagsmod:diamond_socketed_iridium_scepter"
+  }
+}

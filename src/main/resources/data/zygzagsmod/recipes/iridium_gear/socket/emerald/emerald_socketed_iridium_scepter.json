@@ -1,0 +1,15 @@
+{
+  "type": "minecraft:smithing_transform",
+  "base": {
+    "item": "zygzagsmod:iridium_scepter"
+  },
+  "addition": {
+    "item": "minecraft:emerald"
+  },
+"template": {
+    "item": "zygzagsmod:emerald_socket_schematic"
+  },
+  "result": {
+    "item": "zygzagsmod:emerald_socketed_iridium_scepter"
+  }
+}

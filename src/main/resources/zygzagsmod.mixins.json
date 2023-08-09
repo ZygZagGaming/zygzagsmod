@@ -1,0 +1,12 @@
+{
+  "required": true,
+  "package": "com.zygzag.zygzagsmod.mixin",
+  "compatibilityLevel": "JAVA_8",
+  "refmap": "zygzagsmod.refmap.json",
+  "mixins": [
+    "BrushItemMixin"
+  ],
+  "client": [
+  ],
+  "minVersion": "0.8"
+}

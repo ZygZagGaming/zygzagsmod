@@ -1,0 +1,8 @@
+{
+  "type": "zygzagsmod:transmutation",
+  "input": {
+    "item": "minecraft:coal"
+  },
+  "output": "minecraft:diamond",
+  "rate": 0.01
+}

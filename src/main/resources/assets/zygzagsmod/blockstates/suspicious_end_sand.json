@@ -1,0 +1,72 @@
+{
+  "variants": {
+    "dusted=0": [
+      {
+        "model": "zygzagsmod:block/suspicious_end_sand_0"
+      },
+      {
+        "model": "zygzagsmod:block/suspicious_end_sand_0",
+        "y": 90
+      },
+      {
+        "model": "zygzagsmod:block/suspicious_end_sand_0",
+        "y": 180
+      },
+      {
+        "model": "zygzagsmod:block/suspicious_end_sand_0",
+        "y": 270
+      }
+    ],
+    "dusted=1": [
+      {
+        "model": "zygzagsmod:block/suspicious_end_sand_1"
+      },
+      {
+        "model": "zygzagsmod:block/suspicious_end_sand_1",
+        "y": 90
+      },
+      {
+        "model": "zygzagsmod:block/suspicious_end_sand_1",
+        "y": 180
+      },
+      {
+        "model": "zygzagsmod:block/suspicious_end_sand_1",
+        "y": 270
+      }
+    ],
+    "dusted=2": [
+      {
+        "model": "zygzagsmod:block/suspicious_end_sand_2"
+      },
+      {
+        "model": "zygzagsmod:block/suspicious_end_sand_2",
+        "y": 90
+      },
+      {
+        "model": "zygzagsmod:block/suspicious_end_sand_2",
+        "y": 180
+      },
+      {
+        "model": "zygzagsmod:block/suspicious_end_sand_2",
+        "y": 270
+      }
+    ],
+    "dusted=3": [
+      {
+        "model": "zygzagsmod:block/suspicious_end_sand_3"
+      },
+      {
+        "model": "zygzagsmod:block/suspicious_end_sand_3",
+        "y": 90
+      },
+      {
+        "model": "zygzagsmod:block/suspicious_end_sand_3",
+        "y": 180
+      },
+      {
+        "model": "zygzagsmod:block/suspicious_end_sand_3",
+        "y": 270
+      }
+    ]
+  }
+}

@@ -1,0 +1,38 @@
+{
+  "variants": {
+    "ethereal=false": [
+      {
+        "model": "zygzagsmod:block/end_sand"
+      },
+      {
+        "model": "zygzagsmod:block/end_sand",
+        "y": 90
+      },
+      {
+        "model": "zygzagsmod:block/end_sand",
+        "y": 180
+      },
+      {
+        "model": "zygzagsmod:block/end_sand",
+        "y": 270
+      }
+    ],
+    "ethereal=true": [
+      {
+        "model": "zygzagsmod:block/end_sand_translucent"
+      },
+      {
+        "model": "zygzagsmod:block/end_sand_translucent",
+        "y": 90
+      },
+      {
+        "model": "zygzagsmod:block/end_sand_translucent",
+        "y": 180
+      },
+      {
+        "model": "zygzagsmod:block/end_sand_translucent",
+        "y": 270
+      }
+    ]
+  }
+}

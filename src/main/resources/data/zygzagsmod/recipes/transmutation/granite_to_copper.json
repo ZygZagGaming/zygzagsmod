@@ -1,0 +1,8 @@
+{
+  "type": "zygzagsmod:transmutation",
+  "input": {
+    "item": "minecraft:granite"
+  },
+  "output": "minecraft:copper_ingot",
+  "rate": "0.25"
+}

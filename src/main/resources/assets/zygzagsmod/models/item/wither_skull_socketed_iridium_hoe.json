@@ -1,0 +1,6 @@
+{
+  "parent": "item/handheld",
+  "textures": {
+    "layer0": "zygzagsmod:item/hoe/wither_skull_socketed_iridium_hoe"
+  }
+}

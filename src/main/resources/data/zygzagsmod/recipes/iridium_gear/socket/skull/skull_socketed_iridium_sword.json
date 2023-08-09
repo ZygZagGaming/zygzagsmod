@@ -1,0 +1,15 @@
+{
+  "type": "minecraft:smithing_transform",
+  "base": {
+    "item": "zygzagsmod:iridium_sword"
+  },
+  "addition": {
+    "item": "minecraft:skeleton_skull"
+  },
+"template": {
+    "item": "zygzagsmod:skull_socket_schematic"
+  },
+  "result": {
+    "item": "zygzagsmod:skull_socketed_iridium_sword"
+  }
+}

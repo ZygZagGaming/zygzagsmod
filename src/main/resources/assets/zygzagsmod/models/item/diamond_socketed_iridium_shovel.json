@@ -1,0 +1,6 @@
+{
+  "parent": "item/handheld",
+  "textures": {
+    "layer0": "zygzagsmod:item/shovel/diamond_socketed_iridium_shovel"
+  }
+}

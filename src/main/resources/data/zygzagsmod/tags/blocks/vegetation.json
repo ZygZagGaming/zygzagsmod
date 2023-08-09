@@ -1,0 +1,16 @@
+{
+  "values": [
+    "#minecraft:leaves",
+    "minecraft:grass",
+    "minecraft:tall_grass",
+    "minecraft:vine",
+    "minecraft:fern",
+    "minecraft:large_fern",
+    "#minecraft:flowers",
+    "minecraft:dead_bush",
+    "minecraft:seagrass",
+    "minecraft:tall_seagrass",
+    "minecraft:chorus_plant",
+    "minecraft:chorus_flower"
+  ]
+}

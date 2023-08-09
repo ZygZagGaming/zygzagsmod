@@ -1,0 +1,8 @@
+{
+  "type": "zygzagsmod:transmutation",
+  "input": {
+    "item": "minecraft:bone"
+  },
+  "output": "minecraft:skeleton_skull",
+  "rate": "0.1"
+}

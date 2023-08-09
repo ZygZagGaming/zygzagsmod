@@ -1,0 +1,6 @@
+{
+  "parent": "item/handheld",
+  "textures": {
+    "layer0": "zygzagsmod:item/scepter/amethyst_socketed_iridium_scepter"
+  }
+}

@@ -1,0 +1,8 @@
+{
+  "type": "zygzagsmod:transmutation",
+  "input": {
+    "item": "zygzagsmod:golden_stew"
+  },
+  "output": "zygzagsmod:enchanted_golden_stew",
+  "rate": "0.0125"
+}

@@ -1,0 +1,15 @@
+{
+  "type": "minecraft:smithing_transform",
+  "base": {
+    "item": "zygzagsmod:partial_iridium_boots_2"
+  },
+  "addition": {
+    "item": "zygzagsmod:iridium_plating"
+  },
+  "template": {
+    "item": "zygzagsmod:iridium_boots_blueprint"
+  },
+  "result": {
+    "item": "zygzagsmod:partial_iridium_boots_3"
+  }
+}

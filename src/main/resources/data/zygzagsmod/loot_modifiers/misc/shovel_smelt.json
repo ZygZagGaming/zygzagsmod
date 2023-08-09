@@ -1,0 +1,13 @@
+{
+  "type": "zygzagsmod:autosmelt",
+  "conditions": [
+    {
+      "condition": "minecraft:match_tool",
+      "predicate": {
+        "items": [
+          "zygzagsmod:amethyst_socketed_iridium_shovel"
+        ]
+      }
+    }
+  ]
+}
