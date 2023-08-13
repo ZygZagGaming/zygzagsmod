@@ -36,7 +36,7 @@ public class AutosmeltModifier extends LootModifier {
             SimpleContainer cont = new SimpleContainer(stack);
             Optional<SmeltingRecipe> opt = world.getRecipeManager().getRecipeFor(RecipeType.SMELTING, cont, world);
             if (opt.isPresent()) {
-                ItemStack outStack = opt.get().assemble(cont, context.getLevel().registryAccess());
+                ItemStack outStack = opt.get().assemble(cont);
                 outStack.setCount(stack.getCount());
                 generatedLoot.set(i, outStack);
             }

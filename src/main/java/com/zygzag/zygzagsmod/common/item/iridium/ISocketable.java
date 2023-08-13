@@ -4,7 +4,6 @@ import com.zygzag.zygzagsmod.common.item.iridium.tool.*;
 import com.zygzag.zygzagsmod.common.registries.EnchantmentRegistry;
 import com.zygzag.zygzagsmod.common.registries.IridiumGearRegistry;
 import com.zygzag.zygzagsmod.common.registries.ItemRegistry;
-import com.zygzag.zygzagsmod.common.registries.Registry;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;

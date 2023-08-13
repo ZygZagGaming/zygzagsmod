@@ -3,17 +3,17 @@ package com.zygzag.zygzagsmod.common.registries;
 import com.zygzag.zygzagsmod.common.entity.HomingWitherSkull;
 import com.zygzag.zygzagsmod.common.entity.PlayerAlliedSkeleton;
 import com.zygzag.zygzagsmod.common.entity.ThrownTransmutationCharge;
-import net.minecraft.core.registries.Registries;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.MobCategory;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraftforge.registries.DeferredRegister;
+import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
 
 import static com.zygzag.zygzagsmod.common.Main.MODID;
 
 public class EntityRegistry extends Registry<EntityType<?>> {
-    public static final EntityRegistry INSTANCE = new EntityRegistry(DeferredRegister.create(Registries.ENTITY_TYPE, MODID));
+    public static final EntityRegistry INSTANCE = new EntityRegistry(DeferredRegister.create(ForgeRegistries.ENTITY_TYPES, MODID));
     public EntityRegistry(DeferredRegister<EntityType<?>> register) {
         super(register);
     }

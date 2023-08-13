@@ -45,7 +45,6 @@ public class ThrownTransmutationCharge extends ThrowableItemProjectile {
 
     protected void onHit(HitResult result) {
         super.onHit(result);
-        var level = level();
         if (level instanceof ServerLevel) {
             level.levelEvent(2002, this.blockPosition(), 0x727175);
             AABB box = getBoundingBox().inflate(5.0);
@@ -55,7 +54,7 @@ public class ThrownTransmutationCharge extends ThrowableItemProjectile {
                 for (TransmutationRecipe recipe : recipes) {
                     SimpleContainer holder = new SimpleContainer(itemEntity.getItem());
                     if (recipe.matches(holder, level)) {
-                        ItemEntity newItem = new ItemEntity(level, itemEntity.getX(), itemEntity.getY(), itemEntity.getZ(), recipe.assemble(holder, level.registryAccess()));
+                        ItemEntity newItem = new ItemEntity(level, itemEntity.getX(), itemEntity.getY(), itemEntity.getZ(), recipe.assemble(holder));
                         level.addFreshEntity(newItem);
                         itemEntity.kill();
                     }

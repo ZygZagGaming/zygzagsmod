@@ -30,7 +30,7 @@ public class PlayerSightCacheImpl implements PlayerSightCache {
 
     @Override
     public void update(SightEffect sightEffect, int amplifier) {
-        var world = player.level();
+        var world = player.level;
         var sightRange = sightEffect.range(amplifier);
         var playerBlockPos = player.blockPosition();
         var minimap = map.computeIfAbsent(sightEffect, k -> new HashMap<>());

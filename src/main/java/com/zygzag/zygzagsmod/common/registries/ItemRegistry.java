@@ -1,11 +1,12 @@
 package com.zygzag.zygzagsmod.common.registries;
 
+import com.zygzag.zygzagsmod.common.Main;
 import com.zygzag.zygzagsmod.common.item.TransmutationCharge;
-import net.minecraft.core.registries.Registries;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.Block;
 import net.minecraftforge.registries.DeferredRegister;
+import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
 
 import java.util.List;
@@ -13,14 +14,14 @@ import java.util.List;
 import static com.zygzag.zygzagsmod.common.Main.MODID;
 
 public class ItemRegistry extends Registry<Item> {
-    public static final ItemRegistry INSTANCE = new ItemRegistry(DeferredRegister.create(Registries.ITEM, MODID));
+    public static final ItemRegistry INSTANCE = new ItemRegistry(DeferredRegister.create(ForgeRegistries.ITEMS, MODID));
     public ItemRegistry(DeferredRegister<Item> register) {
         super(register);
     }
     public static final RegistryObject<Item> IRIDIUM_PLATING = basicItem("iridium_plating");
     public static final RegistryObject<Item> TRANSMUTATION_CHARGE = INSTANCE.register(
             "transmutation_charge",
-            () -> new TransmutationCharge(new Item.Properties())
+            () -> new TransmutationCharge(new Item.Properties().tab(Main.TAB))
     );
 
     public static final RegistryObject<Item> RAW_IRIDIUM = basicItem("raw_iridium");
@@ -62,14 +63,13 @@ public class ItemRegistry extends Registry<Item> {
     public static final RegistryObject<Item> END_STONE_SWITCH_ITEM = registerBlockItem(BlockRegistry.END_STONE_SWITCH_BLOCK);
     public static final RegistryObject<Item> END_SAND_ITEM = registerBlockItem(BlockRegistry.END_SAND);
     public static final RegistryObject<Item> IRIDIUM_END_SAND_ITEM = registerBlockItem(BlockRegistry.IRIDIUM_END_SAND);
-    public static final RegistryObject<Item> SUSPICIOUS_END_SAND_ITEM = registerBlockItem(BlockRegistry.SUSPICIOUS_END_SAND);
 
     private static RegistryObject<Item> basicItem(String id) {
-        return INSTANCE.register(id, () -> new Item(new Item.Properties()));
+        return INSTANCE.register(id, () -> new Item(new Item.Properties().tab(Main.TAB)));
     }
 
     public static RegistryObject<Item> registerBlockItem(RegistryObject<Block> block, Item.Properties properties) {
-        return INSTANCE.register(block.getId().getPath(), () -> new BlockItem(block.get(), properties));
+        return INSTANCE.register(block.getId().getPath(), () -> new BlockItem(block.get(), properties.tab(Main.TAB)));
     }
 
     private static RegistryObject<Item> registerBlockItem(RegistryObject<Block> block) {

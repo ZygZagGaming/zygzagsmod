@@ -5,7 +5,7 @@ import com.zygzag.zygzagsmod.common.registries.ItemRegistry;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.util.LazyLoadedValue;
-import net.minecraft.world.item.ArmorItem;
+import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.item.ArmorMaterial;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraftforge.api.distmarker.Dist;
@@ -107,12 +107,12 @@ public enum IridiumArmorMaterial implements ArmorMaterial {
         this.repairIngredient = new LazyLoadedValue<>(repair);
     }
 
-    public int getDurabilityForType(ArmorItem.Type type) {
-        return HEALTH_PER_SLOT[type.ordinal()] * this.durabilityMultiplier;
+    public int getDurabilityForSlot(EquipmentSlot slot) {
+        return HEALTH_PER_SLOT[5 - slot.ordinal()] * this.durabilityMultiplier;
     }
 
-    public int getDefenseForType(ArmorItem.Type type) {
-        return this.slotProtections[type.ordinal()];
+    public int getDefenseForSlot(EquipmentSlot slot) {
+        return this.slotProtections[5 - slot.ordinal()];
     }
 
     public int getEnchantmentValue() {

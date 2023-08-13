@@ -1,6 +1,5 @@
 package com.zygzag.zygzagsmod.common;
 
-import com.zygzag.zygzagsmod.common.blockentity.CustomBrushableBlockEntity;
 import com.zygzag.zygzagsmod.common.capability.PlayerSightCache;
 import com.zygzag.zygzagsmod.common.capability.PlayerSightCacheImpl;
 import com.zygzag.zygzagsmod.common.effect.SightEffect;
@@ -9,18 +8,11 @@ import com.zygzag.zygzagsmod.common.item.iridium.armor.IridiumChestplateItem;
 import com.zygzag.zygzagsmod.common.item.iridium.tool.IridiumAxeItem;
 import com.zygzag.zygzagsmod.common.item.iridium.tool.IridiumHoeItem;
 import com.zygzag.zygzagsmod.common.registries.BlockRegistry;
-import com.zygzag.zygzagsmod.common.registries.EnchantmentRegistry;
 import com.zygzag.zygzagsmod.common.registries.IridiumGearRegistry;
-import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.sounds.SoundEvent;
-import net.minecraft.sounds.SoundEvents;
-import net.minecraft.sounds.SoundSource;
 import net.minecraft.stats.Stats;
-import net.minecraft.world.InteractionHand;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
@@ -30,7 +22,6 @@ import net.minecraft.world.entity.ai.targeting.TargetingConditions;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.npc.Villager;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.BrushItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
@@ -39,21 +30,18 @@ import net.minecraft.world.item.enchantment.Enchantments;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
-import net.minecraft.world.level.block.BrushableBlock;
-import net.minecraft.world.level.block.entity.BlockEntity;
-import net.minecraft.world.level.block.entity.BrushableBlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.phys.AABB;
-import net.minecraft.world.phys.BlockHitResult;
-import net.minecraft.world.phys.HitResult;
 import net.minecraftforge.common.Tags;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
 import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.event.AttachCapabilitiesEvent;
 import net.minecraftforge.event.TickEvent;
-import net.minecraftforge.event.entity.living.*;
+import net.minecraftforge.event.entity.living.LivingDamageEvent;
+import net.minecraftforge.event.entity.living.LivingDeathEvent;
+import net.minecraftforge.event.entity.living.LivingExperienceDropEvent;
+import net.minecraftforge.event.entity.living.MobEffectEvent;
 import net.minecraftforge.event.level.BlockEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
@@ -71,7 +59,7 @@ public class EventHandler {
     @SubscribeEvent
     public static void attachCapabilitiesToPlayer(final AttachCapabilitiesEvent<Entity> event) {
         var entity = event.getObject();
-        if (entity instanceof Player player && entity.level().isClientSide) {
+        if (entity instanceof Player player && entity.level.isClientSide) {
             PlayerSightCache backend = new PlayerSightCacheImpl(player);
             LazyOptional<PlayerSightCache> optional = LazyOptional.of(() -> backend);
             ICapabilityProvider provider = new ICapabilityProvider() {
@@ -104,7 +92,7 @@ public class EventHandler {
     @SubscribeEvent
     public static void onHurt(final LivingDamageEvent evt) {
         LivingEntity entity = evt.getEntity();
-        Level world = entity.level();
+        Level world = entity.level;
         long time = world.dayTime();
         DamageSource source = evt.getSource();
         float amt = evt.getAmount();
@@ -183,7 +171,7 @@ public class EventHandler {
         var living = event.getEntity();
         var source = event.getSource();
         var killer = source.getEntity();
-        var world = living.level();
+        var world = living.level;
         if (killer instanceof Player player) {
             var mainhand = player.getMainHandItem();
             if (mainhand.getItem() instanceof IridiumAxeItem iridaxe
@@ -202,7 +190,7 @@ public class EventHandler {
     public static void onXpDrop(final LivingExperienceDropEvent event) {
         var player = event.getAttackingPlayer();
         if (player == null) return;
-        var world = player.level();
+        var world = player.level;
         var mainhand = player.getMainHandItem();
         var item = mainhand.getItem();
         if (player instanceof ServerPlayer sPlayer && item == IridiumGearRegistry.EMERALD_SOCKETED_IRIDIUM_SWORD.get()) {
@@ -258,7 +246,7 @@ public class EventHandler {
         Player player = event.player;
         ItemStack chestStack = player.getItemBySlot(EquipmentSlot.CHEST);
         Item chestItem = chestStack.getItem();
-        Level world = player.level();
+        Level world = player.level;
         if (chestItem instanceof IridiumChestplateItem plate) {
             Socket socket = plate.getSocket();
             if (socket == Socket.EMERALD) {
@@ -273,97 +261,6 @@ public class EventHandler {
                     player.addEffect(new MobEffectInstance(MobEffects.NIGHT_VISION, duration, 0, true, false));
                 }
             }
-        }
-    }
-
-    @SubscribeEvent
-    public static void brush(final LivingEntityUseItemEvent.Tick event) {
-        var living = event.getEntity();
-        var stack = living.getMainHandItem();
-        var world = living.level();
-        var remainingUseDuration = living.getUseItemRemainingTicks();
-        if (stack.getItem() instanceof BrushItem brush) {
-            if (remainingUseDuration >= 0 && living instanceof Player player) {
-                HitResult hitresult = brush.calculateHitResult(living);
-                if (hitresult instanceof BlockHitResult blockhitresult) {
-                    if (hitresult.getType() == HitResult.Type.BLOCK) {
-                        int i = brush.getUseDuration(stack) - remainingUseDuration + 1;
-                        boolean flag = i % 10 == 5;
-                        if (flag) {
-                            BlockPos blockpos = blockhitresult.getBlockPos();
-                            BlockState blockstate = world.getBlockState(blockpos);
-                            HumanoidArm humanoidarm = living.getUsedItemHand() == InteractionHand.MAIN_HAND ? player.getMainArm() : player.getMainArm().getOpposite();
-                            brush.spawnDustParticles(world, blockhitresult, blockstate, living.getViewVector(0.0F), humanoidarm);
-                            Block $$18 = blockstate.getBlock();
-                            SoundEvent soundevent;
-                            if ($$18 instanceof BrushableBlock brushableblock) {
-                                soundevent = brushableblock.getBrushSound();
-                            } else {
-                                soundevent = SoundEvents.BRUSH_GENERIC;
-                            }
-
-                            world.playSound(player, blockpos, soundevent, SoundSource.BLOCKS);
-                            if (!world.isClientSide()) {
-                                BlockEntity blockentity = world.getBlockEntity(blockpos);
-                                if (blockentity instanceof CustomBrushableBlockEntity brushableblockentity) {
-                                    boolean flag1 = brushableblockentity.brush(world.getGameTime(), player, blockhitresult.getDirection());
-                                    if (flag1) {
-                                        EquipmentSlot equipmentslot = stack.equals(player.getItemBySlot(EquipmentSlot.OFFHAND)) ? EquipmentSlot.OFFHAND : EquipmentSlot.MAINHAND;
-                                        stack.hurtAndBreak(1, living, (p_279044_) -> {
-                                            p_279044_.broadcastBreakEvent(equipmentslot);
-                                        });
-                                    }
-                                }
-                                else if (blockentity instanceof BrushableBlockEntity brushableblockentity) {
-                                    boolean flag1 = brush(brushableblockentity, world, world.getGameTime(), player, blockhitresult.getDirection());
-                                    if (flag1) {
-                                        EquipmentSlot equipmentslot = stack.equals(player.getItemBySlot(EquipmentSlot.OFFHAND)) ? EquipmentSlot.OFFHAND : EquipmentSlot.MAINHAND;
-                                        stack.hurtAndBreak(1, living, (p_279044_) -> {
-                                            p_279044_.broadcastBreakEvent(equipmentslot);
-                                        });
-                                    }
-                                }
-                            }
-                        }
-
-                        return;
-                    }
-                }
-
-                living.releaseUsingItem();
-            } else {
-                living.releaseUsingItem();
-            }
-        }
-    }
-
-    public static boolean brush(BrushableBlockEntity be, Level level, long pStartTick, Player pPlayer, Direction pHitDirection) {
-        if (be.hitDirection == null) {
-            be.hitDirection = pHitDirection;
-        }
-
-        be.brushCountResetsAtTick = pStartTick + 40L;
-        if (pStartTick >= be.coolDownEndsAtTick && level instanceof ServerLevel) {
-            be.coolDownEndsAtTick = pStartTick + 10L;
-            be.unpackLootTable(pPlayer);
-            int i = be.getCompletionState();
-            var numTicks = 10 - 2 * EnchantmentHelper.getTagEnchantmentLevel(EnchantmentRegistry.BRUSH_EFFICIENCY_ENCHANTMENT.get(), pPlayer.getMainHandItem());
-            if (++be.brushCount >= numTicks) {
-                be.brushingCompleted(pPlayer);
-                return true;
-            } else {
-                level.scheduleTick(be.getBlockPos(), be.getBlockState().getBlock(), 40);
-                int j = be.getCompletionState();
-                if (i != j) {
-                    BlockState blockstate = be.getBlockState();
-                    BlockState blockstate1 = blockstate.setValue(BlockStateProperties.DUSTED, j);
-                    level.setBlock(be.getBlockPos(), blockstate1, 3);
-                }
-
-                return false;
-            }
-        } else {
-            return false;
         }
     }
 }

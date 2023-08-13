@@ -8,9 +8,9 @@ import net.minecraftforge.common.util.ForgeSoundType;
 import static com.zygzag.zygzagsmod.common.Main.MODID;
 
 public class ModSoundEvents {
-    public static final SoundEvent END_SAND_BREAK = SoundEvent.createVariableRangeEvent(new ResourceLocation(MODID, "end_sand_break"));
-    public static final SoundEvent END_SAND_DISSIPATE = SoundEvent.createVariableRangeEvent(new ResourceLocation(MODID, "end_sand_dissipate"));
-    public static final SoundEvent END_SAND_REFORM = SoundEvent.createVariableRangeEvent(new ResourceLocation(MODID, "end_sand_reform"));
+    public static final SoundEvent END_SAND_BREAK = new SoundEvent(new ResourceLocation(MODID, "end_sand_break"));
+    public static final SoundEvent END_SAND_DISSIPATE = new SoundEvent(new ResourceLocation(MODID, "end_sand_dissipate"));
+    public static final SoundEvent END_SAND_REFORM = new SoundEvent(new ResourceLocation(MODID, "end_sand_reform"));
 
     public static final SoundEvent[] SOUND_EVENTS = {
             END_SAND_BREAK,

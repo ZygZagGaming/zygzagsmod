@@ -1,5 +1,6 @@
 package com.zygzag.zygzagsmod.common.plugin.jei;
 
+import com.mojang.blaze3d.vertex.PoseStack;
 import com.zygzag.zygzagsmod.common.recipe.TransmutationRecipe;
 import com.zygzag.zygzagsmod.common.registries.ItemRegistry;
 import mezz.jei.api.constants.ModIds;
@@ -16,7 +17,6 @@ import mezz.jei.api.recipe.category.IRecipeCategory;
 import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
-import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.crafting.Ingredient;
@@ -75,16 +75,16 @@ public class TransmutationCategory implements IRecipeCategory<TransmutationRecip
     }
 
     @Override
-    public void draw(TransmutationRecipe recipe, IRecipeSlotsView recipeSlotsView, GuiGraphics graphics, double mouseX, double mouseY) {
-        drawRateCost(Minecraft.getInstance(), graphics, "Rate: " + recipe.getRate() + "x");
+    public void draw(TransmutationRecipe recipe, IRecipeSlotsView recipeSlotsView, PoseStack stack, double mouseX, double mouseY) {
+        drawRateCost(Minecraft.getInstance(), stack, "Rate: " + recipe.getRate() + "x");
     }
 
-    private void drawRateCost(Minecraft minecraft, GuiGraphics graphics, String text) {
+    private void drawRateCost(Minecraft minecraft, PoseStack stack, String text) {
         int shadowColor = 0xFF000000 | (0xFF111111 & 0xFCFCFC) >> 2;
         int width = minecraft.font.width(text);
         int x = background.getWidth() - 2 - width;
         int y = 37;
 
-        minecraft.font.drawInBatch(text, x, y, 0xFF111111, false, graphics.pose().last().pose(), graphics.bufferSource(), Font.DisplayMode.NORMAL, 0, 15728880);
+        minecraft.font.draw(stack, text, x, y, 0xFF111111);
     }
 }

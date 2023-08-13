@@ -62,7 +62,7 @@ public class ClientEventHandler {
                                     float g = color.getGreen() / 255f;
                                     float b = color.getBlue() / 255f;
                                     float a = color.getAlpha() / 255f;
-                                    if (inst.endsWithin(20)) a *= inst.getDuration() / 20.0;
+                                    if (inst.getDuration() <= 20) a *= inst.getDuration() / 20.0;
                                     LevelRenderer.renderShape(stack, buffer, box, blockPos.getX(), blockPos.getY(), blockPos.getZ(), r, g, b, a);
                                 }
                             }

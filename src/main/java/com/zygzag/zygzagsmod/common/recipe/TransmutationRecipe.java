@@ -5,7 +5,6 @@ import com.google.gson.JsonObject;
 import com.mojang.blaze3d.MethodsReturnNonnullByDefault;
 import com.zygzag.zygzagsmod.common.registries.RecipeSerializerRegistry;
 import com.zygzag.zygzagsmod.common.registries.RecipeTypeRegistry;
-import net.minecraft.core.RegistryAccess;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.SimpleContainer;
@@ -42,7 +41,7 @@ public class TransmutationRecipe implements Recipe<SimpleContainer> {
     }
 
     @Override
-    public ItemStack assemble(SimpleContainer holder, RegistryAccess access) {
+    public ItemStack assemble(SimpleContainer holder) {
         int count = holder.getItem(0).getCount();
         double random = (count * rate) % 1;
         int newCount = (int) (count * rate) + (Math.random() <= random ? 1 : 0);
@@ -55,7 +54,7 @@ public class TransmutationRecipe implements Recipe<SimpleContainer> {
     }
 
     @Override
-    public ItemStack getResultItem(RegistryAccess access) {
+    public ItemStack getResultItem() {
         return outItem.getDefaultInstance();
     }
 

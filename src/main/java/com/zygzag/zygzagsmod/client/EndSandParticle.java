@@ -11,7 +11,6 @@ import net.minecraft.client.particle.ParticleRenderType;
 import net.minecraft.client.particle.TextureSheetParticle;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.SimpleParticleType;
-import net.minecraft.util.Mth;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.Vec3;
@@ -44,7 +43,7 @@ public class EndSandParticle extends TextureSheetParticle {
         this.yd = (y - Math.floor(y) - 0.5 + random.nextGaussian() * 0.2) / 4;
         this.zd = (z - Math.floor(z) - 0.5 + random.nextGaussian() * 0.2) / 4;
         origin = new Vec3(pX, pY, pZ);
-        originBlock = BlockPos.containing(pX, pY, pZ);
+        originBlock = new BlockPos(Math.floor(pX), Math.floor(pY), Math.floor(pZ));
         setLifetime(10000);
         gravity = 1f;
     }

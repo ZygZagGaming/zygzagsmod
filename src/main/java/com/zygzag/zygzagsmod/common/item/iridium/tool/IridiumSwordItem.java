@@ -6,7 +6,6 @@ import com.zygzag.zygzagsmod.common.item.iridium.Socket;
 import com.zygzag.zygzagsmod.common.registries.EnchantmentRegistry;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
-import net.minecraft.core.Vec3i;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.world.InteractionHand;

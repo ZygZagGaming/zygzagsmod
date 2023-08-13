@@ -25,7 +25,7 @@ import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.storage.loot.LootParams;
+import net.minecraft.world.level.storage.loot.LootContext;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
@@ -124,7 +124,7 @@ public class IridiumPickaxeItem extends PickaxeItem implements ISocketable {
                                         world.setBlockAndUpdate(pos, Blocks.AIR.defaultBlockState());
                                         if (world instanceof ServerLevel sWorld) {
                                             List<ItemStack> stacks = state.getDrops(
-                                                    new LootParams.Builder(sWorld)
+                                                    new LootContext.Builder(sWorld)
                                                             .withParameter(LootContextParams.TOOL, stack)
                                                             .withParameter(
                                                                     LootContextParams.ORIGIN,
@@ -157,7 +157,7 @@ public class IridiumPickaxeItem extends PickaxeItem implements ISocketable {
                                 SimpleContainer holder = new SimpleContainer(itemEntity.getItem());
                                 if (recipe.matches(holder, world)) {
                                     int in = itemEntity.getItem().getCount();
-                                    ItemEntity newItem = new ItemEntity(world, itemEntity.getX(), itemEntity.getY(), itemEntity.getZ(), recipe.assemble(holder, world.registryAccess()));
+                                    ItemEntity newItem = new ItemEntity(world, itemEntity.getX(), itemEntity.getY(), itemEntity.getZ(), recipe.assemble(holder));
                                     world.addFreshEntity(newItem);
                                     if (!player.getAbilities().instabuild) stack.hurtAndBreak(in, player, (it) -> {});
                                     itemEntity.kill();

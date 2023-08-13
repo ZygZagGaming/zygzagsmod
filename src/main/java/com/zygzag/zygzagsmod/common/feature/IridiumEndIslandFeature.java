@@ -2,11 +2,9 @@ package com.zygzag.zygzagsmod.common.feature;
 
 import com.mojang.serialization.Codec;
 import com.zygzag.zygzagsmod.common.block.EndStoneSwitchBlock;
-import com.zygzag.zygzagsmod.common.registries.BlockEntityRegistry;
 import com.zygzag.zygzagsmod.common.registries.BlockRegistry;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.WorldGenLevel;
@@ -16,7 +14,9 @@ import net.minecraft.world.level.levelgen.feature.Feature;
 import net.minecraft.world.level.levelgen.feature.FeaturePlaceContext;
 import net.minecraft.world.level.levelgen.feature.configurations.NoneFeatureConfiguration;
 
-import java.util.*;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 import static com.zygzag.zygzagsmod.common.GeneralUtil.randomElement;
 
@@ -31,6 +31,7 @@ public class IridiumEndIslandFeature extends Feature<NoneFeatureConfiguration> {
         BlockPos pos = context.origin();
         int size = rng.nextInt(6, 8);
         Map<BlockPos, BlockState> structure = new HashMap<>();
+        int wouldBeSusSand = 0;
 
         var pillarHeight = 6;
         for (int k = 0; k < pillarHeight; k++) {
@@ -67,7 +68,7 @@ public class IridiumEndIslandFeature extends Feature<NoneFeatureConfiguration> {
                     if ((float) (x * x + z * z) <= (radius + 1f) * (radius + 1f)) {
                         var state = BlockRegistry.END_SAND.get().defaultBlockState();
                         var random = rng.nextDouble();
-                        if (random < 0.03) state = BlockRegistry.SUSPICIOUS_END_SAND.get().defaultBlockState();
+                        if (random < 0.03) wouldBeSusSand++;
                         if (random > 0.95) state = BlockRegistry.IRIDIUM_END_SAND.get().defaultBlockState();
                         structure.put(pos.offset(x, layer + pillarHeight + 1, z), state);
                     }
@@ -135,11 +136,6 @@ public class IridiumEndIslandFeature extends Feature<NoneFeatureConfiguration> {
         for (BlockPos position : structure.keySet()) {
             BlockState state = structure.get(position);
             setBlock(world, position, state);
-            if (state.is(BlockRegistry.SUSPICIOUS_END_SAND.get())) {
-                world.getBlockEntity(position, BlockEntityRegistry.SUSPICIOUS_END_SAND.get()).ifPresent((it) ->
-                        it.setLootTable(new ResourceLocation("zygzagsmod:archaeology/suspicious_end_sand"), rng.nextLong())
-                );
-            }
         }
 
         return true;

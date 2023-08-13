@@ -5,6 +5,7 @@ import com.zygzag.zygzagsmod.common.item.iridium.Socket;
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
+import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.item.*;
 import net.minecraft.world.level.Level;
 
@@ -16,7 +17,7 @@ import java.util.List;
 public class IridiumChestplateItem extends ArmorItem implements ISocketable {
     Socket socket;
     public IridiumChestplateItem(ArmorMaterial material, Properties properties, Socket socket) {
-        super(material, Type.CHESTPLATE, properties);
+        super(material, EquipmentSlot.CHEST, properties);
         this.socket = socket;
     }
 

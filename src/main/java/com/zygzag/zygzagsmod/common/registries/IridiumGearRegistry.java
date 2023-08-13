@@ -1,5 +1,6 @@
 package com.zygzag.zygzagsmod.common.registries;
 
+import com.zygzag.zygzagsmod.common.Main;
 import com.zygzag.zygzagsmod.common.item.iridium.Socket;
 import com.zygzag.zygzagsmod.common.item.iridium.armor.IridiumChestplateItem;
 import com.zygzag.zygzagsmod.common.item.iridium.armor.PartialIridiumArmorItem;
@@ -10,18 +11,21 @@ import com.zygzag.zygzagsmod.common.item.iridium.tool.partial.PartialIridiumPick
 import com.zygzag.zygzagsmod.common.item.iridium.tool.partial.PartialIridiumSwordItem;
 import com.zygzag.zygzagsmod.common.tier.IridiumArmorMaterial;
 import com.zygzag.zygzagsmod.common.tier.IridiumToolTier;
-import net.minecraft.core.registries.Registries;
+import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.item.ArmorItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Items;
 import net.minecraftforge.registries.DeferredRegister;
+import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
+
+import java.util.function.Supplier;
 
 import static com.zygzag.zygzagsmod.common.Main.MODID;
 
 @SuppressWarnings("unused")
 public class IridiumGearRegistry extends Registry<Item> {
-    public static final IridiumGearRegistry INSTANCE = new IridiumGearRegistry(DeferredRegister.create(Registries.ITEM, MODID));
+    public static final IridiumGearRegistry INSTANCE = new IridiumGearRegistry(DeferredRegister.create(ForgeRegistries.ITEMS, MODID));
     public IridiumGearRegistry(DeferredRegister<Item> register) {
         super(register);
     }
@@ -33,7 +37,7 @@ public class IridiumGearRegistry extends Registry<Item> {
                     IridiumToolTier.FULL,
                     1,
                     -2.8F,
-                    new Item.Properties()
+                    new Item.Properties().tab(Main.TAB)
                             .fireResistant()
                             .stacksTo(1),
                     Socket.NONE
@@ -46,7 +50,7 @@ public class IridiumGearRegistry extends Registry<Item> {
                     IridiumToolTier._3_1,
                     1,
                     -2.8F,
-                    new Item.Properties()
+                    new Item.Properties().tab(Main.TAB)
                             .stacksTo(1),
                     3,
                     1
@@ -58,7 +62,7 @@ public class IridiumGearRegistry extends Registry<Item> {
                     IridiumToolTier._3_2,
                     1,
                     -2.8F,
-                    new Item.Properties()
+                    new Item.Properties().tab(Main.TAB)
                             .stacksTo(1),
                     3,
                     2
@@ -71,7 +75,7 @@ public class IridiumGearRegistry extends Registry<Item> {
                     IridiumToolTier.DIAMOND_SOCKETED_PICK,
                     1,
                     -2.8F,
-                    new Item.Properties()
+                    new Item.Properties().tab(Main.TAB)
                             .fireResistant()
                             .stacksTo(1).
                             craftRemainder(Items.DIAMOND),
@@ -84,7 +88,7 @@ public class IridiumGearRegistry extends Registry<Item> {
                     IridiumToolTier.EMERALD_SOCKETED,
                     1,
                     -2.8F,
-                    new Item.Properties()
+                    new Item.Properties().tab(Main.TAB)
                             .fireResistant()
                             .stacksTo(1).
                             craftRemainder(Items.EMERALD),
@@ -97,7 +101,7 @@ public class IridiumGearRegistry extends Registry<Item> {
                     IridiumToolTier.FULL,
                     1,
                     -2.8F,
-                    new Item.Properties()
+                    new Item.Properties().tab(Main.TAB)
                             .fireResistant()
                             .stacksTo(1).
                             craftRemainder(Items.SKELETON_SKULL),
@@ -110,7 +114,7 @@ public class IridiumGearRegistry extends Registry<Item> {
                     IridiumToolTier.WITHER_SOCKETED_PICK,
                     1,
                     -2.8F,
-                    new Item.Properties()
+                    new Item.Properties().tab(Main.TAB)
                             .fireResistant()
                             .stacksTo(1).
                             craftRemainder(Items.WITHER_SKELETON_SKULL),
@@ -123,7 +127,7 @@ public class IridiumGearRegistry extends Registry<Item> {
                     IridiumToolTier.FULL,
                     1,
                     -2.8F,
-                    new Item.Properties()
+                    new Item.Properties().tab(Main.TAB)
                             .fireResistant()
                             .stacksTo(1).
                             craftRemainder(Items.AMETHYST_SHARD),
@@ -139,7 +143,7 @@ public class IridiumGearRegistry extends Registry<Item> {
                     IridiumToolTier.FULL,
                     5.0F,
                     -3.0F,
-                    new Item.Properties()
+                    new Item.Properties().tab(Main.TAB)
                             .fireResistant()
                             .stacksTo(1),
                     Socket.NONE
@@ -151,7 +155,7 @@ public class IridiumGearRegistry extends Registry<Item> {
                     IridiumToolTier._3_1,
                     5,
                     -3.0F,
-                    new Item.Properties().stacksTo(1),
+                    new Item.Properties().tab(Main.TAB).stacksTo(1),
                     3,
                     1
             )
@@ -162,7 +166,7 @@ public class IridiumGearRegistry extends Registry<Item> {
                     IridiumToolTier._3_2,
                     5,
                     -3.0F,
-                    new Item.Properties().stacksTo(1),
+                    new Item.Properties().tab(Main.TAB).stacksTo(1),
                     3,
                     2
             )
@@ -173,7 +177,7 @@ public class IridiumGearRegistry extends Registry<Item> {
                     IridiumToolTier.DIAMOND_SOCKETED,
                     5.0F,
                     -3.0F,
-                    new Item.Properties()
+                    new Item.Properties().tab(Main.TAB)
                             .fireResistant()
                             .stacksTo(1)
                             .craftRemainder(Items.DIAMOND),
@@ -186,7 +190,7 @@ public class IridiumGearRegistry extends Registry<Item> {
                     IridiumToolTier.EMERALD_SOCKETED,
                     5.0F,
                     -3.0F,
-                    new Item.Properties()
+                    new Item.Properties().tab(Main.TAB)
                             .fireResistant()
                             .stacksTo(1)
                             .craftRemainder(Items.EMERALD),
@@ -199,7 +203,7 @@ public class IridiumGearRegistry extends Registry<Item> {
                     IridiumToolTier.FULL,
                     5.0F,
                     -3.0F,
-                    new Item.Properties()
+                    new Item.Properties().tab(Main.TAB)
                             .fireResistant()
                             .stacksTo(1)
                             .craftRemainder(Items.SKELETON_SKULL),
@@ -212,7 +216,7 @@ public class IridiumGearRegistry extends Registry<Item> {
                     IridiumToolTier.FULL,
                     5.0F,
                     -3.0F,
-                    new Item.Properties()
+                    new Item.Properties().tab(Main.TAB)
                             .craftRemainder(Items.WITHER_SKELETON_SKULL)
                             .fireResistant()
                             .stacksTo(1),
@@ -225,7 +229,7 @@ public class IridiumGearRegistry extends Registry<Item> {
                     IridiumToolTier.FULL,
                     5.0F,
                     -3.0F,
-                    new Item.Properties()
+                    new Item.Properties().tab(Main.TAB)
                             .craftRemainder(Items.AMETHYST_SHARD)
                             .fireResistant()
                             .stacksTo(1),
@@ -244,7 +248,7 @@ public class IridiumGearRegistry extends Registry<Item> {
                     IridiumToolTier.FULL,
                     1.5F,
                     -3.0F,
-                    new Item.Properties()
+                    new Item.Properties().tab(Main.TAB)
                             .fireResistant()
                             .stacksTo(1),
                     Socket.NONE
@@ -257,7 +261,7 @@ public class IridiumGearRegistry extends Registry<Item> {
                     IridiumToolTier.DIAMOND_SOCKETED,
                     1.5F,
                     -3.0F,
-                    new Item.Properties()
+                    new Item.Properties().tab(Main.TAB)
                             .fireResistant()
                             .stacksTo(1)
                             .craftRemainder(Items.DIAMOND),
@@ -270,7 +274,7 @@ public class IridiumGearRegistry extends Registry<Item> {
                     IridiumToolTier.EMERALD_SOCKETED,
                     1.5F,
                     -3.0F,
-                    new Item.Properties()
+                    new Item.Properties().tab(Main.TAB)
                             .fireResistant()
                             .stacksTo(1)
                             .craftRemainder(Items.EMERALD),
@@ -283,7 +287,7 @@ public class IridiumGearRegistry extends Registry<Item> {
                     IridiumToolTier.FULL,
                     1.5F,
                     -3.0F,
-                    new Item.Properties()
+                    new Item.Properties().tab(Main.TAB)
                             .fireResistant()
                             .stacksTo(1)
                             .craftRemainder(Items.SKELETON_SKULL),
@@ -296,7 +300,7 @@ public class IridiumGearRegistry extends Registry<Item> {
                     IridiumToolTier.FULL,
                     1.5F,
                     -3.0F,
-                    new Item.Properties()
+                    new Item.Properties().tab(Main.TAB)
                             .fireResistant()
                             .stacksTo(1)
                             .craftRemainder(Items.WITHER_SKELETON_SKULL),
@@ -309,7 +313,7 @@ public class IridiumGearRegistry extends Registry<Item> {
                     IridiumToolTier.FULL,
                     1.5F,
                     -3.0F,
-                    new Item.Properties()
+                    new Item.Properties().tab(Main.TAB)
                             .fireResistant()
                             .stacksTo(1)
                             .craftRemainder(Items.AMETHYST_SHARD),
@@ -327,7 +331,7 @@ public class IridiumGearRegistry extends Registry<Item> {
                     IridiumToolTier.FULL,
                     3,
                     -2.4F,
-                    new Item.Properties()
+                    new Item.Properties().tab(Main.TAB)
                             .fireResistant()
                             .stacksTo(1),
                     Socket.NONE
@@ -339,7 +343,7 @@ public class IridiumGearRegistry extends Registry<Item> {
                     IridiumToolTier.HALF,
                     3,
                     -2.4F,
-                    new Item.Properties()
+                    new Item.Properties().tab(Main.TAB)
                             .stacksTo(1),
                     2,
                     1
@@ -351,7 +355,7 @@ public class IridiumGearRegistry extends Registry<Item> {
                     IridiumToolTier.DIAMOND_SOCKETED,
                     3,
                     -2.4F,
-                    new Item.Properties()
+                    new Item.Properties().tab(Main.TAB)
                             .fireResistant()
                             .stacksTo(1)
                             .craftRemainder(Items.DIAMOND),
@@ -364,7 +368,7 @@ public class IridiumGearRegistry extends Registry<Item> {
                     IridiumToolTier.EMERALD_SOCKETED,
                     3,
                     -2.4F,
-                    new Item.Properties()
+                    new Item.Properties().tab(Main.TAB)
                             .fireResistant()
                             .stacksTo(1)
                             .craftRemainder(Items.EMERALD),
@@ -377,7 +381,7 @@ public class IridiumGearRegistry extends Registry<Item> {
                     IridiumToolTier.FULL,
                     3,
                     -2.4F,
-                    new Item.Properties()
+                    new Item.Properties().tab(Main.TAB)
                             .fireResistant()
                             .stacksTo(1)
                             .craftRemainder(Items.SKELETON_SKULL),
@@ -390,7 +394,7 @@ public class IridiumGearRegistry extends Registry<Item> {
                     IridiumToolTier.FULL,
                     3,
                     -2.4F,
-                    new Item.Properties()
+                    new Item.Properties().tab(Main.TAB)
                             .fireResistant()
                             .stacksTo(1)
                             .craftRemainder(Items.WITHER_SKELETON_SKULL),
@@ -403,7 +407,7 @@ public class IridiumGearRegistry extends Registry<Item> {
                     IridiumToolTier.FULL,
                     3,
                     -2.4F,
-                    new Item.Properties()
+                    new Item.Properties().tab(Main.TAB)
                             .fireResistant()
                             .stacksTo(1)
                             .craftRemainder(Items.AMETHYST_SHARD),
@@ -421,7 +425,7 @@ public class IridiumGearRegistry extends Registry<Item> {
                     IridiumToolTier.FULL,
                     -1
                     , 0.0F,
-                    new Item.Properties()
+                    new Item.Properties().tab(Main.TAB)
                             .fireResistant()
                             .stacksTo(1)
                     , Socket.NONE));
@@ -434,7 +438,7 @@ public class IridiumGearRegistry extends Registry<Item> {
                     IridiumToolTier.HALF,
                     -1
                     , 0.0F,
-                    new Item.Properties()
+                    new Item.Properties().tab(Main.TAB)
                             .fireResistant()
                             .stacksTo(1)
                     , 2, 1));
@@ -447,7 +451,7 @@ public class IridiumGearRegistry extends Registry<Item> {
                     IridiumToolTier.DIAMOND_SOCKETED,
                     -1
                     , 0.0F,
-                    new Item.Properties()
+                    new Item.Properties().tab(Main.TAB)
                             .fireResistant()
                             .stacksTo(1)
                             .craftRemainder(Items.DIAMOND),
@@ -460,7 +464,7 @@ public class IridiumGearRegistry extends Registry<Item> {
                     IridiumToolTier.EMERALD_SOCKETED,
                     -1
                     , 0.0F,
-                    new Item.Properties()
+                    new Item.Properties().tab(Main.TAB)
                             .fireResistant()
                             .stacksTo(1)
                             .craftRemainder(Items.EMERALD),
@@ -473,7 +477,7 @@ public class IridiumGearRegistry extends Registry<Item> {
                     IridiumToolTier.FULL,
                     -1
                     , 0.0F,
-                    new Item.Properties()
+                    new Item.Properties().tab(Main.TAB)
                             .fireResistant()
                             .stacksTo(1)
                             .craftRemainder(Items.SKELETON_SKULL),
@@ -486,7 +490,7 @@ public class IridiumGearRegistry extends Registry<Item> {
                     IridiumToolTier.FULL,
                     3,
                     -2.4F,
-                    new Item.Properties()
+                    new Item.Properties().tab(Main.TAB)
                             .fireResistant()
                             .stacksTo(1)
                             .craftRemainder(Items.WITHER_SKELETON_SKULL),
@@ -499,7 +503,7 @@ public class IridiumGearRegistry extends Registry<Item> {
                     IridiumToolTier.FULL,
                     -1
                     , 0.0F,
-                    new Item.Properties()
+                    new Item.Properties().tab(Main.TAB)
                             .fireResistant()
                             .stacksTo(1)
                             .craftRemainder(Items.AMETHYST_SHARD),
@@ -515,8 +519,8 @@ public class IridiumGearRegistry extends Registry<Item> {
             "iridium_helmet",
             () -> new ArmorItem(
                     IridiumArmorMaterial.IRIDIUM,
-                    ArmorItem.Type.HELMET,
-                    new Item.Properties()
+                    EquipmentSlot.HEAD,
+                    new Item.Properties().tab(Main.TAB)
                             .fireResistant()
                             .stacksTo(1)
             )
@@ -525,7 +529,7 @@ public class IridiumGearRegistry extends Registry<Item> {
             "iridium_chestplate",
             () -> new IridiumChestplateItem(
                     IridiumArmorMaterial.IRIDIUM,
-                    new Item.Properties()
+                    new Item.Properties().tab(Main.TAB)
                             .fireResistant()
                             .stacksTo(1),
                     Socket.NONE
@@ -535,8 +539,8 @@ public class IridiumGearRegistry extends Registry<Item> {
             "iridium_leggings",
             () -> new ArmorItem(
                     IridiumArmorMaterial.IRIDIUM,
-                    ArmorItem.Type.LEGGINGS,
-                    new Item.Properties()
+                    EquipmentSlot.LEGS,
+                    new Item.Properties().tab(Main.TAB)
                             .fireResistant()
                             .stacksTo(1)
             )
@@ -545,8 +549,8 @@ public class IridiumGearRegistry extends Registry<Item> {
             "iridium_boots",
             () -> new ArmorItem(
                     IridiumArmorMaterial.IRIDIUM,
-                    ArmorItem.Type.BOOTS,
-                    new Item.Properties()
+                    EquipmentSlot.FEET,
+                    new Item.Properties().tab(Main.TAB)
                             .fireResistant()
                             .stacksTo(1)
             )
@@ -557,7 +561,7 @@ public class IridiumGearRegistry extends Registry<Item> {
             "diamond_socketed_iridium_chestplate",
             () -> new IridiumChestplateItem(
                     IridiumArmorMaterial.DIAMOND_SOCKETED,
-                    new Item.Properties()
+                    new Item.Properties().tab(Main.TAB)
                             .fireResistant()
                             .stacksTo(1)
                             .craftRemainder(Items.DIAMOND),
@@ -568,7 +572,7 @@ public class IridiumGearRegistry extends Registry<Item> {
             "emerald_socketed_iridium_chestplate",
             () -> new IridiumChestplateItem(
                     IridiumArmorMaterial.EMERALD_SOCKETED,
-                    new Item.Properties()
+                    new Item.Properties().tab(Main.TAB)
                             .fireResistant()
                             .stacksTo(1)
                             .craftRemainder(Items.EMERALD),
@@ -579,7 +583,7 @@ public class IridiumGearRegistry extends Registry<Item> {
             "skull_socketed_iridium_chestplate",
             () -> new IridiumChestplateItem(
                     IridiumArmorMaterial.IRIDIUM,
-                    new Item.Properties()
+                    new Item.Properties().tab(Main.TAB)
                             .fireResistant()
                             .stacksTo(1)
                             .craftRemainder(Items.SKELETON_SKULL),
@@ -590,7 +594,7 @@ public class IridiumGearRegistry extends Registry<Item> {
             "wither_skull_socketed_iridium_chestplate",
             () -> new IridiumChestplateItem(
                     IridiumArmorMaterial.IRIDIUM,
-                    new Item.Properties()
+                    new Item.Properties().tab(Main.TAB)
                             .fireResistant()
                             .stacksTo(1)
                             .craftRemainder(Items.WITHER_SKELETON_SKULL),
@@ -601,7 +605,7 @@ public class IridiumGearRegistry extends Registry<Item> {
             "amethyst_socketed_iridium_chestplate",
             () -> new IridiumChestplateItem(
                     IridiumArmorMaterial.IRIDIUM,
-                    new Item.Properties()
+                    new Item.Properties().tab(Main.TAB)
                             .fireResistant()
                             .stacksTo(1)
                             .craftRemainder(Items.AMETHYST_SHARD),
@@ -616,8 +620,8 @@ public class IridiumGearRegistry extends Registry<Item> {
             "partial_iridium_helmet_1",
             () -> new PartialIridiumArmorItem(
                     IridiumArmorMaterial._5_1,
-                    ArmorItem.Type.HELMET,
-                    new Item.Properties()
+                    EquipmentSlot.HEAD,
+                    new Item.Properties().tab(Main.TAB)
                             .fireResistant(),
                     5,
                     1
@@ -627,8 +631,8 @@ public class IridiumGearRegistry extends Registry<Item> {
             "partial_iridium_helmet_2",
             () -> new PartialIridiumArmorItem(
                     IridiumArmorMaterial._5_2,
-                    ArmorItem.Type.HELMET,
-                    new Item.Properties()
+                    EquipmentSlot.HEAD,
+                    new Item.Properties().tab(Main.TAB)
                             .fireResistant(),
                     5,
                     2
@@ -638,8 +642,8 @@ public class IridiumGearRegistry extends Registry<Item> {
             "partial_iridium_helmet_3",
             () -> new PartialIridiumArmorItem(
                     IridiumArmorMaterial._5_3,
-                    ArmorItem.Type.HELMET,
-                    new Item.Properties()
+                    EquipmentSlot.HEAD,
+                    new Item.Properties().tab(Main.TAB)
                             .fireResistant(),
                     5,
                     3
@@ -649,8 +653,8 @@ public class IridiumGearRegistry extends Registry<Item> {
             "partial_iridium_helmet_4",
             () -> new PartialIridiumArmorItem(
                     IridiumArmorMaterial._5_4,
-                    ArmorItem.Type.HELMET,
-                    new Item.Properties()
+                    EquipmentSlot.HEAD,
+                    new Item.Properties().tab(Main.TAB)
                             .fireResistant(),
                     5,
                     4
@@ -660,8 +664,8 @@ public class IridiumGearRegistry extends Registry<Item> {
             "partial_iridium_chestplate_1",
             () -> new PartialIridiumArmorItem(
                     IridiumArmorMaterial._8_1,
-                    ArmorItem.Type.CHESTPLATE,
-                    new Item.Properties()
+                    EquipmentSlot.CHEST,
+                    new Item.Properties().tab(Main.TAB)
                             .fireResistant(),
                     8,
                     1
@@ -671,8 +675,8 @@ public class IridiumGearRegistry extends Registry<Item> {
             "partial_iridium_chestplate_2",
             () -> new PartialIridiumArmorItem(
                     IridiumArmorMaterial._8_2,
-                    ArmorItem.Type.CHESTPLATE,
-                    new Item.Properties()
+                    EquipmentSlot.CHEST,
+                    new Item.Properties().tab(Main.TAB)
                             .fireResistant(),
                     8,
                     2
@@ -682,8 +686,8 @@ public class IridiumGearRegistry extends Registry<Item> {
             "partial_iridium_chestplate_3",
             () -> new PartialIridiumArmorItem(
                     IridiumArmorMaterial._8_3,
-                    ArmorItem.Type.CHESTPLATE,
-                    new Item.Properties()
+                    EquipmentSlot.CHEST,
+                    new Item.Properties().tab(Main.TAB)
                             .fireResistant(),
                     8,
                     3
@@ -693,8 +697,8 @@ public class IridiumGearRegistry extends Registry<Item> {
             "partial_iridium_chestplate_4",
             () -> new PartialIridiumArmorItem(
                     IridiumArmorMaterial._8_4,
-                    ArmorItem.Type.CHESTPLATE,
-                    new Item.Properties()
+                    EquipmentSlot.CHEST,
+                    new Item.Properties().tab(Main.TAB)
                             .fireResistant(),
                     8,
                     4
@@ -704,8 +708,8 @@ public class IridiumGearRegistry extends Registry<Item> {
             "partial_iridium_chestplate_5",
             () -> new PartialIridiumArmorItem(
                     IridiumArmorMaterial._8_5,
-                    ArmorItem.Type.CHESTPLATE,
-                    new Item.Properties()
+                    EquipmentSlot.CHEST,
+                    new Item.Properties().tab(Main.TAB)
                             .fireResistant(),
                     8,
                     5
@@ -715,8 +719,8 @@ public class IridiumGearRegistry extends Registry<Item> {
             "partial_iridium_chestplate_6",
             () -> new PartialIridiumArmorItem(
                     IridiumArmorMaterial._8_6,
-                    ArmorItem.Type.CHESTPLATE,
-                    new Item.Properties()
+                    EquipmentSlot.CHEST,
+                    new Item.Properties().tab(Main.TAB)
                             .fireResistant(),
                     8,
                     6
@@ -726,8 +730,8 @@ public class IridiumGearRegistry extends Registry<Item> {
             "partial_iridium_chestplate_7",
             () -> new PartialIridiumArmorItem(
                     IridiumArmorMaterial._8_7,
-                    ArmorItem.Type.CHESTPLATE,
-                    new Item.Properties()
+                    EquipmentSlot.CHEST,
+                    new Item.Properties().tab(Main.TAB)
                             .fireResistant(),
                     8,
                     7
@@ -737,8 +741,8 @@ public class IridiumGearRegistry extends Registry<Item> {
             "partial_iridium_leggings_1",
             () -> new PartialIridiumArmorItem(
                     IridiumArmorMaterial._7_1,
-                    ArmorItem.Type.LEGGINGS,
-                    new Item.Properties()
+                    EquipmentSlot.LEGS,
+                    new Item.Properties().tab(Main.TAB)
                             .fireResistant(),
                     7,
                     1
@@ -748,8 +752,8 @@ public class IridiumGearRegistry extends Registry<Item> {
             "partial_iridium_leggings_2",
             () -> new PartialIridiumArmorItem(
                     IridiumArmorMaterial._7_2,
-                    ArmorItem.Type.LEGGINGS,
-                    new Item.Properties()
+                    EquipmentSlot.LEGS,
+                    new Item.Properties().tab(Main.TAB)
                             .fireResistant(),
                     7,
                     2
@@ -759,8 +763,8 @@ public class IridiumGearRegistry extends Registry<Item> {
             "partial_iridium_leggings_3",
             () -> new PartialIridiumArmorItem(
                     IridiumArmorMaterial._7_3,
-                    ArmorItem.Type.LEGGINGS,
-                    new Item.Properties()
+                    EquipmentSlot.LEGS,
+                    new Item.Properties().tab(Main.TAB)
                             .fireResistant(),
                     7,
                     3
@@ -770,8 +774,8 @@ public class IridiumGearRegistry extends Registry<Item> {
             "partial_iridium_leggings_4",
             () -> new PartialIridiumArmorItem(
                     IridiumArmorMaterial._7_4,
-                    ArmorItem.Type.LEGGINGS,
-                    new Item.Properties()
+                    EquipmentSlot.LEGS,
+                    new Item.Properties().tab(Main.TAB)
                             .fireResistant(),
                     7,
                     4
@@ -781,8 +785,8 @@ public class IridiumGearRegistry extends Registry<Item> {
             "partial_iridium_leggings_5",
             () -> new PartialIridiumArmorItem(
                     IridiumArmorMaterial._7_5,
-                    ArmorItem.Type.LEGGINGS,
-                    new Item.Properties()
+                    EquipmentSlot.LEGS,
+                    new Item.Properties().tab(Main.TAB)
                             .fireResistant(),
                     7,
                     5
@@ -792,8 +796,8 @@ public class IridiumGearRegistry extends Registry<Item> {
             "partial_iridium_leggings_6",
             () -> new PartialIridiumArmorItem(
                     IridiumArmorMaterial._7_6,
-                    ArmorItem.Type.LEGGINGS,
-                    new Item.Properties()
+                    EquipmentSlot.LEGS,
+                    new Item.Properties().tab(Main.TAB)
                             .fireResistant(),
                     7,
                     6
@@ -803,8 +807,8 @@ public class IridiumGearRegistry extends Registry<Item> {
             "partial_iridium_boots_1",
             () -> new PartialIridiumArmorItem(
                     IridiumArmorMaterial._4_1,
-                    ArmorItem.Type.BOOTS,
-                    new Item.Properties()
+                    EquipmentSlot.FEET,
+                    new Item.Properties().tab(Main.TAB)
                             .fireResistant(),
                     4,
                     1
@@ -814,8 +818,8 @@ public class IridiumGearRegistry extends Registry<Item> {
             "partial_iridium_boots_2",
             () -> new PartialIridiumArmorItem(
                     IridiumArmorMaterial._4_2,
-                    ArmorItem.Type.BOOTS,
-                    new Item.Properties()
+                    EquipmentSlot.FEET,
+                    new Item.Properties().tab(Main.TAB)
                             .fireResistant(),
                     4,
                     2
@@ -825,8 +829,8 @@ public class IridiumGearRegistry extends Registry<Item> {
             "partial_iridium_boots_3",
             () -> new PartialIridiumArmorItem(
                     IridiumArmorMaterial._4_3,
-                    ArmorItem.Type.BOOTS,
-                    new Item.Properties()
+                    EquipmentSlot.FEET,
+                    new Item.Properties().tab(Main.TAB)
                             .fireResistant(),
                     4,
                     3
@@ -842,7 +846,7 @@ public class IridiumGearRegistry extends Registry<Item> {
     public static final RegistryObject<Item> IRIDIUM_SCEPTER = INSTANCE.register(
             "iridium_scepter",
             () -> new IridiumScepterItem(
-                    new Item.Properties()
+                    new Item.Properties().tab(Main.TAB)
                             .fireResistant()
                             .stacksTo(1)
                     , Socket.NONE
@@ -853,7 +857,7 @@ public class IridiumGearRegistry extends Registry<Item> {
             <Item> DIAMOND_SOCKETED_IRIDIUM_SCEPTER = INSTANCE.register(
             "diamond_socketed_iridium_scepter",
             () -> new IridiumScepterItem(
-                    new Item.Properties()
+                    new Item.Properties().tab(Main.TAB)
                             .fireResistant()
                             .stacksTo(1)
                             .craftRemainder(Items.DIAMOND),
@@ -863,7 +867,7 @@ public class IridiumGearRegistry extends Registry<Item> {
     public static final RegistryObject<Item> EMERALD_SOCKETED_IRIDIUM_SCEPTER = INSTANCE.register(
             "emerald_socketed_iridium_scepter",
             () -> new IridiumScepterItem(
-                    new Item.Properties()
+                    new Item.Properties().tab(Main.TAB)
                             .fireResistant()
                             .stacksTo(1)
                             .craftRemainder(Items.EMERALD),
@@ -873,7 +877,7 @@ public class IridiumGearRegistry extends Registry<Item> {
     public static final RegistryObject<Item> SKULL_SOCKETED_IRIDIUM_SCEPTER = INSTANCE.register(
             "skull_socketed_iridium_scepter",
             () -> new IridiumScepterItem(
-                    new Item.Properties()
+                    new Item.Properties().tab(Main.TAB)
                             .fireResistant()
                             .stacksTo(1)
                             .craftRemainder(Items.SKELETON_SKULL),
@@ -883,7 +887,7 @@ public class IridiumGearRegistry extends Registry<Item> {
     public static final RegistryObject<Item> WITHER_SKULL_SOCKETED_IRIDIUM_SCEPTER = INSTANCE.register(
             "wither_skull_socketed_iridium_scepter",
             () -> new IridiumScepterItem(
-                    new Item.Properties()
+                    new Item.Properties().tab(Main.TAB)
                             .fireResistant()
                             .stacksTo(1)
                             .craftRemainder(Items.WITHER_SKELETON_SKULL),
@@ -893,7 +897,7 @@ public class IridiumGearRegistry extends Registry<Item> {
     public static final RegistryObject<Item> AMETHYST_SOCKETED_IRIDIUM_SCEPTER = INSTANCE.register(
             "amethyst_socketed_iridium_scepter",
             () -> new IridiumScepterItem(
-                    new Item.Properties()
+                    new Item.Properties().tab(Main.TAB)
                             .fireResistant()
                             .stacksTo(1)
                             .craftRemainder(Items.AMETHYST_SHARD),

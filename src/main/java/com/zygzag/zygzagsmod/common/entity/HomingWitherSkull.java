@@ -72,7 +72,7 @@ public class HomingWitherSkull extends WitherSkull {
         Optional<UUID> o = getTargetUUID();
         if (o.isEmpty()) return null;
         UUID targetUUID = o.get();
-        List<Entity> entities = level().getEntities(this, getBoundingBox().inflate(50.0), (e) -> e.getUUID() == targetUUID);
+        List<Entity> entities = level.getEntities(this, getBoundingBox().inflate(50.0), (e) -> e.getUUID() == targetUUID);
         if (entities.size() < 1) return null;
         return entities.get(0);
     }
@@ -95,9 +95,9 @@ public class HomingWitherSkull extends WitherSkull {
 
     @Nullable
     public Entity findTarget() {
-        List<Entity> players = level().getEntities(this, getBoundingBox().inflate(80), (e) -> e instanceof Player && targetSelector.test(e));
-        List<Entity> monsters = level().getEntities(this, getBoundingBox().inflate(30), (e) -> e instanceof Monster && targetSelector.test(e));
-        List<Entity> entities = level().getEntities(this, getBoundingBox().inflate(10), targetSelector);
+        List<Entity> players = level.getEntities(this, getBoundingBox().inflate(80), (e) -> e instanceof Player && targetSelector.test(e));
+        List<Entity> monsters = level.getEntities(this, getBoundingBox().inflate(30), (e) -> e instanceof Monster && targetSelector.test(e));
+        List<Entity> entities = level.getEntities(this, getBoundingBox().inflate(10), targetSelector);
         if (players.size() > 0) {
             float shortestDistance = Float.MAX_VALUE;
             Entity maxEntity = players.get(0);
@@ -143,7 +143,7 @@ public class HomingWitherSkull extends WitherSkull {
     @Override
     public void tick() {
         if (tickCount >= 60 * 20) kill();
-        if (level().isClientSide || level().hasChunkAt(this.blockPosition())) {
+        if (level.isClientSide || level.hasChunkAt(this.blockPosition())) {
 
             speed *= 1.005;
             //super.tick();
@@ -151,7 +151,7 @@ public class HomingWitherSkull extends WitherSkull {
                 this.setSecondsOnFire(1);
             }
 
-            HitResult hitresult = ProjectileUtil.getHitResultOnMoveVector(this, this::canHitEntity);
+            HitResult hitresult = ProjectileUtil.getHitResult(this, this::canHitEntity);
             if (hitresult.getType() != HitResult.Type.MISS && !net.minecraftforge.event.ForgeEventFactory.onProjectileImpact(this, hitresult)) {
                 this.onHit(hitresult);
             }
@@ -165,14 +165,14 @@ public class HomingWitherSkull extends WitherSkull {
             float f = this.getInertia();
             if (this.isInWater()) {
                 for (int i = 0; i < 4; ++i) {
-                    level().addParticle(ParticleTypes.BUBBLE, d0 - vec3.x * 0.25D, d1 - vec3.y * 0.25D, d2 - vec3.z * 0.25D, vec3.x, vec3.y, vec3.z);
+                    level.addParticle(ParticleTypes.BUBBLE, d0 - vec3.x * 0.25D, d1 - vec3.y * 0.25D, d2 - vec3.z * 0.25D, vec3.x, vec3.y, vec3.z);
                 }
 
                 f = 0.8F;
             }
 
             this.setDeltaMovement(vec3.add(this.xPower, this.yPower, this.zPower).normalize().scale(speed));
-            level().addParticle(this.getTrailParticle(), d0, d1 + 0.5D, d2, 0.0D, 0.0D, 0.0D);
+            level.addParticle(this.getTrailParticle(), d0, d1 + 0.5D, d2, 0.0D, 0.0D, 0.0D);
             this.setPos(d0, d1, d2);
             if (getTargetUUID().isEmpty() || shouldAutoTarget()) {
                 Entity e = findTarget();
