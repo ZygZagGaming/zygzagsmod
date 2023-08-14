@@ -33,7 +33,7 @@ public class PlayerAlliedSkeleton extends WitherSkeleton {
     @Override
     protected void registerGoals() {
         super.registerGoals();
-        targetSelector.removeGoal(new NearestAttackableTargetGoal<>(this, Player.class, true));
+        targetSelector.getAvailableGoals().removeIf((it) -> it.getGoal() instanceof NearestAttackableTargetGoal natgp && natgp.targetType == Player.class);
         this.targetSelector.addGoal(2, new NearestAttackableTargetGoal<>(this, Player.class, 10, true, false, (p) -> !p.getUUID().equals(alliedPlayerUUID)));
         this.targetSelector.addGoal(2, new NearestAttackableTargetGoal<>(this, Monster.class, 10, true, false, (l) -> !(l instanceof PlayerAlliedSkeleton pas) || !pas.alliedPlayerUUID.equals(alliedPlayerUUID)));
     }

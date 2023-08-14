@@ -1,14 +1,12 @@
 {
-  "type": "minecraft:smithing_transform",
+  "type": "minecraft:smithing",
   "base": {
     "item": "minecraft:netherite_pickaxe"
   },
   "addition": {
     "item": "zygzagsmod:iridium_plating"
   },
-  "template": {
-    "item": "zygzagsmod:iridium_pickaxe_blueprint"
-  },
+
   "result": {
     "item": "zygzagsmod:partial_iridium_pickaxe_1"
   }

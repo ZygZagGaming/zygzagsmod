@@ -32,7 +32,7 @@ public class TransmutationCategory implements IRecipeCategory<TransmutationRecip
     private final IDrawable background;
     private final IDrawable icon;
 
-    public static final String TEXTURE_GUI_PATH = "textures/jei/gui/";
+    public static final String TEXTURE_GUI_PATH = "textures/gui/";
     public static final String TEXTURE_GUI_VANILLA = TEXTURE_GUI_PATH + "gui_vanilla.png";
 
     public static final ResourceLocation RECIPE_GUI_VANILLA = new ResourceLocation(ModIds.JEI_ID, TEXTURE_GUI_VANILLA);

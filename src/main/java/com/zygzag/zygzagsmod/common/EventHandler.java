@@ -3,16 +3,19 @@ package com.zygzag.zygzagsmod.common;
 import com.zygzag.zygzagsmod.common.capability.PlayerSightCache;
 import com.zygzag.zygzagsmod.common.capability.PlayerSightCacheImpl;
 import com.zygzag.zygzagsmod.common.effect.SightEffect;
+import com.zygzag.zygzagsmod.common.entity.HomingWitherSkull;
 import com.zygzag.zygzagsmod.common.item.iridium.Socket;
 import com.zygzag.zygzagsmod.common.item.iridium.armor.IridiumChestplateItem;
 import com.zygzag.zygzagsmod.common.item.iridium.tool.IridiumAxeItem;
 import com.zygzag.zygzagsmod.common.item.iridium.tool.IridiumHoeItem;
 import com.zygzag.zygzagsmod.common.registries.BlockRegistry;
 import com.zygzag.zygzagsmod.common.registries.IridiumGearRegistry;
+import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.stats.Stats;
+import net.minecraft.world.Difficulty;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
@@ -32,6 +35,7 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
+import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.common.Tags;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
@@ -51,6 +55,7 @@ import org.jetbrains.annotations.Nullable;
 import java.util.HashMap;
 
 import static com.zygzag.zygzagsmod.common.GeneralUtil.ifCapability;
+import static com.zygzag.zygzagsmod.common.GeneralUtil.isExposedToSunlight;
 import static com.zygzag.zygzagsmod.common.Main.MODID;
 
 @Mod.EventBusSubscriber(modid = MODID)
@@ -126,6 +131,7 @@ public class EventHandler {
                 ItemStack mainhandStack = living.getMainHandItem();
                 Item mainhandItem = mainhandStack.getItem();
                 Item chestItem = living.getItemBySlot(EquipmentSlot.CHEST).getItem();
+                BlockPos pos = living.blockPosition();
 
                 if (chestplateStack.getItem() == IridiumGearRegistry.WITHER_SKULL_SOCKETED_IRIDIUM_CHESTPLATE.get()) {
                     int th = EnchantmentHelper.getTagEnchantmentLevel(Enchantments.THORNS, chestplateStack);
@@ -153,14 +159,25 @@ public class EventHandler {
                         else evt.setAmount(Float.MAX_VALUE);
                     }
                 } else if (mainhandItem == IridiumGearRegistry.AMETHYST_SOCKETED_IRIDIUM_AXE.get()) {
-                    if (time < 11834 || time > 22300) evt.setAmount(evt.getAmount() * (float) Config.amethystAxeDamageBonus);
+                    if ((time < 11834 || time > 22300) && isExposedToSunlight(pos, world)) evt.setAmount(evt.getAmount() * (float) Config.amethystAxeDamageBonus);
                 } else if (mainhandItem == IridiumGearRegistry.AMETHYST_SOCKETED_IRIDIUM_SWORD.get()) {
-                    if (time >= 11834 && time <= 22300) evt.setAmount(evt.getAmount() * (float) Config.amethystSwordDamageBonus);
+                    if ((time >= 11834 && time <= 22300) && isExposedToSunlight(pos, world)) evt.setAmount(evt.getAmount() * (float) Config.amethystSwordDamageBonus);
                 }
 
                 if (chestItem == IridiumGearRegistry.SKULL_SOCKETED_IRIDIUM_CHESTPLATE.get()) {
                     float heal = amt / 4;
                     living.heal(heal);
+                }
+            } else if (attacker instanceof HomingWitherSkull hws) {
+                int i = 0;
+                if (world.getDifficulty() == Difficulty.NORMAL) {
+                    i = 7;
+                } else if (world.getDifficulty() == Difficulty.HARD) {
+                    i = 25;
+                }
+
+                if (i > 0) {
+                    entity.addEffect(new MobEffectInstance(MobEffects.WITHER, 20 * i, 1), hws.getOwner());
                 }
             }
         }

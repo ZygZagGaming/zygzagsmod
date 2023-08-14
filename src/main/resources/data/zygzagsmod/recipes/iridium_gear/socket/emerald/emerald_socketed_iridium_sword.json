@@ -1,13 +1,10 @@
 {
-  "type": "minecraft:smithing_transform",
+  "type": "minecraft:smithing",
   "base": {
     "item": "zygzagsmod:iridium_sword"
   },
   "addition": {
     "item": "minecraft:emerald"
-  },
-"template": {
-    "item": "zygzagsmod:emerald_socket_schematic"
   },
   "result": {
     "item": "zygzagsmod:emerald_socketed_iridium_sword"

@@ -133,7 +133,7 @@ public class IridiumAxeItem extends AxeItem implements ISocketable {
     @Override
     public AABB getSweepHitBox(@Nonnull ItemStack stack, @Nonnull Player player, @Nonnull Entity target) {
         if (stack.getItem() instanceof IridiumAxeItem axe && axe.getSocket() == Socket.DIAMOND) {
-            return target.getBoundingBox().inflate(4.0D, 0.25D, 4.0D);
+            return target.getBoundingBox().inflate(1.0D, 0.25D, 1.0D);
         }
         return super.getSweepHitBox(stack, player, target);
     }
