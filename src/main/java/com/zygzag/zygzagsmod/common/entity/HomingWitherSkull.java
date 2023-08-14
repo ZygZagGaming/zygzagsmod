@@ -2,6 +2,7 @@ package com.zygzag.zygzagsmod.common.entity;
 
 import com.zygzag.zygzagsmod.common.registries.EntityRegistry;
 import net.minecraft.MethodsReturnNonnullByDefault;
+import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
@@ -13,7 +14,10 @@ import net.minecraft.world.entity.monster.Monster;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.ProjectileUtil;
 import net.minecraft.world.entity.projectile.WitherSkull;
+import net.minecraft.world.level.Explosion;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.gameevent.GameEvent;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.EntityHitResult;
 import net.minecraft.world.phys.HitResult;
@@ -201,7 +205,22 @@ public class HomingWitherSkull extends WitherSkull {
     @Override
     public void onHit(HitResult result) {
         Entity target = getTarget();
-        if ((target != null && distanceToSqr(target) <= 9.0) || result instanceof BlockHitResult) super.onHit(result);
+        if ((target != null && distanceToSqr(target) <= 9.0) || result instanceof BlockHitResult) {
+            HitResult.Type type = result.getType();
+            if (type == HitResult.Type.ENTITY) {
+                this.onHitEntity((EntityHitResult) result);
+                this.level().gameEvent(GameEvent.PROJECTILE_LAND, result.getLocation(), GameEvent.Context.of(this, (BlockState)null));
+            } else if (type == HitResult.Type.BLOCK) {
+                BlockHitResult blockhitresult = (BlockHitResult) result;
+                this.onHitBlock(blockhitresult);
+                BlockPos blockpos = blockhitresult.getBlockPos();
+                this.level().gameEvent(GameEvent.PROJECTILE_LAND, blockpos, GameEvent.Context.of(this, this.level().getBlockState(blockpos)));
+            }
+            if (!this.level().isClientSide) {
+                this.level().explode(this, this.getX(), this.getY(), this.getZ(), 1.0F, false, Level.ExplosionInteraction.MOB);
+                this.discard();
+            }
+        }
     }
 
     protected void onHitEntity(EntityHitResult result) {

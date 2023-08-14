@@ -57,7 +57,7 @@ public class Config {
 
     private static final ForgeConfigSpec.DoubleValue SKULL_SWORD_INSTAKILL_CHANCE_BOSSES = BUILDER
             .comment("Chance for Skull-Socketed Iridium Swords to instakill bosses")
-            .defineInRange("skullSwordInstakillChanceBosses", 0.025, 0, 1);
+            .defineInRange("skullSwordInstakillChanceBosses", 0.01, 0, 1);
 
     private static final ForgeConfigSpec.DoubleValue SKULL_SWORD_INSTAKILL_CHANCE_PLAYERS = BUILDER
             .comment("Chance for Skull-Socketed Iridium Swords to instakill players")
@@ -125,7 +125,7 @@ public class Config {
 
     public static final ForgeConfigSpec.IntValue WITHER_SKULL_SCEPTER_COOLDOWN = BUILDER
             .comment("Cooldown for the ability of Wither Skull-Socketed Iridium Scepters")
-            .defineInRange("witherSkullScepterCooldown", 1000, 0, Integer.MAX_VALUE);
+            .defineInRange("witherSkullScepterCooldown", 600, 0, Integer.MAX_VALUE);
 
     public static final ForgeConfigSpec.IntValue AMETHYST_SCEPTER_COOLDOWN = BUILDER
             .comment("Cooldown for the ability of Amethyst-Socketed Iridium Scepters")

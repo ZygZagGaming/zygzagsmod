@@ -4,6 +4,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ParticleOptions;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.util.RandomSource;
+import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.common.Tags;
@@ -68,5 +69,13 @@ public class GeneralUtil {
 
     public static <T> T randomElement(List<T> list, RandomSource rng) {
         return list.get(rng.nextInt(list.size()));
+    }
+
+    public static boolean isExposedToSunlight(BlockPos pos, BlockGetter world) {
+        int max = world.getMaxBuildHeight();
+        for (int y = 0; y < max - pos.getY(); y++) {
+            if (!world.getBlockState(pos.offset(0, y, 0)).isAir()) return false;
+        }
+        return true;
     }
 }

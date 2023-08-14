@@ -105,7 +105,7 @@ public class IridiumScepterItem extends Item implements ISocketable {
             }
             case AMETHYST -> {
                 if (!player.getCooldowns().isOnCooldown(this)) {
-                    aabb = new AABB(player.blockPosition().subtract(new Vec3i(40, 40, 40)), player.blockPosition().offset(new Vec3i(40, 40, 40)));
+                    aabb = player.getBoundingBox().inflate(40.0);
                     List<LivingEntity> entities = world.getEntitiesOfClass(LivingEntity.class, aabb, (v) -> v != player);
                     for (LivingEntity e : entities) {
                         e.addEffect(new MobEffectInstance(MobEffects.BLINDNESS, 200));
