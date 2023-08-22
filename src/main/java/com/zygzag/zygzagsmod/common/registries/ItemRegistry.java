@@ -59,11 +59,6 @@ public class ItemRegistry extends Registry<Item> {
             AMETHYST_SOCKET_SCHEMATIC
     );
 
-    public static final RegistryObject<Item> RAW_IRIDIUM_BLOCK_ITEM = registerBlockItem(BlockRegistry.RAW_IRIDIUM_BLOCK);
-    public static final RegistryObject<Item> END_STONE_SWITCH_ITEM = registerBlockItem(BlockRegistry.END_STONE_SWITCH_BLOCK);
-    public static final RegistryObject<Item> END_SAND_ITEM = registerBlockItem(BlockRegistry.END_SAND);
-    public static final RegistryObject<Item> IRIDIUM_END_SAND_ITEM = registerBlockItem(BlockRegistry.IRIDIUM_END_SAND);
-
     private static RegistryObject<Item> basicItem(String id) {
         return INSTANCE.register(id, () -> new Item(new Item.Properties().tab(Main.TAB)));
     }

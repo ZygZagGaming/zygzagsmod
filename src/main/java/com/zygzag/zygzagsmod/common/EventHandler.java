@@ -1,5 +1,6 @@
 package com.zygzag.zygzagsmod.common;
 
+import com.zygzag.zygzagsmod.common.block.TunedAmethystClusterBlock;
 import com.zygzag.zygzagsmod.common.capability.PlayerSightCache;
 import com.zygzag.zygzagsmod.common.capability.PlayerSightCacheImpl;
 import com.zygzag.zygzagsmod.common.effect.SightEffect;
@@ -9,6 +10,7 @@ import com.zygzag.zygzagsmod.common.item.iridium.tool.IridiumAxeItem;
 import com.zygzag.zygzagsmod.common.item.iridium.tool.IridiumHoeItem;
 import com.zygzag.zygzagsmod.common.registries.BlockRegistry;
 import com.zygzag.zygzagsmod.common.registries.IridiumGearRegistry;
+import com.zygzag.zygzagsmod.common.registries.ItemRegistry;
 import net.minecraft.core.Direction;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
@@ -31,13 +33,17 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.gameevent.GameEvent;
+import net.minecraft.world.level.gameevent.GameEventListener;
 import net.minecraft.world.phys.AABB;
+import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.common.Tags;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
 import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.event.AttachCapabilitiesEvent;
 import net.minecraftforge.event.TickEvent;
+import net.minecraftforge.event.VanillaGameEvent;
 import net.minecraftforge.event.entity.living.LivingDamageEvent;
 import net.minecraftforge.event.entity.living.LivingDeathEvent;
 import net.minecraftforge.event.entity.living.LivingExperienceDropEvent;
@@ -49,6 +55,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.HashMap;
+import java.util.stream.Collectors;
 
 import static com.zygzag.zygzagsmod.common.GeneralUtil.ifCapability;
 import static com.zygzag.zygzagsmod.common.Main.MODID;

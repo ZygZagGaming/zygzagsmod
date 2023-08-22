@@ -1,7 +1,7 @@
 package com.zygzag.zygzagsmod.client;
 
 import com.zygzag.zygzagsmod.common.block.EndSandBlock;
-import com.zygzag.zygzagsmod.common.registries.BlockRegistry;
+import com.zygzag.zygzagsmod.common.registries.BlockWithItemRegistry;
 import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ClientLevel;
@@ -178,7 +178,7 @@ public class EndSandParticle extends TextureSheetParticle {
     public static class Provider implements ParticleProvider<SimpleParticleType> {
         public Particle createParticle(SimpleParticleType pType, ClientLevel pLevel, double pX, double pY, double pZ, double pXSpeed, double pYSpeed, double pZSpeed) {
             return new EndSandParticle(pLevel, pX, pY, pZ, pXSpeed, pYSpeed, pZSpeed)
-                    .updateSprite(BlockRegistry.END_SAND.get().defaultBlockState(), BlockPos.ZERO);
+                    .updateSprite(BlockWithItemRegistry.END_SAND.getDefaultBlockState(), BlockPos.ZERO);
         }
     }
 

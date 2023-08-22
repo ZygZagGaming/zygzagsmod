@@ -2,7 +2,7 @@ package com.zygzag.zygzagsmod.common.feature;
 
 import com.mojang.serialization.Codec;
 import com.zygzag.zygzagsmod.common.block.EndStoneSwitchBlock;
-import com.zygzag.zygzagsmod.common.registries.BlockRegistry;
+import com.zygzag.zygzagsmod.common.registries.BlockWithItemRegistry;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.util.Mth;
@@ -31,7 +31,6 @@ public class IridiumEndIslandFeature extends Feature<NoneFeatureConfiguration> {
         BlockPos pos = context.origin();
         int size = rng.nextInt(6, 8);
         Map<BlockPos, BlockState> structure = new HashMap<>();
-        int wouldBeSusSand = 0;
 
         var pillarHeight = 6;
         for (int k = 0; k < pillarHeight; k++) {
@@ -66,10 +65,9 @@ public class IridiumEndIslandFeature extends Feature<NoneFeatureConfiguration> {
             for (int x = Mth.floor(-radius); x <= Mth.ceil(radius); ++x) {
                 for (int z = Mth.floor(-radius); z <= Mth.ceil(radius); ++z) {
                     if ((float) (x * x + z * z) <= (radius + 1f) * (radius + 1f)) {
-                        var state = BlockRegistry.END_SAND.get().defaultBlockState();
+                        var state = BlockWithItemRegistry.END_SAND.getDefaultBlockState();
                         var random = rng.nextDouble();
-                        if (random < 0.03) wouldBeSusSand++;
-                        if (random > 0.95) state = BlockRegistry.IRIDIUM_END_SAND.get().defaultBlockState();
+                        if (random > 0.95) state = BlockWithItemRegistry.IRIDIUM_END_SAND.getDefaultBlockState();
                         structure.put(pos.offset(x, layer + pillarHeight + 1, z), state);
                     }
                 }
@@ -79,12 +77,6 @@ public class IridiumEndIslandFeature extends Feature<NoneFeatureConfiguration> {
         }
         var pillarPos = 2;
         var placedSwitch = false;
-        var horizontalDirections = new Direction[]{
-                Direction.NORTH,
-                Direction.SOUTH,
-                Direction.EAST,
-                Direction.WEST
-        };
         var pillarsHeight = 9;
         for (double x = -0.5; x <= 0.5; x++) for (double z = -0.5; z <= 0.5; z++) {
             for (int height = 1; height < pillarsHeight; height++) {
@@ -92,21 +84,20 @@ public class IridiumEndIslandFeature extends Feature<NoneFeatureConfiguration> {
                 var k = structure.put(p, Blocks.END_STONE_BRICKS.defaultBlockState());
                 if (k == null && !placedSwitch) {
                     structure.put(p,
-                            BlockRegistry.END_STONE_SWITCH_BLOCK.get()
-                                    .defaultBlockState()
+                            BlockWithItemRegistry.END_STONE_SWITCH.getDefaultBlockState()
                                     .setValue(EndStoneSwitchBlock.FACING, Direction.WEST)
                     );
                     structure.put(p.relative(Direction.EAST),
-                            BlockRegistry.END_SAND.get().defaultBlockState()
+                            BlockWithItemRegistry.END_SAND.getDefaultBlockState()
                     );
                     structure.put(p.relative(Direction.EAST).offset(0, -1, 0),
-                            BlockRegistry.END_SAND.get().defaultBlockState()
+                            BlockWithItemRegistry.END_SAND.getDefaultBlockState()
                     );
                     structure.put(p.relative(Direction.SOUTH),
-                            BlockRegistry.END_SAND.get().defaultBlockState()
+                            BlockWithItemRegistry.END_SAND.getDefaultBlockState()
                     );
                     structure.put(p.relative(Direction.SOUTH).offset(0, -1, 0),
-                            BlockRegistry.END_SAND.get().defaultBlockState()
+                            BlockWithItemRegistry.END_SAND.getDefaultBlockState()
                     );
                     placedSwitch = true;
                 }
@@ -125,9 +116,9 @@ public class IridiumEndIslandFeature extends Feature<NoneFeatureConfiguration> {
                     direction.getCounterClockWise(Direction.Axis.Y)
             );
             for (int block = 0; block < branchLength; block++) {
-                structure.put(currentPos, BlockRegistry.RAW_IRIDIUM_BLOCK.get().defaultBlockState());
+                structure.put(currentPos, BlockWithItemRegistry.RAW_IRIDIUM_BLOCK.getDefaultBlockState());
                 Direction directionToGo = randomElement(directionsToGo, rng);
-                setBlock(world, currentPos.relative(randomElement(directionsToGo, rng)), BlockRegistry.IRIDIUM_END_SAND.get().defaultBlockState());
+                setBlock(world, currentPos.relative(randomElement(directionsToGo, rng)), BlockWithItemRegistry.IRIDIUM_END_SAND.getDefaultBlockState());
                 currentPos = currentPos.relative(directionToGo);
             }
         }

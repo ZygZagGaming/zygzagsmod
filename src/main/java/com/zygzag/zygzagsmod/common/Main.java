@@ -4,6 +4,7 @@ import com.mojang.logging.LogUtils;
 import com.zygzag.zygzagsmod.common.capability.PlayerSightCache;
 import com.zygzag.zygzagsmod.common.item.iridium.ISocketable;
 import com.zygzag.zygzagsmod.common.registries.ItemRegistry;
+import com.zygzag.zygzagsmod.common.registries.SoundEventRegistry;
 import com.zygzag.zygzagsmod.common.registries.Registry;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.BlockTags;
@@ -58,8 +59,6 @@ public class Main {
         Registry.register(modEventBus);
 
         MinecraftForge.EVENT_BUS.register(this);
-
-        for (var soundEvent : ModSoundEvents.SOUND_EVENTS) modEventBus.register(soundEvent);
 
         ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, Config.SPEC);
 
