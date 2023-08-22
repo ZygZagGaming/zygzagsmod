@@ -1,0 +1,7 @@
+{
+  "parent": "minecraft:block/cross",
+  "textures": {
+    "cross": "zygzagsmod:block/tuned_amethyst_cluster"
+  },
+  "render_type": "minecraft:cutout"
+}

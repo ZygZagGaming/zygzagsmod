@@ -5,45 +5,27 @@ import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.RegistryObject;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Consumer;
 import java.util.function.Supplier;
 
-public class Registry<T> {
+public class Registry<T> implements IDeferredRegistry<T> {
     final DeferredRegister<T> register;
+    public DeferredRegister<T> getRegister() {
+        return register;
+    }
 
     public void registerTo(IEventBus bus) {
         register.register(bus);
     }
 
-    private static final Lazy<List<Registry<?>>> REGISTRIES = Lazy.of(() -> List.of(
-            EntityRegistry.INSTANCE,
-            ItemRegistry.INSTANCE,
-            IridiumGearRegistry.INSTANCE,
-            BlockRegistry.INSTANCE,
-            RecipeSerializerRegistry.INSTANCE,
-            EnchantmentRegistry.INSTANCE,
-            //PotionRegistry.INSTANCE,
-            MobEffectRegistry.INSTANCE,
-            //BlockEntityRegistry.INSTANCE,
-            //MenuTypeRegistry.INSTANCE,
-            FeatureRegistry.INSTANCE,
-            //ConfiguredFeatureRegistry.INSTANCE,
-            //PlacedFeatureRegistry.INSTANCE,
-            //StructureRegistry.INSTANCE,
-            //BiomeRegistry.INSTANCE,
-            //BiomeSourceRegistry.INSTANCE,
-            //RuleSourceRegistry.INSTANCE,
-            //EntityDataSerializerRegistry.INSTANCE,
-            ParticleTypeRegistry.INSTANCE,
-            RecipeTypeRegistry.INSTANCE,
-            //StructureTypeRegistry.INSTANCE,
-            //PoiTypeRegistry.INSTANCE,
-            GlobalLootModifierSerializerRegistry.INSTANCE
-            //CreativeModeTabRegistry.INSTANCE
-    ));
+    public static final ArrayList<Consumer<IEventBus>> REGISTRATION_QUEUE = new ArrayList<>();
+    // Registries not extending this class are expected to add themselves
 
     public Registry(DeferredRegister<T> register) {
         this.register = register;
+        REGISTRATION_QUEUE.add(register::register);
     }
 
     public <P extends T> RegistryObject<P> register(String id, Supplier<P> supplier) {
@@ -51,9 +33,8 @@ public class Registry<T> {
     }
 
     public static void register(IEventBus bus) {
-        for (Registry<?> registry : REGISTRIES.get()) {
-            registry.registerTo(bus);
+        for (Consumer<IEventBus> registration : REGISTRATION_QUEUE) {
+            registration.accept(bus);
         }
     }
-
 }
