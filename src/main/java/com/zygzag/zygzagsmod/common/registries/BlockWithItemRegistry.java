@@ -32,26 +32,22 @@ public class BlockWithItemRegistry {
                     BlockBehaviour.Properties.of(Material.METAL)
                             .requiresCorrectToolForDrops()
                             .strength(7.0F, 9.0F)
-            ),
-            new Item.Properties().tab(Main.TAB)
+            )
     );
 
     public static final BlockWithItemRegistryObject<EndStoneSwitchBlock, BlockItem> END_STONE_SWITCH = INSTANCE.register(
             "end_stone_switch",
-            () -> new EndStoneSwitchBlock(BlockBehaviour.Properties.copy(Blocks.END_STONE_BRICKS)),
-            new Item.Properties().tab(Main.TAB)
+            () -> new EndStoneSwitchBlock(BlockBehaviour.Properties.copy(Blocks.END_STONE_BRICKS))
     );
 
     public static final BlockWithItemRegistryObject<EndSandBlock, BlockItem> END_SAND = INSTANCE.register(
             "end_sand",
-            () -> new EndSandBlock(BlockBehaviour.Properties.copy(Blocks.SAND).sound(SoundEventRegistry.END_SAND)),
-            new Item.Properties().tab(Main.TAB)
+            () -> new EndSandBlock(BlockBehaviour.Properties.copy(Blocks.SAND).sound(SoundEventRegistry.END_SAND))
     );
 
     public static final BlockWithItemRegistryObject<Block, BlockItem> IRIDIUM_END_SAND = INSTANCE.register(
             "iridium_end_sand",
-            () -> new Block(BlockBehaviour.Properties.copy(Blocks.SAND)),
-            new Item.Properties().tab(Main.TAB)
+            () -> new Block(BlockBehaviour.Properties.copy(Blocks.SAND))
     );
 
     public <B extends Block> BlockWithItemRegistryObject<B, BlockItem> register(String id, Supplier<B> blockSupplier, Item.Properties properties) {
@@ -61,6 +57,10 @@ public class BlockWithItemRegistry {
                 blockRegObj,
                 itemRegister.register(id, () -> new BlockItem(blockRegObj.get(), properties))
         );
+    }
+
+    public <B extends Block> BlockWithItemRegistryObject<B, BlockItem> register(String id, Supplier<B> blockSupplier) {
+        return register(id, blockSupplier, new Item.Properties().tab(Main.TAB));
     }
 
     public void registerTo(IEventBus bus) {

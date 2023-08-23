@@ -47,6 +47,7 @@ public class Main {
     public static final TagKey<Block> VEGETATION_TAG = BlockTags.create(new ResourceLocation("zygzagsmod:vegetation"));
     public static final TagKey<EntityType<?>> VILLAGER_HATED = TagKey.create(ForgeRegistries.Keys.ENTITY_TYPES, new ResourceLocation("zygzagsmod:villager_hated"));
     public static final TagKey<Block> VEINMINEABLE = TagKey.create(ForgeRegistries.Keys.BLOCKS, new ResourceLocation("zygzagsmod:veinmineable"));
+    public static final TagKey<Block> SCULK_VEIN_LIKE = TagKey.create(ForgeRegistries.Keys.BLOCKS, new ResourceLocation("zygzagsmod:sculk_vein_like"));
     public static final TagKey<EntityType<?>> BOSS_TAG = TagKey.create(ForgeRegistries.Keys.ENTITY_TYPES, new ResourceLocation("zygzagsmod:bosses"));
 
     public static final Capability<PlayerSightCache> PLAYER_SIGHT_CACHE = CapabilityManager.get(new CapabilityToken<>(){});

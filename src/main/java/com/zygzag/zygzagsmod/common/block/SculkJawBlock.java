@@ -5,12 +5,15 @@ import com.zygzag.zygzagsmod.common.registries.BlockItemEntityRegistry;
 import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.EntityBlock;
 import net.minecraft.world.level.block.SimpleWaterloggedBlock;
 import net.minecraft.world.level.block.entity.BlockEntity;
@@ -40,6 +43,7 @@ public class SculkJawBlock extends Block implements EntityBlock, SimpleWaterlogg
     public static final IntegerProperty CLOSED = IntegerProperty.create("closed", 0, 3);
     public static final DirectionProperty FACE = DirectionProperty.create("face");
     public static final BooleanProperty POWERED = BlockStateProperties.POWERED;
+    public static final BooleanProperty DEAL_DAMAGE = BooleanProperty.create("deal_damage");
     public static final Map<Direction, VoxelShape[]> SHAPES_FOR_CLOSING = Map.of(
             Direction.UP,
             new VoxelShape[]{
@@ -86,7 +90,7 @@ public class SculkJawBlock extends Block implements EntityBlock, SimpleWaterlogg
     );
     public SculkJawBlock(Properties properties) {
         super(properties);
-        registerDefaultState(defaultBlockState().setValue(CLOSED, 0).setValue(FACE, Direction.UP).setValue(POWERED, false).setValue(WATERLOGGED, false));
+        registerDefaultState(defaultBlockState().setValue(DEAL_DAMAGE, true).setValue(CLOSED, 0).setValue(FACE, Direction.UP).setValue(POWERED, false).setValue(WATERLOGGED, false));
     }
 
     @Nullable
@@ -102,6 +106,11 @@ public class SculkJawBlock extends Block implements EntityBlock, SimpleWaterlogg
     }
 
     @Override
+    public BlockState updateShape(BlockState state1, Direction dir, BlockState state2, LevelAccessor world, BlockPos pos1, BlockPos pos2) {
+        return canSurvive(state1, world, pos1) ? state1 : Blocks.AIR.defaultBlockState();
+    }
+
+    @Override
     public void entityInside(BlockState state, Level world, BlockPos pos, Entity entity) {
         var be = world.getBlockEntity(pos);
         if (be instanceof SculkJawBlockEntity sculkJaw && sculkJaw.latchedEntity == null && state.getValue(CLOSED) == 0 && !state.getValue(POWERED) && getShape(state, world, pos, CollisionContext.empty()).bounds().move(pos).intersects(entity.getBoundingBox())) sculkJaw.latchOnto(world, pos, state, entity);
@@ -109,7 +118,7 @@ public class SculkJawBlock extends Block implements EntityBlock, SimpleWaterlogg
 
     @Override
     protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
-        builder.add(CLOSED, FACE, POWERED, WATERLOGGED);
+        builder.add(DEAL_DAMAGE, CLOSED, FACE, POWERED, WATERLOGGED);
     }
 
     @Nullable
@@ -128,9 +137,14 @@ public class SculkJawBlock extends Block implements EntityBlock, SimpleWaterlogg
     @Override
     public void neighborChanged(BlockState state, Level world, BlockPos pos, Block neighbor, BlockPos neighborPos, boolean idk) {
         var currentPowered = state.getValue(POWERED);
-        var shouldBePowered = world.getBestNeighborSignal(pos) > 0;
+        var currentDealDamage = state.getValue(DEAL_DAMAGE);
+        var shouldBePowered = world.getBestNeighborSignal(pos) > 7;
+        var shouldDealDamage = world.getBestNeighborSignal(pos) == 0;
         if (currentPowered != shouldBePowered) {
             world.setBlockAndUpdate(pos, state.setValue(POWERED, shouldBePowered));
+        }
+        if (currentDealDamage != shouldDealDamage) {
+            world.setBlockAndUpdate(pos, state.setValue(DEAL_DAMAGE, shouldDealDamage));
         }
     }
 
@@ -140,5 +154,22 @@ public class SculkJawBlock extends Block implements EntityBlock, SimpleWaterlogg
         var face = state.getValue(FACE);
         var otherState = world.getBlockState(pos.relative(face.getOpposite()));
         return otherState.isFaceSturdy(world, pos.relative(face.getOpposite()), face);
+    }
+
+    @Override
+    public boolean hasAnalogOutputSignal(BlockState state) {
+        return true;
+    }
+
+    @Override
+    public int getAnalogOutputSignal(BlockState state, Level world, BlockPos pos) {
+        var be = world.getBlockEntity(pos);
+        if (!(be instanceof SculkJawBlockEntity sculkJaw)) return 0;
+        return sculkJaw.latchedEntity == null ? 0 : 15; // TODO: add different signal strengths for different mobs?
+    }
+
+    @Override
+    public int getExpDrop(BlockState state, net.minecraft.world.level.LevelReader level, RandomSource randomSource, BlockPos pos, int fortuneLevel, int silkTouchLevel) {
+        return silkTouchLevel == 0 ? 5 : 0;
     }
 }

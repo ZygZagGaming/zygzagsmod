@@ -32,14 +32,12 @@ public class BlockItemEntityRegistry {
     public static final BlockItemEntityRegistryObject<SculkJawBlock, BlockItem, SculkJawBlockEntity> SCULK_JAW = INSTANCE.register(
             "sculk_jaw",
             () -> new SculkJawBlock(BlockBehaviour.Properties.copy(Blocks.SCULK_VEIN)),
-            new Item.Properties().tab(Main.TAB),
             SculkJawBlockEntity::new
     );
 
     public static final BlockItemEntityRegistryObject<TunedAmethystClusterBlock, BlockItem, TunedAmethystClusterBlockEntity> TUNED_AMETHYST_CLUSTER = INSTANCE.register(
             "tuned_amethyst_cluster",
             () -> new TunedAmethystClusterBlock(BlockBehaviour.Properties.of(Material.AMETHYST)),
-            new Item.Properties().tab(Main.TAB),
             TunedAmethystClusterBlockEntity::new
     );
 
@@ -51,6 +49,10 @@ public class BlockItemEntityRegistry {
                 itemRegister.register(id, () -> new BlockItem(blockRegObj.get(), properties)),
                 beRegister.register(id, () -> BlockEntityType.Builder.of(beSupplier, blockRegObj.get()).build(null))
         );
+    }
+
+    public <B extends Block, E extends BlockEntity> BlockItemEntityRegistryObject<B, BlockItem, E> register(String id, Supplier<B> blockSupplier, BlockEntityType.BlockEntitySupplier<E> beSupplier) {
+        return register(id, blockSupplier, new Item.Properties().tab(Main.TAB), beSupplier);
     }
 
     public void registerTo(IEventBus bus) {

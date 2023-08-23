@@ -4,7 +4,8 @@
   "compatibilityLevel": "JAVA_8",
   "refmap": "zygzagsmod.refmap.json",
   "mixins": [
-    "SculkBlockMixin"
+    "SculkBlockMixin",
+    "SculkVeinBlockMixin"
   ],
   "client": [
   ],
