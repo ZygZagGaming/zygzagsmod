@@ -3,6 +3,7 @@ package com.zygzag.zygzagsmod.common;
 import com.mojang.logging.LogUtils;
 import com.zygzag.zygzagsmod.common.capability.PlayerSightCache;
 import com.zygzag.zygzagsmod.common.item.iridium.ISocketable;
+import com.zygzag.zygzagsmod.common.registries.BlockItemEntityRegistry;
 import com.zygzag.zygzagsmod.common.registries.ItemRegistry;
 import com.zygzag.zygzagsmod.common.registries.SoundEventRegistry;
 import com.zygzag.zygzagsmod.common.registries.Registry;
@@ -14,6 +15,8 @@ import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.enchantment.EnchantmentCategory;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.CapabilityManager;
@@ -27,6 +30,11 @@ import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import net.minecraftforge.registries.ForgeRegistries;
 import org.slf4j.Logger;
+import oshi.util.tuples.Pair;
+
+import java.util.List;
+import java.util.Map;
+import java.util.function.Supplier;
 
 @Mod(Main.MODID)
 public class Main {
@@ -42,6 +50,11 @@ public class Main {
     public static final TagKey<EntityType<?>> BOSS_TAG = TagKey.create(ForgeRegistries.Keys.ENTITY_TYPES, new ResourceLocation("zygzagsmod:bosses"));
 
     public static final Capability<PlayerSightCache> PLAYER_SIGHT_CACHE = CapabilityManager.get(new CapabilityToken<>(){});
+    public static final Supplier<Map<BlockState, Integer>> EXTRANEOUS_SCULK_GROWTHS = () -> Map.of(
+            Blocks.SCULK_SENSOR.defaultBlockState(), 10,
+            Blocks.SCULK_SHRIEKER.defaultBlockState(), 1,
+            BlockItemEntityRegistry.SCULK_JAW.getDefaultBlockState(), 2
+    );
 
     public static final CreativeModeTab TAB = new CreativeModeTab("zygzagsmod") {
         @Override

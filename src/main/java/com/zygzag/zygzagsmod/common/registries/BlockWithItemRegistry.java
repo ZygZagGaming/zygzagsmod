@@ -1,5 +1,6 @@
 package com.zygzag.zygzagsmod.common.registries;
 
+import com.zygzag.zygzagsmod.common.Main;
 import com.zygzag.zygzagsmod.common.block.EndSandBlock;
 import com.zygzag.zygzagsmod.common.block.EndStoneSwitchBlock;
 import com.zygzag.zygzagsmod.common.block.SculkJawBlock;
@@ -11,11 +12,13 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.material.Material;
+import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 
 import java.util.function.Supplier;
 
+import static com.zygzag.zygzagsmod.common.Main.LOGGER;
 import static com.zygzag.zygzagsmod.common.Main.MODID;
 
 public class BlockWithItemRegistry {
@@ -30,25 +33,25 @@ public class BlockWithItemRegistry {
                             .requiresCorrectToolForDrops()
                             .strength(7.0F, 9.0F)
             ),
-            new Item.Properties()
+            new Item.Properties().tab(Main.TAB)
     );
 
     public static final BlockWithItemRegistryObject<EndStoneSwitchBlock, BlockItem> END_STONE_SWITCH = INSTANCE.register(
             "end_stone_switch",
             () -> new EndStoneSwitchBlock(BlockBehaviour.Properties.copy(Blocks.END_STONE_BRICKS)),
-            new Item.Properties()
+            new Item.Properties().tab(Main.TAB)
     );
 
     public static final BlockWithItemRegistryObject<EndSandBlock, BlockItem> END_SAND = INSTANCE.register(
             "end_sand",
             () -> new EndSandBlock(BlockBehaviour.Properties.copy(Blocks.SAND).sound(SoundEventRegistry.END_SAND)),
-            new Item.Properties()
+            new Item.Properties().tab(Main.TAB)
     );
 
     public static final BlockWithItemRegistryObject<Block, BlockItem> IRIDIUM_END_SAND = INSTANCE.register(
             "iridium_end_sand",
             () -> new Block(BlockBehaviour.Properties.copy(Blocks.SAND)),
-            new Item.Properties()
+            new Item.Properties().tab(Main.TAB)
     );
 
     public <B extends Block> BlockWithItemRegistryObject<B, BlockItem> register(String id, Supplier<B> blockSupplier, Item.Properties properties) {
@@ -60,10 +63,8 @@ public class BlockWithItemRegistry {
         );
     }
 
-    public BlockWithItemRegistry() {
-        Registry.REGISTRATION_QUEUE.add((bus) -> {
-            blockRegister.register(bus);
-            itemRegister.register(bus);
-        });
+    public void registerTo(IEventBus bus) {
+        blockRegister.register(bus);
+        itemRegister.register(bus);
     }
 }

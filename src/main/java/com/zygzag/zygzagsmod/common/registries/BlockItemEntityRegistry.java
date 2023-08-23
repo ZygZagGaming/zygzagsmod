@@ -1,5 +1,6 @@
 package com.zygzag.zygzagsmod.common.registries;
 
+import com.zygzag.zygzagsmod.common.Main;
 import com.zygzag.zygzagsmod.common.block.SculkJawBlock;
 import com.zygzag.zygzagsmod.common.block.TunedAmethystClusterBlock;
 import com.zygzag.zygzagsmod.common.block.entity.SculkJawBlockEntity;
@@ -13,11 +14,13 @@ import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.material.Material;
+import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 
 import java.util.function.Supplier;
 
+import static com.zygzag.zygzagsmod.common.Main.LOGGER;
 import static com.zygzag.zygzagsmod.common.Main.MODID;
 
 public class BlockItemEntityRegistry {
@@ -29,14 +32,14 @@ public class BlockItemEntityRegistry {
     public static final BlockItemEntityRegistryObject<SculkJawBlock, BlockItem, SculkJawBlockEntity> SCULK_JAW = INSTANCE.register(
             "sculk_jaw",
             () -> new SculkJawBlock(BlockBehaviour.Properties.copy(Blocks.SCULK_VEIN)),
-            new Item.Properties(),
+            new Item.Properties().tab(Main.TAB),
             SculkJawBlockEntity::new
     );
 
     public static final BlockItemEntityRegistryObject<TunedAmethystClusterBlock, BlockItem, TunedAmethystClusterBlockEntity> TUNED_AMETHYST_CLUSTER = INSTANCE.register(
             "tuned_amethyst_cluster",
             () -> new TunedAmethystClusterBlock(BlockBehaviour.Properties.of(Material.AMETHYST)),
-            new Item.Properties(),
+            new Item.Properties().tab(Main.TAB),
             TunedAmethystClusterBlockEntity::new
     );
 
@@ -46,15 +49,13 @@ public class BlockItemEntityRegistry {
                 new ResourceLocation(MODID, id),
                 blockRegObj,
                 itemRegister.register(id, () -> new BlockItem(blockRegObj.get(), properties)),
-                beRegister.register(id, () -> BlockEntityType.Builder.of(beSupplier, blockSupplier.get()).build(null))
+                beRegister.register(id, () -> BlockEntityType.Builder.of(beSupplier, blockRegObj.get()).build(null))
         );
     }
 
-    public BlockItemEntityRegistry() {
-        Registry.REGISTRATION_QUEUE.add((bus) -> {
-            blockRegister.register(bus);
-            itemRegister.register(bus);
-            beRegister.register(bus);
-        });
+    public void registerTo(IEventBus bus) {
+        blockRegister.register(bus);
+        itemRegister.register(bus);
+        beRegister.register(bus);
     }
 }

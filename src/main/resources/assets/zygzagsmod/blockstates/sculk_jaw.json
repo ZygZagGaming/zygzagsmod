@@ -1,0 +1,104 @@
+{
+  "variants": {
+    "closed=0,face=up": {
+      "model": "zygzagsmod:block/sculk_jaw_0"
+    },
+    "closed=1,face=up": {
+      "model": "zygzagsmod:block/sculk_jaw_1"
+    },
+    "closed=2,face=up": {
+      "model": "zygzagsmod:block/sculk_jaw_2"
+    },
+    "closed=3,face=up": {
+      "model": "zygzagsmod:block/sculk_jaw_3"
+    },
+    "closed=0,face=down": {
+      "model": "zygzagsmod:block/sculk_jaw_0",
+      "x": 180
+    },
+    "closed=1,face=down": {
+      "model": "zygzagsmod:block/sculk_jaw_1",
+      "x": 180
+    },
+    "closed=2,face=down": {
+      "model": "zygzagsmod:block/sculk_jaw_2",
+      "x": 180
+    },
+    "closed=3,face=down": {
+      "model": "zygzagsmod:block/sculk_jaw_3",
+      "x": 180
+    },
+    "closed=0,face=north": {
+      "model": "zygzagsmod:block/sculk_jaw_0",
+      "x": 90
+    },
+    "closed=1,face=north": {
+      "model": "zygzagsmod:block/sculk_jaw_1",
+      "x": 90
+    },
+    "closed=2,face=north": {
+      "model": "zygzagsmod:block/sculk_jaw_2",
+      "x": 90
+    },
+    "closed=3,face=north": {
+      "model": "zygzagsmod:block/sculk_jaw_3",
+      "x": 90
+    },
+    "closed=0,face=south": {
+      "model": "zygzagsmod:block/sculk_jaw_0",
+      "x": 270
+    },
+    "closed=1,face=south": {
+      "model": "zygzagsmod:block/sculk_jaw_1",
+      "x": 270
+    },
+    "closed=2,face=south": {
+      "model": "zygzagsmod:block/sculk_jaw_2",
+      "x": 270
+    },
+    "closed=3,face=south": {
+      "model": "zygzagsmod:block/sculk_jaw_3",
+      "x": 270
+    },
+    "closed=0,face=east": {
+      "model": "zygzagsmod:block/sculk_jaw_0",
+      "x": 90,
+      "y": 90
+    },
+    "closed=1,face=east": {
+      "model": "zygzagsmod:block/sculk_jaw_1",
+      "x": 90,
+      "y": 90
+    },
+    "closed=2,face=east": {
+      "model": "zygzagsmod:block/sculk_jaw_2",
+      "x": 90,
+      "y": 90
+    },
+    "closed=3,face=east": {
+      "model": "zygzagsmod:block/sculk_jaw_3",
+      "x": 90,
+      "y": 90
+    },
+    "closed=0,face=west": {
+      "model": "zygzagsmod:block/sculk_jaw_0",
+      "x": 270,
+      "y": 90
+    },
+    "closed=1,face=west": {
+      "model": "zygzagsmod:block/sculk_jaw_1",
+      "x": 270,
+      "y": 90
+    },
+    "closed=2,face=west": {
+      "model": "zygzagsmod:block/sculk_jaw_2",
+      "x": 270,
+      "y": 90
+    },
+    "closed=3,face=west": {
+      "model": "zygzagsmod:block/sculk_jaw_3",
+      "x": 270,
+      "y": 90
+    }
+  }
+}
