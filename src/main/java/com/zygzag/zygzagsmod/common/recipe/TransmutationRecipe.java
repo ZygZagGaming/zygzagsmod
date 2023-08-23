@@ -3,8 +3,8 @@ package com.zygzag.zygzagsmod.common.recipe;
 
 import com.google.gson.JsonObject;
 import com.mojang.blaze3d.MethodsReturnNonnullByDefault;
-import com.zygzag.zygzagsmod.common.registries.RecipeSerializerRegistry;
-import com.zygzag.zygzagsmod.common.registries.RecipeTypeRegistry;
+import com.zygzag.zygzagsmod.common.registry.RecipeSerializerRegistry;
+import com.zygzag.zygzagsmod.common.registry.RecipeTypeRegistry;
 import net.minecraft.core.RegistryAccess;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;

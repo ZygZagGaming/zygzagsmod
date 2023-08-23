@@ -1,4 +1,4 @@
-package com.zygzag.zygzagsmod.common.registries;
+package com.zygzag.zygzagsmod.common.registry;
 
 import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.core.particles.ParticleType;

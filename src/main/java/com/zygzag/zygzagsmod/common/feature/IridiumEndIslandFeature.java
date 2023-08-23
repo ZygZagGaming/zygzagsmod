@@ -2,8 +2,8 @@ package com.zygzag.zygzagsmod.common.feature;
 
 import com.mojang.serialization.Codec;
 import com.zygzag.zygzagsmod.common.block.EndStoneSwitchBlock;
-import com.zygzag.zygzagsmod.common.registries.BlockEntityRegistry;
-import com.zygzag.zygzagsmod.common.registries.BlockRegistry;
+import com.zygzag.zygzagsmod.common.registry.BlockItemEntityRegistry;
+import com.zygzag.zygzagsmod.common.registry.BlockWithItemRegistry;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.resources.ResourceLocation;
@@ -16,7 +16,9 @@ import net.minecraft.world.level.levelgen.feature.Feature;
 import net.minecraft.world.level.levelgen.feature.FeaturePlaceContext;
 import net.minecraft.world.level.levelgen.feature.configurations.NoneFeatureConfiguration;
 
-import java.util.*;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 import static com.zygzag.zygzagsmod.common.GeneralUtil.randomElement;
 
@@ -65,10 +67,10 @@ public class IridiumEndIslandFeature extends Feature<NoneFeatureConfiguration> {
             for (int x = Mth.floor(-radius); x <= Mth.ceil(radius); ++x) {
                 for (int z = Mth.floor(-radius); z <= Mth.ceil(radius); ++z) {
                     if ((float) (x * x + z * z) <= (radius + 1f) * (radius + 1f)) {
-                        var state = BlockRegistry.END_SAND.get().defaultBlockState();
+                        var state = BlockWithItemRegistry.END_SAND.getDefaultBlockState();
                         var random = rng.nextDouble();
-                        if (random < 0.03) state = BlockRegistry.SUSPICIOUS_END_SAND.get().defaultBlockState();
-                        if (random > 0.95) state = BlockRegistry.IRIDIUM_END_SAND.get().defaultBlockState();
+                        if (random < 0.03) state = BlockItemEntityRegistry.SUSPICIOUS_END_SAND.getDefaultBlockState();
+                        if (random > 0.95) state = BlockWithItemRegistry.IRIDIUM_END_SAND.getDefaultBlockState();
                         structure.put(pos.offset(x, layer + pillarHeight + 1, z), state);
                     }
                 }
@@ -91,21 +93,20 @@ public class IridiumEndIslandFeature extends Feature<NoneFeatureConfiguration> {
                 var k = structure.put(p, Blocks.END_STONE_BRICKS.defaultBlockState());
                 if (k == null && !placedSwitch) {
                     structure.put(p,
-                            BlockRegistry.END_STONE_SWITCH_BLOCK.get()
-                                    .defaultBlockState()
+                            BlockWithItemRegistry.END_STONE_SWITCH.getDefaultBlockState()
                                     .setValue(EndStoneSwitchBlock.FACING, Direction.WEST)
                     );
                     structure.put(p.relative(Direction.EAST),
-                            BlockRegistry.END_SAND.get().defaultBlockState()
+                            BlockWithItemRegistry.END_SAND.getDefaultBlockState()
                     );
                     structure.put(p.relative(Direction.EAST).offset(0, -1, 0),
-                            BlockRegistry.END_SAND.get().defaultBlockState()
+                            BlockWithItemRegistry.END_SAND.getDefaultBlockState()
                     );
                     structure.put(p.relative(Direction.SOUTH),
-                            BlockRegistry.END_SAND.get().defaultBlockState()
+                            BlockWithItemRegistry.END_SAND.getDefaultBlockState()
                     );
                     structure.put(p.relative(Direction.SOUTH).offset(0, -1, 0),
-                            BlockRegistry.END_SAND.get().defaultBlockState()
+                            BlockWithItemRegistry.END_SAND.getDefaultBlockState()
                     );
                     placedSwitch = true;
                 }
@@ -124,9 +125,9 @@ public class IridiumEndIslandFeature extends Feature<NoneFeatureConfiguration> {
                     direction.getCounterClockWise(Direction.Axis.Y)
             );
             for (int block = 0; block < branchLength; block++) {
-                structure.put(currentPos, BlockRegistry.RAW_IRIDIUM_BLOCK.get().defaultBlockState());
+                structure.put(currentPos, BlockWithItemRegistry.RAW_IRIDIUM_BLOCK.getDefaultBlockState());
                 Direction directionToGo = randomElement(directionsToGo, rng);
-                setBlock(world, currentPos.relative(randomElement(directionsToGo, rng)), BlockRegistry.IRIDIUM_END_SAND.get().defaultBlockState());
+                setBlock(world, currentPos.relative(randomElement(directionsToGo, rng)), BlockWithItemRegistry.IRIDIUM_END_SAND.getDefaultBlockState());
                 currentPos = currentPos.relative(directionToGo);
             }
         }
@@ -135,8 +136,8 @@ public class IridiumEndIslandFeature extends Feature<NoneFeatureConfiguration> {
         for (BlockPos position : structure.keySet()) {
             BlockState state = structure.get(position);
             setBlock(world, position, state);
-            if (state.is(BlockRegistry.SUSPICIOUS_END_SAND.get())) {
-                world.getBlockEntity(position, BlockEntityRegistry.SUSPICIOUS_END_SAND.get()).ifPresent((it) ->
+            if (state.is(BlockItemEntityRegistry.SUSPICIOUS_END_SAND.getBlock())) {
+                world.getBlockEntity(position, BlockItemEntityRegistry.SUSPICIOUS_END_SAND.getBlockEntityType()).ifPresent((it) ->
                         it.setLootTable(new ResourceLocation("zygzagsmod:archaeology/suspicious_end_sand"), rng.nextLong())
                 );
             }

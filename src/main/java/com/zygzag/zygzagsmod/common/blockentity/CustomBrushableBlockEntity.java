@@ -1,8 +1,8 @@
 package com.zygzag.zygzagsmod.common.blockentity;
 
 import com.mojang.logging.LogUtils;
-import com.zygzag.zygzagsmod.common.registries.BlockEntityRegistry;
-import com.zygzag.zygzagsmod.common.registries.EnchantmentRegistry;
+import com.zygzag.zygzagsmod.common.registry.BlockItemEntityRegistry;
+import com.zygzag.zygzagsmod.common.registry.EnchantmentRegistry;
 import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.advancements.CriteriaTriggers;
@@ -57,7 +57,7 @@ public class CustomBrushableBlockEntity extends BlockEntity {
     private long lootTableSeed;
 
     public CustomBrushableBlockEntity(BlockPos pPos, BlockState pBlockState) {
-        super(BlockEntityRegistry.SUSPICIOUS_END_SAND.get(), pPos, pBlockState);
+        super(BlockItemEntityRegistry.SUSPICIOUS_END_SAND.getBlockEntityType(), pPos, pBlockState);
     }
 
     public boolean brush(long pStartTick, Player pPlayer, Direction pHitDirection) {

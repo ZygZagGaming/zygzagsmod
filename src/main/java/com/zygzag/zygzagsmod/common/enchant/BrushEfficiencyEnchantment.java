@@ -2,7 +2,6 @@ package com.zygzag.zygzagsmod.common.enchant;
 
 import com.zygzag.zygzagsmod.common.Main;
 import net.minecraft.world.entity.EquipmentSlot;
-import net.minecraft.world.item.enchantment.EnchantmentCategory;
 
 public class BrushEfficiencyEnchantment extends CustomEnchantment {
     public BrushEfficiencyEnchantment(Rarity rarity) {

@@ -1,9 +1,9 @@
 package com.zygzag.zygzagsmod.common.entity;
 
 import com.zygzag.zygzagsmod.common.recipe.TransmutationRecipe;
-import com.zygzag.zygzagsmod.common.registries.EntityRegistry;
-import com.zygzag.zygzagsmod.common.registries.ItemRegistry;
-import com.zygzag.zygzagsmod.common.registries.RecipeTypeRegistry;
+import com.zygzag.zygzagsmod.common.registry.EntityRegistry;
+import com.zygzag.zygzagsmod.common.registry.ItemRegistry;
+import com.zygzag.zygzagsmod.common.registry.RecipeTypeRegistry;
 import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.SimpleContainer;

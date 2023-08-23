@@ -1,8 +1,8 @@
 package com.zygzag.zygzagsmod.client;
 
-import com.zygzag.zygzagsmod.common.registries.BlockEntityRegistry;
-import com.zygzag.zygzagsmod.common.registries.EntityRegistry;
-import com.zygzag.zygzagsmod.common.registries.ParticleTypeRegistry;
+import com.zygzag.zygzagsmod.common.registry.BlockItemEntityRegistry;
+import com.zygzag.zygzagsmod.common.registry.EntityRegistry;
+import com.zygzag.zygzagsmod.common.registry.ParticleTypeRegistry;
 import net.minecraft.client.renderer.entity.ThrownItemRenderer;
 import net.minecraft.client.renderer.entity.WitherSkeletonRenderer;
 import net.minecraftforge.api.distmarker.Dist;
@@ -20,7 +20,7 @@ public class ClientModEventHandler {
         event.registerEntityRenderer(EntityRegistry.TRANSMUTATION_CHARGE_ENTITY.get(), ThrownItemRenderer::new);
         event.registerEntityRenderer(EntityRegistry.HOMING_WITHER_SKULL.get(), HomingWitherSkullRenderer::new);
         event.registerEntityRenderer(EntityRegistry.PLAYER_ALLIED_SKELETON.get(), WitherSkeletonRenderer::new);
-        event.registerBlockEntityRenderer(BlockEntityRegistry.SUSPICIOUS_END_SAND.get(), CustomBrushableBlockRenderer::new);
+        event.registerBlockEntityRenderer(BlockItemEntityRegistry.SUSPICIOUS_END_SAND.getBlockEntityType(), CustomBrushableBlockRenderer::new);
     }
 
     @SubscribeEvent

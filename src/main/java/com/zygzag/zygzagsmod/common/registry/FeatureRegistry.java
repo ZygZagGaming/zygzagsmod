@@ -1,6 +1,5 @@
-package com.zygzag.zygzagsmod.common.registries;
+package com.zygzag.zygzagsmod.common.registry;
 
-import com.ibm.icu.impl.ICURegionDataTables;
 import com.zygzag.zygzagsmod.common.feature.IridiumEndIslandFeature;
 import net.minecraft.world.level.levelgen.feature.Feature;
 import net.minecraft.world.level.levelgen.feature.configurations.NoneFeatureConfiguration;

@@ -1,4 +1,4 @@
-package com.zygzag.zygzagsmod.common.registries;
+package com.zygzag.zygzagsmod.common.registry;
 
 
 import com.zygzag.zygzagsmod.common.Config;
@@ -7,8 +7,6 @@ import com.zygzag.zygzagsmod.common.effect.SightEffect;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffectCategory;
-import net.minecraft.world.level.block.CropBlock;
-import net.minecraft.world.level.block.FarmBlock;
 import net.minecraftforge.common.Tags;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.RegistryObject;

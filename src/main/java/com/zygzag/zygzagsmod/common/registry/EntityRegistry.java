@@ -1,4 +1,4 @@
-package com.zygzag.zygzagsmod.common.registries;
+package com.zygzag.zygzagsmod.common.registry;
 
 import com.zygzag.zygzagsmod.common.entity.HomingWitherSkull;
 import com.zygzag.zygzagsmod.common.entity.PlayerAlliedSkeleton;

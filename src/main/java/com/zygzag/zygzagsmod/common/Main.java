@@ -1,15 +1,9 @@
 package com.zygzag.zygzagsmod.common;
 
 import com.mojang.logging.LogUtils;
-import com.zygzag.zygzagsmod.client.CustomBrushableBlockRenderer;
 import com.zygzag.zygzagsmod.common.capability.PlayerSightCache;
 import com.zygzag.zygzagsmod.common.item.iridium.ISocketable;
-import com.zygzag.zygzagsmod.common.registries.BlockEntityRegistry;
-import com.zygzag.zygzagsmod.common.registries.IridiumGearRegistry;
-import com.zygzag.zygzagsmod.common.registries.ItemRegistry;
-import com.zygzag.zygzagsmod.common.registries.Registry;
-import net.minecraft.client.renderer.ItemBlockRenderTypes;
-import net.minecraft.client.renderer.blockentity.BlockEntityRenderers;
+import com.zygzag.zygzagsmod.common.registry.*;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.BlockTags;
@@ -19,6 +13,8 @@ import net.minecraft.world.item.BrushItem;
 import net.minecraft.world.item.CreativeModeTabs;
 import net.minecraft.world.item.enchantment.EnchantmentCategory;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.CapabilityManager;
@@ -31,8 +27,11 @@ import net.minecraftforge.fml.config.ModConfig;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
+import net.minecraftforge.registries.ForgeRegistries;
 import org.slf4j.Logger;
 
+import java.util.Map;
+import java.util.function.Supplier;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -48,9 +47,16 @@ public class Main {
     public static final TagKey<Block> VEGETATION_TAG = BlockTags.create(new ResourceLocation("zygzagsmod:vegetation"));
     public static final TagKey<EntityType<?>> VILLAGER_HATED = TagKey.create(Registries.ENTITY_TYPE, new ResourceLocation("zygzagsmod:villager_hated"));
     public static final TagKey<Block> VEINMINEABLE = TagKey.create(Registries.BLOCK, new ResourceLocation("zygzagsmod:veinmineable"));
+    public static final TagKey<Block> SCULK_VEIN_LIKE = TagKey.create(ForgeRegistries.Keys.BLOCKS, new ResourceLocation("zygzagsmod:sculk_vein_like"));
     public static final TagKey<EntityType<?>> BOSS_TAG = TagKey.create(Registries.ENTITY_TYPE, new ResourceLocation("zygzagsmod:bosses"));
 
     public static final Capability<PlayerSightCache> PLAYER_SIGHT_CACHE = CapabilityManager.get(new CapabilityToken<>(){});
+
+    public static final Supplier<Map<BlockState, Integer>> EXTRANEOUS_SCULK_GROWTHS = () -> Map.of(
+            Blocks.SCULK_SENSOR.defaultBlockState(), 10,
+            Blocks.SCULK_SHRIEKER.defaultBlockState(), 1,
+            BlockItemEntityRegistry.SCULK_JAW.getDefaultBlockState(), 2
+    );
 
     public Main() {
         IEventBus modEventBus = FMLJavaModLoadingContext.get().getModEventBus();
@@ -63,7 +69,6 @@ public class Main {
         MinecraftForge.EVENT_BUS.register(this);
 
         modEventBus.addListener(this::addCreative);
-        for (var soundEvent : ModSoundEvents.SOUND_EVENTS) modEventBus.register(soundEvent);
 
         ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, Config.SPEC);
 
@@ -114,7 +119,7 @@ public class Main {
             event.acceptAll(ItemRegistry.SOCKET_SCHEMATICS.stream().map((it) -> it.get().getDefaultInstance()).collect(Collectors.toList()));
         } else if (event.getTabKey() == CreativeModeTabs.NATURAL_BLOCKS) {
             event.acceptAll(Stream.of(
-                    ItemRegistry.RAW_IRIDIUM_BLOCK_ITEM
+                    BlockWithItemRegistry.RAW_IRIDIUM_BLOCK.item()
             ).map((it) -> it.get().getDefaultInstance()).collect(Collectors.toList()));
         } else if (event.getTabKey() == CreativeModeTabs.TOOLS_AND_UTILITIES) {
             event.acceptAll(Stream.of(

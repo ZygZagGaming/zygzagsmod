@@ -6,7 +6,7 @@ import com.zygzag.zygzagsmod.common.Main;
 import com.zygzag.zygzagsmod.common.entity.PlayerAlliedSkeleton;
 import com.zygzag.zygzagsmod.common.item.iridium.ISocketable;
 import com.zygzag.zygzagsmod.common.item.iridium.Socket;
-import com.zygzag.zygzagsmod.common.registries.EnchantmentRegistry;
+import com.zygzag.zygzagsmod.common.registry.EnchantmentRegistry;
 import net.minecraft.ChatFormatting;
 import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.client.Minecraft;

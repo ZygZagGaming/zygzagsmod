@@ -2,7 +2,6 @@ package com.zygzag.zygzagsmod.common;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ParticleOptions;
-import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
@@ -13,7 +12,6 @@ import net.minecraftforge.common.capabilities.ICapabilityProvider;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
 import java.util.function.Consumer;
 import java.util.function.Function;
@@ -77,5 +75,18 @@ public class GeneralUtil {
             if (!world.getBlockState(pos.offset(0, y, 0)).isAir()) return false;
         }
         return true;
+    }
+
+    public static <T> T randomElement(List<T> list, List<Integer> weights, RandomSource rng) {
+        int totalWeight = 0;
+        for (int k : weights) totalWeight += k;
+        int randomWeight = rng.nextInt(totalWeight);
+        for (int k = 0; k < Math.min(list.size(), weights.size()); k++) {
+            T element = list.get(k);
+            int weight = weights.get(k);
+            randomWeight -= weight;
+            if (randomWeight <= 0) return element;
+        }
+        return list.get(list.size() - 1);
     }
 }

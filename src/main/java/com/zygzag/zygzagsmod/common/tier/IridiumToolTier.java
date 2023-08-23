@@ -2,12 +2,11 @@ package com.zygzag.zygzagsmod.common.tier;
 
 import com.mojang.blaze3d.MethodsReturnNonnullByDefault;
 import com.zygzag.zygzagsmod.common.Main;
-import com.zygzag.zygzagsmod.common.registries.ItemRegistry;
+import com.zygzag.zygzagsmod.common.registry.ItemRegistry;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.Tier;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.level.block.Block;
-import org.jetbrains.annotations.Nullable;
 
 @MethodsReturnNonnullByDefault
 public enum IridiumToolTier implements Tier {

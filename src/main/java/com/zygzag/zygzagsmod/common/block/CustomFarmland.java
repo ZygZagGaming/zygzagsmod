@@ -10,7 +10,6 @@ import net.minecraft.world.level.block.FarmBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.common.IPlantable;
 import net.minecraftforge.common.PlantType;
-import org.spongepowered.asm.mixin.Mutable;
 
 import javax.annotation.ParametersAreNonnullByDefault;
 

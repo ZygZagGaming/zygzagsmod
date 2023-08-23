@@ -1,13 +1,12 @@
 package com.zygzag.zygzagsmod.common.block;
 
-import com.zygzag.zygzagsmod.common.ModSoundEvents;
-import com.zygzag.zygzagsmod.common.registries.ParticleTypeRegistry;
+import com.zygzag.zygzagsmod.common.registry.ParticleTypeRegistry;
+import com.zygzag.zygzagsmod.common.registry.SoundEventRegistry;
 import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundSource;
-import net.minecraft.util.Mth;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.BlockGetter;
@@ -62,7 +61,7 @@ public class EndSandBlock extends Block {
         }
         var effectivePower = Math.max(redstonePower, blockPower - 1);
         world.setBlockAndUpdate(pos, state.setValue(POWER, effectivePower));
-        if (effectivePower == 0 && state.getValue(POWER) > 0) world.playSound(null, pos, ModSoundEvents.END_SAND_REFORM, SoundSource.BLOCKS);
+        if (effectivePower == 0 && state.getValue(POWER) > 0) world.playSound(null, pos, SoundEventRegistry.END_SAND_REFORM.get(), SoundSource.BLOCKS);
         world.scheduleTick(pos, this, 2);
     }
 
@@ -71,7 +70,7 @@ public class EndSandBlock extends Block {
         world.setBlockAndUpdate(pos, state.setValue(ETHEREAL, state.getValue(POWER) > 0));
         if (state.getValue(POWER) > 0 && !state.getValue(ETHEREAL)) {
             displayParticles(pos, state, world);
-            world.playSound(null, pos, ModSoundEvents.END_SAND_DISSIPATE, SoundSource.BLOCKS);
+            world.playSound(null, pos, SoundEventRegistry.END_SAND_DISSIPATE.get(), SoundSource.BLOCKS);
         }
     }
 
