@@ -1,5 +1,6 @@
 package com.zygzag.zygzagsmod.common.registry;
 
+import com.zygzag.zygzagsmod.common.Main;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.RegistryObject;
@@ -13,14 +14,15 @@ public class Registry<T> {
 
     public void registerTo(IEventBus bus) {
         register.register(bus);
+        Main.LOGGER.debug("registered registry " + this);
     }
 
     public static final Supplier<List<Consumer<IEventBus>>> REGISTRATION_QUEUE = () -> List.of(
             BlockRegistry.INSTANCE::registerTo,
             ItemRegistry.INSTANCE::registerTo,
             BlockEntityRegistry.INSTANCE::registerTo,
-            BlockItemEntityRegistry.INSTANCE::registerTo,
             BlockWithItemRegistry.INSTANCE::registerTo,
+            BlockItemEntityRegistry.INSTANCE::registerTo,
             EnchantmentRegistry.INSTANCE::registerTo,
             EntityRegistry.INSTANCE::registerTo,
             FeatureRegistry.INSTANCE::registerTo,
@@ -30,8 +32,7 @@ public class Registry<T> {
             ParticleTypeRegistry.INSTANCE::registerTo,
             RecipeSerializerRegistry.INSTANCE::registerTo,
             RecipeTypeRegistry.INSTANCE::registerTo,
-            SoundEventRegistry.INSTANCE::registerTo,
-            DamageTypeRegistry.INSTANCE::registerTo
+            SoundEventRegistry.INSTANCE::registerTo
     );
 
     public Registry(DeferredRegister<T> register) {

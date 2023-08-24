@@ -3,6 +3,11 @@ package com.zygzag.zygzagsmod.client;
 import com.zygzag.zygzagsmod.common.registry.BlockItemEntityRegistry;
 import com.zygzag.zygzagsmod.common.registry.EntityRegistry;
 import com.zygzag.zygzagsmod.common.registry.ParticleTypeRegistry;
+import com.zygzag.zygzagsmod.client.particle.EndSandParticle;
+import com.zygzag.zygzagsmod.client.particle.ShockwaveParticle;
+import com.zygzag.zygzagsmod.client.renderer.CustomBrushableBlockRenderer;
+import com.zygzag.zygzagsmod.client.renderer.HomingWitherSkullRenderer;
+import com.zygzag.zygzagsmod.client.renderer.IridiumGolemRenderer;
 import net.minecraft.client.renderer.entity.ThrownItemRenderer;
 import net.minecraft.client.renderer.entity.WitherSkeletonRenderer;
 import net.minecraftforge.api.distmarker.Dist;
@@ -21,10 +26,13 @@ public class ClientModEventHandler {
         event.registerEntityRenderer(EntityRegistry.HOMING_WITHER_SKULL.get(), HomingWitherSkullRenderer::new);
         event.registerEntityRenderer(EntityRegistry.PLAYER_ALLIED_SKELETON.get(), WitherSkeletonRenderer::new);
         event.registerBlockEntityRenderer(BlockItemEntityRegistry.SUSPICIOUS_END_SAND.getBlockEntityType(), CustomBrushableBlockRenderer::new);
+        event.registerEntityRenderer(EntityRegistry.IRIDIUM_GOLEM.get(), IridiumGolemRenderer::new);
+        event.registerBlockEntityRenderer(BlockItemEntityRegistry.SUSPICIOUS_END_SAND.getBlockEntityType(), CustomBrushableBlockRenderer::new);
     }
 
     @SubscribeEvent
     public static void registerParticleProviders(final RegisterParticleProvidersEvent event) {
         event.registerSpecial(ParticleTypeRegistry.END_SAND_PARTICLES.get(), new EndSandParticle.Provider());
+        event.registerSpriteSet(ParticleTypeRegistry.SHOCKWAVE_PARTICLES.get(), (sprites) -> new ShockwaveParticle.Provider(sprites, 2, 6));
     }
 }

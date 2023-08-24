@@ -23,4 +23,8 @@ public class ParticleTypeRegistry extends Registry<ParticleType<?>> {
             "end_sand_particles",
             () -> new SimpleParticleType(false)
     );
+    public static RegistryObject<SimpleParticleType> SHOCKWAVE_PARTICLES = INSTANCE.register(
+            "shockwave",
+            () -> new SimpleParticleType(false)
+    );
 }

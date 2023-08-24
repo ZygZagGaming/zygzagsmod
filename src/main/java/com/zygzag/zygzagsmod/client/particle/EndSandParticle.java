@@ -1,4 +1,4 @@
-package com.zygzag.zygzagsmod.client;
+package com.zygzag.zygzagsmod.client.particle;
 
 import com.zygzag.zygzagsmod.common.block.EndSandBlock;
 import com.zygzag.zygzagsmod.common.registry.BlockWithItemRegistry;
@@ -174,7 +174,6 @@ public class EndSandParticle extends TextureSheetParticle {
         return ParticleRenderType.TERRAIN_SHEET;
     }
 
-    @OnlyIn(Dist.CLIENT)
     public static class Provider implements ParticleProvider<SimpleParticleType> {
         public Particle createParticle(SimpleParticleType pType, ClientLevel pLevel, double pX, double pY, double pZ, double pXSpeed, double pYSpeed, double pZSpeed) {
             return new EndSandParticle(pLevel, pX, pY, pZ, pXSpeed, pYSpeed, pZSpeed)

@@ -13,6 +13,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.Random;
 import java.util.function.Consumer;
 import java.util.function.Function;
 
@@ -67,6 +68,10 @@ public class GeneralUtil {
 
     public static <T> T randomElement(List<T> list, RandomSource rng) {
         return list.get(rng.nextInt(list.size()));
+    }
+
+    public static <T> T randomElement(List<T> list) {
+        return list.get((int) Math.floor(Math.random() * list.size()));
     }
 
     public static boolean isExposedToSunlight(BlockPos pos, BlockGetter world) {

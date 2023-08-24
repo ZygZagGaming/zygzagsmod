@@ -1,13 +1,16 @@
 package com.zygzag.zygzagsmod.common.block.entity;
 
 import com.zygzag.zygzagsmod.common.registry.BlockItemEntityRegistry;
-import com.zygzag.zygzagsmod.common.registry.DamageTypeRegistry;
 import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.core.Holder;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.tags.BlockTags;
+import net.minecraft.world.damagesource.DamageEffects;
+import net.minecraft.world.damagesource.DamageScaling;
 import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.damagesource.DamageType;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.item.ItemEntity;
@@ -29,7 +32,7 @@ import static com.zygzag.zygzagsmod.common.block.SculkJawBlock.*;
 @ParametersAreNonnullByDefault
 @MethodsReturnNonnullByDefault
 public class SculkJawBlockEntity extends BlockEntity {
-    public static final DamageSource SCULK_JAW_DAMAGE = new DamageSource(DamageTypeRegistry.SCULK_JAW.getHolder().orElseThrow());
+    //public static final DamageSource SCULK_JAW_DAMAGE = new DamageSource(Holder.direct(new DamageType("sculkJaw", DamageScaling.WHEN_CAUSED_BY_LIVING_NON_PLAYER, 0.1f,DamageEffects.POKING)));
 
     @Nullable
     public Entity latchedEntity = null;
@@ -77,7 +80,7 @@ public class SculkJawBlockEntity extends BlockEntity {
                         player.giveExperiencePoints(-xp);
                     } else {
                         float originalHealth = living.getHealth();
-                        living.hurt(SCULK_JAW_DAMAGE, 1.5f);
+                        //living.hurt(SCULK_JAW_DAMAGE, 1.5f);
                         float healthChange = originalHealth - living.getHealth();
                         xp = (int) Math.floor(healthChange * (living instanceof Player ? 30 : living.getExperienceReward()) / living.getMaxHealth() + Math.random()/* + Math.random()*/);
                         if (living.getHealth() == 0) living.skipDropExperience();

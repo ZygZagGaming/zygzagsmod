@@ -1,5 +1,6 @@
 package com.zygzag.zygzagsmod.common.registry;
 
+import com.zygzag.zygzagsmod.common.Main;
 import com.zygzag.zygzagsmod.common.block.EndSandBlock;
 import com.zygzag.zygzagsmod.common.block.EndStoneSwitchBlock;
 import com.zygzag.zygzagsmod.common.registry.object.BlockWithItemRegistryObject;
@@ -51,6 +52,7 @@ public class BlockWithItemRegistry {
     );
 
     public <B extends Block> BlockWithItemRegistryObject<B, BlockItem> register(String id, Supplier<B> blockSupplier, Item.Properties properties) {
+        Main.LOGGER.debug("registered block with id " + id);
         var blockRegObj = blockRegister.register(id, blockSupplier);
         return new BlockWithItemRegistryObject<>(
                 new ResourceLocation(MODID, id),
@@ -66,5 +68,6 @@ public class BlockWithItemRegistry {
     public void registerTo(IEventBus bus) {
         blockRegister.register(bus);
         itemRegister.register(bus);
+        Main.LOGGER.debug("registered registry " + this);
     }
 }

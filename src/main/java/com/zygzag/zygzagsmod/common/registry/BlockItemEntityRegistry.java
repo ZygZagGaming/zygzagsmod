@@ -1,5 +1,6 @@
 package com.zygzag.zygzagsmod.common.registry;
 
+import com.zygzag.zygzagsmod.common.Main;
 import com.zygzag.zygzagsmod.common.block.SculkJawBlock;
 import com.zygzag.zygzagsmod.common.block.SuspiciousEndSandBlock;
 import com.zygzag.zygzagsmod.common.block.entity.SculkJawBlockEntity;
@@ -48,6 +49,7 @@ public class BlockItemEntityRegistry {
     );
 
     public <B extends Block, E extends BlockEntity> BlockItemEntityRegistryObject<B, BlockItem, E> register(String id, Supplier<B> blockSupplier, Item.Properties properties, BlockEntityType.BlockEntitySupplier<E> beSupplier) {
+        Main.LOGGER.debug("registered block with id " + id);
         var blockRegObj = blockRegister.register(id, blockSupplier);
         return new BlockItemEntityRegistryObject<>(
                 new ResourceLocation(MODID, id),
@@ -65,5 +67,6 @@ public class BlockItemEntityRegistry {
         blockRegister.register(bus);
         itemRegister.register(bus);
         beRegister.register(bus);
+        Main.LOGGER.debug("registered registry " + this);
     }
 }

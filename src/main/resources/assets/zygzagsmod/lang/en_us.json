@@ -207,5 +207,8 @@
   "enchantment.zygzagsmod.dynamo": "Dynamo",
   "enchantment.zygzagsmod.grounded": "Grounded",
   "subtitles.block.end_sand.dissipate": "End Sand dissipates",
-  "subtitles.block.end_sand.reform": "End Sand reforms"
+  "subtitles.block.end_sand.reform": "End Sand reforms",
+
+  "death.attack.sculkJaw": "%1$s got chomped to death",
+  "death.attack.sculkJaw.player": "%1$s got chomped by %2$s"
 }
