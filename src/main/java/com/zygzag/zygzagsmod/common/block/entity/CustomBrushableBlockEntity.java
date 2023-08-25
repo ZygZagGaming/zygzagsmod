@@ -1,4 +1,4 @@
-package com.zygzag.zygzagsmod.common.blockentity;
+package com.zygzag.zygzagsmod.common.block.entity;
 
 import com.mojang.logging.LogUtils;
 import com.zygzag.zygzagsmod.common.registry.BlockItemEntityRegistry;

@@ -8,6 +8,7 @@
   "block.zygzagsmod.end_stone_switch": "End Stone Switch",
   "block.zygzagsmod.iridium_end_sand": "Iridium-Speckled End Sand",
   "block.zygzagsmod.suspicious_end_sand": "Suspicious End Sand",
+  "block.zygzagsmod.sculk_jaw": "Sculk Jaw",
   "enchantment.zygzagsmod.cooldown": "Cooldown",
   "enchantment.zygzagsmod.brush_efficiency": "Brush Efficiency",
   "zygzagsmod.recipe.transmutation": "Transmutation",
@@ -209,6 +210,6 @@
   "subtitles.block.end_sand.dissipate": "End Sand dissipates",
   "subtitles.block.end_sand.reform": "End Sand reforms",
 
-  "death.attack.sculkJaw": "%1$s got chomped to death",
-  "death.attack.sculkJaw.player": "%1$s got chomped by %2$s"
+  "death.attack.sculk_jaw": "%1$s got chomped to death",
+  "death.attack.sculk_jaw.player": "%1$s got chomped by %2$s"
 }

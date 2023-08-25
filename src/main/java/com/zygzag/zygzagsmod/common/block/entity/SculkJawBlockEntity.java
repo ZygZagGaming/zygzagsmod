@@ -4,11 +4,12 @@ import com.zygzag.zygzagsmod.common.registry.BlockItemEntityRegistry;
 import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
-import net.minecraft.core.Holder;
+import net.minecraft.core.RegistryAccess;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.resources.ResourceKey;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.BlockTags;
-import net.minecraft.world.damagesource.DamageEffects;
-import net.minecraft.world.damagesource.DamageScaling;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.damagesource.DamageType;
 import net.minecraft.world.entity.Entity;
@@ -26,13 +27,18 @@ import net.minecraft.world.phys.shapes.CollisionContext;
 
 import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
+import java.util.function.Function;
 
+import static com.zygzag.zygzagsmod.common.Main.MODID;
 import static com.zygzag.zygzagsmod.common.block.SculkJawBlock.*;
 
 @ParametersAreNonnullByDefault
 @MethodsReturnNonnullByDefault
 public class SculkJawBlockEntity extends BlockEntity {
-    //public static final DamageSource SCULK_JAW_DAMAGE = new DamageSource(Holder.direct(new DamageType("sculkJaw", DamageScaling.WHEN_CAUSED_BY_LIVING_NON_PLAYER, 0.1f,DamageEffects.POKING)));
+    public static final ResourceKey<DamageType> SCULK_JAW_DAMAGE_TYPE = ResourceKey.create(Registries.DAMAGE_TYPE, new ResourceLocation(MODID, "sculk_jaw"));
+    public static DamageSource sculkJawDamage(RegistryAccess registryAccess) {
+        return new DamageSource(registryAccess.registryOrThrow(Registries.DAMAGE_TYPE).getHolderOrThrow(SCULK_JAW_DAMAGE_TYPE));
+    }
 
     @Nullable
     public Entity latchedEntity = null;
@@ -80,7 +86,7 @@ public class SculkJawBlockEntity extends BlockEntity {
                         player.giveExperiencePoints(-xp);
                     } else {
                         float originalHealth = living.getHealth();
-                        //living.hurt(SCULK_JAW_DAMAGE, 1.5f);
+                        living.hurt(sculkJawDamage(world.registryAccess()), 1.5f);
                         float healthChange = originalHealth - living.getHealth();
                         xp = (int) Math.floor(healthChange * (living instanceof Player ? 30 : living.getExperienceReward()) / living.getMaxHealth() + Math.random()/* + Math.random()*/);
                         if (living.getHealth() == 0) living.skipDropExperience();
@@ -102,7 +108,7 @@ public class SculkJawBlockEntity extends BlockEntity {
         }
 
         if (latchedEntity instanceof ItemEntity item && lastLatchedEntity == null) {
-            //item.setUnlimitedLifetime();
+            if (!isClient) item.setUnlimitedLifetime();
             item.setNeverPickUp();
         }
 

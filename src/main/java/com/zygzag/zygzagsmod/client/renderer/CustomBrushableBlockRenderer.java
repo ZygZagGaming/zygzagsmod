@@ -2,7 +2,7 @@ package com.zygzag.zygzagsmod.client.renderer;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.math.Axis;
-import com.zygzag.zygzagsmod.common.blockentity.CustomBrushableBlockEntity;
+import com.zygzag.zygzagsmod.common.block.entity.CustomBrushableBlockEntity;
 import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.client.renderer.LevelRenderer;
 import net.minecraft.client.renderer.MultiBufferSource;

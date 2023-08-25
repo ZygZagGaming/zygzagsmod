@@ -1,6 +1,6 @@
 package com.zygzag.zygzagsmod.common.block;
 
-import com.zygzag.zygzagsmod.common.blockentity.CustomBrushableBlockEntity;
+import com.zygzag.zygzagsmod.common.block.entity.CustomBrushableBlockEntity;
 import com.zygzag.zygzagsmod.common.registry.BlockWithItemRegistry;
 import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.core.BlockPos;

@@ -87,6 +87,7 @@ public class SculkJawBlock extends Block implements EntityBlock, SimpleWaterlogg
                     Block.box(6, 0, 0, 10, 16, 8),
             }
     );
+
     public SculkJawBlock(Properties properties) {
         super(properties);
         registerDefaultState(defaultBlockState().setValue(DEAL_DAMAGE, true).setValue(CLOSED, 0).setValue(FACE, Direction.UP).setValue(POWERED, false).setValue(WATERLOGGED, false));

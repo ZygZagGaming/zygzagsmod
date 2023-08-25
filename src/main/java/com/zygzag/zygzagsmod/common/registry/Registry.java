@@ -20,8 +20,8 @@ public class Registry<T> {
     public static final Supplier<List<Consumer<IEventBus>>> REGISTRATION_QUEUE = () -> List.of(
             BlockRegistry.INSTANCE::registerTo,
             ItemRegistry.INSTANCE::registerTo,
-            BlockEntityRegistry.INSTANCE::registerTo,
             BlockWithItemRegistry.INSTANCE::registerTo,
+            BlockEntityRegistry.INSTANCE::registerTo,
             BlockItemEntityRegistry.INSTANCE::registerTo,
             EnchantmentRegistry.INSTANCE::registerTo,
             EntityRegistry.INSTANCE::registerTo,

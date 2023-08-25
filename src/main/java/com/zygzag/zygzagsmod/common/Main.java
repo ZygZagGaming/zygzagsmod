@@ -119,7 +119,8 @@ public class Main {
             event.acceptAll(ItemRegistry.SOCKET_SCHEMATICS.stream().map((it) -> it.get().getDefaultInstance()).collect(Collectors.toList()));
         } else if (event.getTabKey() == CreativeModeTabs.NATURAL_BLOCKS) {
             event.acceptAll(Stream.of(
-                    BlockWithItemRegistry.RAW_IRIDIUM_BLOCK.item()
+                    BlockWithItemRegistry.RAW_IRIDIUM_BLOCK.item(),
+                    BlockItemEntityRegistry.SCULK_JAW.item()
             ).map((it) -> it.get().getDefaultInstance()).collect(Collectors.toList()));
         } else if (event.getTabKey() == CreativeModeTabs.TOOLS_AND_UTILITIES) {
             event.acceptAll(Stream.of(

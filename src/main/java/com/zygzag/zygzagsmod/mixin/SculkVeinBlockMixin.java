@@ -16,6 +16,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 public abstract class SculkVeinBlockMixin extends MultifaceBlock implements SculkBehaviour, SimpleWaterloggedBlock {
     public SculkVeinBlockMixin(Properties prop) {
         super(prop);
+        throw new UnsupportedOperationException();
     }
 
     @Inject(at = @At("head"), cancellable = true, method = "hasSubstrateAccess(Lnet/minecraft/world/level/LevelAccessor;Lnet/minecraft/world/level/block/state/BlockState;Lnet/minecraft/core/BlockPos;)Z")

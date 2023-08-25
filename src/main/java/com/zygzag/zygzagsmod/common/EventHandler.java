@@ -1,6 +1,6 @@
 package com.zygzag.zygzagsmod.common;
 
-import com.zygzag.zygzagsmod.common.blockentity.CustomBrushableBlockEntity;
+import com.zygzag.zygzagsmod.common.block.entity.CustomBrushableBlockEntity;
 import com.zygzag.zygzagsmod.common.capability.PlayerSightCache;
 import com.zygzag.zygzagsmod.common.capability.PlayerSightCacheImpl;
 import com.zygzag.zygzagsmod.common.effect.SightEffect;

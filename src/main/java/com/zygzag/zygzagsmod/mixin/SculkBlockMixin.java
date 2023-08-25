@@ -23,6 +23,7 @@ import javax.annotation.ParametersAreNonnullByDefault;
 public abstract class SculkBlockMixin extends DropExperienceBlock implements SculkBehaviour {
     public SculkBlockMixin(Properties p_221081_) {
         super(p_221081_);
+        throw new UnsupportedOperationException();
     }
 
     @Inject(at = @At("HEAD"), cancellable = true, method = "getRandomGrowthState(Lnet/minecraft/world/level/LevelAccessor;Lnet/minecraft/core/BlockPos;Lnet/minecraft/util/RandomSource;Z)Lnet/minecraft/world/level/block/state/BlockState;")
