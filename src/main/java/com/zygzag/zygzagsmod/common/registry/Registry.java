@@ -32,7 +32,8 @@ public class Registry<T> {
             ParticleTypeRegistry.INSTANCE::registerTo,
             RecipeSerializerRegistry.INSTANCE::registerTo,
             RecipeTypeRegistry.INSTANCE::registerTo,
-            SoundEventRegistry.INSTANCE::registerTo
+            SoundEventRegistry.INSTANCE::registerTo,
+            CreativeModeTabRegistry.INSTANCE::registerTo
     );
 
     public Registry(DeferredRegister<T> register) {

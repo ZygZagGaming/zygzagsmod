@@ -19,6 +19,8 @@ public class CreativeModeTabRegistry extends Registry<CreativeModeTab> {
             .displayItems((parameters, output) -> {
                 output.acceptAll(ItemRegistry.INSTANCE.register.getEntries().stream().map((it) -> it.get().getDefaultInstance()).collect(Collectors.toList()));
                 output.acceptAll(IridiumGearRegistry.INSTANCE.register.getEntries().stream().map((it) -> it.get().getDefaultInstance()).collect(Collectors.toList()));
+                output.acceptAll(BlockWithItemRegistry.INSTANCE.itemRegister.getEntries().stream().map((it) -> it.get().getDefaultInstance()).collect(Collectors.toList()));
+                output.acceptAll(BlockItemEntityRegistry.INSTANCE.itemRegister.getEntries().stream().map((it) -> it.get().getDefaultInstance()).collect(Collectors.toList()));
             })
             .title(Component.translatable("zygzagsmod.tab"))
             .build());
