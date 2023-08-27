@@ -49,6 +49,7 @@ public class Main {
     public static final TagKey<Block> VEINMINEABLE = TagKey.create(ForgeRegistries.Keys.BLOCKS, new ResourceLocation("zygzagsmod:veinmineable"));
     public static final TagKey<Block> SCULK_VEIN_LIKE = TagKey.create(ForgeRegistries.Keys.BLOCKS, new ResourceLocation("zygzagsmod:sculk_vein_like"));
     public static final TagKey<EntityType<?>> BOSS_TAG = TagKey.create(ForgeRegistries.Keys.ENTITY_TYPES, new ResourceLocation("zygzagsmod:bosses"));
+    public static final TagKey<EntityType<?>> SCULK_JAW_IMMUNE = TagKey.create(ForgeRegistries.Keys.ENTITY_TYPES, new ResourceLocation("zygzagsmod:sculk_jaw_immune"));
 
     public static final Capability<PlayerSightCache> PLAYER_SIGHT_CACHE = CapabilityManager.get(new CapabilityToken<>(){});
     public static final Supplier<Map<BlockState, Integer>> EXTRANEOUS_SCULK_GROWTHS = () -> Map.of(

@@ -1,5 +1,6 @@
 package com.zygzag.zygzagsmod.common.block;
 
+import com.zygzag.zygzagsmod.common.Main;
 import com.zygzag.zygzagsmod.common.block.entity.SculkJawBlockEntity;
 import com.zygzag.zygzagsmod.common.registry.BlockItemEntityRegistry;
 import net.minecraft.MethodsReturnNonnullByDefault;
@@ -114,7 +115,7 @@ public class SculkJawBlock extends Block implements EntityBlock, SimpleWaterlogg
     @Override
     public void entityInside(BlockState state, Level world, BlockPos pos, Entity entity) {
         var be = world.getBlockEntity(pos);
-        if (be instanceof SculkJawBlockEntity sculkJaw && sculkJaw.latchedEntity == null && state.getValue(CLOSED) == 0 && !state.getValue(POWERED) && getShape(state, world, pos, CollisionContext.empty()).bounds().move(pos).intersects(entity.getBoundingBox())) sculkJaw.latchOnto(world, pos, state, entity);
+        if (be instanceof SculkJawBlockEntity sculkJaw && !entity.getType().is(Main.SCULK_JAW_IMMUNE) && sculkJaw.latchedEntity == null && state.getValue(CLOSED) == 0 && !state.getValue(POWERED) && getShape(state, world, pos, CollisionContext.empty()).bounds().move(pos).intersects(entity.getBoundingBox())) sculkJaw.latchOnto(world, pos, state, entity);
     }
 
     @Override
