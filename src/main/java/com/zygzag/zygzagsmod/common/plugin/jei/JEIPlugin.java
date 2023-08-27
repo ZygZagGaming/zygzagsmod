@@ -2,9 +2,9 @@ package com.zygzag.zygzagsmod.common.plugin.jei;
 
 import com.mojang.blaze3d.MethodsReturnNonnullByDefault;
 import com.zygzag.zygzagsmod.common.recipe.TransmutationRecipe;
-import com.zygzag.zygzagsmod.common.registries.IridiumGearRegistry;
-import com.zygzag.zygzagsmod.common.registries.ItemRegistry;
-import com.zygzag.zygzagsmod.common.registries.RecipeTypeRegistry;
+import com.zygzag.zygzagsmod.common.registry.IridiumGearRegistry;
+import com.zygzag.zygzagsmod.common.registry.ItemRegistry;
+import com.zygzag.zygzagsmod.common.registry.RecipeTypeRegistry;
 import mezz.jei.api.IModPlugin;
 import mezz.jei.api.JeiPlugin;
 import mezz.jei.api.recipe.category.IRecipeCategory;

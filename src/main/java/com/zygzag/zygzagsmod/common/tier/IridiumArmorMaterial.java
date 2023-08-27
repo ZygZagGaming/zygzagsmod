@@ -1,7 +1,7 @@
 package com.zygzag.zygzagsmod.common.tier;
 
 import com.mojang.blaze3d.MethodsReturnNonnullByDefault;
-import com.zygzag.zygzagsmod.common.registries.ItemRegistry;
+import com.zygzag.zygzagsmod.common.registry.ItemRegistry;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.util.LazyLoadedValue;

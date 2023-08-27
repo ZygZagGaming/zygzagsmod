@@ -2,7 +2,7 @@ package com.zygzag.zygzagsmod.common.plugin.jei;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.zygzag.zygzagsmod.common.recipe.TransmutationRecipe;
-import com.zygzag.zygzagsmod.common.registries.ItemRegistry;
+import com.zygzag.zygzagsmod.common.registry.ItemRegistry;
 import mezz.jei.api.constants.ModIds;
 import mezz.jei.api.constants.VanillaTypes;
 import mezz.jei.api.gui.builder.IRecipeLayoutBuilder;

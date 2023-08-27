@@ -1,10 +1,11 @@
-package com.zygzag.zygzagsmod.common.registries;
+package com.zygzag.zygzagsmod.common.registry;
 
 import com.zygzag.zygzagsmod.common.Main;
 import com.zygzag.zygzagsmod.common.block.EndSandBlock;
 import com.zygzag.zygzagsmod.common.block.EndStoneSwitchBlock;
 import com.zygzag.zygzagsmod.common.block.SculkJawBlock;
 import com.zygzag.zygzagsmod.common.block.TunedAmethystClusterBlock;
+import com.zygzag.zygzagsmod.common.registry.object.BlockWithItemRegistryObject;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
@@ -42,7 +43,7 @@ public class BlockWithItemRegistry {
 
     public static final BlockWithItemRegistryObject<EndSandBlock, BlockItem> END_SAND = INSTANCE.register(
             "end_sand",
-            () -> new EndSandBlock(BlockBehaviour.Properties.copy(Blocks.SAND).sound(SoundEventRegistry.END_SAND))
+            () -> new EndSandBlock(BlockBehaviour.Properties.copy(Blocks.SAND).sound(com.zygzag.zygzagsmod.common.registry.SoundEventRegistry.END_SAND))
     );
 
     public static final BlockWithItemRegistryObject<Block, BlockItem> IRIDIUM_END_SAND = INSTANCE.register(

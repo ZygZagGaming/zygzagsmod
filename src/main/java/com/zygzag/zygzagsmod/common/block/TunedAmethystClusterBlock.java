@@ -1,8 +1,8 @@
 package com.zygzag.zygzagsmod.common.block;
 
 import com.zygzag.zygzagsmod.common.block.entity.TunedAmethystClusterBlockEntity;
-import com.zygzag.zygzagsmod.common.registries.BlockItemEntityRegistry;
-import com.zygzag.zygzagsmod.common.registries.ItemRegistry;
+import com.zygzag.zygzagsmod.common.registry.BlockItemEntityRegistry;
+import com.zygzag.zygzagsmod.common.registry.ItemRegistry;
 import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;

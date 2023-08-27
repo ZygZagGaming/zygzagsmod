@@ -1,7 +1,7 @@
 package com.zygzag.zygzagsmod.mixin;
 
 import com.zygzag.zygzagsmod.common.Main;
-import com.zygzag.zygzagsmod.common.registries.BlockItemEntityRegistry;
+import com.zygzag.zygzagsmod.common.registry.BlockItemEntityRegistry;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.tags.BlockTags;

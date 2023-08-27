@@ -1,6 +1,6 @@
 package com.zygzag.zygzagsmod.common.block.entity;
 
-import com.zygzag.zygzagsmod.common.registries.BlockItemEntityRegistry;
+import com.zygzag.zygzagsmod.common.registry.BlockItemEntityRegistry;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceLocation;

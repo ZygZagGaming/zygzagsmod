@@ -1,7 +1,7 @@
 package com.zygzag.zygzagsmod.common.block.entity;
 
 import com.zygzag.zygzagsmod.common.Main;
-import com.zygzag.zygzagsmod.common.registries.BlockItemEntityRegistry;
+import com.zygzag.zygzagsmod.common.registry.BlockItemEntityRegistry;
 import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -49,7 +49,7 @@ public class SculkJawBlockEntity extends BlockEntity {
 
         var isClient = world.isClientSide;
 
-        //Main.LOGGER.debug("Latched entity on " + (isClient ? "client" : "server") + ": " + latchedEntity + "; closed: " + state.getValue(CLOSED));
+        Main.LOGGER.debug("Latched entity on " + (isClient ? "client" : "server") + ": " + latchedEntity + "; closed: " + state.getValue(CLOSED) + "; powered: " + state.getValue(POWERED));
         if (shouldLetGoOfEntity(world, pos, state)) latchedEntity = null;
         if (latchedEntity == null) {
             ticksSinceEntityLatched++;
@@ -139,8 +139,7 @@ public class SculkJawBlockEntity extends BlockEntity {
     }
 
     public boolean shouldLetGoOfEntity(Level world, BlockPos pos, BlockState state) {
-        var signal = world.getBestNeighborSignal(pos);
-        if (signal > 0) return true;
+        if (state.getValue(POWERED)) return true;
         if (latchedEntity != null) {
             var intersectsBounds = state.getShape(world, pos, CollisionContext.empty()).bounds().move(pos).intersects(latchedEntity.getBoundingBox());
             return !intersectsBounds || latchedEntity.isRemoved() || (latchedEntity instanceof Player player && player.isSpectator());

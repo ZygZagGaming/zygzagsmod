@@ -1,7 +1,7 @@
 package com.zygzag.zygzagsmod.client;
 
 import com.zygzag.zygzagsmod.common.block.EndSandBlock;
-import com.zygzag.zygzagsmod.common.registries.BlockWithItemRegistry;
+import com.zygzag.zygzagsmod.common.registry.BlockWithItemRegistry;
 import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ClientLevel;

@@ -1,6 +1,6 @@
 package com.zygzag.zygzagsmod.common;
 
-import com.zygzag.zygzagsmod.common.registries.EntityRegistry;
+import com.zygzag.zygzagsmod.common.registry.EntityRegistry;
 import net.minecraft.world.entity.monster.AbstractSkeleton;
 import net.minecraftforge.event.entity.EntityAttributeCreationEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;

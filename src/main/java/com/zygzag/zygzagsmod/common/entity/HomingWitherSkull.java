@@ -1,6 +1,6 @@
 package com.zygzag.zygzagsmod.common.entity;
 
-import com.zygzag.zygzagsmod.common.registries.EntityRegistry;
+import com.zygzag.zygzagsmod.common.registry.EntityRegistry;
 import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ParticleTypes;

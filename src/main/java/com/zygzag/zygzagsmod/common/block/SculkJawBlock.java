@@ -1,7 +1,7 @@
 package com.zygzag.zygzagsmod.common.block;
 
 import com.zygzag.zygzagsmod.common.block.entity.SculkJawBlockEntity;
-import com.zygzag.zygzagsmod.common.registries.BlockItemEntityRegistry;
+import com.zygzag.zygzagsmod.common.registry.BlockItemEntityRegistry;
 import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -97,7 +97,8 @@ public class SculkJawBlock extends Block implements EntityBlock, SimpleWaterlogg
     @Override
     public BlockState getStateForPlacement(BlockPlaceContext context) {
         var fluid = context.getLevel().getFluidState(context.getClickedPos());
-        return defaultBlockState().setValue(FACE, context.getClickedFace()).setValue(WATERLOGGED, fluid.is(Fluids.WATER));
+        var power = context.getLevel().getBestNeighborSignal(context.getClickedPos());
+        return defaultBlockState().setValue(FACE, context.getClickedFace()).setValue(WATERLOGGED, fluid.is(Fluids.WATER)).setValue(POWERED, power > 7).setValue(DEAL_DAMAGE, power == 0);
     }
 
     @Override

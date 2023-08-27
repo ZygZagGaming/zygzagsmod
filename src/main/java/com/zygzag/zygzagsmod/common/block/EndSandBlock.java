@@ -1,7 +1,7 @@
 package com.zygzag.zygzagsmod.common.block;
 
-import com.zygzag.zygzagsmod.common.registries.SoundEventRegistry;
-import com.zygzag.zygzagsmod.common.registries.ParticleTypeRegistry;
+import com.zygzag.zygzagsmod.common.registry.SoundEventRegistry;
+import com.zygzag.zygzagsmod.common.registry.ParticleTypeRegistry;
 import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;

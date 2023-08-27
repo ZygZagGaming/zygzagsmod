@@ -2,7 +2,7 @@ package com.zygzag.zygzagsmod.common.feature;
 
 import com.mojang.serialization.Codec;
 import com.zygzag.zygzagsmod.common.block.EndStoneSwitchBlock;
-import com.zygzag.zygzagsmod.common.registries.BlockWithItemRegistry;
+import com.zygzag.zygzagsmod.common.registry.BlockWithItemRegistry;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.util.Mth;

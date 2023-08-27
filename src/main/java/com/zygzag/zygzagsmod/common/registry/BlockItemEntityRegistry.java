@@ -1,10 +1,11 @@
-package com.zygzag.zygzagsmod.common.registries;
+package com.zygzag.zygzagsmod.common.registry;
 
 import com.zygzag.zygzagsmod.common.Main;
 import com.zygzag.zygzagsmod.common.block.SculkJawBlock;
 import com.zygzag.zygzagsmod.common.block.TunedAmethystClusterBlock;
 import com.zygzag.zygzagsmod.common.block.entity.SculkJawBlockEntity;
 import com.zygzag.zygzagsmod.common.block.entity.TunedAmethystClusterBlockEntity;
+import com.zygzag.zygzagsmod.common.registry.object.BlockItemEntityRegistryObject;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
