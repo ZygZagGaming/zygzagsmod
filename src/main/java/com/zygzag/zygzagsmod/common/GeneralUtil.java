@@ -32,7 +32,7 @@ public class GeneralUtil {
         else if (state.is(Tags.Blocks.ORES_REDSTONE)) return Config.redstoneOreColor;
         else if (state.is(Tags.Blocks.ORES_EMERALD)) return Config.emeraldOreColor;
 
-        return 0;
+        return Config.miscOreColor;
     }
 
     public static int pow(int base, int exponent) {
