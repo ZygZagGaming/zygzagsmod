@@ -14,7 +14,7 @@ public class Registry<T> {
 
     public void registerTo(IEventBus bus) {
         register.register(bus);
-        Main.LOGGER.debug("registered registry " + this);
+        //Main.LOGGER.debug("Registered registry " + this);
     }
 
     public static final Supplier<List<Consumer<IEventBus>>> REGISTRATION_QUEUE = () -> List.of(

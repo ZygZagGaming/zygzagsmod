@@ -102,10 +102,13 @@ public class Config {
     private static final ForgeConfigSpec.IntValue REDSTONE_ORE_COLOR = BUILDER
             .comment("Color for Redstone Ores during Sight")
             .defineInRange("redstoneOreColor", 0xaa0f01, 0, 0xffffff);
-
     private static final ForgeConfigSpec.IntValue EMERALD_ORE_COLOR = BUILDER
             .comment("Color for Emerald Ores during Sight")
             .defineInRange("emeraldOreColor", 0x72db58, 0, 0xffffff);
+
+    private static final ForgeConfigSpec.IntValue MISC_ORE_COLOR = BUILDER
+            .comment("Color for non-vanilla ores during Sight")
+            .defineInRange("miscOreColor", 0x888888, 0, 0xffffff);
 
     public static final ForgeConfigSpec.IntValue SIGHT_EFFECT_COLOR = BUILDER
             .comment("Color for Sight effect")
@@ -150,6 +153,7 @@ public class Config {
             lapisOreColor,
             redstoneOreColor,
             emeraldOreColor,
+            miscOreColor,
             sightEffectColor,
             witherSkullAxeRange,
             emeraldScepterCooldown,
@@ -187,6 +191,7 @@ public class Config {
         lapisOreColor = LAPIS_ORE_COLOR.get();
         redstoneOreColor = REDSTONE_ORE_COLOR.get();
         emeraldOreColor = EMERALD_ORE_COLOR.get();
+        miscOreColor = MISC_ORE_COLOR.get();
         sightEffectColor = SIGHT_EFFECT_COLOR.get();
         witherSkullAxeRange = WITHER_SKULL_AXE_RANGE.get();
         amethystAxeDamageBonus = AMETHYST_AXE_DAMAGE_BONUS.get();
