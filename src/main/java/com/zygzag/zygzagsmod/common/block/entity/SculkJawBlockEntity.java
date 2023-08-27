@@ -1,5 +1,6 @@
 package com.zygzag.zygzagsmod.common.block.entity;
 
+import com.zygzag.zygzagsmod.common.Main;
 import com.zygzag.zygzagsmod.common.registry.BlockItemEntityRegistry;
 import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.core.BlockPos;
@@ -27,7 +28,6 @@ import net.minecraft.world.phys.shapes.CollisionContext;
 
 import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
-import java.util.function.Function;
 
 import static com.zygzag.zygzagsmod.common.Main.MODID;
 import static com.zygzag.zygzagsmod.common.block.SculkJawBlock.*;
@@ -149,7 +149,7 @@ public class SculkJawBlockEntity extends BlockEntity {
         if (signal > 0) return true;
         if (latchedEntity != null) {
             var intersectsBounds = state.getShape(world, pos, CollisionContext.empty()).bounds().move(pos).intersects(latchedEntity.getBoundingBox());
-            return !intersectsBounds || latchedEntity.isRemoved() || (latchedEntity instanceof Player player && player.isSpectator());
+            return !intersectsBounds || latchedEntity.isRemoved() || (latchedEntity instanceof Player player && player.isSpectator()) || latchedEntity.getType().is(Main.SCULK_JAW_IMMUNE);
         }
         return false;
     }
