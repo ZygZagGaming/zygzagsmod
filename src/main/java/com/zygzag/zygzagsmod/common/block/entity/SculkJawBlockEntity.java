@@ -145,8 +145,7 @@ public class SculkJawBlockEntity extends BlockEntity {
     }
 
     public boolean shouldLetGoOfEntity(Level world, BlockPos pos, BlockState state) {
-        var signal = world.getBestNeighborSignal(pos);
-        if (signal > 0) return true;
+        if (state.getValue(POWERED)) return true;
         if (latchedEntity != null) {
             var intersectsBounds = state.getShape(world, pos, CollisionContext.empty()).bounds().move(pos).intersects(latchedEntity.getBoundingBox());
             return !intersectsBounds || latchedEntity.isRemoved() || (latchedEntity instanceof Player player && player.isSpectator()) || latchedEntity.getType().is(Main.SCULK_JAW_IMMUNE);
