@@ -2,6 +2,7 @@ package com.zygzag.zygzagsmod.common.block.entity;
 
 import com.zygzag.zygzagsmod.common.Main;
 import com.zygzag.zygzagsmod.common.registry.BlockItemEntityRegistry;
+import com.zygzag.zygzagsmod.common.registry.SoundEventRegistry;
 import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -10,6 +11,8 @@ import net.minecraft.core.registries.Registries;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.sounds.SoundSource;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.damagesource.DamageType;
@@ -60,7 +63,9 @@ public class SculkJawBlockEntity extends BlockEntity {
         if (latchedEntity == null) {
             ticksSinceEntityLatched++;
             ticksEntityLatched = 0;
-            if (!isClient && state.getValue(CLOSED) > 0 && ticksSinceEntityLatched % 6 == 0) world.setBlockAndUpdate(pos, state.setValue(CLOSED, state.getValue(CLOSED) - 1));
+            if (!isClient && state.getValue(CLOSED) > 0 && ticksSinceEntityLatched % 6 == 0) {
+                world.setBlockAndUpdate(pos, state.setValue(CLOSED, state.getValue(CLOSED) - 1));
+            }
         } else {
             ticksSinceEntityLatched = 0;
             ticksEntityLatched++;
@@ -76,6 +81,7 @@ public class SculkJawBlockEntity extends BlockEntity {
             if (closed < 3) {
                 if (!isClient) world.setBlockAndUpdate(pos, state.setValue(CLOSED, closed + 1));
                 latchedEntity.setPos(latchedEntity.position().scale((3.5 - closed) / (4 - closed)).add(targetPos.scale(0.5 / (4 - closed))));
+                if (closed == 2 && world instanceof ServerLevel serverWorld) serverWorld.playSound(null, worldPosition, SoundEventRegistry.SCULK_JAW_CLOSE.get(), SoundSource.BLOCKS);
             } else {
                 latchedEntity.setPos(targetPos.add(latchedEntity.position()).scale(0.5));
                 latchedEntity.setDeltaMovement(Vec3.ZERO);
