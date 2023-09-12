@@ -1,5 +1,6 @@
 package com.zygzag.zygzagsmod.common.registry;
 
+import net.minecraft.client.resources.sounds.Sound;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
@@ -24,6 +25,10 @@ public class SoundEventRegistry extends Registry<SoundEvent> {
     public static final RegistryObject<SoundEvent> END_SAND_REFORM = INSTANCE.register(
             "end_sand_reform",
             () -> SoundEvent.createVariableRangeEvent(new ResourceLocation(MODID, "end_sand_reform"))
+    );
+    public static final RegistryObject<SoundEvent> SCULK_JAW_CLOSE = INSTANCE.register(
+            "sculk_jaw_close",
+            () -> SoundEvent.createVariableRangeEvent(new ResourceLocation(MODID, "sculk_jaw_close"))
     );
 
     public static final ForgeSoundType END_SAND = new ForgeSoundType(

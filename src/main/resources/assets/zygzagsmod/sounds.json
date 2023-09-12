@@ -24,5 +24,11 @@
       "zygzagsmod:endsandreverse4"
     ],
     "subtitle": "subtitles.block.end_sand.reform"
+  },
+  "sculk_jaw_close": {
+    "sounds": [
+      "zygzagsmod:sculk_jaw_close"
+    ],
+    "subtitle": "subtitles.block.sculk_jaw.close"
   }
 }

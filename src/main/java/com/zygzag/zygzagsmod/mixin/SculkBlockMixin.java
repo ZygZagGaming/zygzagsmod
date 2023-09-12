@@ -28,7 +28,6 @@ public abstract class SculkBlockMixin extends DropExperienceBlock implements Scu
 
     @Inject(at = @At("HEAD"), cancellable = true, method = "getRandomGrowthState(Lnet/minecraft/world/level/LevelAccessor;Lnet/minecraft/core/BlockPos;Lnet/minecraft/util/RandomSource;Z)Lnet/minecraft/world/level/block/state/BlockState;")
     private void getRandomGrowthState(LevelAccessor world, BlockPos pos, RandomSource rng, boolean flag, CallbackInfoReturnable<BlockState> callback) {
-        //Main.LOGGER.debug("deez nuts");
         BlockState blockstate = GeneralUtil.randomElement(Main.EXTRANEOUS_SCULK_GROWTHS.get().keySet().stream().toList(), Main.EXTRANEOUS_SCULK_GROWTHS.get().values().stream().toList(), rng);
         if (blockstate.is(Blocks.SCULK_SHRIEKER)) blockstate = blockstate.setValue(SculkShriekerBlock.CAN_SUMMON, flag);
 
