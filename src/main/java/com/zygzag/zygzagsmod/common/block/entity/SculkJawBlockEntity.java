@@ -17,10 +17,8 @@ import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Blocks;
-import net.minecraft.world.level.block.SculkCatalystBlock;
 import net.minecraft.world.level.block.SculkSpreader;
 import net.minecraft.world.level.block.entity.BlockEntity;
-import net.minecraft.world.level.block.entity.SculkCatalystBlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
@@ -51,7 +49,7 @@ public class SculkJawBlockEntity extends BlockEntity {
 
         var isClient = world.isClientSide;
 
-        Main.LOGGER.debug("Latched entity on " + (isClient ? "client" : "server") + ": " + latchedEntity + "; closed: " + state.getValue(CLOSED) + "; powered: " + state.getValue(POWERED));
+        //Main.LOGGER.debug("Latched entity on " + (isClient ? "client" : "server") + ": " + latchedEntity + "; closed: " + state.getValue(CLOSED) + "; powered: " + state.getValue(POWERED));
         if (shouldLetGoOfEntity(world, pos, state)) latchedEntity = null;
         if (latchedEntity == null) {
             ticksSinceEntityLatched++;
@@ -72,7 +70,7 @@ public class SculkJawBlockEntity extends BlockEntity {
             if (closed < 3) {
                 if (!isClient) world.setBlockAndUpdate(pos, state.setValue(CLOSED, closed + 1));
                 latchedEntity.setPos(latchedEntity.position().scale((3.5 - closed) / (4 - closed)).add(targetPos.scale(0.5 / (4 - closed))));
-                if (closed == 0 && world instanceof ServerLevel serverWorld) serverWorld.playSound(null, worldPosition, SoundEventRegistry.SCULK_JAW_CLOSE.get(), SoundSource.BLOCKS);
+                if (closed == 0 && world instanceof ServerLevel serverWorld) serverWorld.playSound(null, worldPosition, SoundEventRegistry.SCULK_JAW_CLOSE.get(), SoundSource.BLOCKS, 1f, 1f);
             } else {
                 latchedEntity.setPos(targetPos.add(latchedEntity.position()).scale(0.5));
                 latchedEntity.setDeltaMovement(Vec3.ZERO);

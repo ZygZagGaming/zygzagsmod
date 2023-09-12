@@ -24,6 +24,10 @@ public class SoundEventRegistry extends Registry<SoundEvent> {
             "end_sand_reform",
             () -> new SoundEvent(new ResourceLocation(MODID, "end_sand_reform"))
     );
+    public static final RegistryObject<SoundEvent> SCULK_JAW_CLOSE = INSTANCE.register(
+            "sculk_jaw_close",
+            () -> new SoundEvent(new ResourceLocation(MODID, "sculk_jaw_close"))
+    );
 
     public static final ForgeSoundType END_SAND = new ForgeSoundType(
             1.0F,
