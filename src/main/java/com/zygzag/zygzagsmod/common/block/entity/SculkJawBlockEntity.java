@@ -81,7 +81,7 @@ public class SculkJawBlockEntity extends BlockEntity {
             if (closed < 3) {
                 if (!isClient) world.setBlockAndUpdate(pos, state.setValue(CLOSED, closed + 1));
                 latchedEntity.setPos(latchedEntity.position().scale((3.5 - closed) / (4 - closed)).add(targetPos.scale(0.5 / (4 - closed))));
-                if (closed == 2 && world instanceof ServerLevel serverWorld) serverWorld.playSound(null, worldPosition, SoundEventRegistry.SCULK_JAW_CLOSE.get(), SoundSource.BLOCKS);
+                if (closed == 0 && world instanceof ServerLevel serverWorld) serverWorld.playSound(null, worldPosition, SoundEventRegistry.SCULK_JAW_CLOSE.get(), SoundSource.BLOCKS);
             } else {
                 latchedEntity.setPos(targetPos.add(latchedEntity.position()).scale(0.5));
                 latchedEntity.setDeltaMovement(Vec3.ZERO);
