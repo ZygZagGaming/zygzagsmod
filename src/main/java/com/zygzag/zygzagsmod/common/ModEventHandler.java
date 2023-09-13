@@ -41,17 +41,75 @@ public class ModEventHandler {
                 (DataProvider.Factory<ItemModelProvider>) (output) -> new ItemModelProvider(output, MODID, event.getExistingFileHelper()) {
                     @Override
                     protected void registerModels() {
-                        String[] handHeldItemTypes = { "axe", "sword", "pickaxe", "shovel", "hoe", "scepter" };
-                        String[] nonHandHeldItemTypes = { "chestplate" };
-                        String[] sockets = { "amethyst", "diamond", "emerald", "skull", "wither_skull" };
-                        for (String socket : sockets) {
+                        {
+                            String[] handHeldItemTypes = {"axe", "sword", "pickaxe", "shovel", "hoe", "scepter"};
+                            String[] nonHandHeldItemTypes = {"chestplate"};
+                            String[] sockets = {"amethyst", "diamond", "emerald", "skull", "wither_skull"};
+                            for (String socket : sockets) {
+                                for (String type : handHeldItemTypes) {
+                                    makeSocketedIridiumTool(type, socket);
+                                }
+                                for (String type : nonHandHeldItemTypes) {
+                                    makeSocketedIridiumNonTool(type, socket);
+                                }
+                            }
                             for (String type : handHeldItemTypes) {
-                                makeSocketedIridiumTool(type, socket);
+                                makeNonSocketedIridiumTool(type);
                             }
                             for (String type : nonHandHeldItemTypes) {
-                                makeSocketedIridiumNonTool(type, socket);
+                                makeNonSocketedIridiumNonTool(type);
                             }
                         }
+                        {
+                            String[] handHeldItemTypes = {"axe", "sword", "pickaxe", "hoe"};
+                            int[] handHeldItemPlatings = {3, 2, 3, 2};
+                            String[] nonHandHeldItemTypes = {"helmet", "chestplate", "leggings", "boots"};
+                            int[] nonHandHeldItemPlatings = {5, 8, 7, 4};
+
+                            for (int index = 0; index < handHeldItemTypes.length; index++) {
+                                for (int platings = 1; platings < handHeldItemPlatings[index]; platings++) {
+                                    makePartialIridiumTool(handHeldItemTypes[index], platings, handHeldItemPlatings[index]);
+                                }
+                            }
+                            for (int index = 0; index < nonHandHeldItemTypes.length; index++) {
+                                for (int platings = 1; platings < nonHandHeldItemPlatings[index]; platings++) {
+                                    makePartialIridiumNonTool(nonHandHeldItemTypes[index], platings, nonHandHeldItemPlatings[index]);
+                                }
+                            }
+                        }
+                        makeIridiumNonSocketableArmor("helmet");
+                        makeIridiumNonSocketableArmor("leggings");
+                        makeIridiumNonSocketableArmor("boots");
+                    }
+
+                    public void makeIridiumNonSocketableArmor(String type) {
+                        getBuilder("zygzagsmod:iridium_" + type)
+                                .parent(new ModelFile.UncheckedModelFile("item/generated"))
+                                .texture("layer0", "zygzagsmod:item/" + type + "/iridium_" + type);
+                    }
+
+                    public void makePartialIridiumTool(String type, int platings, int maxPlatings) {
+                        getBuilder("zygzagsmod:partial_iridium_" + type + "_" + platings)
+                                .parent(new ModelFile.UncheckedModelFile("item/handheld"))
+                                .texture("layer0", "zygzagsmod:item/" + type + "/iridium_" + type + "_" + (maxPlatings - platings - 1));
+                    }
+
+                    public void makePartialIridiumNonTool(String type, int platings, int maxPlatings) {
+                        getBuilder("zygzagsmod:partial_iridium_" + type + "_" + platings)
+                                .parent(new ModelFile.UncheckedModelFile("item/generated"))
+                                .texture("layer0", "zygzagsmod:item/" + type + "/iridium_" + type + "_" + (maxPlatings - platings - 1));
+                    }
+
+                    public void makeNonSocketedIridiumTool(String type) {
+                        getBuilder("zygzagsmod:iridium_" + type)
+                                .parent(new ModelFile.UncheckedModelFile("item/handheld"))
+                                .texture("layer0", "zygzagsmod:item/" + type + "/iridium_" + type);
+                    }
+
+                    public void makeNonSocketedIridiumNonTool(String type) {
+                        getBuilder("zygzagsmod:iridium_" + type)
+                                .parent(new ModelFile.UncheckedModelFile("item/generated"))
+                                .texture("layer0", "zygzagsmod:item/" + type + "/iridium_" + type);
                     }
 
                     public void makeSocketedIridiumTool(String type, String socket) {
