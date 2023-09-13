@@ -1,6 +1,6 @@
 package com.zygzag.zygzagsmod.mixin;
 
-import com.zygzag.zygzagsmod.common.GeneralUtil;
+import com.zygzag.zygzagsmod.common.util.GeneralUtil;
 import com.zygzag.zygzagsmod.common.Main;
 import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.core.BlockPos;

@@ -1,7 +1,7 @@
 package com.zygzag.zygzagsmod.common.item.iridium.tool;
 
 import com.zygzag.zygzagsmod.common.Config;
-import com.zygzag.zygzagsmod.common.GeneralUtil;
+import com.zygzag.zygzagsmod.common.util.GeneralUtil;
 import com.zygzag.zygzagsmod.common.Main;
 import com.zygzag.zygzagsmod.common.item.iridium.ISocketable;
 import com.zygzag.zygzagsmod.common.item.iridium.Socket;

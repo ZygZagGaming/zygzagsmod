@@ -34,7 +34,8 @@ public class Registry<T> {
             RecipeTypeRegistry.INSTANCE::registerTo,
             SoundEventRegistry.INSTANCE::registerTo,
             CreativeModeTabRegistry.INSTANCE::registerTo,
-            PaintingVariantRegistry.INSTANCE::registerTo
+            PaintingVariantRegistry.INSTANCE::registerTo,
+            EntityDataSerializerRegistry.INSTANCE::registerTo
     );
 
     public Registry(DeferredRegister<T> register) {

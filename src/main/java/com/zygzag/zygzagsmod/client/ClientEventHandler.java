@@ -21,7 +21,7 @@ import net.minecraftforge.fml.common.Mod;
 import java.awt.*;
 import java.util.Map;
 
-import static com.zygzag.zygzagsmod.common.GeneralUtil.ifCapability;
+import static com.zygzag.zygzagsmod.common.util.GeneralUtil.ifCapability;
 
 @Mod.EventBusSubscriber(modid = Main.MODID, value = Dist.CLIENT)
 @SuppressWarnings("unused")

@@ -1,5 +1,6 @@
-package com.zygzag.zygzagsmod.common;
+package com.zygzag.zygzagsmod.common.util;
 
+import com.zygzag.zygzagsmod.common.Config;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ParticleOptions;
 import net.minecraft.util.RandomSource;

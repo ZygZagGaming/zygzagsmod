@@ -20,7 +20,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import static com.zygzag.zygzagsmod.common.GeneralUtil.randomElement;
+import static com.zygzag.zygzagsmod.common.util.GeneralUtil.randomElement;
 
 public class IridiumEndIslandFeature extends Feature<NoneFeatureConfiguration> {
     public IridiumEndIslandFeature(Codec<NoneFeatureConfiguration> pCodec) {

@@ -64,8 +64,8 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.HashMap;
 
-import static com.zygzag.zygzagsmod.common.GeneralUtil.ifCapability;
-import static com.zygzag.zygzagsmod.common.GeneralUtil.isExposedToSunlight;
+import static com.zygzag.zygzagsmod.common.util.GeneralUtil.ifCapability;
+import static com.zygzag.zygzagsmod.common.util.GeneralUtil.isExposedToSunlight;
 import static com.zygzag.zygzagsmod.common.Main.MODID;
 
 @Mod.EventBusSubscriber(modid = MODID)
