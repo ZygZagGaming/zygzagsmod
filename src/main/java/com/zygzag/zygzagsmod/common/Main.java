@@ -83,34 +83,17 @@ public class Main {
     private void addCreative(BuildCreativeModeTabContentsEvent event) {
         if (event.getTabKey() == CreativeModeTabs.COMBAT) {
             event.acceptAll(Stream.of(
-                    IridiumGearRegistry.IRIDIUM_SWORD,
-                    IridiumGearRegistry.IRIDIUM_AXE,
-                    IridiumGearRegistry.IRIDIUM_SCEPTER,
                     IridiumGearRegistry.IRIDIUM_HELMET,
-                    IridiumGearRegistry.IRIDIUM_CHESTPLATE,
                     IridiumGearRegistry.IRIDIUM_LEGGINGS,
-                    IridiumGearRegistry.IRIDIUM_BOOTS,
-                    IridiumGearRegistry.DIAMOND_SOCKETED_IRIDIUM_SWORD,
-                    IridiumGearRegistry.EMERALD_SOCKETED_IRIDIUM_SWORD,
-                    IridiumGearRegistry.SKULL_SOCKETED_IRIDIUM_SWORD,
-                    IridiumGearRegistry.WITHER_SKULL_SOCKETED_IRIDIUM_SWORD,
-                    IridiumGearRegistry.AMETHYST_SOCKETED_IRIDIUM_SWORD,
-                    IridiumGearRegistry.DIAMOND_SOCKETED_IRIDIUM_AXE,
-                    IridiumGearRegistry.EMERALD_SOCKETED_IRIDIUM_AXE,
-                    IridiumGearRegistry.SKULL_SOCKETED_IRIDIUM_AXE,
-                    IridiumGearRegistry.WITHER_SKULL_SOCKETED_IRIDIUM_AXE,
-                    IridiumGearRegistry.AMETHYST_SOCKETED_IRIDIUM_AXE,
-                    IridiumGearRegistry.DIAMOND_SOCKETED_IRIDIUM_SCEPTER,
-                    IridiumGearRegistry.EMERALD_SOCKETED_IRIDIUM_SCEPTER,
-                    IridiumGearRegistry.SKULL_SOCKETED_IRIDIUM_SCEPTER,
-                    IridiumGearRegistry.WITHER_SKULL_SOCKETED_IRIDIUM_SCEPTER,
-                    IridiumGearRegistry.AMETHYST_SOCKETED_IRIDIUM_SCEPTER,
-                    IridiumGearRegistry.DIAMOND_SOCKETED_IRIDIUM_CHESTPLATE,
-                    IridiumGearRegistry.EMERALD_SOCKETED_IRIDIUM_CHESTPLATE,
-                    IridiumGearRegistry.SKULL_SOCKETED_IRIDIUM_CHESTPLATE,
-                    IridiumGearRegistry.WITHER_SKULL_SOCKETED_IRIDIUM_CHESTPLATE,
-                    IridiumGearRegistry.AMETHYST_SOCKETED_IRIDIUM_CHESTPLATE
+                    IridiumGearRegistry.IRIDIUM_BOOTS
             ).map((it) -> it.get().getDefaultInstance()).collect(Collectors.toList()));
+            event.acceptAll(IridiumGearRegistry.SWORDS.values().stream().map((it) -> it.get().getDefaultInstance()).collect(Collectors.toList()));
+            event.acceptAll(IridiumGearRegistry.PICKAXES.values().stream().map((it) -> it.get().getDefaultInstance()).collect(Collectors.toList()));
+            event.acceptAll(IridiumGearRegistry.AXES.values().stream().map((it) -> it.get().getDefaultInstance()).collect(Collectors.toList()));
+            event.acceptAll(IridiumGearRegistry.SHOVELS.values().stream().map((it) -> it.get().getDefaultInstance()).collect(Collectors.toList()));
+            event.acceptAll(IridiumGearRegistry.HOES.values().stream().map((it) -> it.get().getDefaultInstance()).collect(Collectors.toList()));
+            event.acceptAll(IridiumGearRegistry.CHESTPLATES.values().stream().map((it) -> it.get().getDefaultInstance()).collect(Collectors.toList()));
+            event.acceptAll(IridiumGearRegistry.SCEPTERS.values().stream().map((it) -> it.get().getDefaultInstance()).collect(Collectors.toList()));
         } else if (event.getTabKey() == CreativeModeTabs.INGREDIENTS) {
             event.acceptAll(Stream.of(
                     ItemRegistry.IRIDIUM_PLATING,
@@ -125,38 +108,12 @@ public class Main {
             ).map((it) -> it.get().getDefaultInstance()).collect(Collectors.toList()));
         } else if (event.getTabKey() == CreativeModeTabs.TOOLS_AND_UTILITIES) {
             event.acceptAll(Stream.of(
-                    IridiumGearRegistry.IRIDIUM_PICKAXE,
-                    IridiumGearRegistry.IRIDIUM_AXE,
-                    IridiumGearRegistry.IRIDIUM_SHOVEL,
-                    IridiumGearRegistry.IRIDIUM_HOE,
-                    IridiumGearRegistry.IRIDIUM_SCEPTER,
-                    IridiumGearRegistry.DIAMOND_SOCKETED_IRIDIUM_PICKAXE,
-                    IridiumGearRegistry.EMERALD_SOCKETED_IRIDIUM_PICKAXE,
-                    IridiumGearRegistry.SKULL_SOCKETED_IRIDIUM_PICKAXE,
-                    IridiumGearRegistry.WITHER_SKULL_SOCKETED_IRIDIUM_PICKAXE,
-                    IridiumGearRegistry.AMETHYST_SOCKETED_IRIDIUM_PICKAXE,
-                    IridiumGearRegistry.DIAMOND_SOCKETED_IRIDIUM_AXE,
-                    IridiumGearRegistry.EMERALD_SOCKETED_IRIDIUM_AXE,
-                    IridiumGearRegistry.SKULL_SOCKETED_IRIDIUM_AXE,
-                    IridiumGearRegistry.WITHER_SKULL_SOCKETED_IRIDIUM_AXE,
-                    IridiumGearRegistry.AMETHYST_SOCKETED_IRIDIUM_AXE,
-                    IridiumGearRegistry.DIAMOND_SOCKETED_IRIDIUM_SHOVEL,
-                    IridiumGearRegistry.EMERALD_SOCKETED_IRIDIUM_SHOVEL,
-                    IridiumGearRegistry.SKULL_SOCKETED_IRIDIUM_SHOVEL,
-                    IridiumGearRegistry.WITHER_SKULL_SOCKETED_IRIDIUM_SHOVEL,
-                    IridiumGearRegistry.AMETHYST_SOCKETED_IRIDIUM_SHOVEL,
-                    IridiumGearRegistry.DIAMOND_SOCKETED_IRIDIUM_HOE,
-                    IridiumGearRegistry.EMERALD_SOCKETED_IRIDIUM_HOE,
-                    IridiumGearRegistry.SKULL_SOCKETED_IRIDIUM_HOE,
-                    IridiumGearRegistry.WITHER_SKULL_SOCKETED_IRIDIUM_HOE,
-                    IridiumGearRegistry.AMETHYST_SOCKETED_IRIDIUM_HOE,
-                    IridiumGearRegistry.DIAMOND_SOCKETED_IRIDIUM_SCEPTER,
-                    IridiumGearRegistry.EMERALD_SOCKETED_IRIDIUM_SCEPTER,
-                    IridiumGearRegistry.SKULL_SOCKETED_IRIDIUM_SCEPTER,
-                    IridiumGearRegistry.WITHER_SKULL_SOCKETED_IRIDIUM_SCEPTER,
-                    IridiumGearRegistry.AMETHYST_SOCKETED_IRIDIUM_SCEPTER,
                     ItemRegistry.TRANSMUTATION_CHARGE
             ).map((it) -> it.get().getDefaultInstance()).collect(Collectors.toList()));
+            event.acceptAll(IridiumGearRegistry.PICKAXES.values().stream().map((it) -> it.get().getDefaultInstance()).collect(Collectors.toList()));
+            event.acceptAll(IridiumGearRegistry.AXES.values().stream().map((it) -> it.get().getDefaultInstance()).collect(Collectors.toList()));
+            event.acceptAll(IridiumGearRegistry.SHOVELS.values().stream().map((it) -> it.get().getDefaultInstance()).collect(Collectors.toList()));
+            event.acceptAll(IridiumGearRegistry.HOES.values().stream().map((it) -> it.get().getDefaultInstance()).collect(Collectors.toList()));
         }
     }
 }

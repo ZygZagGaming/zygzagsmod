@@ -9,10 +9,9 @@ import com.zygzag.zygzagsmod.common.item.iridium.Socket;
 import com.zygzag.zygzagsmod.common.item.iridium.armor.IridiumChestplateItem;
 import com.zygzag.zygzagsmod.common.item.iridium.tool.IridiumAxeItem;
 import com.zygzag.zygzagsmod.common.item.iridium.tool.IridiumHoeItem;
+import com.zygzag.zygzagsmod.common.item.iridium.tool.IridiumSwordItem;
 import com.zygzag.zygzagsmod.common.registry.BlockRegistry;
 import com.zygzag.zygzagsmod.common.registry.EnchantmentRegistry;
-import com.zygzag.zygzagsmod.common.registry.IridiumGearRegistry;
-import net.minecraft.client.color.item.ItemColor;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.resources.ResourceLocation;
@@ -50,7 +49,6 @@ import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.HitResult;
-import net.minecraftforge.client.event.RegisterColorHandlersEvent;
 import net.minecraftforge.common.Tags;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
@@ -66,9 +64,9 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.HashMap;
 
+import static com.zygzag.zygzagsmod.common.Main.MODID;
 import static com.zygzag.zygzagsmod.common.util.GeneralUtil.ifCapability;
 import static com.zygzag.zygzagsmod.common.util.GeneralUtil.isExposedToSunlight;
-import static com.zygzag.zygzagsmod.common.Main.MODID;
 
 @Mod.EventBusSubscriber(modid = MODID)
 @SuppressWarnings("unused")
@@ -114,7 +112,7 @@ public class EventHandler {
         DamageSource source = evt.getSource();
         float amt = evt.getAmount();
         ItemStack chestplateStack = entity.getItemBySlot(EquipmentSlot.CHEST);
-        if (chestplateStack.getItem() == IridiumGearRegistry.DIAMOND_SOCKETED_IRIDIUM_CHESTPLATE.get()) {
+        if (chestplateStack.getItem() instanceof IridiumChestplateItem chestplate && chestplate.getSocket() == Socket.DIAMOND) {
             AABB box = entity.getBoundingBox().inflate(16.0);
             Object[] blocks = world.getBlockStates(box).toArray();
             HashMap<Block, Integer> map = new HashMap<>();
@@ -145,19 +143,19 @@ public class EventHandler {
                 Item chestItem = living.getItemBySlot(EquipmentSlot.CHEST).getItem();
                 BlockPos pos = living.blockPosition();
 
-                if (chestplateStack.getItem() == IridiumGearRegistry.WITHER_SKULL_SOCKETED_IRIDIUM_CHESTPLATE.get()) {
+                if (chestplateStack.getItem() instanceof IridiumChestplateItem chestplate && chestplate.getSocket() == Socket.WITHER_SKULL) {
                     int th = EnchantmentHelper.getTagEnchantmentLevel(Enchantments.THORNS, chestplateStack);
                     MobEffectInstance effect = new MobEffectInstance(MobEffects.WITHER, 60 * (3 + th), th / 2);
                     living.addEffect(effect);
                 }
 
-                if (mainhandItem == IridiumGearRegistry.DIAMOND_SOCKETED_IRIDIUM_SWORD.get()) {
+                if (mainhandItem instanceof IridiumSwordItem sword && sword.getSocket() == Socket.DIAMOND) {
                     int height = attacker.getBlockY();
                     double a = Config.diamondSwordMaxDamageBonus, b = Config.diamondSwordMinDamageBonus,
                             m = (b - a) / 384.0;
                     float damageBonus = (float) (m * (height + 64) + a);
                     evt.setAmount(amt + damageBonus);
-                } else if (mainhandItem == IridiumGearRegistry.SKULL_SOCKETED_IRIDIUM_SWORD.get()) {
+                } else if (mainhandItem instanceof IridiumSwordItem sword && sword.getSocket() == Socket.SKULL) {
                     double chance = Config.skullSwordInstakillChance;
                     if (entity.getType().is(Main.BOSS_TAG)) chance = Config.skullSwordInstakillChanceBosses;
                     else if (entity.getType() == EntityType.PLAYER) chance = Config.skullSwordInstakillChancePlayers;
@@ -165,18 +163,18 @@ public class EventHandler {
                         evt.setAmount(Float.MAX_VALUE);
                     }
                     //System.out.println("chance " + chance);
-                } else if (mainhandItem == IridiumGearRegistry.SKULL_SOCKETED_IRIDIUM_HOE.get()) {
+                } else if (mainhandItem instanceof IridiumHoeItem hoe && hoe.getSocket() == Socket.SKULL) {
                     if (entity.getMobType() == MobType.UNDEAD) {
                         if (entity.getType().is(Main.BOSS_TAG)) evt.setAmount(25f);
                         else evt.setAmount(Float.MAX_VALUE);
                     }
-                } else if (mainhandItem == IridiumGearRegistry.AMETHYST_SOCKETED_IRIDIUM_AXE.get()) {
+                } else if (mainhandItem instanceof IridiumAxeItem axe && axe.getSocket() == Socket.AMETHYST) {
                     if ((time < 11834 || time > 22300) && isExposedToSunlight(pos, world)) evt.setAmount(evt.getAmount() * (float) Config.amethystAxeDamageBonus);
-                } else if (mainhandItem == IridiumGearRegistry.AMETHYST_SOCKETED_IRIDIUM_SWORD.get()) {
+                } else if (mainhandItem instanceof IridiumSwordItem sword && sword.getSocket() == Socket.AMETHYST) {
                     if ((time >= 11834 && time <= 22300) && isExposedToSunlight(pos, world)) evt.setAmount(evt.getAmount() * (float) Config.amethystSwordDamageBonus);
                 }
 
-                if (chestItem == IridiumGearRegistry.SKULL_SOCKETED_IRIDIUM_CHESTPLATE.get()) {
+                if (chestItem instanceof IridiumChestplateItem chestplate && chestplate.getSocket() == Socket.SKULL) {
                     float heal = amt / 4;
                     living.heal(heal);
                 }
@@ -222,7 +220,7 @@ public class EventHandler {
         var world = player.level();
         var mainhand = player.getMainHandItem();
         var item = mainhand.getItem();
-        if (player instanceof ServerPlayer sPlayer && item == IridiumGearRegistry.EMERALD_SOCKETED_IRIDIUM_SWORD.get()) {
+        if (player instanceof ServerPlayer sPlayer && item instanceof IridiumSwordItem sword && sword.getSocket() == Socket.EMERALD) {
             var trades = sPlayer.getStats().getValue(Stats.CUSTOM, Stats.TRADED_WITH_VILLAGER);
             var multiplier = 1 + (Math.log(trades) / Math.log(2.0));
             event.setDroppedExperience((int) (event.getDroppedExperience() * multiplier));

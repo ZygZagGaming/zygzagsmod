@@ -32,19 +32,19 @@ public interface ISocketable {
         addCooldown(player, stack, socketableItem.getCooldown(stack, world));
     }
 
-    default Item getSocketlessForm() {
-        if (this instanceof IridiumAxeItem) return IridiumGearRegistry.IRIDIUM_AXE.get();
-        //else if (this instanceof IridiumChestplateItem) return IridiumGearRegistry.IRIDIUM_CHESTPLATE.get();
-        else if (this instanceof IridiumHoeItem) return IridiumGearRegistry.IRIDIUM_HOE.get();
-        else if (this instanceof IridiumPickaxeItem) return IridiumGearRegistry.IRIDIUM_PICKAXE.get();
-        //else if (this instanceof IridiumScepterItem) return IridiumGearRegistry.IRIDIUM_SCEPTER.get();
-        else if (this instanceof IridiumShovelItem) return IridiumGearRegistry.IRIDIUM_SHOVEL.get();
-        else if (this instanceof IridiumSwordItem) return IridiumGearRegistry.IRIDIUM_SWORD.get();
-        // else if (this instanceof IridiumRingItem) return Registry.IRIDIUM_RING.get(); // foreshadowing
-        return ItemRegistry.IRIDIUM_PLATING.get(); // should never happen
-    }
+//    default Item getSocketlessForm() {
+//        if (this instanceof IridiumAxeItem) return IridiumGearRegistry.IRIDIUM_AXE.get();
+//        //else if (this instanceof IridiumChestplateItem) return IridiumGearRegistry.IRIDIUM_CHESTPLATE.get();
+//        else if (this instanceof IridiumHoeItem) return IridiumGearRegistry.IRIDIUM_HOE.get();
+//        else if (this instanceof IridiumPickaxeItem) return IridiumGearRegistry.IRIDIUM_PICKAXE.get();
+//        else if (this instanceof IridiumScepterItem) return IridiumGearRegistry.IRIDIUM_SCEPTER.get();
+//        else if (this instanceof IridiumShovelItem) return IridiumGearRegistry.IRIDIUM_SHOVEL.get();
+//        else if (this instanceof IridiumSwordItem) return IridiumGearRegistry.IRIDIUM_SWORD.get();
+//        // else if (this instanceof IridiumRingItem) return Registry.IRIDIUM_RING.get(); // foreshadowing
+//        return ItemRegistry.IRIDIUM_PLATING.get(); // should never happen
+//    }
 
-    public static int getColor(ItemStack stack, int layer) {
+    static int getColor(ItemStack stack, int layer) {
         if (stack.getItem() instanceof ISocketable socketable && layer == 1) {
             return socketable.getSocket().color;
         } else return 0xffffff;
