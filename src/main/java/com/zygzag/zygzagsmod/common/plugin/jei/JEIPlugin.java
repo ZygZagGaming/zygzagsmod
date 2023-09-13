@@ -1,6 +1,7 @@
 package com.zygzag.zygzagsmod.common.plugin.jei;
 
 import com.mojang.blaze3d.MethodsReturnNonnullByDefault;
+import com.zygzag.zygzagsmod.common.item.iridium.Socket;
 import com.zygzag.zygzagsmod.common.recipe.TransmutationRecipe;
 import com.zygzag.zygzagsmod.common.registry.IridiumGearRegistry;
 import com.zygzag.zygzagsmod.common.registry.ItemRegistry;
@@ -47,6 +48,6 @@ public class JEIPlugin implements IModPlugin {
     @Override
     public void registerRecipeCatalysts(IRecipeCatalystRegistration registration) {
         registration.addRecipeCatalyst(ItemRegistry.TRANSMUTATION_CHARGE.get().getDefaultInstance(), TransmutationCategory.TRANSMUTATION_RECIPE_TYPE);
-        registration.addRecipeCatalyst(IridiumGearRegistry.SKULL_SOCKETED_IRIDIUM_PICKAXE.get().getDefaultInstance(), TransmutationCategory.TRANSMUTATION_RECIPE_TYPE);
+        registration.addRecipeCatalyst(IridiumGearRegistry.PICKAXES.get(Socket.SKULL).get().getDefaultInstance(), TransmutationCategory.TRANSMUTATION_RECIPE_TYPE);
     }
 }
