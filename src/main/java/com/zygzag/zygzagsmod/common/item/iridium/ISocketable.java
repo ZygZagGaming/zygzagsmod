@@ -43,4 +43,10 @@ public interface ISocketable {
         // else if (this instanceof IridiumRingItem) return Registry.IRIDIUM_RING.get(); // foreshadowing
         return ItemRegistry.IRIDIUM_PLATING.get(); // should never happen
     }
+
+    public static int getColor(ItemStack stack, int layer) {
+        if (stack.getItem() instanceof ISocketable socketable && layer == 1) {
+            return socketable.getSocket().color;
+        } else return 0xffffff;
+    }
 }

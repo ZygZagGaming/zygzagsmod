@@ -49,7 +49,6 @@ public class BlockItemEntityRegistry {
     );
 
     public <B extends Block, E extends BlockEntity> BlockItemEntityRegistryObject<B, BlockItem, E> register(String id, Supplier<B> blockSupplier, Item.Properties properties, BlockEntityType.BlockEntitySupplier<E> beSupplier) {
-        Main.LOGGER.debug("registered block with id " + id);
         var blockRegObj = blockRegister.register(id, blockSupplier);
         return new BlockItemEntityRegistryObject<>(
                 new ResourceLocation(MODID, id),

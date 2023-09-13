@@ -68,6 +68,5 @@ public class BlockWithItemRegistry {
     public void registerTo(IEventBus bus) {
         blockRegister.register(bus);
         itemRegister.register(bus);
-        Main.LOGGER.debug("registered registry " + this);
     }
 }
