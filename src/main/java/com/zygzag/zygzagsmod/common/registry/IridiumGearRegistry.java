@@ -17,6 +17,11 @@ import net.minecraft.world.item.Items;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.RegistryObject;
 
+import java.util.Collection;
+import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
+
 import static com.zygzag.zygzagsmod.common.Main.MODID;
 
 @SuppressWarnings("unused")
@@ -26,7 +31,7 @@ public class IridiumGearRegistry extends Registry<Item> {
         super(register);
     }
 
-    //region iridium pickaxe.json
+    //region iridium pickaxe
     public static final RegistryObject<Item> IRIDIUM_PICKAXE = INSTANCE.register(
             "iridium_pickaxe",
             () -> new IridiumPickaxeItem(
@@ -130,6 +135,14 @@ public class IridiumGearRegistry extends Registry<Item> {
                     Socket.AMETHYST
             )
     );
+
+    public static final List<RegistryObject<Item>> SOCKETED_PICKAXES = List.of(
+            AMETHYST_SOCKETED_IRIDIUM_PICKAXE,
+            DIAMOND_SOCKETED_IRIDIUM_PICKAXE,
+            EMERALD_SOCKETED_IRIDIUM_PICKAXE,
+            SKULL_SOCKETED_IRIDIUM_PICKAXE,
+            WITHER_SKULL_SOCKETED_IRIDIUM_PICKAXE
+    );
     //endregion
 
     //region iridium axe
@@ -232,7 +245,13 @@ public class IridiumGearRegistry extends Registry<Item> {
                     Socket.AMETHYST
             )
     );
-
+    public static final List<RegistryObject<Item>> SOCKETED_AXES = List.of(
+            AMETHYST_SOCKETED_IRIDIUM_AXE,
+            DIAMOND_SOCKETED_IRIDIUM_AXE,
+            EMERALD_SOCKETED_IRIDIUM_AXE,
+            SKULL_SOCKETED_IRIDIUM_AXE,
+            WITHER_SKULL_SOCKETED_IRIDIUM_AXE
+    );
 
     //endregion
 
@@ -315,6 +334,13 @@ public class IridiumGearRegistry extends Registry<Item> {
                             .craftRemainder(Items.AMETHYST_SHARD),
                     Socket.AMETHYST
             )
+    );
+    public static final List<RegistryObject<Item>> SOCKETED_SHOVELS = List.of(
+            AMETHYST_SOCKETED_IRIDIUM_SHOVEL,
+            DIAMOND_SOCKETED_IRIDIUM_SHOVEL,
+            EMERALD_SOCKETED_IRIDIUM_SHOVEL,
+            SKULL_SOCKETED_IRIDIUM_SHOVEL,
+            WITHER_SKULL_SOCKETED_IRIDIUM_SHOVEL
     );
 
     //endregion
@@ -409,6 +435,13 @@ public class IridiumGearRegistry extends Registry<Item> {
                             .craftRemainder(Items.AMETHYST_SHARD),
                     Socket.AMETHYST
             )
+    );
+    public static final List<RegistryObject<Item>> SOCKETED_SWORDS = List.of(
+            AMETHYST_SOCKETED_IRIDIUM_SWORD,
+            DIAMOND_SOCKETED_IRIDIUM_SWORD,
+            EMERALD_SOCKETED_IRIDIUM_SWORD,
+            SKULL_SOCKETED_IRIDIUM_SWORD,
+            WITHER_SKULL_SOCKETED_IRIDIUM_SWORD
     );
 
     //endregion
@@ -505,6 +538,13 @@ public class IridiumGearRegistry extends Registry<Item> {
                             .craftRemainder(Items.AMETHYST_SHARD),
                     Socket.AMETHYST
             )
+    );
+    public static final List<RegistryObject<Item>> SOCKETED_HOES = List.of(
+            AMETHYST_SOCKETED_IRIDIUM_HOE,
+            DIAMOND_SOCKETED_IRIDIUM_HOE,
+            EMERALD_SOCKETED_IRIDIUM_HOE,
+            SKULL_SOCKETED_IRIDIUM_HOE,
+            WITHER_SKULL_SOCKETED_IRIDIUM_HOE
     );
 
     //endregion
@@ -607,6 +647,14 @@ public class IridiumGearRegistry extends Registry<Item> {
                             .craftRemainder(Items.AMETHYST_SHARD),
                     Socket.AMETHYST
             )
+    );
+
+    public static final List<RegistryObject<Item>> SOCKETED_CHESTPLATES = List.of(
+            AMETHYST_SOCKETED_IRIDIUM_CHESTPLATE,
+            DIAMOND_SOCKETED_IRIDIUM_CHESTPLATE,
+            EMERALD_SOCKETED_IRIDIUM_CHESTPLATE,
+            SKULL_SOCKETED_IRIDIUM_CHESTPLATE,
+            WITHER_SKULL_SOCKETED_IRIDIUM_CHESTPLATE
     );
     //endregion
 
@@ -900,6 +948,23 @@ public class IridiumGearRegistry extends Registry<Item> {
                     Socket.AMETHYST
             )
     );
+    public static final List<RegistryObject<Item>> SOCKETED_SCEPTERS = List.of(
+            AMETHYST_SOCKETED_IRIDIUM_SCEPTER,
+            DIAMOND_SOCKETED_IRIDIUM_SCEPTER,
+            EMERALD_SOCKETED_IRIDIUM_SCEPTER,
+            SKULL_SOCKETED_IRIDIUM_SCEPTER,
+            WITHER_SKULL_SOCKETED_IRIDIUM_SCEPTER
+    );
 
     //endregion
+
+    public static List<RegistryObject<Item>> SOCKETED_ITEMS = Stream.of(
+            SOCKETED_AXES,
+            SOCKETED_SWORDS,
+            SOCKETED_PICKAXES,
+            SOCKETED_SHOVELS,
+            SOCKETED_HOES,
+            SOCKETED_CHESTPLATES,
+            SOCKETED_SCEPTERS
+    ).flatMap(Collection::stream).collect(Collectors.toList());
 }

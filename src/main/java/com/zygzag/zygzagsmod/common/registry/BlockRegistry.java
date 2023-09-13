@@ -25,7 +25,6 @@ public class BlockRegistry extends Registry<Block> {
 
     @Override
     public <P extends Block> RegistryObject<P> register(String id, Supplier<P> supplier) {
-        Main.LOGGER.debug("registered block with id " + id);
         return super.register(id, supplier);
     }
 }

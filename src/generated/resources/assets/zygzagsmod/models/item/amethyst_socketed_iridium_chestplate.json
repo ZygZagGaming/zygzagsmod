@@ -1,0 +1,7 @@
+{
+  "parent": "minecraft:item/generated",
+  "textures": {
+    "layer0": "zygzagsmod:item/chestplate/iridium_chestplate",
+    "layer1": "zygzagsmod:item/socket/chestplate_socket"
+  }
+}
