@@ -215,5 +215,10 @@
   "death.attack.sculk_jaw.player": "%1$s got chomped by %2$s",
 
   "painting.zygzagsmod.golem.title": "Golem",
-  "painting.zygzagsmod.golem.author": "BLAZEDShard"
+  "painting.zygzagsmod.golem.author": "BLAZEDShard",
+
+  "advancements.iridium.root.title": "Iridium",
+
+  "advancements.end.obtain_iridium.title": "Star Stuff",
+  "advancements.iridium.root.description": "Find Iridium in the End"
 }
