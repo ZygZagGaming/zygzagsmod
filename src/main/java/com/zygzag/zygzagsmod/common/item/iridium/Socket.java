@@ -25,4 +25,6 @@ public enum Socket {
         this.i = i;
         this.color = color;
     }
+
+    
 }
