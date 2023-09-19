@@ -12,6 +12,7 @@ import com.zygzag.zygzagsmod.common.item.iridium.tool.IridiumHoeItem;
 import com.zygzag.zygzagsmod.common.item.iridium.tool.IridiumSwordItem;
 import com.zygzag.zygzagsmod.common.registry.BlockRegistry;
 import com.zygzag.zygzagsmod.common.registry.EnchantmentRegistry;
+import com.zygzag.zygzagsmod.common.registry.SocketRegistry;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.resources.ResourceLocation;
@@ -112,7 +113,7 @@ public class EventHandler {
         DamageSource source = evt.getSource();
         float amt = evt.getAmount();
         ItemStack chestplateStack = entity.getItemBySlot(EquipmentSlot.CHEST);
-        if (chestplateStack.getItem() instanceof IridiumChestplateItem chestplate && chestplate.getSocket() == Socket.DIAMOND) {
+        if (chestplateStack.getItem() instanceof IridiumChestplateItem chestplate && chestplate.getSocket() == SocketRegistry.DIAMOND.get()) {
             AABB box = entity.getBoundingBox().inflate(16.0);
             Object[] blocks = world.getBlockStates(box).toArray();
             HashMap<Block, Integer> map = new HashMap<>();
@@ -143,19 +144,19 @@ public class EventHandler {
                 Item chestItem = living.getItemBySlot(EquipmentSlot.CHEST).getItem();
                 BlockPos pos = living.blockPosition();
 
-                if (chestplateStack.getItem() instanceof IridiumChestplateItem chestplate && chestplate.getSocket() == Socket.WITHER_SKULL) {
+                if (chestplateStack.getItem() instanceof IridiumChestplateItem chestplate && chestplate.getSocket() == SocketRegistry.WITHER_SKULL.get()) {
                     int th = EnchantmentHelper.getTagEnchantmentLevel(Enchantments.THORNS, chestplateStack);
                     MobEffectInstance effect = new MobEffectInstance(MobEffects.WITHER, 60 * (3 + th), th / 2);
                     living.addEffect(effect);
                 }
 
-                if (mainhandItem instanceof IridiumSwordItem sword && sword.getSocket() == Socket.DIAMOND) {
+                if (mainhandItem instanceof IridiumSwordItem sword && sword.getSocket() == SocketRegistry.DIAMOND.get()) {
                     int height = attacker.getBlockY();
                     double a = Config.diamondSwordMaxDamageBonus, b = Config.diamondSwordMinDamageBonus,
                             m = (b - a) / 384.0;
                     float damageBonus = (float) (m * (height + 64) + a);
                     evt.setAmount(amt + damageBonus);
-                } else if (mainhandItem instanceof IridiumSwordItem sword && sword.getSocket() == Socket.SKULL) {
+                } else if (mainhandItem instanceof IridiumSwordItem sword && sword.getSocket() == SocketRegistry.SKULL.get()) {
                     double chance = Config.skullSwordInstakillChance;
                     if (entity.getType().is(Main.BOSS_TAG)) chance = Config.skullSwordInstakillChanceBosses;
                     else if (entity.getType() == EntityType.PLAYER) chance = Config.skullSwordInstakillChancePlayers;
@@ -163,18 +164,18 @@ public class EventHandler {
                         evt.setAmount(Float.MAX_VALUE);
                     }
                     //System.out.println("chance " + chance);
-                } else if (mainhandItem instanceof IridiumHoeItem hoe && hoe.getSocket() == Socket.SKULL) {
+                } else if (mainhandItem instanceof IridiumHoeItem hoe && hoe.getSocket() == SocketRegistry.SKULL.get()) {
                     if (entity.getMobType() == MobType.UNDEAD) {
                         if (entity.getType().is(Main.BOSS_TAG)) evt.setAmount(25f);
                         else evt.setAmount(Float.MAX_VALUE);
                     }
-                } else if (mainhandItem instanceof IridiumAxeItem axe && axe.getSocket() == Socket.AMETHYST) {
+                } else if (mainhandItem instanceof IridiumAxeItem axe && axe.getSocket() == SocketRegistry.AMETHYST.get()) {
                     if ((time < 11834 || time > 22300) && isExposedToSunlight(pos, world)) evt.setAmount(evt.getAmount() * (float) Config.amethystAxeDamageBonus);
-                } else if (mainhandItem instanceof IridiumSwordItem sword && sword.getSocket() == Socket.AMETHYST) {
+                } else if (mainhandItem instanceof IridiumSwordItem sword && sword.getSocket() == SocketRegistry.AMETHYST.get()) {
                     if ((time >= 11834 && time <= 22300) && isExposedToSunlight(pos, world)) evt.setAmount(evt.getAmount() * (float) Config.amethystSwordDamageBonus);
                 }
 
-                if (chestItem instanceof IridiumChestplateItem chestplate && chestplate.getSocket() == Socket.SKULL) {
+                if (chestItem instanceof IridiumChestplateItem chestplate && chestplate.getSocket() == SocketRegistry.SKULL.get()) {
                     float heal = amt / 4;
                     living.heal(heal);
                 }
@@ -202,7 +203,7 @@ public class EventHandler {
         if (killer instanceof Player player) {
             var mainhand = player.getMainHandItem();
             if (mainhand.getItem() instanceof IridiumAxeItem iridaxe
-                    && iridaxe.getSocket() == Socket.EMERALD
+                    && iridaxe.getSocket() == SocketRegistry.EMERALD.get()
                     && living.getType().is(Main.VILLAGER_HATED)
             ) {
                 var nearby = world.getNearbyEntities(Villager.class, TargetingConditions.DEFAULT, living, living.getBoundingBox().inflate(20.0));
@@ -220,7 +221,7 @@ public class EventHandler {
         var world = player.level();
         var mainhand = player.getMainHandItem();
         var item = mainhand.getItem();
-        if (player instanceof ServerPlayer sPlayer && item instanceof IridiumSwordItem sword && sword.getSocket() == Socket.EMERALD) {
+        if (player instanceof ServerPlayer sPlayer && item instanceof IridiumSwordItem sword && sword.getSocket() == SocketRegistry.EMERALD.get()) {
             var trades = sPlayer.getStats().getValue(Stats.CUSTOM, Stats.TRADED_WITH_VILLAGER);
             var multiplier = 1 + (Math.log(trades) / Math.log(2.0));
             event.setDroppedExperience((int) (event.getDroppedExperience() * multiplier));
@@ -237,33 +238,31 @@ public class EventHandler {
         var rng = world.getRandom();
         if (item instanceof IridiumHoeItem hoe && event.getFinalState().getBlock() == Blocks.DIRT) {
             var socket = hoe.getSocket();
-            switch (socket) {
-                case DIAMOND -> {
-                    int rand = rng.nextInt(1000);
-                    if (rand >= 69 && rand <= 73) {
-                        ItemStack i;
-                        if (rand == 69) {
-                            i = Items.DIAMOND.getDefaultInstance();
-                        } else if (rand <= 71) {
-                            i = Items.EMERALD.getDefaultInstance();
-                        } else {
-                            i = Items.AMETHYST_SHARD.getDefaultInstance();
-                            i.setCount(rng.nextInt(8));
-                        }
-                        if (world instanceof Level level) {
-                            ItemEntity e;
-                            if (player != null) e = new ItemEntity(level, player.getX(), player.getY(), player.getZ(), i);
-                            else e = new ItemEntity(level, blockpos.getX(), blockpos.getY(), blockpos.getZ(), i);
-                            world.addFreshEntity(e);
-                        }
+            if (socket == SocketRegistry.DIAMOND.get()) {
+                int rand = rng.nextInt(1000);
+                if (rand >= 69 && rand <= 73) {
+                    ItemStack i;
+                    if (rand == 69) {
+                        i = Items.DIAMOND.getDefaultInstance();
+                    } else if (rand <= 71) {
+                        i = Items.EMERALD.getDefaultInstance();
+                    } else {
+                        i = Items.AMETHYST_SHARD.getDefaultInstance();
+                        i.setCount(rng.nextInt(8));
+                    }
+                    if (world instanceof Level level) {
+                        ItemEntity e;
+                        if (player != null) e = new ItemEntity(level, player.getX(), player.getY(), player.getZ(), i);
+                        else e = new ItemEntity(level, blockpos.getX(), blockpos.getY(), blockpos.getZ(), i);
+                        world.addFreshEntity(e);
                     }
                 }
-                case EMERALD -> {
-                    event.setFinalState(BlockRegistry.BLESSED_SOIL.get().defaultBlockState());
-                }
-                case AMETHYST -> {
-                    event.setFinalState(BlockRegistry.GLOWING_SOIL.get().defaultBlockState());
-                }
+            }
+            if (socket == SocketRegistry.EMERALD.get()) {
+                event.setFinalState(BlockRegistry.BLESSED_SOIL.get().defaultBlockState());
+            }
+            if (socket == SocketRegistry.AMETHYST.get()) {
+                event.setFinalState(BlockRegistry.GLOWING_SOIL.get().defaultBlockState());
             }
         }
     }
@@ -276,12 +275,12 @@ public class EventHandler {
         Level world = player.level();
         if (chestItem instanceof IridiumChestplateItem plate) {
             Socket socket = plate.getSocket();
-            if (socket == Socket.EMERALD) {
+            if (socket == SocketRegistry.EMERALD.get()) {
                 MobEffectInstance effect = player.getEffect(MobEffects.HERO_OF_THE_VILLAGE);
                 if (effect == null || effect.getDuration() <= 5) {
                     player.addEffect(new MobEffectInstance(MobEffects.HERO_OF_THE_VILLAGE, 5, 0, true, false));
                 }
-            } else if (socket == Socket.AMETHYST) {
+            } else if (socket == SocketRegistry.AMETHYST.get()) {
                 MobEffectInstance effect = player.getEffect(MobEffects.NIGHT_VISION);
                 var duration = 10 * 20 + 1;
                 if (effect == null || effect.getDuration() <= duration) {

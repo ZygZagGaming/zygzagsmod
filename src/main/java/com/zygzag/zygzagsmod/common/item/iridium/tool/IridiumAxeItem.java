@@ -1,6 +1,7 @@
 package com.zygzag.zygzagsmod.common.item.iridium.tool;
 
 import com.zygzag.zygzagsmod.common.Config;
+import com.zygzag.zygzagsmod.common.registry.SocketRegistry;
 import com.zygzag.zygzagsmod.common.util.GeneralUtil;
 import com.zygzag.zygzagsmod.common.Main;
 import com.zygzag.zygzagsmod.common.item.iridium.ISocketable;
@@ -9,7 +10,6 @@ import com.zygzag.zygzagsmod.common.registry.EnchantmentRegistry;
 import net.minecraft.ChatFormatting;
 import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.color.item.ItemColor;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.network.chat.Component;
@@ -32,22 +32,23 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.List;
+import java.util.function.Supplier;
 
 @ParametersAreNonnullByDefault
 @MethodsReturnNonnullByDefault
 public class IridiumAxeItem extends AxeItem implements ISocketable {
-    Socket socket;
-    public IridiumAxeItem(Tier tier, float damage, float speed, Properties properties, Socket socket) {
+    Supplier<Socket> socketSupplier;
+    public IridiumAxeItem(Tier tier, float damage, float speed, Properties properties, Supplier<Socket> socketSupplier) {
         super(tier, damage, speed, properties);
-        this.socket = socket;
+        this.socketSupplier = socketSupplier;
     }
 
     @Override
     public void appendHoverText(ItemStack stack, @Nullable Level world, List<Component> text, TooltipFlag flag) {
         Socket s = getSocket();
-        Item i = s.i;
+        Item i = s.item;
         MutableComponent m;
-        if (s != Socket.NONE && world != null) {
+        if (s != SocketRegistry.NONE.get() && world != null) {
             String str = hasUseAbility() ? "use" : "passive";
             MutableComponent t = Component.translatable("socketed.zygzagsmod").withStyle(ChatFormatting.GRAY);
             t.append(Component.literal(": ").withStyle(ChatFormatting.GRAY));
@@ -59,9 +60,9 @@ public class IridiumAxeItem extends AxeItem implements ISocketable {
             if (str.equals("passive")) m = Component.translatable(str + ".zygzagsmod").withStyle(ChatFormatting.GRAY);
             else m = Minecraft.getInstance().options.keyUse.getKey().getDisplayName().copy().withStyle(ChatFormatting.GRAY);
             m.append(Component.literal( ": ").withStyle(ChatFormatting.GRAY));
-            m.append(Component.translatable( str + "_ability.zygzagsmod.axe." + socket.name().toLowerCase()).withStyle(ChatFormatting.GOLD));
+            m.append(Component.translatable( str + "_ability.zygzagsmod.axe." + socket.name.toLowerCase()).withStyle(ChatFormatting.GOLD));
             text.add(m);
-            text.add(Component.translatable("description." + str + "_ability.zygzagsmod.axe." + socket.name().toLowerCase()));
+            text.add(Component.translatable("description." + str + "_ability.zygzagsmod.axe." + socket.name.toLowerCase()));
             if (hasCooldown()) {
                 MutableComponent comp = Component.translatable("zygzagsmod.cooldown").withStyle(ChatFormatting.GRAY);
                 comp.append(Component.literal(": ").withStyle(ChatFormatting.GRAY));
@@ -74,29 +75,29 @@ public class IridiumAxeItem extends AxeItem implements ISocketable {
 
     @Override
     public Socket getSocket() {
-        return socket;
+        return socketSupplier.get();
     }
 
     @Override
     public boolean hasCooldown() {
-        return socket == Socket.WITHER_SKULL;
+        return getSocket() == SocketRegistry.WITHER_SKULL.get();
     }
 
     @Override
     public boolean hasUseAbility() {
-        return socket == Socket.WITHER_SKULL;
+        return getSocket() == SocketRegistry.WITHER_SKULL.get();
     }
 
     @Override
     public int getCooldown(ItemStack stack, Level world) {
         int cooldownLevel = EnchantmentHelper.getTagEnchantmentLevel(EnchantmentRegistry.COOLDOWN_ENCHANTMENT.get(), stack);
-        return socket == Socket.WITHER_SKULL ? Config.witherSkullAxeCooldown / (cooldownLevel + 1) : 0;
+        return getSocket() == SocketRegistry.WITHER_SKULL.get() ? Config.witherSkullAxeCooldown / (cooldownLevel + 1) : 0;
     }
 
     @Override
     public InteractionResultHolder<ItemStack> use(Level world, Player player, InteractionHand hand) {
         var stack = player.getItemInHand(hand);
-        if (socket == Socket.WITHER_SKULL && !player.getCooldowns().isOnCooldown(this)) {
+        if (getSocket() == SocketRegistry.WITHER_SKULL.get() && !player.getCooldowns().isOnCooldown(this)) {
             var range = Config.witherSkullAxeRange;
             for (int x = -range; x <= range; x++) {
                 for (int y = -range; y <= range + 1; y++) {
@@ -133,7 +134,7 @@ public class IridiumAxeItem extends AxeItem implements ISocketable {
     @Nonnull
     @Override
     public AABB getSweepHitBox(@Nonnull ItemStack stack, @Nonnull Player player, @Nonnull Entity target) {
-        if (stack.getItem() instanceof IridiumAxeItem axe && axe.getSocket() == Socket.DIAMOND) {
+        if (stack.getItem() instanceof IridiumAxeItem axe && axe.getSocket() == SocketRegistry.DIAMOND.get()) {
             return target.getBoundingBox().inflate(1.0D, 0.25D, 1.0D);
         }
         return super.getSweepHitBox(stack, player, target);
@@ -141,7 +142,7 @@ public class IridiumAxeItem extends AxeItem implements ISocketable {
 
     @Override
     public boolean canPerformAction(ItemStack stack, ToolAction toolAction) {
-        if (socket == Socket.DIAMOND && toolAction == ToolActions.SWORD_SWEEP) return true;
+        if (getSocket() == SocketRegistry.DIAMOND.get() && toolAction == ToolActions.SWORD_SWEEP) return true;
         return ToolActions.DEFAULT_AXE_ACTIONS.contains(toolAction);
     }
 }

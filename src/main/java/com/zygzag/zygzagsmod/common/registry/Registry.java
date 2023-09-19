@@ -18,6 +18,7 @@ public class Registry<T> {
     }
 
     public static final Supplier<List<Consumer<IEventBus>>> REGISTRATION_QUEUE = () -> List.of(
+            SocketRegistry.INSTANCE::registerTo,
             BlockRegistry.INSTANCE::registerTo,
             ItemRegistry.INSTANCE::registerTo,
             BlockWithItemRegistry.INSTANCE::registerTo,

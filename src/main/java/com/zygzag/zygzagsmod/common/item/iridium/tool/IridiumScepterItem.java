@@ -5,6 +5,7 @@ import com.zygzag.zygzagsmod.common.entity.HomingWitherSkull;
 import com.zygzag.zygzagsmod.common.item.iridium.ISocketable;
 import com.zygzag.zygzagsmod.common.item.iridium.Socket;
 import com.zygzag.zygzagsmod.common.registry.EnchantmentRegistry;
+import com.zygzag.zygzagsmod.common.registry.SocketRegistry;
 import net.minecraft.ChatFormatting;
 import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.client.Minecraft;
@@ -42,19 +43,20 @@ import net.minecraft.world.phys.AABB;
 import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.List;
+import java.util.function.Supplier;
 
 @ParametersAreNonnullByDefault
 @MethodsReturnNonnullByDefault
 public class IridiumScepterItem extends Item implements ISocketable {
-    Socket socket;
-    public IridiumScepterItem(Properties properties, Socket socket) {
+    Supplier<Socket> socketSupplier;
+    public IridiumScepterItem(Properties properties, Supplier<Socket> socketSupplier) {
         super(properties.durability(2048));
-        this.socket = socket;
+        this.socketSupplier = socketSupplier;
     }
 
     @Override
     public Socket getSocket() {
-        return socket;
+        return socketSupplier.get();
     }
 
     @Override
@@ -62,77 +64,70 @@ public class IridiumScepterItem extends Item implements ISocketable {
         ItemStack item = player.getItemInHand(hand);
         Socket socket = getSocket();
         AABB aabb;
-        switch (socket) {
-            case NONE -> {
-                return InteractionResultHolder.fail(item);
+        if (socket == SocketRegistry.NONE.get()) {
+            return InteractionResultHolder.fail(item);
+        } else if (socket == SocketRegistry.DIAMOND.get()) {
+            aabb = new AABB(player.blockPosition().subtract(new Vec3i(20, 20, 20)), player.blockPosition().offset(new Vec3i(20, 20, 20)));
+            List<ItemEntity> items = world.getEntities(EntityType.ITEM, aabb, (v) -> true);
+            for (ItemEntity v : items) {
+                if (v.getItem().is(ItemTags.create(new ResourceLocation("zygzagsmod:diamond_scepter_consumable")))) {
+                    int amount = v.getItem().getCount() / 8;
+                    ExperienceOrb orb = new ExperienceOrb(world, v.getX(), v.getY(), v.getZ(), amount);
+                    world.addFreshEntity(orb);
+                    v.kill();
+                    item.hurtAndBreak(1, player, (p) -> { });
+                }
             }
-            case DIAMOND -> {
-                aabb = new AABB(player.blockPosition().subtract(new Vec3i(20, 20, 20)), player.blockPosition().offset(new Vec3i(20, 20, 20)));
-                List<ItemEntity> items = world.getEntities(EntityType.ITEM, aabb, (v) -> true);
-                for (ItemEntity v : items) {
-                    if (v.getItem().is(ItemTags.create(new ResourceLocation("zygzagsmod:diamond_scepter_consumable")))) {
-                        int amount = v.getItem().getCount() / 8;
-                        ExperienceOrb orb = new ExperienceOrb(world, v.getX(), v.getY(), v.getZ(), amount);
-                        world.addFreshEntity(orb);
-                        v.kill();
+        } else if (socket == SocketRegistry.EMERALD.get()) {
+            aabb = new AABB(player.blockPosition().subtract(new Vec3i(6, 3, 6)), player.blockPosition().offset(new Vec3i(6, 3, 6)));
+            List<Villager> villagers = world.getEntities(EntityType.VILLAGER, aabb, (v) -> true);
+            for (Villager v : villagers) {
+                MerchantOffers offers = v.getOffers();
+                for (int i = 0; i < offers.toArray().length; i++) {
+                    MerchantOffer offer = offers.get(i);
+                    while (offer.isOutOfStock()) {
+                        offer.increaseUses();
                         item.hurtAndBreak(1, player, (p) -> { });
                     }
                 }
             }
-            case EMERALD -> {
-                aabb = new AABB(player.blockPosition().subtract(new Vec3i(6, 3, 6)), player.blockPosition().offset(new Vec3i(6, 3, 6)));
-                List<Villager> villagers = world.getEntities(EntityType.VILLAGER, aabb, (v) -> true);
-                for (Villager v : villagers) {
-                    MerchantOffers offers = v.getOffers();
-                    for (int i = 0; i < offers.toArray().length; i++) {
-                        MerchantOffer offer = offers.get(i);
-                        while (offer.isOutOfStock()) {
-                            offer.increaseUses();
-                            item.hurtAndBreak(1, player, (p) -> { });
-                        }
-                    }
+            ISocketable.setCooldown(player, this, item, world);
+        } else if (socket == SocketRegistry.WITHER_SKULL.get()) {
+            if (!player.getCooldowns().isOnCooldown(this)) {
+                var power = player.getLookAngle().scale(1.5);
+                var skull = new HomingWitherSkull(world, player, power.x, power.y, power.z);
+                //skull.shootFromRotation(player, (float) player.getLookAngle().x, (float) player.getLookAngle().y, (float) player.getLookAngle().z, 3, 0);
+                world.addFreshEntity(skull);
+                ISocketable.setCooldown(player, this, item, world);
+            }
+        } else if (socket == SocketRegistry.AMETHYST.get()) {
+            if (!player.getCooldowns().isOnCooldown(this)) {
+                aabb = player.getBoundingBox().inflate(40.0);
+                List<LivingEntity> entities = world.getEntitiesOfClass(LivingEntity.class, aabb, (v) -> v != player);
+                for (LivingEntity e : entities) {
+                    e.addEffect(new MobEffectInstance(MobEffects.BLINDNESS, 200));
+                    e.addEffect(new MobEffectInstance(MobEffects.GLOWING, 200));
+                    item.hurtAndBreak(1, player, (p) -> { });
                 }
                 ISocketable.setCooldown(player, this, item, world);
             }
-            case WITHER_SKULL -> {
-                if (!player.getCooldowns().isOnCooldown(this)) {
-                    var power = player.getLookAngle().scale(1.5);
-                    var skull = new HomingWitherSkull(world, player, power.x, power.y, power.z);
-                    //skull.shootFromRotation(player, (float) player.getLookAngle().x, (float) player.getLookAngle().y, (float) player.getLookAngle().z, 3, 0);
-                    world.addFreshEntity(skull);
-                    ISocketable.setCooldown(player, this, item, world);
-                }
+        } else if (socket == SocketRegistry.SKULL.get()) {
+            world.playSound(null, player.getX(), player.getY(), player.getZ(), SoundEvents.LINGERING_POTION_THROW, SoundSource.NEUTRAL, 0.5F, 0.4F / (player.getRandom().nextFloat() * 0.4F + 0.8F));
+            if (!world.isClientSide) {
+                ThrownPotion thrownpotion = new ThrownPotion(world, player);
+                ItemStack stack = Items.LINGERING_POTION.getDefaultInstance();
+                PotionUtils.setPotion(stack, Potions.LONG_POISON);
+                thrownpotion.setItem(stack);
+                thrownpotion.shootFromRotation(player, player.getXRot(), player.getYRot(), -20.0F, 0.5F, 1.0F);
+                world.addFreshEntity(thrownpotion);
             }
-            case AMETHYST -> {
-                if (!player.getCooldowns().isOnCooldown(this)) {
-                    aabb = player.getBoundingBox().inflate(40.0);
-                    List<LivingEntity> entities = world.getEntitiesOfClass(LivingEntity.class, aabb, (v) -> v != player);
-                    for (LivingEntity e : entities) {
-                        e.addEffect(new MobEffectInstance(MobEffects.BLINDNESS, 200));
-                        e.addEffect(new MobEffectInstance(MobEffects.GLOWING, 200));
-                        item.hurtAndBreak(1, player, (p) -> { });
-                    }
-                    ISocketable.setCooldown(player, this, item, world);
-                }
-            }
-            case SKULL -> {
-                world.playSound(null, player.getX(), player.getY(), player.getZ(), SoundEvents.LINGERING_POTION_THROW, SoundSource.NEUTRAL, 0.5F, 0.4F / (player.getRandom().nextFloat() * 0.4F + 0.8F));
-                if (!world.isClientSide) {
-                    ThrownPotion thrownpotion = new ThrownPotion(world, player);
-                    ItemStack stack = Items.LINGERING_POTION.getDefaultInstance();
-                    PotionUtils.setPotion(stack, Potions.LONG_POISON);
-                    thrownpotion.setItem(stack);
-                    thrownpotion.shootFromRotation(player, player.getXRot(), player.getYRot(), -20.0F, 0.5F, 1.0F);
-                    world.addFreshEntity(thrownpotion);
-                }
 
-                player.awardStat(Stats.ITEM_USED.get(this));
-                if (!player.getAbilities().instabuild) {
-                    item.hurtAndBreak(4, player, (e) -> { });
-                }
-                item.hurtAndBreak(1, player, (p) -> { });
-                ISocketable.setCooldown(player, this, item, world);
+            player.awardStat(Stats.ITEM_USED.get(this));
+            if (!player.getAbilities().instabuild) {
+                item.hurtAndBreak(4, player, (e) -> { });
             }
+            item.hurtAndBreak(1, player, (p) -> { });
+            ISocketable.setCooldown(player, this, item, world);
         }
         return InteractionResultHolder.consume(item);
     }
@@ -140,9 +135,9 @@ public class IridiumScepterItem extends Item implements ISocketable {
     @Override
     public void appendHoverText(ItemStack stack, @Nullable Level world, List<Component> text, TooltipFlag flag) {
         Socket s = getSocket();
-        Item i = s.i;
+        Item i = s.item;
         MutableComponent m;
-        if (s != Socket.NONE && world != null) {
+        if (s != SocketRegistry.NONE.get() && world != null) {
             MutableComponent t = Component.translatable("socketed.zygzagsmod").withStyle(ChatFormatting.GRAY);
             t.append(Component.literal(": ").withStyle(ChatFormatting.GRAY));
             t.append(((MutableComponent) i.getName(i.getDefaultInstance())).withStyle(ChatFormatting.GOLD));
@@ -152,9 +147,9 @@ public class IridiumScepterItem extends Item implements ISocketable {
             text.add(Component.literal(""));
             m = Minecraft.getInstance().options.keyUse.getKey().getDisplayName().copy().withStyle(ChatFormatting.GRAY);
             m.append(Component.literal( ": ").withStyle(ChatFormatting.GRAY));
-            m.append(Component.translatable("use_ability.zygzagsmod.scepter." + socket.name().toLowerCase()).withStyle(ChatFormatting.GOLD));
+            m.append(Component.translatable("use_ability.zygzagsmod.scepter." + socket.name.toLowerCase()).withStyle(ChatFormatting.GOLD));
             text.add(m);
-            text.add(Component.translatable("description.use_ability.zygzagsmod.scepter." + socket.name().toLowerCase()));
+            text.add(Component.translatable("description.use_ability.zygzagsmod.scepter." + socket.name.toLowerCase()));
             if (hasCooldown()) {
                 MutableComponent comp = Component.translatable("zygzagsmod.cooldown").withStyle(ChatFormatting.GRAY);
                 comp.append(Component.literal(": ").withStyle(ChatFormatting.GRAY));
@@ -168,7 +163,7 @@ public class IridiumScepterItem extends Item implements ISocketable {
 
     @Override
     public boolean hasCooldown() {
-        return socket != Socket.NONE && socket != Socket.DIAMOND;
+        return getSocket() != SocketRegistry.NONE.get() && getSocket() != SocketRegistry.DIAMOND.get();
     }
 
     @Override
@@ -179,20 +174,11 @@ public class IridiumScepterItem extends Item implements ISocketable {
     @Override
     public int getCooldown(ItemStack stack, Level world) {
         int cooldownLevel = EnchantmentHelper.getTagEnchantmentLevel(EnchantmentRegistry.COOLDOWN_ENCHANTMENT.get(), stack);
-        switch (socket) {
-            case EMERALD -> {
-                return Config.emeraldScepterCooldown / (cooldownLevel + 1);
-            }
-            case SKULL -> {
-                return Config.skullScepterCooldown / (cooldownLevel + 1);
-            }
-            case WITHER_SKULL -> {
-                return Config.witherSkullScepterCooldown / (cooldownLevel + 1);
-            }
-            case AMETHYST -> {
-                return Config.amethystScepterCooldown / (cooldownLevel + 1);
-            }
-        }
-        return 0;
+        Socket socket = getSocket();
+        var baseCooldown = socket == SocketRegistry.EMERALD.get() ? Config.emeraldScepterCooldown :
+                socket == SocketRegistry.SKULL.get() ? Config.skullScepterCooldown :
+                        socket == SocketRegistry.WITHER_SKULL.get() ? Config.witherSkullScepterCooldown :
+                                socket == SocketRegistry.AMETHYST.get() ? Config.amethystScepterCooldown : 0;
+        return baseCooldown / (cooldownLevel + 1);
     }
 }

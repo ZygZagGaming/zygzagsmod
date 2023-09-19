@@ -1,6 +1,7 @@
 package com.zygzag.zygzagsmod.common.item.iridium.tool;
 
 import com.zygzag.zygzagsmod.common.Config;
+import com.zygzag.zygzagsmod.common.registry.SocketRegistry;
 import com.zygzag.zygzagsmod.common.util.GeneralUtil;
 import com.zygzag.zygzagsmod.common.Main;
 import com.zygzag.zygzagsmod.common.entity.PlayerAlliedSkeleton;
@@ -44,18 +45,18 @@ import java.util.stream.Collectors;
 @MethodsReturnNonnullByDefault
 @ParametersAreNonnullByDefault
 public class IridiumShovelItem extends ShovelItem implements ISocketable {
-    Socket socket;
-    public IridiumShovelItem(Tier tier, float damage, float speed, Properties properties, Socket socket) {
+    Supplier<Socket> socketSupplier;
+    public IridiumShovelItem(Tier tier, float damage, float speed, Properties properties, Supplier<Socket> socketSupplier) {
         super(tier, damage, speed, properties);
-        this.socket = socket;
+        this.socketSupplier = socketSupplier;
     }
 
     @Override
     public void appendHoverText(ItemStack stack, @Nullable Level world, List<Component> text, TooltipFlag flag) {
         Socket s = getSocket();
-        Item i = s.i;
+        Item i = s.item;
         MutableComponent m;
-        if (s != Socket.NONE && world != null) {
+        if (s != SocketRegistry.NONE.get() && world != null) {
             String str = hasCooldown() ? "use" : "passive";
             MutableComponent t = Component.translatable("socketed.zygzagsmod").withStyle(ChatFormatting.GRAY);
             t.append(Component.literal(": ").withStyle(ChatFormatting.GRAY));
@@ -67,9 +68,9 @@ public class IridiumShovelItem extends ShovelItem implements ISocketable {
             if (str.equals("passive")) m = Component.translatable(str + ".zygzagsmod").withStyle(ChatFormatting.GRAY);
             else m = Minecraft.getInstance().options.keyUse.getKey().getDisplayName().copy().withStyle(ChatFormatting.GRAY);
             m.append(Component.literal( ": ").withStyle(ChatFormatting.GRAY));
-            m.append(Component.translatable( str + "_ability.zygzagsmod.shovel." + socket.name().toLowerCase()).withStyle(ChatFormatting.GOLD));
+            m.append(Component.translatable( str + "_ability.zygzagsmod.shovel." + socket.name.toLowerCase()).withStyle(ChatFormatting.GOLD));
             text.add(m);
-            text.add(Component.translatable("description." + str + "_ability.zygzagsmod.shovel." + socket.name().toLowerCase()));
+            text.add(Component.translatable("description." + str + "_ability.zygzagsmod.shovel." + socket.name.toLowerCase()));
             if (hasCooldown()) {
                 MutableComponent comp = Component.translatable("zygzagsmod.cooldown").withStyle(ChatFormatting.GRAY);
                 comp.append(Component.literal(": ").withStyle(ChatFormatting.GRAY));
@@ -82,7 +83,8 @@ public class IridiumShovelItem extends ShovelItem implements ISocketable {
 
     @Override
     public boolean hasCooldown() {
-        return socket == Socket.EMERALD || socket == Socket.SKULL || socket == Socket.WITHER_SKULL;
+        Socket socket = getSocket();
+        return socket == SocketRegistry.EMERALD.get() || socket == SocketRegistry.SKULL.get() || socket == SocketRegistry.WITHER_SKULL.get();
     }
 
     @Override
@@ -93,28 +95,21 @@ public class IridiumShovelItem extends ShovelItem implements ISocketable {
     @Override
     public int getCooldown(ItemStack stack, Level world) {
         int cooldownLevel = EnchantmentHelper.getTagEnchantmentLevel(EnchantmentRegistry.COOLDOWN_ENCHANTMENT.get(), stack);
-        switch (socket) {
-            case EMERALD -> {
-                return Config.emeraldShovelCooldown / (cooldownLevel + 1);
-            }
-            case SKULL -> {
-                return Config.skullShovelCooldown / (cooldownLevel + 1);
-            }
-            case WITHER_SKULL -> {
-                return Config.witherSkullShovelCooldown / (cooldownLevel + 1);
-            }
-        }
-        return 0;
+        Socket socket = getSocket();
+        int baseCooldown = socket == SocketRegistry.EMERALD.get() ? Config.emeraldShovelCooldown :
+                socket == SocketRegistry.SKULL.get() ? Config.skullShovelCooldown :
+                        socket == SocketRegistry.WITHER_SKULL.get() ? Config.witherSkullShovelCooldown : 0;
+        return baseCooldown / (cooldownLevel + 1);
     }
 
     @Override
     public Socket getSocket() {
-        return socket;
+        return socketSupplier.get();
     }
 
     @Override
     public boolean mineBlock(ItemStack stack, Level level, BlockState state, BlockPos pos, LivingEntity user) {
-        if (state.is(Main.VEINMINEABLE) && (!(user instanceof Player) || user.isShiftKeyDown() && !((Player) user).getCooldowns().isOnCooldown(this)) && stack.getItem() instanceof IridiumShovelItem shovel && shovel.getSocket() == Socket.DIAMOND) {
+        if (state.is(Main.VEINMINEABLE) && (!(user instanceof Player) || user.isShiftKeyDown() && !((Player) user).getCooldowns().isOnCooldown(this)) && stack.getItem() instanceof IridiumShovelItem shovel && shovel.getSocket() == SocketRegistry.DIAMOND.get()) {
             int numDestroyed = 1;
             List<BlockPos> arr = Arrays.stream(getNeighboringBlocks(pos)).collect(Collectors.toList());
             if (level instanceof ServerLevel sLevel) {
@@ -143,83 +138,79 @@ public class IridiumShovelItem extends ShovelItem implements ISocketable {
     public InteractionResultHolder<ItemStack> use(Level world, Player player, InteractionHand hand) {
         ItemStack stack = player.getItemInHand(hand);
         if (stack.getItem() instanceof IridiumShovelItem shovel) {
-            switch (shovel.getSocket()) {
-                case SKULL -> {
-                    var skeleton1 = new PlayerAlliedSkeleton(world, player);
-                    var skeleton2 = new PlayerAlliedSkeleton(world, player);
-                    var skeleton3 = new PlayerAlliedSkeleton(world, player);
-                    skeleton1.setPos(player.position().add(1.0, 0.0, 1.0));
-                    skeleton2.setPos(player.position().add(-1.0, 0.0, 1.0));
-                    skeleton3.setPos(player.position().add(0.0, 0.0, -1.0));
-                    skeleton1.setItemInHand(InteractionHand.MAIN_HAND, Items.WOODEN_SWORD.getDefaultInstance());
-                    skeleton2.setItemInHand(InteractionHand.MAIN_HAND, Items.WOODEN_SWORD.getDefaultInstance());
-                    skeleton3.setItemInHand(InteractionHand.MAIN_HAND, Items.WOODEN_SWORD.getDefaultInstance());
-                    world.addFreshEntity(skeleton1);
-                    world.addFreshEntity(skeleton2);
-                    world.addFreshEntity(skeleton3);
-                    ISocketable.addCooldown(player, stack, Config.skullShovelCooldown);
-                }
-                case EMERALD -> {
-                    if (!world.isClientSide) {
-                        BlockPos blockPos = player.blockPosition();
-                        world.blockEvent(player.blockPosition(), Blocks.BELL, 1, 1);
-                        world.playSound(null, blockPos, SoundEvents.BELL_BLOCK, SoundSource.PLAYERS, 2.0F, 1.0F);
-                        BellBlockEntity.makeRaidersGlow(world, blockPos, world.getEntities(player, player.getBoundingBox().inflate(40.0), (e) -> e.getType().is(EntityTypeTags.RAIDERS)).stream().filter((e) -> e instanceof LivingEntity).map((e) -> (LivingEntity) e).collect(Collectors.toList()));
-                        List<Villager> villagers = world.getEntitiesOfClass(Villager.class, player.getBoundingBox().inflate(40.0));
-                        for (Villager villager : villagers) {
-                            villager.getBrain().setActiveActivityIfPossible(Activity.HIDE);
-                        }
-                        ISocketable.addCooldown(player, stack, Config.emeraldShovelCooldown);
+            if (getSocket() == SocketRegistry.SKULL.get()) {
+                var skeleton1 = new PlayerAlliedSkeleton(world, player);
+                var skeleton2 = new PlayerAlliedSkeleton(world, player);
+                var skeleton3 = new PlayerAlliedSkeleton(world, player);
+                skeleton1.setPos(player.position().add(1.0, 0.0, 1.0));
+                skeleton2.setPos(player.position().add(-1.0, 0.0, 1.0));
+                skeleton3.setPos(player.position().add(0.0, 0.0, -1.0));
+                skeleton1.setItemInHand(InteractionHand.MAIN_HAND, Items.WOODEN_SWORD.getDefaultInstance());
+                skeleton2.setItemInHand(InteractionHand.MAIN_HAND, Items.WOODEN_SWORD.getDefaultInstance());
+                skeleton3.setItemInHand(InteractionHand.MAIN_HAND, Items.WOODEN_SWORD.getDefaultInstance());
+                world.addFreshEntity(skeleton1);
+                world.addFreshEntity(skeleton2);
+                world.addFreshEntity(skeleton3);
+                ISocketable.addCooldown(player, stack, Config.skullShovelCooldown);
+            } else if (getSocket() == SocketRegistry.EMERALD.get()) {
+                if (!world.isClientSide) {
+                    BlockPos blockPos = player.blockPosition();
+                    world.blockEvent(player.blockPosition(), Blocks.BELL, 1, 1);
+                    world.playSound(null, blockPos, SoundEvents.BELL_BLOCK, SoundSource.PLAYERS, 2.0F, 1.0F);
+                    BellBlockEntity.makeRaidersGlow(world, blockPos, world.getEntities(player, player.getBoundingBox().inflate(40.0), (e) -> e.getType().is(EntityTypeTags.RAIDERS)).stream().filter((e) -> e instanceof LivingEntity).map((e) -> (LivingEntity) e).collect(Collectors.toList()));
+                    List<Villager> villagers = world.getEntitiesOfClass(Villager.class, player.getBoundingBox().inflate(40.0));
+                    for (Villager villager : villagers) {
+                        villager.getBrain().setActiveActivityIfPossible(Activity.HIDE);
                     }
-                    return InteractionResultHolder.consume(stack);
+                    ISocketable.addCooldown(player, stack, Config.emeraldShovelCooldown);
                 }
-                case WITHER_SKULL -> {
-                    BiConsumer<BlockPos, BlockState> setBlock = (pos, state) -> { if (!world.isClientSide) world.setBlockAndUpdate(pos, state); };
-                    Supplier<Double> random = () -> world.getRandom().nextDouble();
-                    boolean isCrimson = random.get() <= .75;
-                    BlockState nylium = isCrimson ? Blocks.CRIMSON_NYLIUM.defaultBlockState() : Blocks.WARPED_NYLIUM.defaultBlockState();
-                    for (int j = 0; j < 4; j++) {
-                        BlockPos pos = player.blockPosition().below();
-                        for (int i = 0; i < 64; i++) {
-                            Direction d = Direction.Plane.HORIZONTAL.getRandomDirection(player.getRandom());
-                            if (world.getBlockState(pos).is(Blocks.GRASS_BLOCK)) {
-                                var abovePos = pos.above();
-                                var above = world.getBlockState(abovePos);
-                                if (isAirLike(above)) {
-                                    setBlock.accept(abovePos, Blocks.AIR.defaultBlockState());
-                                    setBlock.accept(pos, nylium);
-                                    GeneralUtil.particles(
-                                            world,
-                                            ParticleTypes.SMOKE,
-                                            pos.above(),
-                                            5,
-                                            0, 0.2, 0
-                                    );
-                                    if (random.get() <= .45) {
-                                        BlockState weeds = isCrimson ^ random.get() <= .05 ? (random.get() <= .1 ? Blocks.CRIMSON_FUNGUS.defaultBlockState() : Blocks.CRIMSON_ROOTS.defaultBlockState()) : (random.get() <= .1 ? Blocks.WARPED_FUNGUS.defaultBlockState() : (random.get() <= .33 ? Blocks.NETHER_SPROUTS.defaultBlockState() : Blocks.WARPED_ROOTS.defaultBlockState()));
-                                        setBlock.accept(abovePos, weeds);
-                                    }
+                return InteractionResultHolder.consume(stack);
+            } else if (getSocket() == SocketRegistry.WITHER_SKULL.get()) {
+                BiConsumer<BlockPos, BlockState> setBlock = (pos, state) -> { if (!world.isClientSide) world.setBlockAndUpdate(pos, state); };
+                Supplier<Double> random = () -> world.getRandom().nextDouble();
+                boolean isCrimson = random.get() <= .75;
+                BlockState nylium = isCrimson ? Blocks.CRIMSON_NYLIUM.defaultBlockState() : Blocks.WARPED_NYLIUM.defaultBlockState();
+                for (int j = 0; j < 4; j++) {
+                    BlockPos pos = player.blockPosition().below();
+                    for (int i = 0; i < 64; i++) {
+                        Direction d = Direction.Plane.HORIZONTAL.getRandomDirection(player.getRandom());
+                        if (world.getBlockState(pos).is(Blocks.GRASS_BLOCK)) {
+                            var abovePos = pos.above();
+                            var above = world.getBlockState(abovePos);
+                            if (isAirLike(above)) {
+                                setBlock.accept(abovePos, Blocks.AIR.defaultBlockState());
+                                setBlock.accept(pos, nylium);
+                                GeneralUtil.particles(
+                                        world,
+                                        ParticleTypes.SMOKE,
+                                        pos.above(),
+                                        5,
+                                        0, 0.2, 0
+                                );
+                                if (random.get() <= .45) {
+                                    BlockState weeds = isCrimson ^ random.get() <= .05 ? (random.get() <= .1 ? Blocks.CRIMSON_FUNGUS.defaultBlockState() : Blocks.CRIMSON_ROOTS.defaultBlockState()) : (random.get() <= .1 ? Blocks.WARPED_FUNGUS.defaultBlockState() : (random.get() <= .33 ? Blocks.NETHER_SPROUTS.defaultBlockState() : Blocks.WARPED_ROOTS.defaultBlockState()));
+                                    setBlock.accept(abovePos, weeds);
                                 }
-                            } else if (world.getBlockState(pos).is(Blocks.SAND))
-                                setBlock.accept(pos, Blocks.SOUL_SAND.defaultBlockState());
-                            else if (world.getBlockState(pos).is(Blocks.GRAVEL))
-                                setBlock.accept(pos, Blocks.SOUL_SOIL.defaultBlockState());
-                            pos = pos.relative(d);
-                            while (!isAirLike(world.getBlockState(pos))) {
-                                pos = pos.above();
-                                if (pos.getY() == world.getMaxBuildHeight()) break;
                             }
-                            while (isAirLike(world.getBlockState(pos))) {
-                                pos = pos.below();
-                                if (pos.getY() == world.getMaxBuildHeight()) break;
-                            }
+                        } else if (world.getBlockState(pos).is(Blocks.SAND))
+                            setBlock.accept(pos, Blocks.SOUL_SAND.defaultBlockState());
+                        else if (world.getBlockState(pos).is(Blocks.GRAVEL))
+                            setBlock.accept(pos, Blocks.SOUL_SOIL.defaultBlockState());
+                        pos = pos.relative(d);
+                        while (!isAirLike(world.getBlockState(pos))) {
+                            pos = pos.above();
+                            if (pos.getY() == world.getMaxBuildHeight()) break;
+                        }
+                        while (isAirLike(world.getBlockState(pos))) {
+                            pos = pos.below();
+                            if (pos.getY() == world.getMaxBuildHeight()) break;
                         }
                     }
-                    ISocketable.addCooldown(player, stack, Config.witherSkullShovelCooldown);
-                    stack.hurtAndBreak(4, player, (e) -> { });
-
-                    return InteractionResultHolder.consume(stack);
                 }
+                ISocketable.addCooldown(player, stack, Config.witherSkullShovelCooldown);
+                stack.hurtAndBreak(4, player, (e) -> { });
+
+                return InteractionResultHolder.consume(stack);
             }
         }
         return InteractionResultHolder.pass(stack);
