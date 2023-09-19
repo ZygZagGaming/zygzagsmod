@@ -1,25 +1,22 @@
 package com.zygzag.zygzagsmod.common.item.iridium.tool;
 
 import com.zygzag.zygzagsmod.common.Config;
-import com.zygzag.zygzagsmod.common.util.GeneralUtil;
 import com.zygzag.zygzagsmod.common.Main;
 import com.zygzag.zygzagsmod.common.item.iridium.ISocketable;
 import com.zygzag.zygzagsmod.common.item.iridium.Socket;
-import com.zygzag.zygzagsmod.common.registry.EnchantmentRegistry;
-import net.minecraft.ChatFormatting;
+import com.zygzag.zygzagsmod.common.util.GeneralUtil;
 import net.minecraft.MethodsReturnNonnullByDefault;
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.color.item.ItemColor;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResultHolder;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.*;
-import net.minecraft.world.item.enchantment.EnchantmentHelper;
+import net.minecraft.world.item.AxeItem;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Tier;
+import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.material.Fluids;
@@ -44,32 +41,7 @@ public class IridiumAxeItem extends AxeItem implements ISocketable {
 
     @Override
     public void appendHoverText(ItemStack stack, @Nullable Level world, List<Component> text, TooltipFlag flag) {
-        Socket s = getSocket();
-        Item i = s.i;
-        MutableComponent m;
-        if (s != Socket.NONE && world != null) {
-            String str = hasUseAbility() ? "use" : "passive";
-            MutableComponent t = Component.translatable("socketed.zygzagsmod").withStyle(ChatFormatting.GRAY);
-            t.append(Component.literal(": ").withStyle(ChatFormatting.GRAY));
-            t.append(((MutableComponent) i.getName(i.getDefaultInstance())).withStyle(ChatFormatting.GOLD));
-            text.add(t);
-
-            Socket socket = getSocket();
-            text.add(Component.literal(""));
-            if (str.equals("passive")) m = Component.translatable(str + ".zygzagsmod").withStyle(ChatFormatting.GRAY);
-            else m = Minecraft.getInstance().options.keyUse.getKey().getDisplayName().copy().withStyle(ChatFormatting.GRAY);
-            m.append(Component.literal( ": ").withStyle(ChatFormatting.GRAY));
-            m.append(Component.translatable( str + "_ability.zygzagsmod.axe." + socket.name().toLowerCase()).withStyle(ChatFormatting.GOLD));
-            text.add(m);
-            text.add(Component.translatable("description." + str + "_ability.zygzagsmod.axe." + socket.name().toLowerCase()));
-            if (hasCooldown()) {
-                MutableComponent comp = Component.translatable("zygzagsmod.cooldown").withStyle(ChatFormatting.GRAY);
-                comp.append(Component.literal(": ").withStyle(ChatFormatting.GRAY));
-                comp.append(Component.literal(Float.toString(getCooldown(stack, world) / 20f) + " ").withStyle(ChatFormatting.GOLD));
-                //text.add(Component.literal("\n"));
-                text.add(comp);
-            }
-        }
+        appendHoverText(stack, world, text, flag, "axe");
     }
 
     @Override
@@ -88,9 +60,8 @@ public class IridiumAxeItem extends AxeItem implements ISocketable {
     }
 
     @Override
-    public int getCooldown(ItemStack stack, Level world) {
-        int cooldownLevel = EnchantmentHelper.getTagEnchantmentLevel(EnchantmentRegistry.COOLDOWN_ENCHANTMENT.get(), stack);
-        return socket == Socket.WITHER_SKULL ? Config.witherSkullAxeCooldown / (cooldownLevel + 1) : 0;
+    public int getBaseCooldown(ItemStack stack, Level world) {
+        return socket == Socket.WITHER_SKULL ? Config.witherSkullAxeCooldown : 0;
     }
 
     @Override
@@ -124,7 +95,7 @@ public class IridiumAxeItem extends AxeItem implements ISocketable {
                     }
                 }
             }
-            if (!player.getAbilities().instabuild) player.getCooldowns().addCooldown(this, getCooldown(stack, world));
+            if (!player.getAbilities().instabuild) addCooldown(player, stack);
             return InteractionResultHolder.consume(stack);
         }
         return super.use(world, player, hand);
