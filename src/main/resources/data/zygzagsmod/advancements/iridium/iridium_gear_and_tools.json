@@ -1,0 +1,101 @@
+{
+  "parent": "zygzagsmod:iridium/full_iridium_gear",
+  "criteria": {
+    "gear": {
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "zygzagsmod:iridium_helmet"
+            ]
+          },
+          {
+            "items": [
+              "zygzagsmod:iridium_leggings"
+            ]
+          },
+          {
+            "items": [
+              "zygzagsmod:iridium_boots"
+            ]
+          },
+          {
+            "items": [
+              "zygzagsmod:diamond_socketed_iridium_chestplate",
+              "zygzagsmod:emerald_socketed_iridium_chestplate",
+              "zygzagsmod:skull_socketed_iridium_chestplate",
+              "zygzagsmod:wither_skull_socketed_iridium_chestplate",
+              "zygzagsmod:amethyst_socketed_iridium_chestplate"
+            ]
+          },
+          {
+            "items": [
+              "zygzagsmod:diamond_socketed_iridium_sword",
+              "zygzagsmod:emerald_socketed_iridium_sword",
+              "zygzagsmod:skull_socketed_iridium_sword",
+              "zygzagsmod:wither_skull_socketed_iridium_sword",
+              "zygzagsmod:amethyst_socketed_iridium_sword"
+            ]
+          },
+          {
+            "items": [
+              "zygzagsmod:diamond_socketed_iridium_axe",
+              "zygzagsmod:emerald_socketed_iridium_axe",
+              "zygzagsmod:skull_socketed_iridium_axe",
+              "zygzagsmod:wither_skull_socketed_iridium_axe",
+              "zygzagsmod:amethyst_socketed_iridium_axe"
+            ]
+          },
+          {
+            "items": [
+              "zygzagsmod:diamond_socketed_iridium_pickaxe",
+              "zygzagsmod:emerald_socketed_iridium_pickaxe",
+              "zygzagsmod:skull_socketed_iridium_pickaxe",
+              "zygzagsmod:wither_skull_socketed_iridium_pickaxe",
+              "zygzagsmod:amethyst_socketed_iridium_pickaxe"
+            ]
+          },
+          {
+            "items": [
+              "zygzagsmod:diamond_socketed_iridium_shovel",
+              "zygzagsmod:emerald_socketed_iridium_shovel",
+              "zygzagsmod:skull_socketed_iridium_shovel",
+              "zygzagsmod:wither_skull_socketed_iridium_shovel",
+              "zygzagsmod:amethyst_socketed_iridium_shovel"
+            ]
+          },
+          {
+            "items": [
+              "zygzagsmod:diamond_socketed_iridium_hoe",
+              "zygzagsmod:emerald_socketed_iridium_hoe",
+              "zygzagsmod:skull_socketed_iridium_hoe",
+              "zygzagsmod:wither_skull_socketed_iridium_hoe",
+              "zygzagsmod:amethyst_socketed_iridium_hoe"
+            ]
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    }
+  },
+  "display": {
+    "announce_to_chat": true,
+    "description": {
+      "translate": "advancements.iridium.iridium_gear_and_tools.description"
+    },
+    "frame": "goal",
+    "hidden": false,
+    "icon": {
+      "item": "zygzagsmod:diamond_socketed_iridium_sword"
+    },
+    "show_toast": true,
+    "title": {
+      "translate": "advancements.iridium.iridium_gear_and_tools.title"
+    }
+  },
+  "requirements": [
+    [
+      "gear"
+    ]
+  ]
+}

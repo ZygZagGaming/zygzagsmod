@@ -1,0 +1,34 @@
+{
+  "parent": "zygzagsmod:iridium/socket",
+  "criteria": {
+    "multi": {
+      "conditions": {
+        "all_entities": {
+          "type": "minecraft:wither_skeleton"
+        },
+        "number": 5
+      },
+      "trigger": "zygzagsmod:multikill"
+    }
+  },
+  "display": {
+    "announce_to_chat": true,
+    "description": {
+      "translate": "advancements.iridium.multikill.description"
+    },
+    "frame": "challenge",
+    "hidden": false,
+    "icon": {
+      "item": "zygzagsmod:wither_skull_socketed_iridium_scepter"
+    },
+    "show_toast": true,
+    "title": {
+      "translate": "advancements.iridium.multikill.title"
+    }
+  },
+  "requirements": [
+    [
+      "multi"
+    ]
+  ]
+}

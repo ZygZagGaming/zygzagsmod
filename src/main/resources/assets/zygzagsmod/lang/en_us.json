@@ -220,5 +220,19 @@
   "advancements.iridium.root.title": "Iridium",
 
   "advancements.end.obtain_iridium.title": "Star Stuff",
-  "advancements.iridium.root.description": "Find Iridium in the End"
+  "advancements.iridium.root.description": "Find Iridium in the End",
+  "advancements.iridium.socket.title": "It Goes In The Square Hole",
+  "advancements.iridium.socket.description": "Socket any Iridium Gear",
+  "advancements.iridium.all_the_hoes.title": "All The Hoes",
+  "advancements.iridium.all_the_hoes.description": "Have 6 Iridium Hoes at once, one with each socket type",
+  "advancements.iridium.full_iridium_gear.title": "Decked Out",
+  "advancements.iridium.full_iridium_gear.description": "Have full Iridium armor and a weapon, with the chestplate and weapon socketed",
+  "advancements.iridium.iridium_gear_and_tools.title": "Really Decked Out",
+  "advancements.iridium.iridium_gear_and_tools.description": "Have full Iridium armor and tools, with all possible sockets filled",
+  "advancements.iridium.useless_enchant.title": "...Why?",
+  "advancements.iridium.useless_enchant.description": "Enchant a Wither Skull-Socketed Iridium Pickaxe with something useless",
+  "advancements.iridium.obtain_blueprint.title": "Patented Designs",
+  "advancements.iridium.obtain_blueprint.description": "Obtain any Iridium Blueprint",
+  "advancements.iridium.multikill.title": "Reply All",
+  "advancements.iridium.multikill.description": "Kill 5 Wither Skeletons with one Wither Skull"
 }

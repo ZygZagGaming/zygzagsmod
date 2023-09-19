@@ -4,7 +4,12 @@ import com.zygzag.zygzagsmod.common.item.iridium.ISocketable;
 import com.zygzag.zygzagsmod.common.item.iridium.tool.IridiumAxeItem;
 import com.zygzag.zygzagsmod.common.registry.EntityRegistry;
 import com.zygzag.zygzagsmod.common.registry.IridiumGearRegistry;
+import net.minecraft.Util;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.data.DataProvider;
+import net.minecraft.data.registries.VanillaRegistries;
+import net.minecraft.data.tags.ItemTagsProvider;
+import net.minecraft.data.tags.TagsProvider;
 import net.minecraft.world.entity.monster.AbstractSkeleton;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemDisplayContext;
@@ -16,7 +21,10 @@ import net.minecraftforge.data.event.GatherDataEvent;
 import net.minecraftforge.event.entity.EntityAttributeCreationEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
+
+import java.util.concurrent.CompletableFuture;
 
 import static com.zygzag.zygzagsmod.common.Main.MODID;
 

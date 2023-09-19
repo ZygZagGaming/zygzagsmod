@@ -1,0 +1,48 @@
+{
+  "parent": "zygzagsmod:iridium/socket",
+  "criteria": {
+    "enchant": {
+      "conditions": {
+        "items": [
+          {
+            "item": [
+              "zygzagsmod:socketed"
+            ],
+            "enchantments": [
+              {
+                "enchantment": "minecraft:fortune"
+              },
+              {
+                "enchantment": "minecraft:efficiency"
+              },
+              {
+                "enchantment": "minecraft:silk_touch"
+              }
+            ]
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    }
+  },
+  "display": {
+    "announce_to_chat": true,
+    "description": {
+      "translate": "advancements.iridium.useless_enchant.description"
+    },
+    "frame": "goal",
+    "hidden": false,
+    "icon": {
+      "item": "zygzagsmod:wither_skull_socketed_iridium_pickaxe"
+    },
+    "show_toast": true,
+    "title": {
+      "translate": "advancements.iridium.useless_enchant.title"
+    }
+  },
+  "requirements": [
+    [
+      "enchant"
+    ]
+  ]
+}
