@@ -1,5 +1,6 @@
 package com.zygzag.zygzagsmod.common;
 
+import com.zygzag.zygzagsmod.common.entity.IridiumGolem;
 import com.zygzag.zygzagsmod.common.item.iridium.ISocketable;
 import com.zygzag.zygzagsmod.common.item.iridium.tool.IridiumAxeItem;
 import com.zygzag.zygzagsmod.common.registry.EntityRegistry;
@@ -25,6 +26,7 @@ public class ModEventHandler {
     @SubscribeEvent
     public static void doAttributes(final EntityAttributeCreationEvent event) {
         event.put(EntityRegistry.PLAYER_ALLIED_SKELETON.get(), AbstractSkeleton.createAttributes().build());
+        event.put(EntityRegistry.IRIDIUM_GOLEM.get(), IridiumGolem.createAttributes().build());
     }
 
     @SubscribeEvent

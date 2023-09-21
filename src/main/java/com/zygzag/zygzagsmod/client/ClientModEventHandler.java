@@ -1,5 +1,6 @@
 package com.zygzag.zygzagsmod.client;
 
+import com.zygzag.zygzagsmod.client.renderer.IridiumGolemRenderer;
 import com.zygzag.zygzagsmod.common.registry.BlockItemEntityRegistry;
 import com.zygzag.zygzagsmod.common.registry.EntityRegistry;
 import com.zygzag.zygzagsmod.common.registry.ParticleTypeRegistry;
@@ -24,7 +25,7 @@ public class ClientModEventHandler {
         event.registerEntityRenderer(EntityRegistry.TRANSMUTATION_CHARGE_ENTITY.get(), ThrownItemRenderer::new);
         event.registerEntityRenderer(EntityRegistry.HOMING_WITHER_SKULL.get(), HomingWitherSkullRenderer::new);
         event.registerEntityRenderer(EntityRegistry.PLAYER_ALLIED_SKELETON.get(), WitherSkeletonRenderer::new);
-        event.registerBlockEntityRenderer(BlockItemEntityRegistry.SUSPICIOUS_END_SAND.getBlockEntityType(), CustomBrushableBlockRenderer::new);
+        event.registerEntityRenderer(EntityRegistry.IRIDIUM_GOLEM.get(), IridiumGolemRenderer::new);
         event.registerBlockEntityRenderer(BlockItemEntityRegistry.SUSPICIOUS_END_SAND.getBlockEntityType(), CustomBrushableBlockRenderer::new);
     }
 
