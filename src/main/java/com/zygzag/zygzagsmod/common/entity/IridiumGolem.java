@@ -16,8 +16,10 @@ import net.minecraft.world.entity.ai.goal.Goal;
 import net.minecraft.world.entity.ai.goal.RandomStrollGoal;
 import net.minecraft.world.entity.ai.goal.target.HurtByTargetGoal;
 import net.minecraft.world.entity.animal.AbstractGolem;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
-import net.minecraftforge.common.util.Lazy;
+import net.minecraft.world.level.pathfinder.Node;
+import net.minecraft.world.level.pathfinder.Path;
 import org.jetbrains.annotations.Nullable;
 import software.bernie.geckolib.core.animatable.GeoAnimatable;
 import software.bernie.geckolib.core.animatable.instance.AnimatableInstanceCache;
@@ -28,10 +30,8 @@ import software.bernie.geckolib.core.object.PlayState;
 import software.bernie.geckolib.util.GeckoLibUtil;
 
 import javax.annotation.ParametersAreNonnullByDefault;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
-import java.util.UUID;
+import java.util.*;
+import java.util.function.Function;
 
 @ParametersAreNonnullByDefault
 @MethodsReturnNonnullByDefault
@@ -52,7 +52,8 @@ public class IridiumGolem extends AbstractGolem implements NeutralMob, GeoAnimat
             State.IDLE, RawAnimation.begin().thenLoop("animation.iridium_golem.idle_loop"),
             State.WALKING, RawAnimation.begin().thenLoop("animation.iridium_golem.walk_cycle"),
             State.RUNNING, RawAnimation.begin().thenLoop("animation.iridium_golem.run_cycle"),
-            State.AGRO, RawAnimation.begin().thenLoop("animation.iridium_golem.agro_idle")
+            State.AGRO, RawAnimation.begin().thenLoop("animation.iridium_golem.agro_idle"),
+            State.ATTACK_2, RawAnimation.begin().thenPlay("animation.iridium_golem.attack2")
     );
     protected static final Map<Pair<State, State>, RawAnimation> TRANSITION_ANIMATIONS = Map.of(
             new Pair<>(State.IDLE, State.WALKING), RawAnimation.begin().thenPlay("animation.iridium_golem.start_walk"),
@@ -64,9 +65,9 @@ public class IridiumGolem extends AbstractGolem implements NeutralMob, GeoAnimat
             new Pair<>(State.AGRO, State.WALKING), RawAnimation.begin().thenPlay("animation.iridium_golem.deagro").thenPlay("animation.iridium_golem.start_walk"),
             new Pair<>(State.WALKING, State.AGRO), RawAnimation.begin().thenPlay("animation.iridium_golem.stop_walk").thenPlay("animation.iridium_golem.agro")
     );
-    protected final Lazy<List<StandingAttackGoal>> standstillAttacks = Lazy.of(() -> List.of(
-
-    ));
+    public static final List<Function<IridiumGolem, StandingAttackGoal>> standstillAttacks = List.of(
+            (golem) -> golem.new StandingAttackGoal(RawAnimation.begin().thenPlay("animation.iridium_golem.attack2"))
+    );
 
     protected static final EntityDataAccessor<State> DATA_STATE = SynchedEntityData.defineId(IridiumGolem.class, EntityDataSerializerRegistry.IRIDIUM_GOLEM_STATE.get());
     protected static final EntityDataAccessor<Optional<CurrentAttack>> DATA_ATTACK = SynchedEntityData.defineId(IridiumGolem.class, EntityDataSerializerRegistry.IRIDIUM_GOLEM_ATTACK.get());
@@ -78,6 +79,8 @@ public class IridiumGolem extends AbstractGolem implements NeutralMob, GeoAnimat
     @Nullable
     private UUID persistentAngerTarget;
 
+
+    private @Nullable RawAnimation queuedAnim = null;
     public IridiumGolem(EntityType<? extends AbstractGolem> type, Level world) {
         super(type, world);
     }
@@ -85,12 +88,14 @@ public class IridiumGolem extends AbstractGolem implements NeutralMob, GeoAnimat
     protected void registerGoals() {
 //        this.goalSelector.addGoal(1, new IridiumGolemMeleeAttackGoal(this, 5, true));
 //        this.goalSelector.addGoal(2, new IridiumGolemMoveTowardsTargetGoal(this, 5, 64f));
-        for (StandingAttackGoal goal : standstillAttacks.get()) {
-            this.goalSelector.addGoal(1, goal);
+        for (var goal : standstillAttacks) {
+            this.goalSelector.addGoal(1, goal.apply(this));
         }
         this.goalSelector.addGoal(3, new IridiumGolemRandomStrollGoal(this, 1, 5));
         this.targetSelector.addGoal(2, new HurtByTargetGoal(this));
     }
+
+
 
     @Override
     protected void defineSynchedData() {
@@ -118,6 +123,12 @@ public class IridiumGolem extends AbstractGolem implements NeutralMob, GeoAnimat
 
     public boolean isIdle() {
         return getState() == State.IDLE;
+    }
+
+    @Override
+    public void setAggressive(boolean value) {
+        getNavigation().setSpeedModifier(value ? 3 : 1);
+        super.setAggressive(value);
     }
 
     @Override
@@ -211,18 +222,20 @@ public class IridiumGolem extends AbstractGolem implements NeutralMob, GeoAnimat
     private final AnimationController<IridiumGolem> bodyAnimController = new AnimationController<>(this, "body", 0, (animState) -> {
         AnimationController<IridiumGolem> animController = animState.getController();
         State state = getState();
-        if (state != lastState) {
-            //System.out.println("last state " + lastState + ", state " + state);
-            RawAnimation transitionAnim = TRANSITION_ANIMATIONS.get(new Pair<>(lastState, state));
-            animController.setAnimation(transitionAnim == null ? ANIMATION_LOOPS.get(state) : transitionAnim);
-        } else if (animController.hasAnimationFinished() || animController.getCurrentRawAnimation() == null) {
-            if (state == State.IDLE && timeUntilIdleAnimation <= 0) {
-                doIdleAnimation(animController);
-            } else {
-                RawAnimation anim = ANIMATION_LOOPS.get(state);
-                animController.setAnimation(anim);
+        if (queuedAnim == null) {
+            if (state != lastState) {
+                //System.out.println("last state " + lastState + ", state " + state);
+                RawAnimation transitionAnim = TRANSITION_ANIMATIONS.get(new Pair<>(lastState, state));
+                animController.setAnimation(transitionAnim == null ? ANIMATION_LOOPS.get(state) : transitionAnim);
+            } else if (animController.hasAnimationFinished() || animController.getCurrentRawAnimation() == null) {
+                if (state == State.IDLE && timeUntilIdleAnimation <= 0) {
+                    doIdleAnimation(animController);
+                } else {
+                    RawAnimation anim = ANIMATION_LOOPS.get(state);
+                    animController.setAnimation(anim);
+                }
             }
-        }
+        } else playQueuedAnimation(animController);
         lastState = state;
 
         return PlayState.CONTINUE;
@@ -246,6 +259,7 @@ public class IridiumGolem extends AbstractGolem implements NeutralMob, GeoAnimat
         public IridiumGolemRandomStrollGoal(PathfinderMob entity, double speedModifier, double runningSpeedModifier) {
             super(entity, speedModifier);
             this.runningSpeedModifier = runningSpeedModifier;
+            setFlags(EnumSet.of(Flag.MOVE, Flag.LOOK));
         }
 
         @Override
@@ -265,46 +279,189 @@ public class IridiumGolem extends AbstractGolem implements NeutralMob, GeoAnimat
         IDLE,
         WALKING,
         RUNNING,
-        AGRO;
+        AGRO,
+        ATTACK_2;
     }
 
     public enum CurrentAttack {
         ATTACK2;
     }
 
-    public abstract class StandingAttackGoal extends Goal {
+    public class StandingAttackGoal extends Goal {
         public static final int GLOBAL_ATTACK_COOLDOWN = 40;
         public static int attackCooldown = 0;
+        private Path path;
+        private double pathedTargetX;
+        private double pathedTargetY;
+        private double pathedTargetZ;
+        private int ticksUntilNextPathRecalculation;
+        private int ticksUntilNextAttack;
+        private final int attackInterval = 20;
+        private long lastCanUseCheck;
+        private static final long COOLDOWN_BETWEEN_CAN_USE_CHECKS = 20L;
+        private int failedPathFindingPenalty = 0;
+        private boolean canPenalize = false;
         public final RawAnimation animation;
+        public final int attackDuration = 20;
+        public final int endLag = 20;
+        public final float speedModifier = 7.5f;
         public StandingAttackGoal(RawAnimation animation) {
             this.animation = animation;
+            setFlags(EnumSet.of(Flag.MOVE, Flag.LOOK));
         }
 
         @Override
         public void start() {
             super.start();
 
+            getNavigation().moveTo(this.path, speedModifier);
+            setAggressive(true);
+            this.ticksUntilNextPathRecalculation = 0;
+            ticksUntilNextAttack = attackDuration + endLag;
         }
 
         @Override
         public void stop() {
             super.stop();
+            LivingEntity livingentity = getTarget();
+            if (!EntitySelector.NO_CREATIVE_OR_SPECTATOR.test(livingentity)) {
+                setTarget(null);
+            }
+
+            setAggressive(false);
+            getNavigation().stop();
+            resetAttackCooldown();
         }
 
         @Override
         public boolean canUse() {
-            return getState() == State.AGRO;
+            long gameTime = level().getGameTime();
+            if (gameTime - lastCanUseCheck < 20) {
+                return false;
+            } else {
+                lastCanUseCheck = gameTime;
+                LivingEntity target = getTarget();
+                if (target == null || !target.isAlive()) {
+                    return false;
+                } else {
+                    if (canPenalize) {
+                        if (--ticksUntilNextPathRecalculation <= 0) {
+                            path = getNavigation().createPath(target, 0);
+                            ticksUntilNextPathRecalculation = 4 + getRandom().nextInt(7);
+                            return path != null;
+                        } else {
+                            return true;
+                        }
+                    }
+                    path = getNavigation().createPath(target, 0);
+                    if (path != null) {
+                        return true;
+                    } else {
+                        return getAttackReachSqr(target) >= distanceToSqr(target.getX(), target.getY(), target.getZ());
+                    }
+                }
+            }
+        }
+
+        public boolean canContinueToUse() {
+            LivingEntity target = getTarget();
+            return (!(target == null || !target.isAlive() || !isWithinRestriction(target.blockPosition())) && (!(target instanceof Player) || !target.isSpectator() && !((Player)target).isCreative()));
+        }
+
+        protected double getAttackReachSqr(LivingEntity living) {
+            return (getBbWidth() * 2.0F * getBbWidth() * 2.0F + living.getBbWidth());
+        }
+
+        public boolean requiresUpdateEveryTick() {
+            return true;
+        }
+        public void tick() {
+            LivingEntity target = getTarget();
+            //if (ticksUntilNextAttack >= attackDuration) getNavigation().moveTo(path, 10);
+            if (target != null) {
+                getLookControl().setLookAt(target, 30.0F, 30.0F);
+                double perceivedDistanceSqr = getPerceivedTargetDistanceSquareForMeleeAttack(target);
+                if (ticksUntilNextPathRecalculation > 0) ticksUntilNextPathRecalculation--;
+                if (ticksUntilNextPathRecalculation <= 0 && (pathedTargetX == 0.0 && pathedTargetY == 0.0 && pathedTargetZ == 0.0 || target.distanceToSqr(pathedTargetX, pathedTargetY, pathedTargetZ) >= 1.0D || getRandom().nextFloat() < 0.05F)) {
+                    pathedTargetX = target.getX();
+                    pathedTargetY = target.getY();
+                    pathedTargetZ = target.getZ();
+                    ticksUntilNextPathRecalculation = 4 + getRandom().nextInt(7);
+                    if (canPenalize) {
+                        ticksUntilNextPathRecalculation += failedPathFindingPenalty;
+                        if (getNavigation().getPath() != null) {
+                            Node finalPathPoint = getNavigation().getPath().getEndNode();
+                            if (finalPathPoint != null && target.distanceToSqr(finalPathPoint.x, finalPathPoint.y, finalPathPoint.z) < 1)
+                                failedPathFindingPenalty = 0;
+                            else
+                                failedPathFindingPenalty += 10;
+                        } else {
+                            failedPathFindingPenalty += 10;
+                        }
+                    }
+                    if (perceivedDistanceSqr > 1024) {
+                        ticksUntilNextPathRecalculation += 10;
+                    } else if (perceivedDistanceSqr > 256) {
+                        ticksUntilNextPathRecalculation += 5;
+                    }
+
+                    if (ticksUntilNextAttack >= attackDuration && !getNavigation().moveTo(target, speedModifier)) {
+                        ticksUntilNextPathRecalculation += 15;
+                    }
+
+                    ticksUntilNextPathRecalculation = adjustedTickDelay(ticksUntilNextPathRecalculation);
+                }
+
+                if (ticksUntilNextAttack != attackDuration) ticksUntilNextAttack = Math.max(ticksUntilNextAttack - 1, 0);
+                checkAndPerformAttack(target, perceivedDistanceSqr);
+            }
+        }
+
+        protected void checkAndPerformAttack(LivingEntity target, double distanceSqr) {
+            double reachSqr = getAttackReachSqr(target);
+            if (distanceSqr <= reachSqr) {
+                if (isTimeToAttack()) {
+                    resetAttackCooldown();
+                    doHurtTarget(target);
+                } else if (ticksUntilNextAttack <= attackDuration) {
+                    if (ticksUntilNextAttack == attackDuration) ticksUntilNextAttack--;
+                    setState(State.ATTACK_2);
+                    getNavigation().stop();
+                }
+            } else {
+                if (ticksUntilNextAttack >= attackDuration) {
+                    if (ticksUntilNextAttack == attackDuration || getState() != State.ATTACK_2) setState(State.RUNNING);
+                } else {
+                    if (isTimeToAttack()) {
+                        resetAttackCooldown();
+                    } else {
+                        setState(State.ATTACK_2);
+                        getNavigation().stop();
+                    }
+                }
+            }
+        }
+
+        protected void resetAttackCooldown() {
+            ticksUntilNextAttack = attackDuration + endLag;
+        }
+
+        protected boolean isTimeToAttack() {
+            return ticksUntilNextAttack <= 0;
+        }
+
+        protected int getTicksUntilNextAttack() {
+            return ticksUntilNextAttack;
+        }
+
+        protected int getAttackInterval() {
+            return adjustedTickDelay(20);
         }
     }
 
     public class AttackGoal2 extends StandingAttackGoal {
         public AttackGoal2() {
             super(RawAnimation.begin().thenPlay("animation.iridium_golem.attack2"));
-        }
-
-        @Override
-        public boolean canUse() {
-            return getState() == State.IDLE;
         }
 
         @Override
@@ -320,12 +477,21 @@ public class IridiumGolem extends AbstractGolem implements NeutralMob, GeoAnimat
         @Override
         public void start() {
             super.start();
-
         }
 
         @Override
         public void stop() {
             super.stop();
+        }
+    }
+    public void queueAnimation(RawAnimation anim) {
+        queuedAnim = anim;
+    }
+
+    public void playQueuedAnimation(AnimationController<IridiumGolem> controller) {
+        if (queuedAnim != null) {
+            controller.setAnimation(queuedAnim);
+            queuedAnim = null;
         }
     }
 }

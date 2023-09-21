@@ -1,6 +1,7 @@
 package com.zygzag.zygzagsmod.common.registry;
 
 import com.zygzag.zygzagsmod.common.entity.HomingWitherSkull;
+import com.zygzag.zygzagsmod.common.entity.IridiumGolem;
 import com.zygzag.zygzagsmod.common.entity.PlayerAlliedSkeleton;
 import com.zygzag.zygzagsmod.common.entity.ThrownTransmutationCharge;
 import net.minecraft.core.registries.Registries;
@@ -40,5 +41,11 @@ public class EntityRegistry extends Registry<EntityType<?>> {
                     .clientTrackingRange(4)
                     .build("player_allied_skeleton")
     );
-
+    public static final RegistryObject<EntityType<IridiumGolem>> IRIDIUM_GOLEM = INSTANCE.register(
+            "iridium_golem",
+            () -> EntityType.Builder.of(IridiumGolem::new, MobCategory.MISC)
+                    .fireImmune()
+                    .sized(1.4F, 2.7F)
+                    .build("iridium_golem")
+    );
 }

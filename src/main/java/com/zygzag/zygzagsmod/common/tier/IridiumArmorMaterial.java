@@ -15,78 +15,36 @@ import java.util.function.Supplier;
 
 @SuppressWarnings("unused")
 @MethodsReturnNonnullByDefault
-public enum IridiumArmorMaterial implements ArmorMaterial {
-    IRIDIUM("iridium", 42, new int[]{4, 7, 9, 4}, 17, SoundEvents.ARMOR_EQUIP_NETHERITE, 3.0F, 0.2F, () -> {
+public class IridiumArmorMaterial implements ArmorMaterial {
+    public static final IridiumArmorMaterial IRIDIUM = new IridiumArmorMaterial ("iridium", 42, new int[]{4, 9, 7, 4}, 17);
+    public static final IridiumArmorMaterial _4_1 = new IridiumArmorMaterial("iridium_1", 38, new int[]{3, 8, 6, 3}, 15);
+    public static final IridiumArmorMaterial _4_2 = new IridiumArmorMaterial("iridium_2", 40, new int[]{4, 9, 7, 4}, 16);
+    public static final IridiumArmorMaterial _4_3 = new IridiumArmorMaterial("iridium_3", 41, new int[]{4, 9, 7, 4}, 17);
+    public static final IridiumArmorMaterial _5_1 = new IridiumArmorMaterial("iridium_1", 38, new int[]{3, 8, 6, 3}, 15);
+    public static final IridiumArmorMaterial _5_2 = new IridiumArmorMaterial("iridium_2", 39, new int[]{3, 8, 6, 3}, 16);
+    public static final IridiumArmorMaterial _5_3 = new IridiumArmorMaterial("iridium_3", 40, new int[]{4, 9, 7, 4}, 16);
+    public static final IridiumArmorMaterial _5_4 = new IridiumArmorMaterial("iridium_4", 41, new int[]{4, 9, 7, 4}, 17);
+    public static final IridiumArmorMaterial _7_1 = new IridiumArmorMaterial("iridium_1", 38, new int[]{3, 8, 6, 3}, 15);
+    public static final IridiumArmorMaterial _7_2 = new IridiumArmorMaterial("iridium_2", 39, new int[]{3, 8, 6, 3}, 15);
+    public static final IridiumArmorMaterial _7_3 = new IridiumArmorMaterial("iridium_3", 39, new int[]{3, 8, 6, 3}, 16);
+    public static final IridiumArmorMaterial _7_4 = new IridiumArmorMaterial("iridium_4", 40, new int[]{4, 9, 7, 4}, 16);
+    public static final IridiumArmorMaterial _7_5 = new IridiumArmorMaterial("iridium_5", 40, new int[]{4, 9, 7, 4}, 17);
+    public static final IridiumArmorMaterial _7_6 = new IridiumArmorMaterial("iridium_6", 41, new int[]{4, 9, 7, 4}, 17);
+    public static final IridiumArmorMaterial _8_1 = new IridiumArmorMaterial("iridium_1", 38, new int[]{3, 8, 6, 3}, 15);
+    public static final IridiumArmorMaterial _8_2 = new IridiumArmorMaterial("iridium_2", 38, new int[]{3, 8, 6, 3}, 15);
+    public static final IridiumArmorMaterial _8_3 = new IridiumArmorMaterial("iridium_3", 39, new int[]{3, 8, 6, 3}, 15);
+    public static final IridiumArmorMaterial _8_4 = new IridiumArmorMaterial("iridium_4", 39, new int[]{3, 8, 6, 3}, 16);
+    public static final IridiumArmorMaterial _8_5 = new IridiumArmorMaterial("iridium_5", 40, new int[]{4, 9, 7, 4}, 16);
+    public static final IridiumArmorMaterial _8_6 = new IridiumArmorMaterial("iridium_6", 41, new int[]{4, 9, 7, 4}, 17);
+    public static final IridiumArmorMaterial _8_7 = new IridiumArmorMaterial("iridium_7", 41, new int[]{4, 9, 7, 4}, 17);
+    public static final IridiumArmorMaterial DIAMOND_SOCKETED = new IridiumArmorMaterial("diamond_iridium", 45, new int[]{8, 8, 8, 8}, 12, SoundEvents.ARMOR_EQUIP_NETHERITE, 3.5f, 0.4f, () -> {
         return Ingredient.of(ItemRegistry.IRIDIUM_PLATING.get());
-    }),
-    _4_1("iridium_1", 38, new int[]{3, 6, 8, 3}, 15, SoundEvents.ARMOR_EQUIP_NETHERITE, 3.0F, 0.2F, () -> {
-        return Ingredient.of(ItemRegistry.IRIDIUM_PLATING.get());
-    }),
-    _4_2("iridium_2", 40, new int[]{4, 7, 9, 4}, 16, SoundEvents.ARMOR_EQUIP_NETHERITE, 3.0F, 0.2F, () -> {
-        return Ingredient.of(ItemRegistry.IRIDIUM_PLATING.get());
-    }),
-    _4_3("iridium_3", 41, new int[]{4, 7, 9, 4}, 17, SoundEvents.ARMOR_EQUIP_NETHERITE, 3.0F, 0.2F, () -> {
-        return Ingredient.of(ItemRegistry.IRIDIUM_PLATING.get());
-    }),
-    _5_1("iridium_1", 38, new int[]{3, 6, 8, 3}, 15, SoundEvents.ARMOR_EQUIP_NETHERITE, 3.0F, 0.2F, () -> {
-        return Ingredient.of(ItemRegistry.IRIDIUM_PLATING.get());
-    }),
-    _5_2("iridium_2", 39, new int[]{3, 6, 8, 3}, 16, SoundEvents.ARMOR_EQUIP_NETHERITE, 3.0F, 0.2F, () -> {
-        return Ingredient.of(ItemRegistry.IRIDIUM_PLATING.get());
-    }),
-    _5_3("iridium_3", 40, new int[]{4, 7, 9, 4}, 16, SoundEvents.ARMOR_EQUIP_NETHERITE, 3.0F, 0.2F, () -> {
-        return Ingredient.of(ItemRegistry.IRIDIUM_PLATING.get());
-    }),
-    _5_4("iridium_4", 41, new int[]{4, 7, 9, 4}, 17, SoundEvents.ARMOR_EQUIP_NETHERITE, 3.0F, 0.2F, () -> {
-        return Ingredient.of(ItemRegistry.IRIDIUM_PLATING.get());
-    }),
-    _7_1("iridium_1", 38, new int[]{3, 6, 8, 3}, 15, SoundEvents.ARMOR_EQUIP_NETHERITE, 3.0F, 0.2F, () -> {
-        return Ingredient.of(ItemRegistry.IRIDIUM_PLATING.get());
-    }),
-    _7_2("iridium_2", 39, new int[]{3, 6, 8, 3}, 15, SoundEvents.ARMOR_EQUIP_NETHERITE, 3.0F, 0.2F, () -> {
-        return Ingredient.of(ItemRegistry.IRIDIUM_PLATING.get());
-    }),
-    _7_3("iridium_3", 39, new int[]{3, 6, 8, 3}, 16, SoundEvents.ARMOR_EQUIP_NETHERITE, 3.0F, 0.2F, () -> {
-        return Ingredient.of(ItemRegistry.IRIDIUM_PLATING.get());
-    }),
-    _7_4("iridium_4", 40, new int[]{4, 7, 9, 4}, 16, SoundEvents.ARMOR_EQUIP_NETHERITE, 3.0F, 0.2F, () -> {
-        return Ingredient.of(ItemRegistry.IRIDIUM_PLATING.get());
-    }),
-    _7_5("iridium_5", 40, new int[]{4, 7, 9, 4}, 17, SoundEvents.ARMOR_EQUIP_NETHERITE, 3.0F, 0.2F, () -> {
-        return Ingredient.of(ItemRegistry.IRIDIUM_PLATING.get());
-    }),
-    _7_6("iridium_6", 41, new int[]{4, 7, 9, 4}, 17, SoundEvents.ARMOR_EQUIP_NETHERITE, 3.0F, 0.2F, () -> {
-        return Ingredient.of(ItemRegistry.IRIDIUM_PLATING.get());
-    }),
-    _8_1("iridium_1", 38, new int[]{3, 6, 8, 3}, 15, SoundEvents.ARMOR_EQUIP_NETHERITE, 3.0F, 0.2F, () -> {
-        return Ingredient.of(ItemRegistry.IRIDIUM_PLATING.get());
-    }),
-    _8_2("iridium_2", 38, new int[]{3, 6, 8, 3}, 15, SoundEvents.ARMOR_EQUIP_NETHERITE, 3.0F, 0.2F, () -> {
-        return Ingredient.of(ItemRegistry.IRIDIUM_PLATING.get());
-    }),
-    _8_3("iridium_3", 39, new int[]{3, 6, 8, 3}, 15, SoundEvents.ARMOR_EQUIP_NETHERITE, 3.0F, 0.2F, () -> {
-        return Ingredient.of(ItemRegistry.IRIDIUM_PLATING.get());
-    }),
-    _8_4("iridium_4", 39, new int[]{3, 6, 8, 3}, 16, SoundEvents.ARMOR_EQUIP_NETHERITE, 3.0F, 0.2F, () -> {
-        return Ingredient.of(ItemRegistry.IRIDIUM_PLATING.get());
-    }),
-    _8_5("iridium_5", 40, new int[]{4, 7, 9, 4}, 16, SoundEvents.ARMOR_EQUIP_NETHERITE, 3.0F, 0.2F, () -> {
-        return Ingredient.of(ItemRegistry.IRIDIUM_PLATING.get());
-    }),
-    _8_6("iridium_6", 41, new int[]{4, 7, 9, 4}, 17, SoundEvents.ARMOR_EQUIP_NETHERITE, 3.0F, 0.2F, () -> {
-        return Ingredient.of(ItemRegistry.IRIDIUM_PLATING.get());
-    }),
-    _8_7("iridium_7", 41, new int[]{4, 7, 9, 4}, 17, SoundEvents.ARMOR_EQUIP_NETHERITE, 3.0F, 0.2F, () -> {
-        return Ingredient.of(ItemRegistry.IRIDIUM_PLATING.get());
-    }),
-    DIAMOND_SOCKETED("diamond_iridium", 45, new int[]{8, 8, 8, 8}, 12, SoundEvents.ARMOR_EQUIP_NETHERITE, 3.5f, 0.4f, () -> {
-        return Ingredient.of(ItemRegistry.IRIDIUM_PLATING.get());
-    }),
-    EMERALD_SOCKETED("emerald_iridium", 38, new int[]{7, 7, 7, 7}, 19, SoundEvents.ARMOR_EQUIP_NETHERITE, 3.0f, 0.6f, () -> {
+    });
+    public static final IridiumArmorMaterial EMERALD_SOCKETED = new IridiumArmorMaterial("emerald_iridium", 38, new int[]{7, 7, 7, 7}, 19, SoundEvents.ARMOR_EQUIP_NETHERITE, 3.0f, 0.6f, () -> {
         return Ingredient.of(ItemRegistry.IRIDIUM_PLATING.get());
     });
 
-    private static final int[] HEALTH_PER_SLOT = new int[]{13, 15, 16, 11};
+    private static final int[] HEALTH_PER_SLOT = new int[]{11, 16, 15, 13};
     private final String name;
     private final int durabilityMultiplier;
     private final int[] slotProtections;
@@ -95,6 +53,10 @@ public enum IridiumArmorMaterial implements ArmorMaterial {
     private final float toughness;
     private final float knockbackResistance;
     private final LazyLoadedValue<Ingredient> repairIngredient;
+
+    IridiumArmorMaterial(String name, int durability, int[] slotProtections, int enchantValue) {
+        this(name, durability, slotProtections, enchantValue, SoundEvents.ARMOR_EQUIP_NETHERITE, 3f, 0.2f, () -> Ingredient.of(ItemRegistry.IRIDIUM_PLATING.get()));
+    }
 
     IridiumArmorMaterial(String name, int durability, int[] slotProtections, int enchantValue, SoundEvent sound, float toughness, float kbRes, Supplier<Ingredient> repair) {
         this.name = name;
@@ -138,5 +100,17 @@ public enum IridiumArmorMaterial implements ArmorMaterial {
 
     public float getKnockbackResistance() {
         return this.knockbackResistance;
+    }
+
+    public static IridiumArmorMaterial getArmorForPartial(int plating, int outOf) {
+        if (outOf == 4) {
+            return plating == 1 ? _4_1 : plating == 2 ? _4_2 : _4_3;
+        } else if (outOf == 5) {
+            return plating == 1 ? _5_1 : plating == 2 ? _5_2 : plating == 3 ? _5_3 : _5_4;
+        } else if (outOf == 7) {
+            return plating == 1 ? _7_1 : plating == 2 ? _7_2 : plating == 3 ? _7_3 : plating == 4 ? _7_4 : plating == 5 ? _7_5 : _7_6;
+        } else {
+            return plating == 1 ? _8_1 : plating == 2 ? _8_2 : plating == 3 ? _8_3 : plating == 4 ? _8_4 : plating == 5 ? _8_5 : plating == 6 ? _8_6 : _8_7;
+        }
     }
 }

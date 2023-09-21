@@ -1,5 +1,6 @@
 package com.zygzag.zygzagsmod.common.registry;
 
+import com.zygzag.zygzagsmod.common.Main;
 import com.zygzag.zygzagsmod.common.item.iridium.Socket;
 import com.zygzag.zygzagsmod.common.item.iridium.armor.IridiumChestplateItem;
 import com.zygzag.zygzagsmod.common.item.iridium.armor.PartialIridiumArmorItem;
@@ -13,9 +14,12 @@ import com.zygzag.zygzagsmod.common.tier.IridiumToolTier;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.world.item.ArmorItem;
 import net.minecraft.world.item.Item;
-import net.minecraft.world.item.Items;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.RegistryObject;
+
+import java.util.*;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import static com.zygzag.zygzagsmod.common.Main.MODID;
 
@@ -26,491 +30,6 @@ public class IridiumGearRegistry extends Registry<Item> {
         super(register);
     }
 
-    //region iridium pickaxe.json
-    public static final RegistryObject<Item> IRIDIUM_PICKAXE = INSTANCE.register(
-            "iridium_pickaxe",
-            () -> new IridiumPickaxeItem(
-                    IridiumToolTier.FULL,
-                    1,
-                    -2.8F,
-                    new Item.Properties()
-                            .fireResistant()
-                            .stacksTo(1),
-                    Socket.NONE
-            )
-    );
-
-    public static final RegistryObject<Item> PARTIAL_IRIDIUM_PICKAXE_3_1 = INSTANCE.register(
-            "partial_iridium_pickaxe_1",
-            () -> new PartialIridiumPickaxeItem(
-                    IridiumToolTier._3_1,
-                    1,
-                    -2.8F,
-                    new Item.Properties()
-                            .stacksTo(1),
-                    3,
-                    1
-            )
-    );
-    public static final RegistryObject<Item> PARTIAL_IRIDIUM_PICKAXE_3_2 = INSTANCE.register(
-            "partial_iridium_pickaxe_2",
-            () -> new PartialIridiumPickaxeItem(
-                    IridiumToolTier._3_2,
-                    1,
-                    -2.8F,
-                    new Item.Properties()
-                            .stacksTo(1),
-                    3,
-                    2
-            )
-    );
-
-    public static final RegistryObject<Item> DIAMOND_SOCKETED_IRIDIUM_PICKAXE = INSTANCE.register(
-            "diamond_socketed_iridium_pickaxe",
-            () -> new IridiumPickaxeItem(
-                    IridiumToolTier.DIAMOND_SOCKETED_PICK,
-                    1,
-                    -2.8F,
-                    new Item.Properties()
-                            .fireResistant()
-                            .stacksTo(1).
-                            craftRemainder(Items.DIAMOND),
-                    Socket.DIAMOND
-            )
-    );
-    public static final RegistryObject<Item> EMERALD_SOCKETED_IRIDIUM_PICKAXE = INSTANCE.register(
-            "emerald_socketed_iridium_pickaxe",
-            () -> new IridiumPickaxeItem(
-                    IridiumToolTier.EMERALD_SOCKETED,
-                    1,
-                    -2.8F,
-                    new Item.Properties()
-                            .fireResistant()
-                            .stacksTo(1).
-                            craftRemainder(Items.EMERALD),
-                    Socket.EMERALD
-            )
-    );
-    public static final RegistryObject<Item> SKULL_SOCKETED_IRIDIUM_PICKAXE = INSTANCE.register(
-            "skull_socketed_iridium_pickaxe",
-            () -> new IridiumPickaxeItem(
-                    IridiumToolTier.FULL,
-                    1,
-                    -2.8F,
-                    new Item.Properties()
-                            .fireResistant()
-                            .stacksTo(1).
-                            craftRemainder(Items.SKELETON_SKULL),
-                    Socket.SKULL
-            )
-    );
-    public static final RegistryObject<Item> WITHER_SKULL_SOCKETED_IRIDIUM_PICKAXE = INSTANCE.register(
-            "wither_skull_socketed_iridium_pickaxe",
-            () -> new IridiumPickaxeItem(
-                    IridiumToolTier.WITHER_SOCKETED_PICK,
-                    1,
-                    -2.8F,
-                    new Item.Properties()
-                            .fireResistant()
-                            .stacksTo(1).
-                            craftRemainder(Items.WITHER_SKELETON_SKULL),
-                    Socket.WITHER_SKULL
-            )
-    );
-    public static final RegistryObject<Item> AMETHYST_SOCKETED_IRIDIUM_PICKAXE = INSTANCE.register(
-            "amethyst_socketed_iridium_pickaxe",
-            () -> new IridiumPickaxeItem(
-                    IridiumToolTier.FULL,
-                    1,
-                    -2.8F,
-                    new Item.Properties()
-                            .fireResistant()
-                            .stacksTo(1).
-                            craftRemainder(Items.AMETHYST_SHARD),
-                    Socket.AMETHYST
-            )
-    );
-    //endregion
-
-    //region iridium axe
-    public static final RegistryObject<Item> IRIDIUM_AXE = INSTANCE.register(
-            "iridium_axe",
-            () -> new IridiumAxeItem(
-                    IridiumToolTier.FULL,
-                    5.0F,
-                    -3.0F,
-                    new Item.Properties()
-                            .fireResistant()
-                            .stacksTo(1),
-                    Socket.NONE
-            )
-    );
-    public static final RegistryObject<Item> PARTIAL_IRIDIUM_AXE_4_1 = INSTANCE.register(
-            "partial_iridium_axe_1",
-            () -> new PartialIridiumAxeItem(
-                    IridiumToolTier._3_1,
-                    5,
-                    -3.0F,
-                    new Item.Properties().stacksTo(1),
-                    3,
-                    1
-            )
-    );
-    public static final RegistryObject<Item> PARTIAL_IRIDIUM_AXE_4_2 = INSTANCE.register(
-            "partial_iridium_axe_2",
-            () -> new PartialIridiumAxeItem(
-                    IridiumToolTier._3_2,
-                    5,
-                    -3.0F,
-                    new Item.Properties().stacksTo(1),
-                    3,
-                    2
-            )
-    );
-    public static final RegistryObject<Item> DIAMOND_SOCKETED_IRIDIUM_AXE = INSTANCE.register(
-            "diamond_socketed_iridium_axe",
-            () -> new IridiumAxeItem(
-                    IridiumToolTier.DIAMOND_SOCKETED,
-                    5.0F,
-                    -3.0F,
-                    new Item.Properties()
-                            .fireResistant()
-                            .stacksTo(1)
-                            .craftRemainder(Items.DIAMOND),
-                    Socket.DIAMOND
-            )
-    );
-    public static final RegistryObject<Item> EMERALD_SOCKETED_IRIDIUM_AXE = INSTANCE.register(
-            "emerald_socketed_iridium_axe",
-            () -> new IridiumAxeItem(
-                    IridiumToolTier.EMERALD_SOCKETED,
-                    5.0F,
-                    -3.0F,
-                    new Item.Properties()
-                            .fireResistant()
-                            .stacksTo(1)
-                            .craftRemainder(Items.EMERALD),
-                    Socket.EMERALD
-            )
-    );
-    public static final RegistryObject<Item> SKULL_SOCKETED_IRIDIUM_AXE = INSTANCE.register(
-            "skull_socketed_iridium_axe",
-            () -> new IridiumAxeItem(
-                    IridiumToolTier.FULL,
-                    5.0F,
-                    -3.0F,
-                    new Item.Properties()
-                            .fireResistant()
-                            .stacksTo(1)
-                            .craftRemainder(Items.SKELETON_SKULL),
-                    Socket.SKULL
-            )
-    );
-    public static final RegistryObject<Item> WITHER_SKULL_SOCKETED_IRIDIUM_AXE = INSTANCE.register(
-            "wither_skull_socketed_iridium_axe",
-            () -> new IridiumAxeItem(
-                    IridiumToolTier.FULL,
-                    5.0F,
-                    -3.0F,
-                    new Item.Properties()
-                            .craftRemainder(Items.WITHER_SKELETON_SKULL)
-                            .fireResistant()
-                            .stacksTo(1),
-                    Socket.WITHER_SKULL
-            )
-    );
-    public static final RegistryObject<Item> AMETHYST_SOCKETED_IRIDIUM_AXE = INSTANCE.register(
-            "amethyst_socketed_iridium_axe",
-            () -> new IridiumAxeItem(
-                    IridiumToolTier.FULL,
-                    5.0F,
-                    -3.0F,
-                    new Item.Properties()
-                            .craftRemainder(Items.AMETHYST_SHARD)
-                            .fireResistant()
-                            .stacksTo(1),
-                    Socket.AMETHYST
-            )
-    );
-
-
-    //endregion
-
-    //region iridium shovel
-
-    public static final RegistryObject<Item> IRIDIUM_SHOVEL = INSTANCE.register(
-            "iridium_shovel",
-            () -> new IridiumShovelItem(
-                    IridiumToolTier.FULL,
-                    1.5F,
-                    -3.0F,
-                    new Item.Properties()
-                            .fireResistant()
-                            .stacksTo(1),
-                    Socket.NONE
-            )
-    );
-
-    public static final RegistryObject<Item> DIAMOND_SOCKETED_IRIDIUM_SHOVEL = INSTANCE.register(
-            "diamond_socketed_iridium_shovel",
-            () -> new IridiumShovelItem(
-                    IridiumToolTier.DIAMOND_SOCKETED,
-                    1.5F,
-                    -3.0F,
-                    new Item.Properties()
-                            .fireResistant()
-                            .stacksTo(1)
-                            .craftRemainder(Items.DIAMOND),
-                    Socket.DIAMOND
-            )
-    );
-    public static final RegistryObject<Item> EMERALD_SOCKETED_IRIDIUM_SHOVEL = INSTANCE.register(
-            "emerald_socketed_iridium_shovel",
-            () -> new IridiumShovelItem(
-                    IridiumToolTier.EMERALD_SOCKETED,
-                    1.5F,
-                    -3.0F,
-                    new Item.Properties()
-                            .fireResistant()
-                            .stacksTo(1)
-                            .craftRemainder(Items.EMERALD),
-                    Socket.EMERALD
-            )
-    );
-    public static final RegistryObject<Item> SKULL_SOCKETED_IRIDIUM_SHOVEL = INSTANCE.register(
-            "skull_socketed_iridium_shovel",
-            () -> new IridiumShovelItem(
-                    IridiumToolTier.FULL,
-                    1.5F,
-                    -3.0F,
-                    new Item.Properties()
-                            .fireResistant()
-                            .stacksTo(1)
-                            .craftRemainder(Items.SKELETON_SKULL),
-                    Socket.SKULL
-            )
-    );
-    public static final RegistryObject<Item> WITHER_SKULL_SOCKETED_IRIDIUM_SHOVEL = INSTANCE.register(
-            "wither_skull_socketed_iridium_shovel",
-            () -> new IridiumShovelItem(
-                    IridiumToolTier.FULL,
-                    1.5F,
-                    -3.0F,
-                    new Item.Properties()
-                            .fireResistant()
-                            .stacksTo(1)
-                            .craftRemainder(Items.WITHER_SKELETON_SKULL),
-                    Socket.WITHER_SKULL
-            )
-    );
-    public static final RegistryObject<Item> AMETHYST_SOCKETED_IRIDIUM_SHOVEL = INSTANCE.register(
-            "amethyst_socketed_iridium_shovel",
-            () -> new IridiumShovelItem(
-                    IridiumToolTier.FULL,
-                    1.5F,
-                    -3.0F,
-                    new Item.Properties()
-                            .fireResistant()
-                            .stacksTo(1)
-                            .craftRemainder(Items.AMETHYST_SHARD),
-                    Socket.AMETHYST
-            )
-    );
-
-    //endregion
-
-    //region iridium sword
-
-    public static final RegistryObject<Item> IRIDIUM_SWORD = INSTANCE.register(
-            "iridium_sword",
-            () -> new IridiumSwordItem(
-                    IridiumToolTier.FULL,
-                    3,
-                    -2.4F,
-                    new Item.Properties()
-                            .fireResistant()
-                            .stacksTo(1),
-                    Socket.NONE
-            )
-    );
-    public static final RegistryObject<Item> PARTIAL_IRIDIUM_SWORD_2_1 = INSTANCE.register(
-            "partial_iridium_sword_1",
-            () -> new PartialIridiumSwordItem(
-                    IridiumToolTier.HALF,
-                    3,
-                    -2.4F,
-                    new Item.Properties()
-                            .stacksTo(1),
-                    2,
-                    1
-            )
-    );
-    public static final RegistryObject<Item> DIAMOND_SOCKETED_IRIDIUM_SWORD = INSTANCE.register(
-            "diamond_socketed_iridium_sword",
-            () -> new IridiumSwordItem(
-                    IridiumToolTier.DIAMOND_SOCKETED,
-                    3,
-                    -2.4F,
-                    new Item.Properties()
-                            .fireResistant()
-                            .stacksTo(1)
-                            .craftRemainder(Items.DIAMOND),
-                    Socket.DIAMOND
-            )
-    );
-    public static final RegistryObject<Item> EMERALD_SOCKETED_IRIDIUM_SWORD = INSTANCE.register(
-            "emerald_socketed_iridium_sword",
-            () -> new IridiumSwordItem(
-                    IridiumToolTier.EMERALD_SOCKETED,
-                    3,
-                    -2.4F,
-                    new Item.Properties()
-                            .fireResistant()
-                            .stacksTo(1)
-                            .craftRemainder(Items.EMERALD),
-                    Socket.EMERALD
-            )
-    );
-    public static final RegistryObject<Item> SKULL_SOCKETED_IRIDIUM_SWORD = INSTANCE.register(
-            "skull_socketed_iridium_sword",
-            () -> new IridiumSwordItem(
-                    IridiumToolTier.FULL,
-                    3,
-                    -2.4F,
-                    new Item.Properties()
-                            .fireResistant()
-                            .stacksTo(1)
-                            .craftRemainder(Items.SKELETON_SKULL),
-                    Socket.SKULL
-            )
-    );
-    public static final RegistryObject<Item> WITHER_SKULL_SOCKETED_IRIDIUM_SWORD = INSTANCE.register(
-            "wither_skull_socketed_iridium_sword",
-            () -> new IridiumSwordItem(
-                    IridiumToolTier.FULL,
-                    3,
-                    -2.4F,
-                    new Item.Properties()
-                            .fireResistant()
-                            .stacksTo(1)
-                            .craftRemainder(Items.WITHER_SKELETON_SKULL),
-                    Socket.WITHER_SKULL
-            )
-    );
-    public static final RegistryObject<Item> AMETHYST_SOCKETED_IRIDIUM_SWORD = INSTANCE.register(
-            "amethyst_socketed_iridium_sword",
-            () -> new IridiumSwordItem(
-                    IridiumToolTier.FULL,
-                    3,
-                    -2.4F,
-                    new Item.Properties()
-                            .fireResistant()
-                            .stacksTo(1)
-                            .craftRemainder(Items.AMETHYST_SHARD),
-                    Socket.AMETHYST
-            )
-    );
-
-    //endregion
-
-    //region iridium hoe
-
-    public static final RegistryObject<Item> IRIDIUM_HOE = INSTANCE.register(
-            "iridium_hoe",
-            () -> new IridiumHoeItem(
-                    IridiumToolTier.FULL,
-                    -1
-                    , 0.0F,
-                    new Item.Properties()
-                            .fireResistant()
-                            .stacksTo(1)
-                    , Socket.NONE));
-    public
-    static final RegistryObject
-            <
-                    Item> PARTIAL_IRIDIUM_HOE_2_1 = INSTANCE.register(
-            "partial_iridium_hoe_1",
-            () -> new PartialIridiumHoeItem(
-                    IridiumToolTier.HALF,
-                    -1
-                    , 0.0F,
-                    new Item.Properties()
-                            .fireResistant()
-                            .stacksTo(1)
-                    , 2, 1));
-    public
-    static final RegistryObject
-            <
-                    Item> DIAMOND_SOCKETED_IRIDIUM_HOE = INSTANCE.register(
-            "diamond_socketed_iridium_hoe",
-            () -> new IridiumHoeItem(
-                    IridiumToolTier.DIAMOND_SOCKETED,
-                    -1
-                    , 0.0F,
-                    new Item.Properties()
-                            .fireResistant()
-                            .stacksTo(1)
-                            .craftRemainder(Items.DIAMOND),
-                    Socket.DIAMOND
-            )
-    );
-    public static final RegistryObject<Item> EMERALD_SOCKETED_IRIDIUM_HOE = INSTANCE.register(
-            "emerald_socketed_iridium_hoe",
-            () -> new IridiumHoeItem(
-                    IridiumToolTier.EMERALD_SOCKETED,
-                    -1
-                    , 0.0F,
-                    new Item.Properties()
-                            .fireResistant()
-                            .stacksTo(1)
-                            .craftRemainder(Items.EMERALD),
-                    Socket.EMERALD
-            )
-    );
-    public static final RegistryObject<Item> SKULL_SOCKETED_IRIDIUM_HOE = INSTANCE.register(
-            "skull_socketed_iridium_hoe",
-            () -> new IridiumHoeItem(
-                    IridiumToolTier.FULL,
-                    -1
-                    , 0.0F,
-                    new Item.Properties()
-                            .fireResistant()
-                            .stacksTo(1)
-                            .craftRemainder(Items.SKELETON_SKULL),
-                    Socket.SKULL
-            )
-    );
-    public static final RegistryObject<Item> WITHER_SKULL_SOCKETED_IRIDIUM_HOE = INSTANCE.register(
-            "wither_skull_socketed_iridium_hoe",
-            () -> new IridiumHoeItem(
-                    IridiumToolTier.FULL,
-                    3,
-                    -2.4F,
-                    new Item.Properties()
-                            .fireResistant()
-                            .stacksTo(1)
-                            .craftRemainder(Items.WITHER_SKELETON_SKULL),
-                    Socket.WITHER_SKULL
-            )
-    );
-    public static final RegistryObject<Item> AMETHYST_SOCKETED_IRIDIUM_HOE = INSTANCE.register(
-            "amethyst_socketed_iridium_hoe",
-            () -> new IridiumHoeItem(
-                    IridiumToolTier.FULL,
-                    -1
-                    , 0.0F,
-                    new Item.Properties()
-                            .fireResistant()
-                            .stacksTo(1)
-                            .craftRemainder(Items.AMETHYST_SHARD),
-                    Socket.AMETHYST
-            )
-    );
-
-    //endregion
-
-    //region iridium armor
-
     public static final RegistryObject<Item> IRIDIUM_HELMET = INSTANCE.register(
             "iridium_helmet",
             () -> new ArmorItem(
@@ -519,16 +38,6 @@ public class IridiumGearRegistry extends Registry<Item> {
                     new Item.Properties()
                             .fireResistant()
                             .stacksTo(1)
-            )
-    );
-    public static final RegistryObject<Item> IRIDIUM_CHESTPLATE = INSTANCE.register(
-            "iridium_chestplate",
-            () -> new IridiumChestplateItem(
-                    IridiumArmorMaterial.IRIDIUM,
-                    new Item.Properties()
-                            .fireResistant()
-                            .stacksTo(1),
-                    Socket.NONE
             )
     );
     public static final RegistryObject<Item> IRIDIUM_LEGGINGS = INSTANCE.register(
@@ -552,354 +61,225 @@ public class IridiumGearRegistry extends Registry<Item> {
             )
     );
 
-    //region socketed chestplates
-    public static final RegistryObject<Item> DIAMOND_SOCKETED_IRIDIUM_CHESTPLATE = INSTANCE.register(
-            "diamond_socketed_iridium_chestplate",
-            () -> new IridiumChestplateItem(
-                    IridiumArmorMaterial.DIAMOND_SOCKETED,
-                    new Item.Properties()
-                            .fireResistant()
-                            .stacksTo(1)
-                            .craftRemainder(Items.DIAMOND),
-                    Socket.DIAMOND
-            )
-    );
-    public static final RegistryObject<Item> EMERALD_SOCKETED_IRIDIUM_CHESTPLATE = INSTANCE.register(
-            "emerald_socketed_iridium_chestplate",
-            () -> new IridiumChestplateItem(
-                    IridiumArmorMaterial.EMERALD_SOCKETED,
-                    new Item.Properties()
-                            .fireResistant()
-                            .stacksTo(1)
-                            .craftRemainder(Items.EMERALD),
-                    Socket.EMERALD
-            )
-    );
-    public static final RegistryObject<Item> SKULL_SOCKETED_IRIDIUM_CHESTPLATE = INSTANCE.register(
-            "skull_socketed_iridium_chestplate",
-            () -> new IridiumChestplateItem(
-                    IridiumArmorMaterial.IRIDIUM,
-                    new Item.Properties()
-                            .fireResistant()
-                            .stacksTo(1)
-                            .craftRemainder(Items.SKELETON_SKULL),
-                    Socket.SKULL
-            )
-    );
-    public static final RegistryObject<Item> WITHER_SKULL_SOCKETED_IRIDIUM_CHESTPLATE = INSTANCE.register(
-            "wither_skull_socketed_iridium_chestplate",
-            () -> new IridiumChestplateItem(
-                    IridiumArmorMaterial.IRIDIUM,
-                    new Item.Properties()
-                            .fireResistant()
-                            .stacksTo(1)
-                            .craftRemainder(Items.WITHER_SKELETON_SKULL),
-                    Socket.WITHER_SKULL
-            )
-    );
-    public static final RegistryObject<Item> AMETHYST_SOCKETED_IRIDIUM_CHESTPLATE = INSTANCE.register(
-            "amethyst_socketed_iridium_chestplate",
-            () -> new IridiumChestplateItem(
-                    IridiumArmorMaterial.IRIDIUM,
-                    new Item.Properties()
-                            .fireResistant()
-                            .stacksTo(1)
-                            .craftRemainder(Items.AMETHYST_SHARD),
-                    Socket.AMETHYST
-            )
-    );
-    //endregion
+    public static final Map<Socket, RegistryObject<Item>> SWORDS = makeAllSocketsForGearType(SocketedGearType.SWORD);
+    public static final Set<RegistryObject<Item>> SOCKETED_SWORDS = SWORDS.entrySet().stream().filter((entry) -> entry.getKey() != Socket.NONE).map(Map.Entry::getValue).collect(Collectors.toSet());
 
-    //region partial iridium armors
+    public static final Map<Socket, RegistryObject<Item>> PICKAXES = makeAllSocketsForGearType(SocketedGearType.PICKAXE);
+    public static final Set<RegistryObject<Item>> SOCKETED_PICKAXES = PICKAXES.entrySet().stream().filter((entry) -> entry.getKey() != Socket.NONE).map(Map.Entry::getValue).collect(Collectors.toSet());
 
-    public static final RegistryObject<Item> PARTIAL_IRIDIUM_HELMET_5_1 = INSTANCE.register(
-            "partial_iridium_helmet_1",
-            () -> new PartialIridiumArmorItem(
-                    IridiumArmorMaterial._5_1,
-                    ArmorItem.Type.HELMET,
-                    new Item.Properties()
-                            .fireResistant(),
-                    5,
-                    1
-            )
-    );
-    public static final RegistryObject<Item> PARTIAL_IRIDIUM_HELMET_5_2 = INSTANCE.register(
-            "partial_iridium_helmet_2",
-            () -> new PartialIridiumArmorItem(
-                    IridiumArmorMaterial._5_2,
-                    ArmorItem.Type.HELMET,
-                    new Item.Properties()
-                            .fireResistant(),
-                    5,
-                    2
-            )
-    );
-    public static final RegistryObject<Item> PARTIAL_IRIDIUM_HELMET_5_3 = INSTANCE.register(
-            "partial_iridium_helmet_3",
-            () -> new PartialIridiumArmorItem(
-                    IridiumArmorMaterial._5_3,
-                    ArmorItem.Type.HELMET,
-                    new Item.Properties()
-                            .fireResistant(),
-                    5,
-                    3
-            )
-    );
-    public static final RegistryObject<Item> PARTIAL_IRIDIUM_HELMET_5_4 = INSTANCE.register(
-            "partial_iridium_helmet_4",
-            () -> new PartialIridiumArmorItem(
-                    IridiumArmorMaterial._5_4,
-                    ArmorItem.Type.HELMET,
-                    new Item.Properties()
-                            .fireResistant(),
-                    5,
-                    4
-            )
-    );
-    public static final RegistryObject<Item> PARTIAL_IRIDIUM_CHESTPLATE_8_1 = INSTANCE.register(
-            "partial_iridium_chestplate_1",
-            () -> new PartialIridiumArmorItem(
-                    IridiumArmorMaterial._8_1,
-                    ArmorItem.Type.CHESTPLATE,
-                    new Item.Properties()
-                            .fireResistant(),
-                    8,
-                    1
-            )
-    );
-    public static final RegistryObject<Item> PARTIAL_IRIDIUM_CHESTPLATE_8_2 = INSTANCE.register(
-            "partial_iridium_chestplate_2",
-            () -> new PartialIridiumArmorItem(
-                    IridiumArmorMaterial._8_2,
-                    ArmorItem.Type.CHESTPLATE,
-                    new Item.Properties()
-                            .fireResistant(),
-                    8,
-                    2
-            )
-    );
-    public static final RegistryObject<Item> PARTIAL_IRIDIUM_CHESTPLATE_8_3 = INSTANCE.register(
-            "partial_iridium_chestplate_3",
-            () -> new PartialIridiumArmorItem(
-                    IridiumArmorMaterial._8_3,
-                    ArmorItem.Type.CHESTPLATE,
-                    new Item.Properties()
-                            .fireResistant(),
-                    8,
-                    3
-            )
-    );
-    public static final RegistryObject<Item> PARTIAL_IRIDIUM_CHESTPLATE_8_4 = INSTANCE.register(
-            "partial_iridium_chestplate_4",
-            () -> new PartialIridiumArmorItem(
-                    IridiumArmorMaterial._8_4,
-                    ArmorItem.Type.CHESTPLATE,
-                    new Item.Properties()
-                            .fireResistant(),
-                    8,
-                    4
-            )
-    );
-    public static final RegistryObject<Item> PARTIAL_IRIDIUM_CHESTPLATE_8_5 = INSTANCE.register(
-            "partial_iridium_chestplate_5",
-            () -> new PartialIridiumArmorItem(
-                    IridiumArmorMaterial._8_5,
-                    ArmorItem.Type.CHESTPLATE,
-                    new Item.Properties()
-                            .fireResistant(),
-                    8,
-                    5
-            )
-    );
-    public static final RegistryObject<Item> PARTIAL_IRIDIUM_CHESTPLATE_8_6 = INSTANCE.register(
-            "partial_iridium_chestplate_6",
-            () -> new PartialIridiumArmorItem(
-                    IridiumArmorMaterial._8_6,
-                    ArmorItem.Type.CHESTPLATE,
-                    new Item.Properties()
-                            .fireResistant(),
-                    8,
-                    6
-            )
-    );
-    public static final RegistryObject<Item> PARTIAL_IRIDIUM_CHESTPLATE_8_7 = INSTANCE.register(
-            "partial_iridium_chestplate_7",
-            () -> new PartialIridiumArmorItem(
-                    IridiumArmorMaterial._8_7,
-                    ArmorItem.Type.CHESTPLATE,
-                    new Item.Properties()
-                            .fireResistant(),
-                    8,
-                    7
-            )
-    );
-    public static final RegistryObject<Item> PARTIAL_IRIDIUM_LEGGINGS_7_1 = INSTANCE.register(
-            "partial_iridium_leggings_1",
-            () -> new PartialIridiumArmorItem(
-                    IridiumArmorMaterial._7_1,
-                    ArmorItem.Type.LEGGINGS,
-                    new Item.Properties()
-                            .fireResistant(),
-                    7,
-                    1
-            )
-    );
-    public static final RegistryObject<Item> PARTIAL_IRIDIUM_LEGGINGS_7_2 = INSTANCE.register(
-            "partial_iridium_leggings_2",
-            () -> new PartialIridiumArmorItem(
-                    IridiumArmorMaterial._7_2,
-                    ArmorItem.Type.LEGGINGS,
-                    new Item.Properties()
-                            .fireResistant(),
-                    7,
-                    2
-            )
-    );
-    public static final RegistryObject<Item> PARTIAL_IRIDIUM_LEGGINGS_7_3 = INSTANCE.register(
-            "partial_iridium_leggings_3",
-            () -> new PartialIridiumArmorItem(
-                    IridiumArmorMaterial._7_3,
-                    ArmorItem.Type.LEGGINGS,
-                    new Item.Properties()
-                            .fireResistant(),
-                    7,
-                    3
-            )
-    );
-    public static final RegistryObject<Item> PARTIAL_IRIDIUM_LEGGINGS_7_4 = INSTANCE.register(
-            "partial_iridium_leggings_4",
-            () -> new PartialIridiumArmorItem(
-                    IridiumArmorMaterial._7_4,
-                    ArmorItem.Type.LEGGINGS,
-                    new Item.Properties()
-                            .fireResistant(),
-                    7,
-                    4
-            )
-    );
-    public static final RegistryObject<Item> PARTIAL_IRIDIUM_LEGGINGS_7_5 = INSTANCE.register(
-            "partial_iridium_leggings_5",
-            () -> new PartialIridiumArmorItem(
-                    IridiumArmorMaterial._7_5,
-                    ArmorItem.Type.LEGGINGS,
-                    new Item.Properties()
-                            .fireResistant(),
-                    7,
-                    5
-            )
-    );
-    public static final RegistryObject<Item> PARTIAL_IRIDIUM_LEGGINGS_7_6 = INSTANCE.register(
-            "partial_iridium_leggings_6",
-            () -> new PartialIridiumArmorItem(
-                    IridiumArmorMaterial._7_6,
-                    ArmorItem.Type.LEGGINGS,
-                    new Item.Properties()
-                            .fireResistant(),
-                    7,
-                    6
-            )
-    );
-    public static final RegistryObject<Item> PARTIAL_IRIDIUM_BOOTS_4_1 = INSTANCE.register(
-            "partial_iridium_boots_1",
-            () -> new PartialIridiumArmorItem(
-                    IridiumArmorMaterial._4_1,
-                    ArmorItem.Type.BOOTS,
-                    new Item.Properties()
-                            .fireResistant(),
-                    4,
-                    1
-            )
-    );
-    public static final RegistryObject<Item> PARTIAL_IRIDIUM_BOOTS_4_2 = INSTANCE.register(
-            "partial_iridium_boots_2",
-            () -> new PartialIridiumArmorItem(
-                    IridiumArmorMaterial._4_2,
-                    ArmorItem.Type.BOOTS,
-                    new Item.Properties()
-                            .fireResistant(),
-                    4,
-                    2
-            )
-    );
-    public static final RegistryObject<Item> PARTIAL_IRIDIUM_BOOTS_4_3 = INSTANCE.register(
-            "partial_iridium_boots_3",
-            () -> new PartialIridiumArmorItem(
-                    IridiumArmorMaterial._4_3,
-                    ArmorItem.Type.BOOTS,
-                    new Item.Properties()
-                            .fireResistant(),
-                    4,
-                    3
-            )
-    );
+    public static final Map<Socket, RegistryObject<Item>> AXES = makeAllSocketsForGearType(SocketedGearType.AXE);
+    public static final Set<RegistryObject<Item>> SOCKETED_AXES = AXES.entrySet().stream().filter((entry) -> entry.getKey() != Socket.NONE).map(Map.Entry::getValue).collect(Collectors.toSet());
 
-    //endregion
+    public static final Map<Socket, RegistryObject<Item>> SHOVELS = makeAllSocketsForGearType(SocketedGearType.SHOVEL);
+    public static final Set<RegistryObject<Item>> SOCKETED_SHOVELS = SHOVELS.entrySet().stream().filter((entry) -> entry.getKey() != Socket.NONE).map(Map.Entry::getValue).collect(Collectors.toSet());
 
-    //endregion
+    public static final Map<Socket, RegistryObject<Item>> HOES = makeAllSocketsForGearType(SocketedGearType.HOE);
+    public static final Set<RegistryObject<Item>> SOCKETED_HOES = HOES.entrySet().stream().filter((entry) -> entry.getKey() != Socket.NONE).map(Map.Entry::getValue).collect(Collectors.toSet());
 
-    //region iridium scepter
+    public static final Map<Socket, RegistryObject<Item>> CHESTPLATES = makeAllSocketsForGearType(SocketedGearType.CHESTPLATE);
+    public static final Set<RegistryObject<Item>> SOCKETED_CHESTPLATES = CHESTPLATES.entrySet().stream().filter((entry) -> entry.getKey() != Socket.NONE).map(Map.Entry::getValue).collect(Collectors.toSet());
 
-    public static final RegistryObject<Item> IRIDIUM_SCEPTER = INSTANCE.register(
-            "iridium_scepter",
-            () -> new IridiumScepterItem(
-                    new Item.Properties()
-                            .fireResistant()
-                            .stacksTo(1)
-                    , Socket.NONE
-            )
-    );
+    public static final Map<Socket, RegistryObject<Item>> SCEPTERS = makeAllSocketsForGearType(SocketedGearType.SCEPTER);
+    public static final Set<RegistryObject<Item>> SOCKETED_SCEPTERS = SCEPTERS.entrySet().stream().filter((entry) -> entry.getKey() != Socket.NONE).map(Map.Entry::getValue).collect(Collectors.toSet());
 
-    public static final RegistryObject
-            <Item> DIAMOND_SOCKETED_IRIDIUM_SCEPTER = INSTANCE.register(
-            "diamond_socketed_iridium_scepter",
-            () -> new IridiumScepterItem(
-                    new Item.Properties()
-                            .fireResistant()
-                            .stacksTo(1)
-                            .craftRemainder(Items.DIAMOND),
-                    Socket.DIAMOND
-            )
-    );
-    public static final RegistryObject<Item> EMERALD_SOCKETED_IRIDIUM_SCEPTER = INSTANCE.register(
-            "emerald_socketed_iridium_scepter",
-            () -> new IridiumScepterItem(
-                    new Item.Properties()
-                            .fireResistant()
-                            .stacksTo(1)
-                            .craftRemainder(Items.EMERALD),
-                    Socket.EMERALD
-            )
-    );
-    public static final RegistryObject<Item> SKULL_SOCKETED_IRIDIUM_SCEPTER = INSTANCE.register(
-            "skull_socketed_iridium_scepter",
-            () -> new IridiumScepterItem(
-                    new Item.Properties()
-                            .fireResistant()
-                            .stacksTo(1)
-                            .craftRemainder(Items.SKELETON_SKULL),
-                    Socket.SKULL
-            )
-    );
-    public static final RegistryObject<Item> WITHER_SKULL_SOCKETED_IRIDIUM_SCEPTER = INSTANCE.register(
-            "wither_skull_socketed_iridium_scepter",
-            () -> new IridiumScepterItem(
-                    new Item.Properties()
-                            .fireResistant()
-                            .stacksTo(1)
-                            .craftRemainder(Items.WITHER_SKELETON_SKULL),
-                    Socket.WITHER_SKULL
-            )
-    );
-    public static final RegistryObject<Item> AMETHYST_SOCKETED_IRIDIUM_SCEPTER = INSTANCE.register(
-            "amethyst_socketed_iridium_scepter",
-            () -> new IridiumScepterItem(
-                    new Item.Properties()
-                            .fireResistant()
-                            .stacksTo(1)
-                            .craftRemainder(Items.AMETHYST_SHARD),
-                    Socket.AMETHYST
-            )
-    );
+    public static final Map<Integer, RegistryObject<Item>> PARTIAL_SWORDS = makeAllPartialsForGearType(PartialGearType.SWORD);
+    public static final Map<Integer, RegistryObject<Item>> PARTIAL_PICKAXES = makeAllPartialsForGearType(PartialGearType.PICKAXE);
+    public static final Map<Integer, RegistryObject<Item>> PARTIAL_AXES = makeAllPartialsForGearType(PartialGearType.AXE);
+    public static final Map<Integer, RegistryObject<Item>> PARTIAL_HOES = makeAllPartialsForGearType(PartialGearType.HOE);
+    public static final Map<Integer, RegistryObject<Item>> PARTIAL_HELMETS = makeAllPartialsForGearType(PartialGearType.HELMET);
+    public static final Map<Integer, RegistryObject<Item>> PARTIAL_CHESTPLATES = makeAllPartialsForGearType(PartialGearType.CHESTPLATE);
+    public static final Map<Integer, RegistryObject<Item>> PARTIAL_LEGGINGS = makeAllPartialsForGearType(PartialGearType.LEGGINGS);
+    public static final Map<Integer, RegistryObject<Item>> PARTIAL_BOOTS = makeAllPartialsForGearType(PartialGearType.BOOTS);
 
-    //endregion
+    private static Map<Socket, RegistryObject<Item>> makeAllSocketsForGearType(SocketedGearType gearType) {
+        Map<Socket, RegistryObject<Item>> map = new HashMap<>();
+        for (Socket socket : Socket.values()) {
+            map.put(socket, makeIridiumGear(socket, gearType));
+        }
+        return map;
+    }
+
+    private static RegistryObject<Item> makeIridiumGear(Socket socket, SocketedGearType gearType) {
+        return INSTANCE.register(
+                (socket == Socket.NONE ? "" : socket.name().toLowerCase() + "_socketed_") + "iridium_" + gearType.name().toLowerCase(),
+                () -> gearType.itemFactory.provideItem(
+                        new Item.Properties()
+                                .fireResistant()
+                                .stacksTo(1)
+                                .craftRemainder(socket.i),
+                        socket
+                )
+        );
+    }
+
+    private interface SocketedItemFactory {
+        Item provideItem(Item.Properties properties, Socket socket);
+    }
+
+    public static List<RegistryObject<Item>> SOCKETED_ITEMS = Stream.of(
+            SOCKETED_AXES,
+            SOCKETED_SWORDS,
+            SOCKETED_PICKAXES,
+            SOCKETED_SHOVELS,
+            SOCKETED_HOES,
+            SOCKETED_CHESTPLATES,
+            SOCKETED_SCEPTERS
+    ).flatMap(Collection::stream).collect(Collectors.toList());
+
+    enum SocketedGearType {
+        SWORD((properties, socket) -> new IridiumSwordItem(
+                socket == Socket.DIAMOND ? IridiumToolTier.DIAMOND_SOCKETED :
+                socket == Socket.EMERALD ? IridiumToolTier.EMERALD_SOCKETED :
+                IridiumToolTier.FULL,
+                3,
+                -2.4f,
+                properties,
+                socket
+        )),
+        PICKAXE((properties, socket) -> new IridiumPickaxeItem(
+                socket == Socket.DIAMOND ? IridiumToolTier.DIAMOND_SOCKETED_PICK :
+                socket == Socket.EMERALD ? IridiumToolTier.EMERALD_SOCKETED :
+                socket == Socket.WITHER_SKULL ? IridiumToolTier.WITHER_SOCKETED_PICK :
+                IridiumToolTier.FULL,
+                1,
+                -2.8f,
+                properties,
+                socket
+        )),
+        AXE((properties, socket) -> new IridiumAxeItem(
+                socket == Socket.DIAMOND ? IridiumToolTier.DIAMOND_SOCKETED :
+                socket == Socket.EMERALD ? IridiumToolTier.EMERALD_SOCKETED :
+                IridiumToolTier.FULL,
+                5,
+                -3,
+                properties,
+                socket
+        )),
+        SHOVEL((properties, socket) -> new IridiumShovelItem(
+                socket == Socket.DIAMOND ? IridiumToolTier.DIAMOND_SOCKETED :
+                socket == Socket.EMERALD ? IridiumToolTier.EMERALD_SOCKETED :
+                IridiumToolTier.FULL,
+                1.5f,
+                -3,
+                properties,
+                socket
+        )),
+        HOE((properties, socket) -> new IridiumHoeItem(
+                socket == Socket.DIAMOND ? IridiumToolTier.DIAMOND_SOCKETED :
+                socket == Socket.EMERALD ? IridiumToolTier.EMERALD_SOCKETED :
+                IridiumToolTier.FULL,
+                socket == Socket.WITHER_SKULL ? 3 : -1,
+                socket == Socket.WITHER_SKULL ? -2.4f : 0,
+                properties,
+                socket
+        )),
+        CHESTPLATE((properties, socket) -> new IridiumChestplateItem(
+                socket == Socket.DIAMOND ? IridiumArmorMaterial.DIAMOND_SOCKETED :
+                socket == Socket.EMERALD ? IridiumArmorMaterial.EMERALD_SOCKETED :
+                IridiumArmorMaterial.IRIDIUM,
+                properties,
+                socket
+        )),
+        SCEPTER(IridiumScepterItem::new);
+
+        public SocketedItemFactory itemFactory;
+        SocketedGearType(SocketedItemFactory factory) {
+            itemFactory = factory;
+        }
+    }
+    private static Map<Integer, RegistryObject<Item>> makeAllPartialsForGearType(PartialGearType gearType) {
+        Map<Integer, RegistryObject<Item>> map = new HashMap<>();
+        Main.LOGGER.debug("making partials for gear type " + gearType);
+        for (int platings = 1; platings < gearType.maxPlatings; platings++) {
+            map.put(platings, makePartialIridiumGear(platings, gearType));
+            Main.LOGGER.debug("made partial " + platings + " for gear type " + gearType);
+        }
+        return map;
+    }
+
+    private static RegistryObject<Item> makePartialIridiumGear(int platings, PartialGearType gearType) {
+        return INSTANCE.register(
+                "partial_iridium_" + gearType.name().toLowerCase() + "_" + platings,
+                () -> gearType.itemFactory.provideItem(
+                        new Item.Properties()
+                                .fireResistant()
+                                .stacksTo(1),
+                        platings
+                )
+        );
+    }
+
+    private interface PartialItemFactory {
+        Item provideItem(Item.Properties properties, int platings);
+    }
+
+    enum PartialGearType {
+        HELMET(5, (properties, platings) -> new PartialIridiumArmorItem(
+                IridiumArmorMaterial.getArmorForPartial(platings, 5),
+                ArmorItem.Type.HELMET,
+                properties,
+                5,
+                platings
+        )),
+        CHESTPLATE(8, (properties, platings) -> new PartialIridiumArmorItem(
+                IridiumArmorMaterial.getArmorForPartial(platings, 8),
+                ArmorItem.Type.CHESTPLATE,
+                properties,
+                8,
+                platings
+        )),
+        LEGGINGS(7, (properties, platings) -> new PartialIridiumArmorItem(
+                IridiumArmorMaterial.getArmorForPartial(platings, 7),
+                ArmorItem.Type.LEGGINGS,
+                properties,
+                7,
+                platings
+        )),
+        BOOTS(4, (properties, platings) -> new PartialIridiumArmorItem(
+                IridiumArmorMaterial.getArmorForPartial(platings, 4),
+                ArmorItem.Type.BOOTS,
+                properties,
+                4,
+                platings
+        )),
+        SWORD(2, (properties, platings) -> new PartialIridiumSwordItem(
+                IridiumToolTier.getToolTier(platings, 2),
+                3,
+                -2.4F,
+                properties,
+                2,
+                platings // theres only one but whatever
+        )),
+        PICKAXE(3, (properties, platings) -> new PartialIridiumPickaxeItem(
+                IridiumToolTier.getToolTier(platings, 3),
+                1,
+                -2.8F,
+                properties,
+                3,
+                platings
+        )),
+        AXE(3, (properties, platings) -> new PartialIridiumAxeItem(
+                IridiumToolTier.getToolTier(platings, 3),
+                5,
+                -3.0F,
+                properties,
+                3,
+                platings
+        )),
+        HOE(2, (properties, platings) -> new PartialIridiumHoeItem(
+                IridiumToolTier.getToolTier(platings, 2),
+                -1,
+                0.0F,
+                properties,
+                2,
+                platings
+        ));
+
+        public int maxPlatings;
+        public PartialItemFactory itemFactory;
+        PartialGearType(int maxPlatings, PartialItemFactory factory) {
+            this.maxPlatings = maxPlatings;
+            itemFactory = factory;
+        }
+    }
 }
