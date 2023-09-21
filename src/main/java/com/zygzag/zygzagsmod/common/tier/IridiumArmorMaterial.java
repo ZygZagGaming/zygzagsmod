@@ -108,11 +108,11 @@ public enum IridiumArmorMaterial implements ArmorMaterial {
     }
 
     public int getDurabilityForSlot(EquipmentSlot slot) {
-        return HEALTH_PER_SLOT[5 - slot.ordinal()] * this.durabilityMultiplier;
+        return HEALTH_PER_SLOT[slot.getIndex()] * this.durabilityMultiplier;
     }
 
     public int getDefenseForSlot(EquipmentSlot slot) {
-        return this.slotProtections[5 - slot.ordinal()];
+        return this.slotProtections[slot.getIndex()];
     }
 
     public int getEnchantmentValue() {
