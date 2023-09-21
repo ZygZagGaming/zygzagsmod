@@ -16,27 +16,27 @@ import java.util.function.Supplier;
 @SuppressWarnings("unused")
 @MethodsReturnNonnullByDefault
 public class IridiumArmorMaterial implements ArmorMaterial {
-    public static final IridiumArmorMaterial IRIDIUM = new IridiumArmorMaterial ("iridium", 42, new int[]{4, 7, 9, 4}, 17);
-    public static final IridiumArmorMaterial _4_1 = new IridiumArmorMaterial("iridium_1", 38, new int[]{3, 6, 8, 3}, 15);
-    public static final IridiumArmorMaterial _4_2 = new IridiumArmorMaterial("iridium_2", 40, new int[]{4, 7, 9, 4}, 16);
-    public static final IridiumArmorMaterial _4_3 = new IridiumArmorMaterial("iridium_3", 41, new int[]{4, 7, 9, 4}, 17);
-    public static final IridiumArmorMaterial _5_1 = new IridiumArmorMaterial("iridium_1", 38, new int[]{3, 6, 8, 3}, 15);
-    public static final IridiumArmorMaterial _5_2 = new IridiumArmorMaterial("iridium_2", 39, new int[]{3, 6, 8, 3}, 16);
-    public static final IridiumArmorMaterial _5_3 = new IridiumArmorMaterial("iridium_3", 40, new int[]{4, 7, 9, 4}, 16);
-    public static final IridiumArmorMaterial _5_4 = new IridiumArmorMaterial("iridium_4", 41, new int[]{4, 7, 9, 4}, 17);
-    public static final IridiumArmorMaterial _7_1 = new IridiumArmorMaterial("iridium_1", 38, new int[]{3, 6, 8, 3}, 15);
-    public static final IridiumArmorMaterial _7_2 = new IridiumArmorMaterial("iridium_2", 39, new int[]{3, 6, 8, 3}, 15);
-    public static final IridiumArmorMaterial _7_3 = new IridiumArmorMaterial("iridium_3", 39, new int[]{3, 6, 8, 3}, 16);
-    public static final IridiumArmorMaterial _7_4 = new IridiumArmorMaterial("iridium_4", 40, new int[]{4, 7, 9, 4}, 16);
-    public static final IridiumArmorMaterial _7_5 = new IridiumArmorMaterial("iridium_5", 40, new int[]{4, 7, 9, 4}, 17);
-    public static final IridiumArmorMaterial _7_6 = new IridiumArmorMaterial("iridium_6", 41, new int[]{4, 7, 9, 4}, 17);
-    public static final IridiumArmorMaterial _8_1 = new IridiumArmorMaterial("iridium_1", 38, new int[]{3, 6, 8, 3}, 15);
-    public static final IridiumArmorMaterial _8_2 = new IridiumArmorMaterial("iridium_2", 38, new int[]{3, 6, 8, 3}, 15);
-    public static final IridiumArmorMaterial _8_3 = new IridiumArmorMaterial("iridium_3", 39, new int[]{3, 6, 8, 3}, 15);
-    public static final IridiumArmorMaterial _8_4 = new IridiumArmorMaterial("iridium_4", 39, new int[]{3, 6, 8, 3}, 16);
-    public static final IridiumArmorMaterial _8_5 = new IridiumArmorMaterial("iridium_5", 40, new int[]{4, 7, 9, 4}, 16);
-    public static final IridiumArmorMaterial _8_6 = new IridiumArmorMaterial("iridium_6", 41, new int[]{4, 7, 9, 4}, 17);
-    public static final IridiumArmorMaterial _8_7 = new IridiumArmorMaterial("iridium_7", 41, new int[]{4, 7, 9, 4}, 17);
+    public static final IridiumArmorMaterial IRIDIUM = new IridiumArmorMaterial ("iridium", 42, new int[]{4, 9, 7, 4}, 17);
+    public static final IridiumArmorMaterial _4_1 = new IridiumArmorMaterial("iridium_1", 38, new int[]{3, 8, 6, 3}, 15);
+    public static final IridiumArmorMaterial _4_2 = new IridiumArmorMaterial("iridium_2", 40, new int[]{4, 9, 7, 4}, 16);
+    public static final IridiumArmorMaterial _4_3 = new IridiumArmorMaterial("iridium_3", 41, new int[]{4, 9, 7, 4}, 17);
+    public static final IridiumArmorMaterial _5_1 = new IridiumArmorMaterial("iridium_1", 38, new int[]{3, 8, 6, 3}, 15);
+    public static final IridiumArmorMaterial _5_2 = new IridiumArmorMaterial("iridium_2", 39, new int[]{3, 8, 6, 3}, 16);
+    public static final IridiumArmorMaterial _5_3 = new IridiumArmorMaterial("iridium_3", 40, new int[]{4, 9, 7, 4}, 16);
+    public static final IridiumArmorMaterial _5_4 = new IridiumArmorMaterial("iridium_4", 41, new int[]{4, 9, 7, 4}, 17);
+    public static final IridiumArmorMaterial _7_1 = new IridiumArmorMaterial("iridium_1", 38, new int[]{3, 8, 6, 3}, 15);
+    public static final IridiumArmorMaterial _7_2 = new IridiumArmorMaterial("iridium_2", 39, new int[]{3, 8, 6, 3}, 15);
+    public static final IridiumArmorMaterial _7_3 = new IridiumArmorMaterial("iridium_3", 39, new int[]{3, 8, 6, 3}, 16);
+    public static final IridiumArmorMaterial _7_4 = new IridiumArmorMaterial("iridium_4", 40, new int[]{4, 9, 7, 4}, 16);
+    public static final IridiumArmorMaterial _7_5 = new IridiumArmorMaterial("iridium_5", 40, new int[]{4, 9, 7, 4}, 17);
+    public static final IridiumArmorMaterial _7_6 = new IridiumArmorMaterial("iridium_6", 41, new int[]{4, 9, 7, 4}, 17);
+    public static final IridiumArmorMaterial _8_1 = new IridiumArmorMaterial("iridium_1", 38, new int[]{3, 8, 6, 3}, 15);
+    public static final IridiumArmorMaterial _8_2 = new IridiumArmorMaterial("iridium_2", 38, new int[]{3, 8, 6, 3}, 15);
+    public static final IridiumArmorMaterial _8_3 = new IridiumArmorMaterial("iridium_3", 39, new int[]{3, 8, 6, 3}, 15);
+    public static final IridiumArmorMaterial _8_4 = new IridiumArmorMaterial("iridium_4", 39, new int[]{3, 8, 6, 3}, 16);
+    public static final IridiumArmorMaterial _8_5 = new IridiumArmorMaterial("iridium_5", 40, new int[]{4, 9, 7, 4}, 16);
+    public static final IridiumArmorMaterial _8_6 = new IridiumArmorMaterial("iridium_6", 41, new int[]{4, 9, 7, 4}, 17);
+    public static final IridiumArmorMaterial _8_7 = new IridiumArmorMaterial("iridium_7", 41, new int[]{4, 9, 7, 4}, 17);
     public static final IridiumArmorMaterial DIAMOND_SOCKETED = new IridiumArmorMaterial("diamond_iridium", 45, new int[]{8, 8, 8, 8}, 12, SoundEvents.ARMOR_EQUIP_NETHERITE, 3.5f, 0.4f, () -> {
         return Ingredient.of(ItemRegistry.IRIDIUM_PLATING.get());
     });
@@ -44,7 +44,7 @@ public class IridiumArmorMaterial implements ArmorMaterial {
         return Ingredient.of(ItemRegistry.IRIDIUM_PLATING.get());
     });
 
-    private static final int[] HEALTH_PER_SLOT = new int[]{13, 15, 16, 11};
+    private static final int[] HEALTH_PER_SLOT = new int[]{11, 16, 15, 13};
     private final String name;
     private final int durabilityMultiplier;
     private final int[] slotProtections;
