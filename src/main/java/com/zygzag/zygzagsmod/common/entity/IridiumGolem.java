@@ -38,46 +38,41 @@ import java.util.function.Function;
 public class IridiumGolem extends AbstractGolem implements NeutralMob, GeoAnimatable {
     private static final EntityDataAccessor<Integer> DATA_REMAINING_ANGER_TIME = SynchedEntityData.defineId(IridiumGolem.class, EntityDataSerializers.INT);
     private static final UniformInt PERSISTENT_ANGER_TIME = TimeUtil.rangeOfSeconds(10 * 60, 20 * 60);
-    protected static final RawAnimation START_WALKING = RawAnimation.begin().thenPlay("animation.iridium_golem.start_walk").thenLoop("animation.iridium_golem.walk_cycle");
-    protected static final RawAnimation STOP_WALKING = RawAnimation.begin().thenPlay("animation.iridium_golem.stop_walk");
-    protected static final RawAnimation START_RUNNING = RawAnimation.begin().thenPlay("animation.iridium_golem.start_run").thenLoop("animation.iridium_golem.run_cycle");
-    protected static final RawAnimation STOP_RUNNING = RawAnimation.begin().thenPlay("animation.iridium_golem.stop_run");
-    protected static final RawAnimation WALK_START = RawAnimation.begin().thenPlay("animation.iridium_golem.start_walk");
-    protected static final RawAnimation WALK_STOP = RawAnimation.begin().thenPlay("animation.iridium_golem.stop_walk");
     protected static final RawAnimation IDLE1 = RawAnimation.begin().thenPlay("animation.iridium_golem.idle1");
     protected static final RawAnimation IDLE2 = RawAnimation.begin().thenPlay("animation.iridium_golem.idle2");
     protected static final RawAnimation IDLE3 = RawAnimation.begin().thenPlay("animation.iridium_golem.idle3");
-    protected static final RawAnimation IDLE_LOOP = RawAnimation.begin().thenLoop("animation.iridium_golem.idle_loop");
-    protected static final Map<State, RawAnimation> ANIMATION_LOOPS = Map.of(
-            State.IDLE, RawAnimation.begin().thenLoop("animation.iridium_golem.idle_loop"),
-            State.WALKING, RawAnimation.begin().thenLoop("animation.iridium_golem.walk_cycle"),
-            State.RUNNING, RawAnimation.begin().thenLoop("animation.iridium_golem.run_cycle"),
-            State.AGRO, RawAnimation.begin().thenLoop("animation.iridium_golem.agro_idle"),
-            State.ATTACK_2, RawAnimation.begin().thenPlay("animation.iridium_golem.attack2")
+    protected static final Map<AnimationState, RawAnimation> ANIMATION_LOOPS = Map.of(
+            AnimationState.IDLE, RawAnimation.begin().thenLoop("animation.iridium_golem.idle_loop"),
+            AnimationState.WALKING, RawAnimation.begin().thenLoop("animation.iridium_golem.walk_cycle"),
+            AnimationState.RUNNING, RawAnimation.begin().thenLoop("animation.iridium_golem.run_cycle"),
+            AnimationState.AGRO, RawAnimation.begin().thenLoop("animation.iridium_golem.agro_idle"),
+            AnimationState.ATTACK_2, RawAnimation.begin().thenPlay("animation.iridium_golem.attack2")
     );
-    protected static final Map<Pair<State, State>, RawAnimation> TRANSITION_ANIMATIONS = Map.of(
-            new Pair<>(State.IDLE, State.WALKING), RawAnimation.begin().thenPlay("animation.iridium_golem.start_walk"),
-            new Pair<>(State.WALKING, State.IDLE), RawAnimation.begin().thenPlay("animation.iridium_golem.stop_walk"),
-            new Pair<>(State.IDLE, State.AGRO), RawAnimation.begin().thenPlay("animation.iridium_golem.agro"),
-            new Pair<>(State.AGRO, State.IDLE), RawAnimation.begin().thenPlay("animation.iridium_golem.deagro"),
-            new Pair<>(State.IDLE, State.RUNNING), RawAnimation.begin().thenPlay("animation.iridium_golem.start_run_from_idle"),
-            new Pair<>(State.RUNNING, State.IDLE), RawAnimation.begin().thenPlay("animation.iridium_golem.deagro"),
-            new Pair<>(State.AGRO, State.WALKING), RawAnimation.begin().thenPlay("animation.iridium_golem.deagro").thenPlay("animation.iridium_golem.start_walk"),
-            new Pair<>(State.WALKING, State.AGRO), RawAnimation.begin().thenPlay("animation.iridium_golem.stop_walk").thenPlay("animation.iridium_golem.agro")
+    protected static final Map<Pair<AnimationState, AnimationState>, RawAnimation> TRANSITION_ANIMATIONS = Map.of(
+            new Pair<>(AnimationState.IDLE, AnimationState.WALKING), RawAnimation.begin().thenPlay("animation.iridium_golem.start_walk"),
+            new Pair<>(AnimationState.WALKING, AnimationState.IDLE), RawAnimation.begin().thenPlay("animation.iridium_golem.stop_walk"),
+            new Pair<>(AnimationState.IDLE, AnimationState.AGRO), RawAnimation.begin().thenPlay("animation.iridium_golem.agro"),
+            new Pair<>(AnimationState.AGRO, AnimationState.IDLE), RawAnimation.begin().thenPlay("animation.iridium_golem.deagro"),
+            new Pair<>(AnimationState.IDLE, AnimationState.RUNNING), RawAnimation.begin().thenPlay("animation.iridium_golem.start_run_from_idle"),
+            new Pair<>(AnimationState.RUNNING, AnimationState.IDLE), RawAnimation.begin().thenPlay("animation.iridium_golem.deagro"),
+            new Pair<>(AnimationState.AGRO, AnimationState.WALKING), RawAnimation.begin().thenPlay("animation.iridium_golem.deagro").thenPlay("animation.iridium_golem.start_walk"),
+            new Pair<>(AnimationState.WALKING, AnimationState.AGRO), RawAnimation.begin().thenPlay("animation.iridium_golem.stop_walk").thenPlay("animation.iridium_golem.agro")
     );
     public static final List<Function<IridiumGolem, StandingAttackGoal>> standstillAttacks = List.of(
             (golem) -> golem.new StandingAttackGoal(RawAnimation.begin().thenPlay("animation.iridium_golem.attack2"))
     );
 
-    protected static final EntityDataAccessor<State> DATA_STATE = SynchedEntityData.defineId(IridiumGolem.class, EntityDataSerializerRegistry.IRIDIUM_GOLEM_STATE.get());
+    protected static final EntityDataAccessor<AnimationState> DATA_ANIMATION_STATE = SynchedEntityData.defineId(IridiumGolem.class, EntityDataSerializerRegistry.IRIDIUM_GOLEM_ANIMATION_STATE.get());
+    protected static final EntityDataAccessor<MindState> DATA_MIND_STATE = SynchedEntityData.defineId(IridiumGolem.class, EntityDataSerializerRegistry.IRIDIUM_GOLEM_MIND_STATE.get());
     protected static final EntityDataAccessor<Optional<CurrentAttack>> DATA_ATTACK = SynchedEntityData.defineId(IridiumGolem.class, EntityDataSerializerRegistry.IRIDIUM_GOLEM_ATTACK.get());
 
-    private State lastState = State.IDLE;
+    private AnimationState lastAnimationState = AnimationState.IDLE;
     private int timeUntilIdleAnimation = 5 * 20; // 5 seconds of idle time after spawning, do idle animation
 
     private final AnimatableInstanceCache instanceCache = GeckoLibUtil.createInstanceCache(this);
     @Nullable
     private UUID persistentAngerTarget;
+    public boolean wasMoving = false;
 
 
     private @Nullable RawAnimation queuedAnim = null;
@@ -101,16 +96,25 @@ public class IridiumGolem extends AbstractGolem implements NeutralMob, GeoAnimat
     protected void defineSynchedData() {
         super.defineSynchedData();
         entityData.define(DATA_REMAINING_ANGER_TIME, 0);
-        entityData.define(DATA_STATE, State.IDLE);
+        entityData.define(DATA_ANIMATION_STATE, AnimationState.IDLE);
+        entityData.define(DATA_MIND_STATE, MindState.IDLE);
         entityData.define(DATA_ATTACK, Optional.empty());
     }
 
-    public State getState() {
-        return entityData.get(DATA_STATE);
+    public AnimationState getAnimationState() {
+        return entityData.get(DATA_ANIMATION_STATE);
     }
 
-    public void setState(State state) {
-        entityData.set(DATA_STATE, state);
+    public void setAnimationState(AnimationState animationState) {
+        entityData.set(DATA_ANIMATION_STATE, animationState);
+    }
+
+    public MindState getMindState() {
+        return entityData.get(DATA_MIND_STATE);
+    }
+
+    public void setMindState(MindState mindState) {
+        entityData.set(DATA_MIND_STATE, mindState);
     }
 
     public @Nullable CurrentAttack getCurrentAttack() {
@@ -122,7 +126,7 @@ public class IridiumGolem extends AbstractGolem implements NeutralMob, GeoAnimat
     }
 
     public boolean isIdle() {
-        return getState() == State.IDLE;
+        return getAnimationState() == AnimationState.IDLE;
     }
 
     @Override
@@ -134,37 +138,41 @@ public class IridiumGolem extends AbstractGolem implements NeutralMob, GeoAnimat
     @Override
     public void addAdditionalSaveData(CompoundTag tag) {
         super.addAdditionalSaveData(tag);
-        tag.putString("state", getState().name());
+        tag.putString("animation_state", getAnimationState().name());
+        tag.putString("mind_state", getMindState().name());
     }
 
     @Override
     public void readAdditionalSaveData(CompoundTag tag) {
         super.readAdditionalSaveData(tag);
         try {
-            State state = State.valueOf(tag.getString("state"));
-            setState(state);
+            AnimationState animationState = AnimationState.valueOf(tag.getString("animation_state"));
+            setAnimationState(animationState);
+        } catch (IllegalArgumentException ignored) { }
+        try {
+            MindState mindState = MindState.valueOf(tag.getString("mind_state"));
+            setMindState(mindState);
         } catch (IllegalArgumentException ignored) { }
     }
 
-    public State getIdleState() {
-        return getTarget() == null ? State.IDLE : State.AGRO;
+    public AnimationState getIdleState() {
+        return getTarget() == null ? AnimationState.IDLE : AnimationState.AGRO;
     }
 
-    public State getWalkingState() {
-        return getTarget() == null ? State.WALKING : State.RUNNING;
+    public AnimationState getWalkingState() {
+        return getTarget() == null ? AnimationState.WALKING : AnimationState.RUNNING;
     }
 
     @Override
     public void setTarget(@Nullable LivingEntity target) {
         super.setTarget(target);
-        State state = getState();
-        if (target == null) {
-            if (state == State.AGRO) setState(State.IDLE);
-            if (state == State.RUNNING) setState(State.WALKING);
-        } else {
-            if (state == State.IDLE) setState(State.AGRO);
-            if (state == State.WALKING) setState(State.RUNNING);
-        }
+        if (getMindState() == MindState.IDLE && target != null) setMindState(MindState.AGRO);
+        if (getMindState() == MindState.AGRO && target == null) setMindState(MindState.IDLE);
+    }
+
+    public void setNeutralState() {
+        if (getTarget() != null) setMindState(MindState.AGRO);
+        else setMindState(MindState.IDLE);
     }
 
     @Override
@@ -198,6 +206,8 @@ public class IridiumGolem extends AbstractGolem implements NeutralMob, GeoAnimat
         setOldPosAndRot();
         super.tick();
         if (isIdle()) timeUntilIdleAnimation--;
+        var animationState = getNavigation().getPath() == null ? getMindState().movingState : getMindState().nonMovingState;
+        if (animationState != null) setAnimationState(animationState);
     }
 
     public static AttributeSupplier.Builder createAttributes() {
@@ -219,30 +229,31 @@ public class IridiumGolem extends AbstractGolem implements NeutralMob, GeoAnimat
         return tickCount;
     }
 
+    @Override
+    public float getStepHeight() {
+        return getTarget() == null ? 0.2f : 1.2f;
+    }
+
     private final AnimationController<IridiumGolem> bodyAnimController = new AnimationController<>(this, "body", 0, (animState) -> {
         AnimationController<IridiumGolem> animController = animState.getController();
-        State state = getState();
+        AnimationState animationState = getAnimationState();
         if (queuedAnim == null) {
-            if (state != lastState) {
+            if (animationState != lastAnimationState) {
                 //System.out.println("last state " + lastState + ", state " + state);
-                RawAnimation transitionAnim = TRANSITION_ANIMATIONS.get(new Pair<>(lastState, state));
-                animController.setAnimation(transitionAnim == null ? ANIMATION_LOOPS.get(state) : transitionAnim);
+                RawAnimation transitionAnim = TRANSITION_ANIMATIONS.get(new Pair<>(lastAnimationState, animationState));
+                animController.setAnimation(transitionAnim == null ? ANIMATION_LOOPS.get(animationState) : transitionAnim);
             } else if (animController.hasAnimationFinished() || animController.getCurrentRawAnimation() == null) {
-                if (state == State.IDLE && timeUntilIdleAnimation <= 0) {
+                if (animationState == AnimationState.IDLE && timeUntilIdleAnimation <= 0) {
                     doIdleAnimation(animController);
                 } else {
-                    RawAnimation anim = ANIMATION_LOOPS.get(state);
+                    RawAnimation anim = ANIMATION_LOOPS.get(animationState);
                     animController.setAnimation(anim);
                 }
             }
         } else playQueuedAnimation(animController);
-        lastState = state;
+        lastAnimationState = animationState;
 
-        return PlayState.CONTINUE;
 
-    });
-
-    private final AnimationController<IridiumGolem> attackAnimController = new AnimationController<>(this, "attack", 0, (animState) -> {
         return PlayState.CONTINUE;
     });
 
@@ -265,22 +276,33 @@ public class IridiumGolem extends AbstractGolem implements NeutralMob, GeoAnimat
         @Override
         public void start() {
             getNavigation().moveTo(this.wantedX, this.wantedY, this.wantedZ, getTarget() == null ? speedModifier : runningSpeedModifier);
-            setState(getWalkingState());
         }
 
         @Override
         public void stop() {
             super.stop();
-            setState(getIdleState());
         }
     }
 
-    public enum State {
+    public enum AnimationState {
         IDLE,
         WALKING,
         RUNNING,
         AGRO,
         ATTACK_2;
+    }
+
+    public enum MindState {
+        IDLE(AnimationState.IDLE, AnimationState.WALKING),
+        AGRO(AnimationState.AGRO, AnimationState.RUNNING),
+        ATTACK_2(AnimationState.ATTACK_2, null);
+
+        public final @Nullable AnimationState nonMovingState;
+        public final @Nullable AnimationState movingState;
+        MindState(@Nullable AnimationState nonMovingState, @Nullable AnimationState movingState) {
+            this.nonMovingState = nonMovingState;
+            this.movingState = movingState;
+        }
     }
 
     public enum CurrentAttack {
@@ -412,7 +434,7 @@ public class IridiumGolem extends AbstractGolem implements NeutralMob, GeoAnimat
                     ticksUntilNextPathRecalculation = adjustedTickDelay(ticksUntilNextPathRecalculation);
                 }
 
-                if (ticksUntilNextAttack != attackDuration) ticksUntilNextAttack = Math.max(ticksUntilNextAttack - 1, 0);
+                if (ticksUntilNextAttack != attackDuration + endLag) ticksUntilNextAttack = Math.max(ticksUntilNextAttack - 1, 0);
                 checkAndPerformAttack(target, perceivedDistanceSqr);
             }
         }
@@ -421,21 +443,23 @@ public class IridiumGolem extends AbstractGolem implements NeutralMob, GeoAnimat
             double reachSqr = getAttackReachSqr(target);
             if (distanceSqr <= reachSqr) {
                 if (isTimeToAttack()) {
-                    resetAttackCooldown();
                     doHurtTarget(target);
-                } else if (ticksUntilNextAttack <= attackDuration) {
-                    if (ticksUntilNextAttack == attackDuration) ticksUntilNextAttack--;
-                    setState(State.ATTACK_2);
+                } else {
+                    if (ticksUntilNextAttack == attackDuration + endLag) ticksUntilNextAttack--;
+                    setMindState(MindState.ATTACK_2);
                     getNavigation().stop();
+                    if (ticksUntilNextAttack == 0)
+                        resetAttackCooldown();
                 }
             } else {
-                if (ticksUntilNextAttack >= attackDuration) {
-                    if (ticksUntilNextAttack == attackDuration || getState() != State.ATTACK_2) setState(State.RUNNING);
+                if (ticksUntilNextAttack == attackDuration + endLag) {
+                    if (getMindState() != MindState.ATTACK_2) setAnimationState(AnimationState.AGRO);
                 } else {
-                    if (isTimeToAttack()) {
+                    if (ticksUntilNextAttack == 0) {
                         resetAttackCooldown();
+                        setNeutralState();
                     } else {
-                        setState(State.ATTACK_2);
+                        setMindState(MindState.ATTACK_2);
                         getNavigation().stop();
                     }
                 }
@@ -447,7 +471,7 @@ public class IridiumGolem extends AbstractGolem implements NeutralMob, GeoAnimat
         }
 
         protected boolean isTimeToAttack() {
-            return ticksUntilNextAttack <= 0;
+            return ticksUntilNextAttack == endLag;
         }
 
         protected int getTicksUntilNextAttack() {
