@@ -20,6 +20,8 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.pathfinder.Node;
 import net.minecraft.world.level.pathfinder.Path;
+import net.minecraft.world.phys.AABB;
+import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.Nullable;
 import software.bernie.geckolib.core.animatable.GeoAnimatable;
 import software.bernie.geckolib.core.animatable.instance.AnimatableInstanceCache;
@@ -32,6 +34,7 @@ import software.bernie.geckolib.util.GeckoLibUtil;
 import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.*;
 import java.util.function.Function;
+import java.util.function.Predicate;
 
 @ParametersAreNonnullByDefault
 @MethodsReturnNonnullByDefault
@@ -206,8 +209,8 @@ public class IridiumGolem extends AbstractGolem implements NeutralMob, GeoAnimat
         setOldPosAndRot();
         super.tick();
         if (isIdle()) timeUntilIdleAnimation--;
-        var animationState = getNavigation().getPath() == null ? getMindState().movingState : getMindState().nonMovingState;
-        if (animationState != null) setAnimationState(animationState);
+        var animationState = getNavigation().getPath() == null ? getMindState().nonMovingState : getMindState().movingState;
+        if (animationState != null && !level().isClientSide) setAnimationState(animationState);
     }
 
     public static AttributeSupplier.Builder createAttributes() {
@@ -325,7 +328,7 @@ public class IridiumGolem extends AbstractGolem implements NeutralMob, GeoAnimat
         private boolean canPenalize = false;
         public final RawAnimation animation;
         public final int attackDuration = 20;
-        public final int endLag = 20;
+        public final int endLag = 15;
         public final float speedModifier = 7.5f;
         public StandingAttackGoal(RawAnimation animation) {
             this.animation = animation;
@@ -353,6 +356,7 @@ public class IridiumGolem extends AbstractGolem implements NeutralMob, GeoAnimat
             setAggressive(false);
             getNavigation().stop();
             resetAttackCooldown();
+            setNeutralState();
         }
 
         @Override
@@ -392,6 +396,23 @@ public class IridiumGolem extends AbstractGolem implements NeutralMob, GeoAnimat
 
         protected double getAttackReachSqr(LivingEntity living) {
             return (getBbWidth() * 2.0F * getBbWidth() * 2.0F + living.getBbWidth());
+        }
+
+        public AABB getAttackHitbox() {
+            Vec3 facingDirectionHoriz = getLookAngle().multiply(1, 0, 1).normalize();
+            // facing x (0, 1, 0) should be the right-facing vector
+            Vec3 rightFacingHoriz = facingDirectionHoriz.cross(new Vec3(0, 1, 0)).normalize(); // should already be unit but whatever
+            Vec3 centerOfAttack = position().add(facingDirectionHoriz.scale(1.2)).add(rightFacingHoriz.scale(0.6));
+            double attackSizeHoriz = 1;
+            double attackSizeY = 0.6;
+            return new AABB(
+                    centerOfAttack.x + attackSizeHoriz,
+                    centerOfAttack.y + attackSizeY,
+                    centerOfAttack.z + attackSizeHoriz,
+                    centerOfAttack.x - attackSizeHoriz,
+                    centerOfAttack.y - attackSizeY,
+                    centerOfAttack.z - attackSizeHoriz
+            );
         }
 
         public boolean requiresUpdateEveryTick() {
@@ -435,35 +456,33 @@ public class IridiumGolem extends AbstractGolem implements NeutralMob, GeoAnimat
                 }
 
                 if (ticksUntilNextAttack != attackDuration + endLag) ticksUntilNextAttack = Math.max(ticksUntilNextAttack - 1, 0);
-                checkAndPerformAttack(target, perceivedDistanceSqr);
+                checkAndPerformAttack();
             }
         }
 
-        protected void checkAndPerformAttack(LivingEntity target, double distanceSqr) {
-            double reachSqr = getAttackReachSqr(target);
-            if (distanceSqr <= reachSqr) {
-                if (isTimeToAttack()) {
-                    doHurtTarget(target);
+        protected void checkAndPerformAttack() {
+            LivingEntity target = getTarget();
+            if (target != null) {
+                if (ticksUntilNextAttack == attackDuration + endLag) {
+                    if (target.getBoundingBox().intersects(getAttackHitbox()))
+                        ticksUntilNextAttack--; // start attack
                 } else {
-                    if (ticksUntilNextAttack == attackDuration + endLag) ticksUntilNextAttack--;
+                    if (ticksUntilNextAttack == endLag) doAttack();
                     setMindState(MindState.ATTACK_2);
                     getNavigation().stop();
-                    if (ticksUntilNextAttack == 0)
-                        resetAttackCooldown();
-                }
-            } else {
-                if (ticksUntilNextAttack == attackDuration + endLag) {
-                    if (getMindState() != MindState.ATTACK_2) setAnimationState(AnimationState.AGRO);
-                } else {
                     if (ticksUntilNextAttack == 0) {
                         resetAttackCooldown();
                         setNeutralState();
-                    } else {
-                        setMindState(MindState.ATTACK_2);
-                        getNavigation().stop();
+                        ticksUntilNextPathRecalculation = 0;
                     }
                 }
             }
+        }
+
+        protected void doAttack() {
+            AABB hitbox = getAttackHitbox();
+            List<Entity> entities = level().getEntities(IridiumGolem.this, hitbox, (it) -> it instanceof LivingEntity);
+            for (Entity entity : entities) doHurtTarget(entity);
         }
 
         protected void resetAttackCooldown() {

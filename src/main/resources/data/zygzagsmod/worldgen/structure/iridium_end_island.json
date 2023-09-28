@@ -1,0 +1,6 @@
+{
+  "type": "zygzagsmod:iridium_end_island",
+  "biomes": "#minecraft:is_end",
+  "spawn_overrides": {},
+  "step": "surface_structures"
+}

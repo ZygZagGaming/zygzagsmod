@@ -1,6 +1,5 @@
 package com.zygzag.zygzagsmod.common.registry;
 
-import com.zygzag.zygzagsmod.common.Main;
 import com.zygzag.zygzagsmod.common.item.iridium.Socket;
 import com.zygzag.zygzagsmod.common.item.iridium.armor.IridiumChestplateItem;
 import com.zygzag.zygzagsmod.common.item.iridium.armor.PartialIridiumArmorItem;
@@ -189,10 +188,10 @@ public class IridiumGearRegistry extends Registry<Item> {
     }
     private static Map<Integer, RegistryObject<Item>> makeAllPartialsForGearType(PartialGearType gearType) {
         Map<Integer, RegistryObject<Item>> map = new HashMap<>();
-        Main.LOGGER.debug("making partials for gear type " + gearType);
+        //Main.LOGGER.debug("making partials for gear type " + gearType);
         for (int platings = 1; platings < gearType.maxPlatings; platings++) {
             map.put(platings, makePartialIridiumGear(platings, gearType));
-            Main.LOGGER.debug("made partial " + platings + " for gear type " + gearType);
+            //Main.LOGGER.debug("made partial " + platings + " for gear type " + gearType);
         }
         return map;
     }
