@@ -116,12 +116,14 @@ public class IridiumPickaxeItem extends PickaxeItem implements ISocketable {
                         List<ItemEntity> entities = world.getEntitiesOfClass(ItemEntity.class, box);
                         List<TransmutationRecipe> recipes = world.getRecipeManager().getAllRecipesFor(RecipeTypeRegistry.TRANSMUTATION.get());
                         int n = 0;
+                        int dura = 0;
                         for (ItemEntity itemEntity : entities) {
                             for (TransmutationRecipe recipe : recipes) {
                                 if (n >= 10) break;
                                 SimpleContainer holder = new SimpleContainer(itemEntity.getItem());
                                 if (recipe.matches(holder, world)) {
                                     int in = itemEntity.getItem().getCount();
+                                    dura += in;
                                     ItemEntity newItem = new ItemEntity(world, itemEntity.getX(), itemEntity.getY(), itemEntity.getZ(), recipe.assemble(holder, world.registryAccess()));
                                     world.addFreshEntity(newItem);
                                     if (!player.getAbilities().instabuild) stack.hurtAndBreak(in, player, (it) -> {});
@@ -130,6 +132,7 @@ public class IridiumPickaxeItem extends PickaxeItem implements ISocketable {
                                 }
                             }
                         }
+                        stack.hurtAndBreak(dura, player, (p) -> {});
                         return InteractionResultHolder.success(stack);
                     }
                 }

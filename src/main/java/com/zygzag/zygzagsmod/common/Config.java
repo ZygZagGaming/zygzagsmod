@@ -18,8 +18,8 @@ public class Config {
             .defineInRange("witherSkullAxeCooldown", 15 * 30, 0, Integer.MAX_VALUE);
 
     private static final ForgeConfigSpec.DoubleValue AMETHYST_AXE_DAMAGE_BONUS = BUILDER
-            .comment("Damage multiplier for Amethyst-Socketed Iridium Axes")
-            .defineInRange("amethystAxeDamageBonus", 1.2, 0, Double.MAX_VALUE);
+            .comment("Damage boost for Amethyst-Socketed Iridium Axes")
+            .defineInRange("amethystAxeDamageBonus", 0.4, 0, Double.MAX_VALUE);
 
     private static final ForgeConfigSpec.IntValue EMERALD_SHOVEL_COOLDOWN = BUILDER
             .comment("Cooldown for Emerald-Socketed Iridium Shovels in ticks")
@@ -66,8 +66,8 @@ public class Config {
             .defineInRange("witherSkullSwordCooldown", 1000, 0, Integer.MAX_VALUE);
 
     private static final ForgeConfigSpec.DoubleValue AMETHYST_SWORD_DAMAGE_BONUS = BUILDER
-            .comment("Damage multiplier for Amethyst-Socketed Iridium Swords")
-            .defineInRange("amethystSwordDamageBonus", 1.2, 0, Double.MAX_VALUE);
+            .comment("Damage boost for Amethyst-Socketed Iridium Swords")
+            .defineInRange("amethystSwordDamageBonus", 0.4, 0, Double.MAX_VALUE);
 
     private static final ForgeConfigSpec.DoubleValue EMERALD_SWORD_UNDEAD_DAMAGE_MULTIPLIER = BUILDER
             .comment("Damage multiplier for Emerald-Socketed Iridium Swords")

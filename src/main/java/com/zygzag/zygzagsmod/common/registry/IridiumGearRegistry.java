@@ -149,7 +149,7 @@ public class IridiumGearRegistry extends Registry<Item> {
                 socket == Socket.DIAMOND ? IridiumToolTier.DIAMOND_SOCKETED :
                 socket == Socket.EMERALD ? IridiumToolTier.EMERALD_SOCKETED :
                 IridiumToolTier.FULL,
-                5,
+                socket == Socket.DIAMOND ? 4.5f : 5,
                 -3,
                 properties,
                 socket

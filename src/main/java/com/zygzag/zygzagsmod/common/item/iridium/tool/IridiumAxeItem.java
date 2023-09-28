@@ -11,7 +11,10 @@ import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResultHolder;
+import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.AxeItem;
 import net.minecraft.world.item.ItemStack;
@@ -95,6 +98,8 @@ public class IridiumAxeItem extends AxeItem implements ISocketable {
                     }
                 }
             }
+            List<LivingEntity> entities = world.getEntitiesOfClass(LivingEntity.class, player.getBoundingBox().inflate(range), (living) -> living.isAlive() && living.distanceToSqr(player) <= range * range && !living.is(player));
+            for (LivingEntity living : entities) living.addEffect(new MobEffectInstance(MobEffects.WITHER, (int) ((living.distanceToSqr(player) - range * range) * 4), 1));
             if (!player.getAbilities().instabuild) addCooldown(player, stack);
             return InteractionResultHolder.consume(stack);
         }
