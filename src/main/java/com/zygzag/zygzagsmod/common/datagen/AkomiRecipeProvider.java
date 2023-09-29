@@ -43,7 +43,7 @@ public class AkomiRecipeProvider extends RecipeProvider {
             new IridiumSocketingRecipeType("shovel", IridiumGearRegistry.SocketedGearType.SHOVEL, IridiumGearRegistry.SHOVELS, RecipeCategory.TOOLS),
             new IridiumSocketingRecipeType("hoe", IridiumGearRegistry.SocketedGearType.HOE, IridiumGearRegistry.HOES, RecipeCategory.TOOLS),
             new IridiumSocketingRecipeType("chestplate", IridiumGearRegistry.SocketedGearType.CHESTPLATE, IridiumGearRegistry.CHESTPLATES, RecipeCategory.COMBAT),
-            new IridiumSocketingRecipeType("scepter", IridiumGearRegistry.SocketedGearType.CHESTPLATE, IridiumGearRegistry.CHESTPLATES, RecipeCategory.TOOLS),
+            new IridiumSocketingRecipeType("scepter", IridiumGearRegistry.SocketedGearType.SCEPTER, IridiumGearRegistry.SCEPTERS, RecipeCategory.TOOLS),
     };
 
     public AkomiRecipeProvider(PackOutput output) {
