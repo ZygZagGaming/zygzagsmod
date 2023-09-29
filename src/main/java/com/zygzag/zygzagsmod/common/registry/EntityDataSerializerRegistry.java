@@ -13,9 +13,13 @@ import static com.zygzag.zygzagsmod.common.Main.MODID;
 public class EntityDataSerializerRegistry extends Registry<EntityDataSerializer<?>> {
     public static final EntityDataSerializerRegistry INSTANCE = new EntityDataSerializerRegistry(DeferredRegister.create(ForgeRegistries.Keys.ENTITY_DATA_SERIALIZERS, MODID));
 
-    public static final RegistryObject<EntityDataSerializer<IridiumGolem.State>> IRIDIUM_GOLEM_STATE = INSTANCE.register(
-            "iridium_golem_state",
-            () -> EntityDataSerializer.simpleEnum(IridiumGolem.State.class)
+    public static final RegistryObject<EntityDataSerializer<IridiumGolem.AnimationState>> IRIDIUM_GOLEM_ANIMATION_STATE = INSTANCE.register(
+            "iridium_golem_animation_state",
+            () -> EntityDataSerializer.simpleEnum(IridiumGolem.AnimationState.class)
+    );
+    public static final RegistryObject<EntityDataSerializer<IridiumGolem.MindState>> IRIDIUM_GOLEM_MIND_STATE = INSTANCE.register(
+            "iridium_golem_mind_state",
+            () -> EntityDataSerializer.simpleEnum(IridiumGolem.MindState.class)
     );
     public static final RegistryObject<EntityDataSerializer<Optional<IridiumGolem.CurrentAttack>>> IRIDIUM_GOLEM_ATTACK = INSTANCE.register(
             "iridium_golem_attack",

@@ -1,0 +1,35 @@
+{
+  "parent": "minecraft:recipes/root",
+  "criteria": {
+    "has_iridium_plating": {
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "zygzagsmod:iridium_plating"
+            ]
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_the_recipe": {
+      "conditions": {
+        "recipe": "zygzagsmod:iridium_chestplate_plating_1"
+      },
+      "trigger": "minecraft:recipe_unlocked"
+    }
+  },
+  "requirements": [
+    [
+      "has_iridium_plating",
+      "has_the_recipe"
+    ]
+  ],
+  "rewards": {
+    "recipes": [
+      "zygzagsmod:iridium_chestplate_plating_1"
+    ]
+  },
+  "sends_telemetry_event": false
+}

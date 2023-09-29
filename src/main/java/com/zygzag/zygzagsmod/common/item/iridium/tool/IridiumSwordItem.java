@@ -3,17 +3,15 @@ package com.zygzag.zygzagsmod.common.item.iridium.tool;
 import com.zygzag.zygzagsmod.common.Config;
 import com.zygzag.zygzagsmod.common.item.iridium.ISocketable;
 import com.zygzag.zygzagsmod.common.item.iridium.Socket;
-import com.zygzag.zygzagsmod.common.registry.EnchantmentRegistry;
-import net.minecraft.ChatFormatting;
-import net.minecraft.client.Minecraft;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResultHolder;
 import net.minecraft.world.entity.monster.Monster;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.*;
-import net.minecraft.world.item.enchantment.EnchantmentHelper;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.SwordItem;
+import net.minecraft.world.item.Tier;
+import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.AABB;
 import org.jetbrains.annotations.NotNull;
@@ -32,33 +30,7 @@ public class IridiumSwordItem extends SwordItem implements ISocketable {
 
     @Override
     public void appendHoverText(ItemStack stack, @Nullable Level world, List<Component> text, TooltipFlag flag) {
-        Socket s = getSocket();
-        Item i = s.i;
-        MutableComponent m;
-        if (s != Socket.NONE && world != null) {
-            String str = hasCooldown() ? "use" : "passive";
-            MutableComponent t = Component.translatable("socketed.zygzagsmod").withStyle(ChatFormatting.GRAY);
-            t.append(Component.literal(": ").withStyle(ChatFormatting.GRAY));
-            t.append(((MutableComponent) i.getName(i.getDefaultInstance())).withStyle(ChatFormatting.GOLD));
-            text.add(t);
-
-            Socket socket = getSocket();
-            text.add(Component.literal(""));
-            if (str.equals("passive")) m = Component.translatable(str + ".zygzagsmod").withStyle(ChatFormatting.GRAY);
-            else m = Minecraft.getInstance().options.keyUse.getKey().getDisplayName().copy().withStyle(ChatFormatting.GRAY);
-            m.append(Component.literal( ": ").withStyle(ChatFormatting.GRAY));
-            m.append(Component.translatable( str + "_ability.zygzagsmod.sword." + socket.name().toLowerCase()).withStyle(ChatFormatting.GOLD));
-            text.add(m);
-            text.add(Component.translatable("description." + str + "_ability.zygzagsmod.sword." + socket.name().toLowerCase()));
-            if (hasCooldown()) {
-                MutableComponent comp = Component.translatable("zygzagsmod.cooldown").withStyle(ChatFormatting.GRAY);
-                comp.append(Component.literal(": ").withStyle(ChatFormatting.GRAY));
-                comp.append(Component.literal(getCooldown(stack, world) / 20f + " ").withStyle(ChatFormatting.GOLD));
-                comp.append(Component.translatable("zygzagsmod.seconds").withStyle(ChatFormatting.GRAY));
-                //text.add(Component.literal("\n"));
-                text.add(comp);
-            }
-        }
+        appendHoverText(stack, world, text, flag, "sword");
     }
 
     @Override
@@ -94,9 +66,8 @@ public class IridiumSwordItem extends SwordItem implements ISocketable {
     }
 
     @Override
-    public int getCooldown(ItemStack stack, Level world) {
-        int cooldownLevel = EnchantmentHelper.getItemEnchantmentLevel(EnchantmentRegistry.COOLDOWN_ENCHANTMENT.get(), stack);
-        if (socket == Socket.WITHER_SKULL) return Config.witherSkullSwordCooldown / (cooldownLevel + 1);
+    public int getBaseCooldown(ItemStack stack, Level world) {
+        if (socket == Socket.WITHER_SKULL) return Config.witherSkullSwordCooldown;
         else return 0;
     }
 }

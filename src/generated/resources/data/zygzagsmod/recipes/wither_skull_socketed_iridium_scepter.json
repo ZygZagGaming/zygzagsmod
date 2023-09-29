@@ -1,0 +1,15 @@
+{
+  "type": "minecraft:smithing_transform",
+  "addition": {
+    "item": "minecraft:wither_skeleton_skull"
+  },
+  "base": {
+    "item": "zygzagsmod:iridium_scepter"
+  },
+  "result": {
+    "item": "zygzagsmod:wither_skull_socketed_iridium_scepter"
+  },
+  "template": {
+    "item": "zygzagsmod:wither_skull_socket_schematic"
+  }
+}

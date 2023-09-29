@@ -4,13 +4,9 @@ import com.zygzag.zygzagsmod.common.Config;
 import com.zygzag.zygzagsmod.common.entity.HomingWitherSkull;
 import com.zygzag.zygzagsmod.common.item.iridium.ISocketable;
 import com.zygzag.zygzagsmod.common.item.iridium.Socket;
-import com.zygzag.zygzagsmod.common.registry.EnchantmentRegistry;
-import net.minecraft.ChatFormatting;
 import net.minecraft.MethodsReturnNonnullByDefault;
-import net.minecraft.client.Minecraft;
 import net.minecraft.core.Vec3i;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
@@ -33,7 +29,6 @@ import net.minecraft.world.item.Items;
 import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.item.alchemy.PotionUtils;
 import net.minecraft.world.item.alchemy.Potions;
-import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.item.trading.MerchantOffer;
 import net.minecraft.world.item.trading.MerchantOffers;
 import net.minecraft.world.level.Level;
@@ -92,7 +87,7 @@ public class IridiumScepterItem extends Item implements ISocketable {
                         }
                     }
                 }
-                ISocketable.setCooldown(player, this, item, world);
+                addCooldown(player, item);
             }
             case WITHER_SKULL -> {
                 if (!player.getCooldowns().isOnCooldown(this)) {
@@ -100,7 +95,7 @@ public class IridiumScepterItem extends Item implements ISocketable {
                     var skull = new HomingWitherSkull(world, player, power.x, power.y, power.z);
                     //skull.shootFromRotation(player, (float) player.getLookAngle().x, (float) player.getLookAngle().y, (float) player.getLookAngle().z, 3, 0);
                     world.addFreshEntity(skull);
-                    ISocketable.setCooldown(player, this, item, world);
+                    addCooldown(player, item);
                 }
             }
             case AMETHYST -> {
@@ -112,16 +107,16 @@ public class IridiumScepterItem extends Item implements ISocketable {
                         e.addEffect(new MobEffectInstance(MobEffects.GLOWING, 200));
                         item.hurtAndBreak(1, player, (p) -> { });
                     }
-                    ISocketable.setCooldown(player, this, item, world);
+                    addCooldown(player, item);
                 }
             }
             case SKULL -> {
                 world.playSound(null, player.getX(), player.getY(), player.getZ(), SoundEvents.LINGERING_POTION_THROW, SoundSource.NEUTRAL, 0.5F, 0.4F / (player.getRandom().nextFloat() * 0.4F + 0.8F));
                 if (!world.isClientSide) {
                     ThrownPotion thrownpotion = new ThrownPotion(world, player);
-                    ItemStack stack = Items.LINGERING_POTION.getDefaultInstance();
-                    PotionUtils.setPotion(stack, Potions.LONG_POISON);
-                    thrownpotion.setItem(stack);
+                    ItemStack potionItem = Items.LINGERING_POTION.getDefaultInstance();
+                    PotionUtils.setPotion(potionItem, Potions.LONG_POISON);
+                    thrownpotion.setItem(potionItem);
                     thrownpotion.shootFromRotation(player, player.getXRot(), player.getYRot(), -20.0F, 0.5F, 1.0F);
                     world.addFreshEntity(thrownpotion);
                 }
@@ -131,7 +126,7 @@ public class IridiumScepterItem extends Item implements ISocketable {
                     item.hurtAndBreak(4, player, (e) -> { });
                 }
                 item.hurtAndBreak(1, player, (p) -> { });
-                ISocketable.setCooldown(player, this, item, world);
+                addCooldown(player, item);
             }
         }
         return InteractionResultHolder.consume(item);
@@ -139,31 +134,7 @@ public class IridiumScepterItem extends Item implements ISocketable {
 
     @Override
     public void appendHoverText(ItemStack stack, @Nullable Level world, List<Component> text, TooltipFlag flag) {
-        Socket s = getSocket();
-        Item i = s.i;
-        MutableComponent m;
-        if (s != Socket.NONE && world != null) {
-            MutableComponent t = Component.translatable("socketed.zygzagsmod").withStyle(ChatFormatting.GRAY);
-            t.append(Component.literal(": ").withStyle(ChatFormatting.GRAY));
-            t.append(((MutableComponent) i.getName(i.getDefaultInstance())).withStyle(ChatFormatting.GOLD));
-            text.add(t);
-
-            Socket socket = getSocket();
-            text.add(Component.literal(""));
-            m = Minecraft.getInstance().options.keyUse.getKey().getDisplayName().copy().withStyle(ChatFormatting.GRAY);
-            m.append(Component.literal( ": ").withStyle(ChatFormatting.GRAY));
-            m.append(Component.translatable("use_ability.zygzagsmod.scepter." + socket.name().toLowerCase()).withStyle(ChatFormatting.GOLD));
-            text.add(m);
-            text.add(Component.translatable("description.use_ability.zygzagsmod.scepter." + socket.name().toLowerCase()));
-            if (hasCooldown()) {
-                MutableComponent comp = Component.translatable("zygzagsmod.cooldown").withStyle(ChatFormatting.GRAY);
-                comp.append(Component.literal(": ").withStyle(ChatFormatting.GRAY));
-                comp.append(Component.literal(getCooldown(stack, world) / 20f + " ").withStyle(ChatFormatting.GOLD));
-                comp.append(Component.translatable("zygzagsmod.seconds").withStyle(ChatFormatting.GRAY));
-                //text.add(Component.literal("\n"));
-                text.add(comp);
-            }
-        }
+        appendHoverText(stack, world, text, flag, "scepter");
     }
 
     @Override
@@ -177,20 +148,19 @@ public class IridiumScepterItem extends Item implements ISocketable {
     }
 
     @Override
-    public int getCooldown(ItemStack stack, Level world) {
-        int cooldownLevel = EnchantmentHelper.getTagEnchantmentLevel(EnchantmentRegistry.COOLDOWN_ENCHANTMENT.get(), stack);
+    public int getBaseCooldown(ItemStack stack, Level world) {
         switch (socket) {
             case EMERALD -> {
-                return Config.emeraldScepterCooldown / (cooldownLevel + 1);
+                return Config.emeraldScepterCooldown;
             }
             case SKULL -> {
-                return Config.skullScepterCooldown / (cooldownLevel + 1);
+                return Config.skullScepterCooldown;
             }
             case WITHER_SKULL -> {
-                return Config.witherSkullScepterCooldown / (cooldownLevel + 1);
+                return Config.witherSkullScepterCooldown;
             }
             case AMETHYST -> {
-                return Config.amethystScepterCooldown / (cooldownLevel + 1);
+                return Config.amethystScepterCooldown;
             }
         }
         return 0;

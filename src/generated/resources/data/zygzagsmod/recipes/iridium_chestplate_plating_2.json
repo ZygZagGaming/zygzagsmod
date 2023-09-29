@@ -1,0 +1,15 @@
+{
+  "type": "minecraft:smithing_transform",
+  "addition": {
+    "item": "zygzagsmod:iridium_plating"
+  },
+  "base": {
+    "item": "zygzagsmod:partial_iridium_chestplate_2"
+  },
+  "result": {
+    "item": "zygzagsmod:partial_iridium_chestplate_3"
+  },
+  "template": {
+    "item": "zygzagsmod:iridium_chestplate_blueprint"
+  }
+}

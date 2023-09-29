@@ -1,6 +1,0 @@
-{
-  "parent": "item/handheld",
-  "textures": {
-    "layer0": "zygzagsmod:item/hoe/amethyst_socketed_iridium_hoe"
-  }
-}

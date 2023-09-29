@@ -1,6 +1,5 @@
 package com.zygzag.zygzagsmod.common.registry;
 
-import com.zygzag.zygzagsmod.common.Main;
 import com.zygzag.zygzagsmod.common.item.iridium.Socket;
 import com.zygzag.zygzagsmod.common.item.iridium.armor.IridiumChestplateItem;
 import com.zygzag.zygzagsmod.common.item.iridium.armor.PartialIridiumArmorItem;
@@ -94,7 +93,7 @@ public class IridiumGearRegistry extends Registry<Item> {
     private static Map<Socket, RegistryObject<Item>> makeAllSocketsForGearType(SocketedGearType gearType) {
         Map<Socket, RegistryObject<Item>> map = new HashMap<>();
         for (Socket socket : Socket.values()) {
-            map.put(socket, makeIridiumGear(socket, gearType));
+            if (socket.gearTypeFilter.test(gearType)) map.put(socket, makeIridiumGear(socket, gearType));
         }
         return map;
     }
@@ -106,7 +105,7 @@ public class IridiumGearRegistry extends Registry<Item> {
                         new Item.Properties()
                                 .fireResistant()
                                 .stacksTo(1)
-                                .craftRemainder(socket.i),
+                                .craftRemainder(socket.itemSupplier.get()),
                         socket
                 )
         );
@@ -126,7 +125,7 @@ public class IridiumGearRegistry extends Registry<Item> {
             SOCKETED_SCEPTERS
     ).flatMap(Collection::stream).collect(Collectors.toList());
 
-    enum SocketedGearType {
+    public enum SocketedGearType {
         SWORD((properties, socket) -> new IridiumSwordItem(
                 socket == Socket.DIAMOND ? IridiumToolTier.DIAMOND_SOCKETED :
                 socket == Socket.EMERALD ? IridiumToolTier.EMERALD_SOCKETED :
@@ -150,7 +149,7 @@ public class IridiumGearRegistry extends Registry<Item> {
                 socket == Socket.DIAMOND ? IridiumToolTier.DIAMOND_SOCKETED :
                 socket == Socket.EMERALD ? IridiumToolTier.EMERALD_SOCKETED :
                 IridiumToolTier.FULL,
-                5,
+                socket == Socket.DIAMOND ? 4.5f : 5,
                 -3,
                 properties,
                 socket
@@ -189,10 +188,10 @@ public class IridiumGearRegistry extends Registry<Item> {
     }
     private static Map<Integer, RegistryObject<Item>> makeAllPartialsForGearType(PartialGearType gearType) {
         Map<Integer, RegistryObject<Item>> map = new HashMap<>();
-        Main.LOGGER.debug("making partials for gear type " + gearType);
+        //Main.LOGGER.debug("making partials for gear type " + gearType);
         for (int platings = 1; platings < gearType.maxPlatings; platings++) {
             map.put(platings, makePartialIridiumGear(platings, gearType));
-            Main.LOGGER.debug("made partial " + platings + " for gear type " + gearType);
+            //Main.LOGGER.debug("made partial " + platings + " for gear type " + gearType);
         }
         return map;
     }

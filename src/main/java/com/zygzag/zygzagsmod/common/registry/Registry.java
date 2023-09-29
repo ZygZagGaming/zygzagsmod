@@ -1,6 +1,5 @@
 package com.zygzag.zygzagsmod.common.registry;
 
-import com.zygzag.zygzagsmod.common.Main;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.RegistryObject;
@@ -25,7 +24,6 @@ public class Registry<T> {
             BlockItemEntityRegistry.INSTANCE::registerTo,
             EnchantmentRegistry.INSTANCE::registerTo,
             EntityRegistry.INSTANCE::registerTo,
-            FeatureRegistry.INSTANCE::registerTo,
             GlobalLootModifierSerializerRegistry.INSTANCE::registerTo,
             IridiumGearRegistry.INSTANCE::registerTo,
             MobEffectRegistry.INSTANCE::registerTo,
@@ -35,7 +33,9 @@ public class Registry<T> {
             SoundEventRegistry.INSTANCE::registerTo,
             CreativeModeTabRegistry.INSTANCE::registerTo,
             PaintingVariantRegistry.INSTANCE::registerTo,
-            EntityDataSerializerRegistry.INSTANCE::registerTo
+            EntityDataSerializerRegistry.INSTANCE::registerTo,
+            StructureTypeRegistry.INSTANCE::registerTo,
+            StructurePieceTypeRegistry.INSTANCE::registerTo
     );
 
     public Registry(DeferredRegister<T> register) {

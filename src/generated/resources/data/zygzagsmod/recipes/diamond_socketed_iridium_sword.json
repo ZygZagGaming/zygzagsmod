@@ -1,0 +1,15 @@
+{
+  "type": "minecraft:smithing_transform",
+  "addition": {
+    "item": "minecraft:diamond"
+  },
+  "base": {
+    "item": "zygzagsmod:iridium_sword"
+  },
+  "result": {
+    "item": "zygzagsmod:diamond_socketed_iridium_sword"
+  },
+  "template": {
+    "item": "zygzagsmod:diamond_socket_schematic"
+  }
+}

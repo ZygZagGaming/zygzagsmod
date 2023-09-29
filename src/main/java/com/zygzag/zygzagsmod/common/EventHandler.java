@@ -169,9 +169,15 @@ public class EventHandler {
                         else evt.setAmount(Float.MAX_VALUE);
                     }
                 } else if (mainhandItem instanceof IridiumAxeItem axe && axe.getSocket() == Socket.AMETHYST) {
-                    if ((time < 11834 || time > 22300) && isExposedToSunlight(pos, world)) evt.setAmount(evt.getAmount() * (float) Config.amethystAxeDamageBonus);
+                    if (isExposedToSunlight(pos, world)) {
+                        double damageBonus = 1 + Config.amethystAxeDamageBonus * Math.exp(-(time - 12000.0) * (time - 12000.0) / 12000.0);
+                        evt.setAmount(evt.getAmount() * (float) damageBonus);
+                    }
                 } else if (mainhandItem instanceof IridiumSwordItem sword && sword.getSocket() == Socket.AMETHYST) {
-                    if ((time >= 11834 && time <= 22300) && isExposedToSunlight(pos, world)) evt.setAmount(evt.getAmount() * (float) Config.amethystSwordDamageBonus);
+                    if (isExposedToSunlight(pos, world)) {
+                        double damageBonus = 1 + Config.amethystSwordDamageBonus * Math.exp(-((time + 12000.0) % 24000.0 - 12000.0) * ((time + 12000.0) % 24000.0 - 12000.0) / 12000.0);
+                        evt.setAmount(evt.getAmount() * (float) damageBonus);
+                    }
                 }
 
                 if (chestItem instanceof IridiumChestplateItem chestplate && chestplate.getSocket() == Socket.SKULL) {
