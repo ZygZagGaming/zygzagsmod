@@ -4,10 +4,10 @@
     "item": "minecraft:amethyst_shard"
   },
   "base": {
-    "item": "zygzagsmod:iridium_chestplate"
+    "item": "zygzagsmod:iridium_scepter"
   },
   "result": {
-    "item": "zygzagsmod:amethyst_socketed_iridium_chestplate"
+    "item": "zygzagsmod:amethyst_socketed_iridium_scepter"
   },
   "template": {
     "item": "zygzagsmod:amethyst_socket_schematic"

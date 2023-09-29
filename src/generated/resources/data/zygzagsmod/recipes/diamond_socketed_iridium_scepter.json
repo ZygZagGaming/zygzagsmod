@@ -4,10 +4,10 @@
     "item": "minecraft:diamond"
   },
   "base": {
-    "item": "zygzagsmod:iridium_chestplate"
+    "item": "zygzagsmod:iridium_scepter"
   },
   "result": {
-    "item": "zygzagsmod:diamond_socketed_iridium_chestplate"
+    "item": "zygzagsmod:diamond_socketed_iridium_scepter"
   },
   "template": {
     "item": "zygzagsmod:diamond_socket_schematic"
