@@ -152,7 +152,7 @@
   "passive_ability.zygzagsmod.axe.skull": "Executioner",
   "description.passive_ability.zygzagsmod.axe.skull": "Mobs killed have a 10% chance to drop their head.",
   "use_ability.zygzagsmod.axe.wither_skull": "Withering Away",
-  "description.use_ability.zygzagsmod.axe.wither_skull": "Withers a sphere centered on the player, inflicting the Wither effect and destroying vegetation",
+  "description.use_ability.zygzagsmod.axe.wither_skull": "Withers a sphere centered on the player, inflicting the Wither effect and destroying vegetation.",
   "passive_ability.zygzagsmod.axe.diamond": "Collateral Damage",
   "description.passive_ability.zygzagsmod.axe.diamond": "Attacks with this axe can now sweep.",
 

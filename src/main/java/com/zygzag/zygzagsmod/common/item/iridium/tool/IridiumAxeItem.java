@@ -99,7 +99,7 @@ public class IridiumAxeItem extends AxeItem implements ISocketable {
                 }
             }
             List<LivingEntity> entities = world.getEntitiesOfClass(LivingEntity.class, player.getBoundingBox().inflate(range), (living) -> living.isAlive() && living.distanceToSqr(player) <= range * range && !living.is(player));
-            for (LivingEntity living : entities) living.addEffect(new MobEffectInstance(MobEffects.WITHER, (int) ((living.distanceToSqr(player) - range * range) * 4), 1));
+            for (LivingEntity living : entities) living.addEffect(new MobEffectInstance(MobEffects.WITHER, (int) ((range * range - living.distanceToSqr(player)) * 4), 1));
             if (!player.getAbilities().instabuild) addCooldown(player, stack);
             return InteractionResultHolder.consume(stack);
         }
