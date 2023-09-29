@@ -1,0 +1,35 @@
+{
+  "parent": "zygzagsmod:iridium/root",
+  "criteria": {
+    "blueprint": {
+      "conditions": {
+        "items": [
+          {
+            "tag": "zygzagsmod:iridium_gear_blueprints"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    }
+  },
+  "display": {
+    "announce_to_chat": true,
+    "description": {
+      "translate": "advancements.iridium.obtain_blueprint.description"
+    },
+    "frame": "task",
+    "hidden": false,
+    "icon": {
+      "item": "zygzagsmod:iridium_helmet_blueprint"
+    },
+    "show_toast": true,
+    "title": {
+      "translate": "advancements.iridium.obtain_blueprint.title"
+    }
+  },
+  "requirements": [
+    [
+      "blueprint"
+    ]
+  ]
+}

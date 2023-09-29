@@ -1,0 +1,70 @@
+{
+  "parent": "zygzagsmod:iridium/socket",
+  "criteria": {
+    "gear": {
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "zygzagsmod:iridium_helmet"
+            ]
+          },
+          {
+            "items": [
+              "zygzagsmod:iridium_leggings"
+            ]
+          },
+          {
+            "items": [
+              "zygzagsmod:iridium_boots"
+            ]
+          },
+          {
+            "items": [
+              "zygzagsmod:diamond_socketed_iridium_chestplate",
+              "zygzagsmod:emerald_socketed_iridium_chestplate",
+              "zygzagsmod:skull_socketed_iridium_chestplate",
+              "zygzagsmod:wither_skull_socketed_iridium_chestplate",
+              "zygzagsmod:amethyst_socketed_iridium_chestplate"
+            ]
+          },
+          {
+            "items": [
+              "zygzagsmod:diamond_socketed_iridium_sword",
+              "zygzagsmod:emerald_socketed_iridium_sword",
+              "zygzagsmod:skull_socketed_iridium_sword",
+              "zygzagsmod:wither_skull_socketed_iridium_sword",
+              "zygzagsmod:amethyst_socketed_iridium_sword",
+              "zygzagsmod:diamond_socketed_iridium_axe",
+              "zygzagsmod:emerald_socketed_iridium_axe",
+              "zygzagsmod:skull_socketed_iridium_axe",
+              "zygzagsmod:wither_skull_socketed_iridium_axe",
+              "zygzagsmod:amethyst_socketed_iridium_axe"
+            ]
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    }
+  },
+  "display": {
+    "announce_to_chat": true,
+    "description": {
+      "translate": "advancements.iridium.full_iridium_gear.description"
+    },
+    "frame": "goal",
+    "hidden": false,
+    "icon": {
+      "item": "zygzagsmod:diamond_socketed_iridium_chestplate"
+    },
+    "show_toast": true,
+    "title": {
+      "translate": "advancements.iridium.full_iridium_gear.title"
+    }
+  },
+  "requirements": [
+    [
+      "gear"
+    ]
+  ]
+}

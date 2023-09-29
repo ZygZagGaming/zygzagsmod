@@ -1,0 +1,50 @@
+{
+  "criteria": {
+    "raw_iridium": {
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "zygzagsmod:raw_iridium"
+            ]
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "raw_iridium_block": {
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "zygzagsmod:raw_iridium_block"
+            ]
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    }
+  },
+  "display": {
+    "announce_to_chat": false,
+    "background": "minecraft:textures/gui/advancements/backgrounds/end.png",
+    "description": {
+      "translate": "advancements.iridium.root.description"
+    },
+    "frame": "task",
+    "hidden": false,
+    "icon": {
+      "item": "zygzagsmod:raw_iridium"
+    },
+    "show_toast": false,
+    "title": {
+      "translate": "advancements.iridium.root.title"
+    }
+  },
+  "requirements": [
+    [
+      "raw_iridium",
+      "raw_iridium_block"
+    ]
+  ]
+}

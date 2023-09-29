@@ -1,0 +1,35 @@
+{
+  "parent": "zygzagsmod:iridium/obtain_blueprint",
+  "criteria": {
+    "socketed": {
+      "conditions": {
+        "items": [
+          {
+            "tag": "zygzagsmod:socketed"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    }
+  },
+  "display": {
+    "announce_to_chat": true,
+    "description": {
+      "translate": "advancements.iridium.socket.description"
+    },
+    "frame": "task",
+    "hidden": false,
+    "icon": {
+      "item": "zygzagsmod:skull_socketed_iridium_pickaxe"
+    },
+    "show_toast": true,
+    "title": {
+      "translate": "advancements.iridium.socket.title"
+    }
+  },
+  "requirements": [
+    [
+      "socketed"
+    ]
+  ]
+}
