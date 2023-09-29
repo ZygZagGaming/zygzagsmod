@@ -1,8 +1,0 @@
-{
-  "type": "forge:add_features",
-  "biomes": [
-    "minecraft:small_end_islands"
-  ],
-  "features": "zygzagsmod:iridium_end_island",
-  "step": "raw_generation"
-}
