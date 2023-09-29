@@ -93,7 +93,7 @@ public class IridiumGearRegistry extends Registry<Item> {
     private static Map<Socket, RegistryObject<Item>> makeAllSocketsForGearType(SocketedGearType gearType) {
         Map<Socket, RegistryObject<Item>> map = new HashMap<>();
         for (Socket socket : Socket.values()) {
-            map.put(socket, makeIridiumGear(socket, gearType));
+            if (socket.gearTypeFilter.test(gearType)) map.put(socket, makeIridiumGear(socket, gearType));
         }
         return map;
     }
@@ -105,7 +105,7 @@ public class IridiumGearRegistry extends Registry<Item> {
                         new Item.Properties()
                                 .fireResistant()
                                 .stacksTo(1)
-                                .craftRemainder(socket.i),
+                                .craftRemainder(socket.itemSupplier.get()),
                         socket
                 )
         );
@@ -125,7 +125,7 @@ public class IridiumGearRegistry extends Registry<Item> {
             SOCKETED_SCEPTERS
     ).flatMap(Collection::stream).collect(Collectors.toList());
 
-    enum SocketedGearType {
+    public enum SocketedGearType {
         SWORD((properties, socket) -> new IridiumSwordItem(
                 socket == Socket.DIAMOND ? IridiumToolTier.DIAMOND_SOCKETED :
                 socket == Socket.EMERALD ? IridiumToolTier.EMERALD_SOCKETED :

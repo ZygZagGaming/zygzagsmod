@@ -1,0 +1,15 @@
+{
+  "type": "minecraft:smithing_transform",
+  "addition": {
+    "item": "zygzagsmod:iridium_plating"
+  },
+  "base": {
+    "item": "zygzagsmod:partial_iridium_sword_1"
+  },
+  "result": {
+    "item": "zygzagsmod:iridium_sword"
+  },
+  "template": {
+    "item": "zygzagsmod:iridium_sword_blueprint"
+  }
+}

@@ -40,7 +40,7 @@ public interface ISocketable {
 
     default void appendHoverText(ItemStack stack, @Nullable Level world, List<Component> text, TooltipFlag flag, String type) {
         Socket s = getSocket();
-        Item i = s.i;
+        Item i = s.itemSupplier.get();
         if (s != Socket.NONE && world != null) {
             String str = hasUseAbility() ? "use" : "passive";
             MutableComponent t = Component.translatable("socketed.zygzagsmod").withStyle(ChatFormatting.GRAY);

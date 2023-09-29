@@ -1,6 +1,0 @@
-{
-  "parent": "item/handheld",
-  "textures": {
-    "layer0": "zygzagsmod:item/chestplate/wither_skull_socketed_iridium_chestplate"
-  }
-}

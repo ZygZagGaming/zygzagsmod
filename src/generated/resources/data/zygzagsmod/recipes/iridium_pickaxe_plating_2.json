@@ -1,0 +1,15 @@
+{
+  "type": "minecraft:smithing_transform",
+  "addition": {
+    "item": "zygzagsmod:iridium_plating"
+  },
+  "base": {
+    "item": "zygzagsmod:partial_iridium_pickaxe_2"
+  },
+  "result": {
+    "item": "zygzagsmod:iridium_pickaxe"
+  },
+  "template": {
+    "item": "zygzagsmod:iridium_pickaxe_blueprint"
+  }
+}

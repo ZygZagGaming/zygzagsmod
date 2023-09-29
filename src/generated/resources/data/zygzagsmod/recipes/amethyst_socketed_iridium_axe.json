@@ -1,0 +1,15 @@
+{
+  "type": "minecraft:smithing_transform",
+  "addition": {
+    "item": "minecraft:amethyst_shard"
+  },
+  "base": {
+    "item": "zygzagsmod:iridium_axe"
+  },
+  "result": {
+    "item": "zygzagsmod:amethyst_socketed_iridium_axe"
+  },
+  "template": {
+    "item": "zygzagsmod:amethyst_socket_schematic"
+  }
+}

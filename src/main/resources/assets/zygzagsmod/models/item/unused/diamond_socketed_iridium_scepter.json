@@ -1,6 +1,0 @@
-{
-  "parent": "item/handheld",
-  "textures": {
-    "layer0": "zygzagsmod:item/scepter/diamond_socketed_iridium_scepter"
-  }
-}
