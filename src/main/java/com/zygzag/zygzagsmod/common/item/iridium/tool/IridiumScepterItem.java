@@ -131,22 +131,19 @@ public class IridiumScepterItem extends Item implements ISocketable {
         }
         return InteractionResultHolder.consume(item);
     }
-
+    
     @Override
     public void appendHoverText(ItemStack stack, @Nullable Level world, List<Component> text, TooltipFlag flag) {
         appendHoverText(stack, world, text, flag, "scepter");
     }
-
     @Override
     public boolean hasCooldown() {
         return socket != Socket.NONE && socket != Socket.DIAMOND;
     }
-
     @Override
     public boolean hasUseAbility() {
         return true;
     }
-
     @Override
     public int getBaseCooldown(ItemStack stack, Level world) {
         switch (socket) {
