@@ -34,7 +34,6 @@ import software.bernie.geckolib.util.GeckoLibUtil;
 import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.*;
 import java.util.function.Function;
-import java.util.function.Predicate;
 
 @ParametersAreNonnullByDefault
 @MethodsReturnNonnullByDefault
@@ -44,22 +43,28 @@ public class IridiumGolem extends AbstractGolem implements NeutralMob, GeoAnimat
     protected static final RawAnimation IDLE1 = RawAnimation.begin().thenPlay("animation.iridium_golem.idle1");
     protected static final RawAnimation IDLE2 = RawAnimation.begin().thenPlay("animation.iridium_golem.idle2");
     protected static final RawAnimation IDLE3 = RawAnimation.begin().thenPlay("animation.iridium_golem.idle3");
-    protected static final Map<AnimationState, RawAnimation> ANIMATION_LOOPS = Map.of(
-            AnimationState.IDLE, RawAnimation.begin().thenLoop("animation.iridium_golem.idle_loop"),
-            AnimationState.WALKING, RawAnimation.begin().thenLoop("animation.iridium_golem.walk_cycle"),
-            AnimationState.RUNNING, RawAnimation.begin().thenLoop("animation.iridium_golem.run_cycle"),
-            AnimationState.AGRO, RawAnimation.begin().thenLoop("animation.iridium_golem.agro_idle"),
-            AnimationState.ATTACK_2, RawAnimation.begin().thenPlay("animation.iridium_golem.attack2")
+
+    private record TransitionAnimation(RawAnimation raw, int ticks) { }
+    private record LoopAnimation(RawAnimation raw, int ticks) { }
+
+    //Map of All Loop Animations
+    protected static final Map<AnimationState, LoopAnimation> ANIMATION_LOOPS = Map.of(
+            AnimationState.IDLE, new LoopAnimation(RawAnimation.begin().thenLoop("animation.iridium_golem.idle_loop"), 160),
+            AnimationState.WALKING, new LoopAnimation(RawAnimation.begin().thenLoop("animation.iridium_golem.walk_cycle"), 33),
+            AnimationState.RUNNING, new LoopAnimation(RawAnimation.begin().thenLoop("animation.iridium_golem.run_cycle"), 20), //going to be changed
+            AnimationState.AGRO, new LoopAnimation(RawAnimation.begin().thenLoop("animation.iridium_golem.agro_idle"), 16),
+            AnimationState.ATTACK_2, new LoopAnimation(RawAnimation.begin().thenPlay("animation.iridium_golem.attack2"), 48)
     );
-    protected static final Map<Pair<AnimationState, AnimationState>, RawAnimation> TRANSITION_ANIMATIONS = Map.of(
-            new Pair<>(AnimationState.IDLE, AnimationState.WALKING), RawAnimation.begin().thenPlay("animation.iridium_golem.start_walk"),
-            new Pair<>(AnimationState.WALKING, AnimationState.IDLE), RawAnimation.begin().thenPlay("animation.iridium_golem.stop_walk"),
-            new Pair<>(AnimationState.IDLE, AnimationState.AGRO), RawAnimation.begin().thenPlay("animation.iridium_golem.agro"),
-            new Pair<>(AnimationState.AGRO, AnimationState.IDLE), RawAnimation.begin().thenPlay("animation.iridium_golem.deagro"),
-            new Pair<>(AnimationState.IDLE, AnimationState.RUNNING), RawAnimation.begin().thenPlay("animation.iridium_golem.start_run_from_idle"),
-            new Pair<>(AnimationState.RUNNING, AnimationState.IDLE), RawAnimation.begin().thenPlay("animation.iridium_golem.deagro"),
-            new Pair<>(AnimationState.AGRO, AnimationState.WALKING), RawAnimation.begin().thenPlay("animation.iridium_golem.deagro").thenPlay("animation.iridium_golem.start_walk"),
-            new Pair<>(AnimationState.WALKING, AnimationState.AGRO), RawAnimation.begin().thenPlay("animation.iridium_golem.stop_walk").thenPlay("animation.iridium_golem.agro")
+    //Map of All Transition Animations
+    protected static final Map<Pair<AnimationState, AnimationState>, TransitionAnimation> TRANSITION_ANIMATIONS = Map.of(
+            new Pair<>(AnimationState.IDLE, AnimationState.WALKING), new TransitionAnimation(RawAnimation.begin().thenPlay("animation.iridium_golem.start_walk"), 17),
+            new Pair<>(AnimationState.WALKING, AnimationState.IDLE), new TransitionAnimation(RawAnimation.begin().thenPlay("animation.iridium_golem.stop_walk"), 25),
+            new Pair<>(AnimationState.IDLE, AnimationState.AGRO), new TransitionAnimation(RawAnimation.begin().thenPlay("animation.iridium_golem.agro"), 28),
+            new Pair<>(AnimationState.AGRO, AnimationState.IDLE), new TransitionAnimation(RawAnimation.begin().thenPlay("animation.iridium_golem.deagro"), 42),
+            new Pair<>(AnimationState.IDLE, AnimationState.RUNNING), new TransitionAnimation(RawAnimation.begin().thenPlay("animation.iridium_golem.start_run_from_idle"), 13),
+            new Pair<>(AnimationState.RUNNING, AnimationState.IDLE), new TransitionAnimation(RawAnimation.begin().thenPlay("animation.iridium_golem.deagro"), 42),
+            new Pair<>(AnimationState.AGRO, AnimationState.WALKING), new TransitionAnimation(RawAnimation.begin().thenPlay("animation.iridium_golem.deagro").thenPlay("animation.iridium_golem.start_walk"), 59),
+            new Pair<>(AnimationState.WALKING, AnimationState.AGRO), new TransitionAnimation(RawAnimation.begin().thenPlay("animation.iridium_golem.stop_walk").thenPlay("animation.iridium_golem.agro"), 53)
     );
     public static final List<Function<IridiumGolem, StandingAttackGoal>> standstillAttacks = List.of(
             (golem) -> golem.new StandingAttackGoal(RawAnimation.begin().thenPlay("animation.iridium_golem.attack2"))
@@ -134,8 +139,10 @@ public class IridiumGolem extends AbstractGolem implements NeutralMob, GeoAnimat
 
     @Override
     public void setAggressive(boolean value) {
-        getNavigation().setSpeedModifier(value ? 3 : 1);
-        super.setAggressive(value);
+            getNavigation().setSpeedModifier(value ? 3 : 1);
+            super.setAggressive(value);
+
+        // }
     }
 
     @Override
@@ -243,14 +250,15 @@ public class IridiumGolem extends AbstractGolem implements NeutralMob, GeoAnimat
         if (queuedAnim == null) {
             if (animationState != lastAnimationState) {
                 //System.out.println("last state " + lastState + ", state " + state);
-                RawAnimation transitionAnim = TRANSITION_ANIMATIONS.get(new Pair<>(lastAnimationState, animationState));
-                animController.setAnimation(transitionAnim == null ? ANIMATION_LOOPS.get(animationState) : transitionAnim);
+                TransitionAnimation transitionAnim = TRANSITION_ANIMATIONS.get(new Pair<>(lastAnimationState, animationState));
+                animController.setAnimation(transitionAnim == null ? ANIMATION_LOOPS.get(animationState).raw() : transitionAnim.raw());
             } else if (animController.hasAnimationFinished() || animController.getCurrentRawAnimation() == null) {
+                //Does not continue with another Idle animation until the animation is complete
                 if (animationState == AnimationState.IDLE && timeUntilIdleAnimation <= 0) {
                     doIdleAnimation(animController);
                 } else {
-                    RawAnimation anim = ANIMATION_LOOPS.get(animationState);
-                    animController.setAnimation(anim);
+                    LoopAnimation anim = ANIMATION_LOOPS.get(animationState);
+                    animController.setAnimation(anim.raw());
                 }
             }
         } else playQueuedAnimation(animController);
@@ -337,6 +345,10 @@ public class IridiumGolem extends AbstractGolem implements NeutralMob, GeoAnimat
 
         @Override
         public void start() {
+            /* boolean agroed = false; created to Make sure the animation would run through completely then
+        while (!agroed) {
+            if (TRANSITION_ANIMATIONS.get(new Pair<>(lastAnimationState, animationState)) equals the string name for the file
+            or the file name) */
             super.start();
 
             getNavigation().moveTo(this.path, speedModifier);
