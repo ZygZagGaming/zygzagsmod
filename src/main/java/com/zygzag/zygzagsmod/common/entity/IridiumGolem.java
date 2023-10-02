@@ -76,12 +76,12 @@ public class IridiumGolem extends AbstractGolem implements NeutralMob, GeoAnimat
 
     private AnimationState lastAnimationState = AnimationState.IDLE;
     private int timeUntilIdleAnimation = 5 * 20; // 5 seconds of idle time after spawning, do idle animation
+    private int ticksUntilAnimEnds = 0;
 
     private final AnimatableInstanceCache instanceCache = GeckoLibUtil.createInstanceCache(this);
     @Nullable
     private UUID persistentAngerTarget;
     public boolean wasMoving = false;
-
 
     private @Nullable RawAnimation queuedAnim = null;
     public IridiumGolem(EntityType<? extends AbstractGolem> type, Level world) {
@@ -98,8 +98,6 @@ public class IridiumGolem extends AbstractGolem implements NeutralMob, GeoAnimat
         this.targetSelector.addGoal(2, new HurtByTargetGoal(this));
     }
 
-
-
     @Override
     protected void defineSynchedData() {
         super.defineSynchedData();
@@ -114,7 +112,12 @@ public class IridiumGolem extends AbstractGolem implements NeutralMob, GeoAnimat
     }
 
     public void setAnimationState(AnimationState animationState) {
-        entityData.set(DATA_ANIMATION_STATE, animationState);
+        AnimationState oldAnimState = getAnimationState();
+        if (oldAnimState != animationState) {
+            entityData.set(DATA_ANIMATION_STATE, animationState);
+            TransitionAnimation transition = TRANSITION_ANIMATIONS.get(new Pair<>(oldAnimState, animationState));
+            if (transition != null) ticksUntilAnimEnds = transition.ticks();
+        }
     }
 
     public MindState getMindState() {
@@ -139,10 +142,8 @@ public class IridiumGolem extends AbstractGolem implements NeutralMob, GeoAnimat
 
     @Override
     public void setAggressive(boolean value) {
-            getNavigation().setSpeedModifier(value ? 3 : 1);
-            super.setAggressive(value);
-
-        // }
+        getNavigation().setSpeedModifier(value ? 3 : 1);
+        super.setAggressive(value);
     }
 
     @Override
@@ -218,6 +219,7 @@ public class IridiumGolem extends AbstractGolem implements NeutralMob, GeoAnimat
         if (isIdle()) timeUntilIdleAnimation--;
         var animationState = getNavigation().getPath() == null ? getMindState().nonMovingState : getMindState().movingState;
         if (animationState != null && !level().isClientSide) setAnimationState(animationState);
+        if (ticksUntilAnimEnds > 0) ticksUntilAnimEnds--;
     }
 
     public static AttributeSupplier.Builder createAttributes() {
@@ -263,7 +265,6 @@ public class IridiumGolem extends AbstractGolem implements NeutralMob, GeoAnimat
             }
         } else playQueuedAnimation(animController);
         lastAnimationState = animationState;
-
 
         return PlayState.CONTINUE;
     });
@@ -469,6 +470,7 @@ public class IridiumGolem extends AbstractGolem implements NeutralMob, GeoAnimat
 
                 if (ticksUntilNextAttack != attackDuration + endLag) ticksUntilNextAttack = Math.max(ticksUntilNextAttack - 1, 0);
                 checkAndPerformAttack();
+                getNavigation().setSpeedModifier(ticksUntilAnimEnds > 0 ? 0 : speedModifier);
             }
         }
 
