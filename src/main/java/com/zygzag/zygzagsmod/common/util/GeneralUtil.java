@@ -1,6 +1,9 @@
 package com.zygzag.zygzagsmod.common.util;
 
 import com.zygzag.zygzagsmod.common.Config;
+import com.zygzag.zygzagsmod.common.Main;
+import com.zygzag.zygzagsmod.common.entity.Animation;
+import com.zygzag.zygzagsmod.common.entity.TransitionAnimation;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ParticleOptions;
 import net.minecraft.util.RandomSource;
@@ -14,7 +17,6 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.Random;
 import java.util.function.Consumer;
 import java.util.function.Function;
 
@@ -94,5 +96,19 @@ public class GeneralUtil {
             if (randomWeight <= 0) return element;
         }
         return list.get(list.size() - 1);
+    }
+
+    @SafeVarargs
+    public static <T> T randomElement(T... elements) {
+        return elements[(int) (Math.random() * elements.length)];
+    }
+
+    @SafeVarargs
+    public static <T> T randomElement(RandomSource rng, T... elements) {
+        return elements[rng.nextInt(elements.length)];
+    }
+
+    public static @Nullable TransitionAnimation getTransitionAnimation(Animation from, Animation to) {
+        return Main.transitionAnimationRegistry().getValues().stream().filter((it) -> it.from() == from && it.to() == to).findFirst().orElse(null);
     }
 }

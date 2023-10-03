@@ -2,6 +2,8 @@ package com.zygzag.zygzagsmod.common.registry;
 
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.registries.DeferredRegister;
+import net.minecraftforge.registries.IForgeRegistry;
+import net.minecraftforge.registries.RegistryBuilder;
 import net.minecraftforge.registries.RegistryObject;
 
 import java.util.List;
@@ -10,10 +12,10 @@ import java.util.function.Supplier;
 
 public class Registry<T> {
     final DeferredRegister<T> register;
+    Supplier<IForgeRegistry<T>> forgeRegistrySupplier;
 
     public void registerTo(IEventBus bus) {
         register.register(bus);
-        //Main.LOGGER.debug("Registered registry " + this);
     }
 
     public static final Supplier<List<Consumer<IEventBus>>> REGISTRATION_QUEUE = () -> List.of(
@@ -35,7 +37,9 @@ public class Registry<T> {
             PaintingVariantRegistry.INSTANCE::registerTo,
             EntityDataSerializerRegistry.INSTANCE::registerTo,
             StructureTypeRegistry.INSTANCE::registerTo,
-            StructurePieceTypeRegistry.INSTANCE::registerTo
+            StructurePieceTypeRegistry.INSTANCE::registerTo,
+            AnimationRegistry.INSTANCE::registerTo,
+            TransitionAnimationRegistry.INSTANCE::registerTo
     );
 
     public Registry(DeferredRegister<T> register) {
@@ -50,5 +54,10 @@ public class Registry<T> {
         for (Consumer<IEventBus> consumer : REGISTRATION_QUEUE.get()) {
             consumer.accept(bus);
         }
+    }
+
+    public IForgeRegistry<T> basicRegistry() {
+        if (forgeRegistrySupplier == null) forgeRegistrySupplier = register.makeRegistry(RegistryBuilder::new);
+        return forgeRegistrySupplier.get();
     }
 }

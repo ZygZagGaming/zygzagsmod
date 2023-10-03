@@ -2,6 +2,8 @@ package com.zygzag.zygzagsmod.common;
 
 import com.mojang.logging.LogUtils;
 import com.zygzag.zygzagsmod.common.capability.PlayerSightCache;
+import com.zygzag.zygzagsmod.common.entity.Animation;
+import com.zygzag.zygzagsmod.common.entity.TransitionAnimation;
 import com.zygzag.zygzagsmod.common.item.iridium.ISocketable;
 import com.zygzag.zygzagsmod.common.registry.*;
 import net.minecraft.core.registries.Registries;
@@ -28,6 +30,7 @@ import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import net.minecraftforge.registries.ForgeRegistries;
+import net.minecraftforge.registries.IForgeRegistry;
 import org.slf4j.Logger;
 
 import java.util.Map;
@@ -115,5 +118,13 @@ public class Main {
             event.acceptAll(IridiumGearRegistry.SHOVELS.values().stream().map((it) -> it.get().getDefaultInstance()).collect(Collectors.toList()));
             event.acceptAll(IridiumGearRegistry.HOES.values().stream().map((it) -> it.get().getDefaultInstance()).collect(Collectors.toList()));
         }
+    }
+
+    public static IForgeRegistry<Animation> animationRegistry() {
+        return AnimationRegistry.FORGE_REGISTRY_SUPPLIER.get();
+    }
+
+    public static IForgeRegistry<TransitionAnimation> transitionAnimationRegistry() {
+        return TransitionAnimationRegistry.FORGE_REGISTRY_SUPPLIER.get();
     }
 }
