@@ -3,7 +3,6 @@ package com.zygzag.zygzagsmod.common.entity;
 import com.zygzag.zygzagsmod.common.Main;
 import com.zygzag.zygzagsmod.common.registry.AnimationRegistry;
 import com.zygzag.zygzagsmod.common.registry.EntityDataSerializerRegistry;
-import com.zygzag.zygzagsmod.common.registry.TransitionAnimationRegistry;
 import com.zygzag.zygzagsmod.common.util.GeneralUtil;
 import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.nbt.CompoundTag;
@@ -40,6 +39,7 @@ import java.util.*;
 import java.util.function.Function;
 import java.util.function.Supplier;
 
+
 @ParametersAreNonnullByDefault
 @MethodsReturnNonnullByDefault
 public class IridiumGolem extends AbstractGolem implements NeutralMob, GeoAnimatable {
@@ -60,7 +60,7 @@ public class IridiumGolem extends AbstractGolem implements NeutralMob, GeoAnimat
     protected static final EntityDataAccessor<Optional<TransitionAnimation>> DATA_TRANSITION_ANIMATION = SynchedEntityData.defineId(IridiumGolem.class, EntityDataSerializerRegistry.TRANSITION_ANIMATION.get());
     protected static final EntityDataAccessor<MindState> DATA_MIND_STATE = SynchedEntityData.defineId(IridiumGolem.class, EntityDataSerializerRegistry.IRIDIUM_GOLEM_MIND_STATE.get());
     protected static final EntityDataAccessor<Integer> DATA_TICKS_REMAINING_IN_ANIMATION = SynchedEntityData.defineId(IridiumGolem.class, EntityDataSerializers.INT);
-    protected static final EntityDataAccessor<Optional<CurrentAttack>> DATA_ATTACK = SynchedEntityData.defineId(IridiumGolem.class, EntityDataSerializerRegistry.IRIDIUM_GOLEM_ATTACK.get());
+
 
     private Animation lastNonTransitionAnimation;
     private AbstractAnimation lastAnimation;
@@ -91,7 +91,6 @@ public class IridiumGolem extends AbstractGolem implements NeutralMob, GeoAnimat
         entityData.define(DATA_ANIMATION, AnimationRegistry.IridiumGolem.IDLE_BASE.get());
         entityData.define(DATA_TRANSITION_ANIMATION, Optional.empty());
         entityData.define(DATA_MIND_STATE, MindState.IDLE);
-        entityData.define(DATA_ATTACK, Optional.empty());
         entityData.define(DATA_TICKS_REMAINING_IN_ANIMATION, 0);
     }
 
@@ -132,14 +131,6 @@ public class IridiumGolem extends AbstractGolem implements NeutralMob, GeoAnimat
 
     public void setTicksRemainingInAnimation(int ticksRemainingInAnimation) {
         entityData.set(DATA_TICKS_REMAINING_IN_ANIMATION, ticksRemainingInAnimation);
-    }
-
-    public @Nullable CurrentAttack getCurrentAttack() {
-        return entityData.get(DATA_ATTACK).orElse(null);
-    }
-
-    public void setCurrentAttack(@Nullable CurrentAttack attack) {
-        entityData.set(DATA_ATTACK, Optional.ofNullable(attack));
     }
 
     public boolean isIdle() {
@@ -322,7 +313,7 @@ public class IridiumGolem extends AbstractGolem implements NeutralMob, GeoAnimat
         WALKING,
         RUNNING,
         AGRO,
-        ATTACK_2;
+        ATTACK_2
     }
 
     public enum MindState {
@@ -336,10 +327,6 @@ public class IridiumGolem extends AbstractGolem implements NeutralMob, GeoAnimat
             this.nonMovingAnim = nonMovingAnim;
             this.movingAnim = movingAnim;
         }
-    }
-
-    public enum CurrentAttack {
-        ATTACK2;
     }
 
     public class StandingAttackGoal extends Goal {
@@ -375,6 +362,7 @@ public class IridiumGolem extends AbstractGolem implements NeutralMob, GeoAnimat
 
             getNavigation().moveTo(this.path, speedModifier);
             setAggressive(true);
+            getNavigation().setSpeedModifier(0);
             this.ticksUntilNextPathRecalculation = 0;
             ticksUntilNextAttack = attackDuration + endLag;
         }
@@ -388,6 +376,7 @@ public class IridiumGolem extends AbstractGolem implements NeutralMob, GeoAnimat
             }
 
             setAggressive(false);
+            getNavigation().setSpeedModifier(1);
             getNavigation().stop();
             resetAttackCooldown();
             setNeutralState();
@@ -452,6 +441,7 @@ public class IridiumGolem extends AbstractGolem implements NeutralMob, GeoAnimat
         public boolean requiresUpdateEveryTick() {
             return true;
         }
+
         public void tick() {
             LivingEntity target = getTarget();
             //if (ticksUntilNextAttack >= attackDuration) getNavigation().moveTo(path, 10);

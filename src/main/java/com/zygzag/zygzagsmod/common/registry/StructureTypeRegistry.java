@@ -1,7 +1,7 @@
 package com.zygzag.zygzagsmod.common.registry;
 
 
-import com.zygzag.zygzagsmod.common.feature.IridiumEndIslandStructure;
+import com.zygzag.zygzagsmod.common.structure.IridiumEndIslandStructure;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.world.level.levelgen.structure.StructureType;
 import net.minecraftforge.registries.DeferredRegister;

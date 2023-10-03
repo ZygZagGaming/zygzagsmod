@@ -45,13 +45,6 @@ public class EntityDataSerializerRegistry extends Registry<EntityDataSerializer<
             "iridium_golem_mind_state",
             () -> EntityDataSerializer.simpleEnum(IridiumGolem.MindState.class)
     );
-    public static final RegistryObject<EntityDataSerializer<Optional<IridiumGolem.CurrentAttack>>> IRIDIUM_GOLEM_ATTACK = INSTANCE.register(
-            "iridium_golem_attack",
-            () -> EntityDataSerializer.optional(
-                    (buf, attack) -> buf.writeUtf(attack.name()),
-                    (buf) -> IridiumGolem.CurrentAttack.valueOf(buf.readUtf())
-            )
-    );
 
     public EntityDataSerializerRegistry(DeferredRegister<EntityDataSerializer<?>> register) {
         super(register);

@@ -235,5 +235,7 @@
   "advancements.iridium.obtain_blueprint.title": "Patented Designs",
   "advancements.iridium.obtain_blueprint.description": "Obtain any Iridium Blueprint",
   "advancements.iridium.multikill.title": "Reply All",
-  "advancements.iridium.multikill.description": "Kill 5 Wither Skeletons with one Wither Skull"
+  "advancements.iridium.multikill.description": "Kill 5 Wither Skeletons with one Wither Skull",
+  "advancements.nether.nether_roof.title": "Holy Hell",
+  "advancements.nether.nether_roof.description": "Reach the Nether Roof"
 }

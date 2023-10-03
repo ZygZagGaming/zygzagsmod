@@ -52,7 +52,7 @@ public class BlockWithItemRegistry {
     );
 
     public <B extends Block> BlockWithItemRegistryObject<B, BlockItem> register(String id, Supplier<B> blockSupplier, Item.Properties properties) {
-        Main.LOGGER.debug("registered block with id " + id);
+        //Main.LOGGER.debug("registered block with id " + id);
         var blockRegObj = blockRegister.register(id, blockSupplier);
         return new BlockWithItemRegistryObject<>(
                 new ResourceLocation(MODID, id),

@@ -66,6 +66,6 @@ public class BlockItemEntityRegistry {
         blockRegister.register(bus);
         itemRegister.register(bus);
         beRegister.register(bus);
-        Main.LOGGER.debug("registered registry " + this);
+        //Main.LOGGER.debug("registered registry " + this);
     }
 }

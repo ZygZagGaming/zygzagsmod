@@ -1,0 +1,41 @@
+{
+  "parent": "minecraft:nether/root",
+  "criteria": {
+    "nether_roof": {
+      "conditions": {
+        "player": {
+          "location": {
+            "position": {
+              "y": {
+                "min": 128,
+                "max": 256
+              }
+            },
+            "dimension": "minecraft:the_nether"
+          }
+        }
+      },
+      "trigger": "minecraft:location"
+    }
+  },
+  "display": {
+    "announce_to_chat": true,
+    "description": {
+      "translate": "advancements.nether.nether_roof.description"
+    },
+    "frame": "goal",
+    "hidden": false,
+    "icon": {
+      "item": "minecraft:ender_pearl"
+    },
+    "show_toast": true,
+    "title": {
+      "translate": "advancements.nether.nether_roof.title"
+    }
+  },
+  "requirements": [
+    [
+      "nether_roof"
+    ]
+  ]
+}

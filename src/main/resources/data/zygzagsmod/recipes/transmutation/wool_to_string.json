@@ -1,7 +1,7 @@
 {
   "type": "zygzagsmod:transmutation",
   "input": {
-    "item": "minecraft:wool"
+    "tag": "minecraft:wool"
   },
   "output": "minecraft:string",
   "rate": "1.2"

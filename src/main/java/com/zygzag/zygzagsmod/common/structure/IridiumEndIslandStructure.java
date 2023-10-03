@@ -1,4 +1,4 @@
-package com.zygzag.zygzagsmod.common.feature;
+package com.zygzag.zygzagsmod.common.structure;
 
 import com.mojang.serialization.Codec;
 import com.zygzag.zygzagsmod.common.block.EndStoneSwitchBlock;
