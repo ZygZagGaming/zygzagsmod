@@ -54,7 +54,7 @@ public class IridiumAxeItem extends AxeItem implements ISocketable {
 
     @Override
     public boolean hasCooldown() {
-        return socket == Socket.WITHER_SKULL;
+        return socket == Socket.WITHER_SKULL || socket == Socket.EMERALD;
     }
 
     @Override
@@ -64,7 +64,7 @@ public class IridiumAxeItem extends AxeItem implements ISocketable {
 
     @Override
     public int getBaseCooldown(ItemStack stack, Level world) {
-        return socket == Socket.WITHER_SKULL ? Config.witherSkullAxeCooldown : 0;
+        return socket == Socket.WITHER_SKULL ? Config.witherSkullAxeCooldown : socket == Socket.EMERALD ? Config.emeraldAxeCooldown : 0;
     }
 
     @Override

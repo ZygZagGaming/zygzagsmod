@@ -13,6 +13,10 @@ public class Config {
             .comment("Cooldown for Amethyst-Socketed Iridium Pickaxes in ticks")
             .defineInRange("amethystPickaxeCooldown", 15 * 30, 0, Integer.MAX_VALUE);
 
+    private static final ForgeConfigSpec.IntValue EMERALD_AXE_COOLDOWN = BUILDER
+            .comment("Cooldown for Emerald-Socketed Iridium Axes in ticks")
+            .defineInRange("emeraldAxeCooldown", 20 * 20, 0, Integer.MAX_VALUE);
+
     private static final ForgeConfigSpec.IntValue WITHER_SKULL_AXE_COOLDOWN = BUILDER
             .comment("Cooldown for Wither Skull-Socketed Iridium Axes in ticks")
             .defineInRange("witherSkullAxeCooldown", 15 * 30, 0, Integer.MAX_VALUE);
@@ -135,6 +139,7 @@ public class Config {
     static final ForgeConfigSpec SPEC = BUILDER.build();
 
     public static int amethystPickaxeCooldown,
+            emeraldAxeCooldown,
             witherSkullAxeCooldown,
             emeraldShovelCooldown,
             skullShovelCooldown,
@@ -172,6 +177,7 @@ public class Config {
     @SubscribeEvent
     static void onLoad(final ModConfigEvent event) {
         amethystPickaxeCooldown = AMETHYST_PICKAXE_COOLDOWN.get();
+        emeraldAxeCooldown = EMERALD_AXE_COOLDOWN.get();
         witherSkullAxeCooldown = WITHER_SKULL_AXE_COOLDOWN.get();
         emeraldShovelCooldown = EMERALD_SHOVEL_COOLDOWN.get();
         skullShovelCooldown = SKULL_SHOVEL_COOLDOWN.get();

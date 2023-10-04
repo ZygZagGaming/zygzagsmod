@@ -27,10 +27,7 @@ import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.*;
-import net.minecraft.world.entity.ai.gossip.GossipType;
-import net.minecraft.world.entity.ai.targeting.TargetingConditions;
 import net.minecraft.world.entity.item.ItemEntity;
-import net.minecraft.world.entity.npc.Villager;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.BrushItem;
 import net.minecraft.world.item.Item;
@@ -42,7 +39,6 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.BrushableBlock;
-import net.minecraft.world.level.block.WetSpongeBlock;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BrushableBlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
@@ -56,7 +52,10 @@ import net.minecraftforge.common.capabilities.ICapabilityProvider;
 import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.event.AttachCapabilitiesEvent;
 import net.minecraftforge.event.TickEvent;
-import net.minecraftforge.event.entity.living.*;
+import net.minecraftforge.event.entity.living.LivingDamageEvent;
+import net.minecraftforge.event.entity.living.LivingEntityUseItemEvent;
+import net.minecraftforge.event.entity.living.LivingExperienceDropEvent;
+import net.minecraftforge.event.entity.living.MobEffectEvent;
 import net.minecraftforge.event.level.BlockEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
@@ -179,6 +178,14 @@ public class EventHandler {
                         double damageBonus = 1 + Config.amethystSwordDamageBonus * Math.exp(-((time + 12000.0) % 24000.0 - 12000.0) * ((time + 12000.0) % 24000.0 - 12000.0) / 12000.0);
                         evt.setAmount(evt.getAmount() * (float) damageBonus);
                     }
+                } else if (mainhandItem instanceof IridiumAxeItem axe && axe.getSocket() == Socket.EMERALD) {
+                    if (living instanceof Player player && !player.getCooldowns().isOnCooldown(axe)) {
+                        LightningBolt bolt = new LightningBolt(EntityType.LIGHTNING_BOLT, world);
+                        if (living instanceof ServerPlayer sPlayer) bolt.setCause(sPlayer);
+                        bolt.moveTo(entity.position());
+                        world.addFreshEntity(bolt);
+                        axe.addCooldown(player, mainhandStack);
+                    }
                 }
 
                 if (chestItem instanceof IridiumChestplateItem chestplate && chestplate.getSocket() == Socket.SKULL) {
@@ -195,26 +202,6 @@ public class EventHandler {
 
                 if (i > 0) {
                     entity.addEffect(new MobEffectInstance(MobEffects.WITHER, 20 * i, 1), hws.getOwner());
-                }
-            }
-        }
-    }
-
-    @SubscribeEvent
-    public static void onEntityKill(final LivingDeathEvent event) {
-        var living = event.getEntity();
-        var source = event.getSource();
-        var killer = source.getEntity();
-        var world = living.level();
-        if (killer instanceof Player player) {
-            var mainhand = player.getMainHandItem();
-            if (mainhand.getItem() instanceof IridiumAxeItem iridaxe
-                    && iridaxe.getSocket() == Socket.EMERALD
-                    && living.getType().is(Main.VILLAGER_HATED)
-            ) {
-                var nearby = world.getNearbyEntities(Villager.class, TargetingConditions.DEFAULT, living, living.getBoundingBox().inflate(20.0));
-                for (var villager : nearby) {
-                    villager.getGossips().add(player.getUUID(), GossipType.MAJOR_POSITIVE, 10);
                 }
             }
         }
