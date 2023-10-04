@@ -110,7 +110,7 @@ public class GeneralUtil {
 
     public static @Nullable TransitionAnimation getTransitionAnimation(AbstractAnimation from, AbstractAnimation to) {
         TransitionAnimation anim = Main.transitionAnimationRegistry().getValues().stream().filter((it) -> it.from().is(from) && it.to().is(to)).findFirst().orElse(null);
-        if (anim == null) System.out.println("no transition exists from " + from + " to " + to);
+        //  if (anim == null) System.out.println("no transition exists from " + from + " to " + to);
         return anim;
     }
 

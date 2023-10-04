@@ -340,7 +340,7 @@ public class IridiumGolem extends AbstractGolem implements NeutralMob, GeoAnimat
         private boolean canPenalize = false;
         public final RawAnimation animation;
         public final int attackDuration = 20;
-        public final int endLag = 15;
+        public final int endLag = 28;
         public final float speedModifier = 7.5f;
         public StandingAttackGoal(RawAnimation animation) {
             this.animation = animation;
