@@ -30,6 +30,7 @@ import software.bernie.geckolib.util.GeckoLibUtil;
 
 import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.EnumSet;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.UUID;
 import java.util.function.Function;
@@ -79,7 +80,15 @@ public class IridiumGolem extends AbstractGolem implements NeutralMob, AnimatedE
         entityData.define(DATA_REMAINING_ANGER_TIME, 0);
         entityData.define(DATA_MIND_STATE, MindState.IDLE);
         entityData.define(DATA_TICKS_REMAINING_IN_ANIMATION, 0);
-        entityData.define(DATA_ANIMATOR_STATE, animator.getState());
+        entityData.define(DATA_ANIMATOR_STATE, new Animator.State(
+                AnimationRegistry.IridiumGolem.IDLE_BASE.get(),
+                null,
+                5 * 20,
+                160,
+                new LinkedList<>(),
+                AnimationRegistry.IridiumGolem.IDLE_BASE.get(),
+                AnimationRegistry.IridiumGolem.IDLE_BASE.get()
+        ));
     }
 
     @Override
