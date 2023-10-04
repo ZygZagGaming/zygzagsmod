@@ -164,14 +164,6 @@ public class IridiumGolem extends AbstractGolem implements NeutralMob, GeoAnimat
         } catch (IllegalArgumentException ignored) { }
     }
 
-    public AnimationState getIdleState() {
-        return getTarget() == null ? AnimationState.IDLE : AnimationState.AGRO;
-    }
-
-    public AnimationState getWalkingState() {
-        return getTarget() == null ? AnimationState.WALKING : AnimationState.RUNNING;
-    }
-
     @Override
     public void setTarget(@Nullable LivingEntity target) {
         super.setTarget(target);
@@ -308,14 +300,6 @@ public class IridiumGolem extends AbstractGolem implements NeutralMob, GeoAnimat
         }
     }
 
-    public enum AnimationState {
-        IDLE,
-        WALKING,
-        RUNNING,
-        AGRO,
-        ATTACK_2
-    }
-
     public enum MindState {
         IDLE(AnimationRegistry.IridiumGolem.IDLE_BASE.get(), AnimationRegistry.IridiumGolem.WALK_BASE.get()),
         AGRO(AnimationRegistry.IridiumGolem.AGRO_BASE.get(), AnimationRegistry.IridiumGolem.RUN_BASE.get()),
@@ -354,10 +338,6 @@ public class IridiumGolem extends AbstractGolem implements NeutralMob, GeoAnimat
 
         @Override
         public void start() {
-            /* boolean agroed = false; created to Make sure the animation would run through completely then
-        while (!agroed) {
-            if (TRANSITION_ANIMATIONS.get(new Pair<>(lastAnimationState, animationState)) equals the string name for the file
-            or the file name) */
             super.start();
 
             getNavigation().moveTo(this.path, speedModifier);
@@ -524,32 +504,6 @@ public class IridiumGolem extends AbstractGolem implements NeutralMob, GeoAnimat
 
         protected int getAttackInterval() {
             return adjustedTickDelay(20);
-        }
-    }
-
-    public class AttackGoal2 extends StandingAttackGoal {
-        public AttackGoal2() {
-            super(RawAnimation.begin().thenPlay("animation.iridium_golem.attack2"));
-        }
-
-        @Override
-        public boolean requiresUpdateEveryTick() {
-            return true;
-        }
-
-        @Override
-        public void tick() {
-            super.tick();
-        }
-
-        @Override
-        public void start() {
-            super.start();
-        }
-
-        @Override
-        public void stop() {
-            super.stop();
         }
     }
     public void queueAnimation(AbstractAnimation anim) {
