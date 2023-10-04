@@ -16,11 +16,7 @@ import static com.zygzag.zygzagsmod.common.Main.MODID;
 
 public class EntityDataSerializerRegistry extends Registry<EntityDataSerializer<?>> {
     public static final EntityDataSerializerRegistry INSTANCE = new EntityDataSerializerRegistry(DeferredRegister.create(ForgeRegistries.Keys.ENTITY_DATA_SERIALIZERS, MODID));
-
-    public static final RegistryObject<EntityDataSerializer<IridiumGolem.AnimationState>> IRIDIUM_GOLEM_ANIMATION_STATE = INSTANCE.register(
-            "iridium_golem_animation_state",
-            () -> EntityDataSerializer.simpleEnum(IridiumGolem.AnimationState.class)
-    );
+    
     public static final RegistryObject<EntityDataSerializer<Animation>> ANIMATION = INSTANCE.register(
             "iridium_golem_animation",
             () -> EntityDataSerializer.simple(
