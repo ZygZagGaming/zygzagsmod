@@ -1,7 +1,10 @@
 package com.zygzag.zygzagsmod.common.entity;
 
+import com.zygzag.zygzagsmod.common.Main;
 import com.zygzag.zygzagsmod.common.util.GeneralUtil;
 import net.minecraft.MethodsReturnNonnullByDefault;
+import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.PathfinderMob;
 import net.minecraft.world.level.Level;
@@ -108,6 +111,12 @@ public class Animator<T extends LivingEntity & AnimatedEntity<T>> {
         }
 
         lastAnimation = getTransitionAnimation() != null ? getTransitionAnimation() : getAnimation();
+
+        if (level().isClientSide()) {
+            setState(parent.getEntityData().get(parent.animatorStateAccessor()));
+        } else {
+            parent.getEntityData().set(parent.animatorStateAccessor(), getState());
+        }
     }
 
     public void queueAnimation(AbstractAnimation anim) {
@@ -133,5 +142,79 @@ public class Animator<T extends LivingEntity & AnimatedEntity<T>> {
 
     public void register(AnimatableManager.ControllerRegistrar controllerRegistrar) {
         controllerRegistrar.add(mainAnimController);
+    }
+
+    public State getState() {
+        return new State(
+                animation,
+                transitionAnimation,
+                timeUntilIdleAnimation,
+                ticksRemainingInAnimation,
+                queuedAnims,
+                lastAnimation,
+                lastNonTransitionAnimation
+        );
+    }
+
+    public void setState(State state) {
+        animation = state.animation();
+        transitionAnimation = state.transitionAnimation();
+        timeUntilIdleAnimation = state.timeUntilIdleAnimation();
+        ticksRemainingInAnimation = state.ticksRemainingInAnimation();
+        queuedAnims.clear();
+        queuedAnims.addAll(state.queuedAnims());
+        lastAnimation = state.lastAnimation();
+        lastNonTransitionAnimation = state.lastNonTransitionAnimation;
+    }
+
+    public record State(
+            Animation animation,
+            @Nullable TransitionAnimation transitionAnimation,
+            int timeUntilIdleAnimation,
+            int ticksRemainingInAnimation,
+            Queue<AbstractAnimation> queuedAnims,
+            AbstractAnimation lastAnimation,
+            Animation lastNonTransitionAnimation
+    ) {
+        public void toNetwork(FriendlyByteBuf buf) {
+            buf.writeUtf(animation.id().toString());
+            buf.writeUtf(transitionAnimation == null ? "null" : transitionAnimation.id().toString());
+            buf.writeInt(timeUntilIdleAnimation);
+            buf.writeInt(ticksRemainingInAnimation);
+            buf.writeInt(queuedAnims.size());
+            for (AbstractAnimation queued : queuedAnims) {
+                buf.writeBoolean(queued instanceof TransitionAnimation);
+                buf.writeUtf(queued.id().toString());
+            }
+            buf.writeBoolean(lastAnimation instanceof TransitionAnimation);
+            buf.writeUtf(lastAnimation.id().toString());
+            buf.writeUtf(lastNonTransitionAnimation.id().toString());
+        }
+
+        public static State fromNetwork(FriendlyByteBuf buf) {
+            ResourceLocation animationLoc = new ResourceLocation(buf.readUtf());
+            Animation animation = Main.animationRegistry().getValue(animationLoc);
+            if (animation == null) throw new IllegalArgumentException("Invalid animation id recieved: " + animationLoc);
+            String transString = buf.readUtf();
+            TransitionAnimation transitionAnimation = transString.equals("null") ? null : Main.transitionAnimationRegistry().getValue(new ResourceLocation(transString));
+            int timeUntilIdleAnimation = buf.readInt();
+            int ticksRemainingInAnimation = buf.readInt();
+            int numQueuedAnims = buf.readInt();
+            Queue<AbstractAnimation> queuedAnims = new LinkedList<>();
+            for (int i = 0; i < numQueuedAnims; i++) {
+                boolean isTransition = buf.readBoolean();
+                ResourceLocation loc = new ResourceLocation(buf.readUtf());
+                AbstractAnimation anim = isTransition ? Main.transitionAnimationRegistry().getValue(loc) : Main.animationRegistry().getValue(loc);
+                queuedAnims.add(anim);
+            }
+            boolean lastTransition = buf.readBoolean();
+            ResourceLocation lastLoc = new ResourceLocation(buf.readUtf());
+            AbstractAnimation lastAnimation = lastTransition ? Main.transitionAnimationRegistry().getValue(lastLoc) : Main.animationRegistry().getValue(lastLoc);
+            if (lastAnimation == null) throw new IllegalArgumentException("Invalid animation id recieved: " + lastLoc);
+            ResourceLocation lastNonTransitionLoc = new ResourceLocation(buf.readUtf());
+            Animation lastNonTransitionAnimation = Main.animationRegistry().getValue(lastNonTransitionLoc);
+            if (lastNonTransitionAnimation == null) throw new IllegalArgumentException("Invalid animation id recieved: " + lastNonTransitionLoc);
+            return new State(animation, transitionAnimation, timeUntilIdleAnimation, ticksRemainingInAnimation, queuedAnims, lastAnimation, lastNonTransitionAnimation);
+        }
     }
 }

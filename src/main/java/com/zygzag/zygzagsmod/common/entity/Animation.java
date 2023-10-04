@@ -14,6 +14,7 @@ public class Animation extends AbstractAnimation {
         super(raw, lengthInTicks);
     }
 
+    @Override
     public ResourceLocation id() {
         ResourceLocation loc = Main.animationRegistry().getKey(this);
         assert loc != null;

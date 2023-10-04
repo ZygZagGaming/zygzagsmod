@@ -1,5 +1,6 @@
 package com.zygzag.zygzagsmod.common.entity;
 
+import net.minecraft.resources.ResourceLocation;
 import software.bernie.geckolib.core.animation.RawAnimation;
 
 public abstract class AbstractAnimation {
@@ -31,5 +32,9 @@ public abstract class AbstractAnimation {
 
     public boolean is(AbstractAnimation other) {
         return this == other;
+    }
+
+    public ResourceLocation id() {
+        return null;
     }
 }

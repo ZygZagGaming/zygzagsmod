@@ -40,6 +40,7 @@ public class TransitionAnimation extends AbstractAnimation {
         return other instanceof TransitionAnimation transition && transition.id().equals(this.id());
     }
 
+    @Override
     public ResourceLocation id() {
         ResourceLocation loc = Main.transitionAnimationRegistry().getKey(this);
         assert loc != null;
