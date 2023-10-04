@@ -28,4 +28,8 @@ public abstract class AbstractAnimation {
     public boolean canBeSkipped() {
         return canBeSkipped;
     }
+
+    public boolean is(AbstractAnimation other) {
+        return this == other;
+    }
 }

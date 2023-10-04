@@ -24,4 +24,14 @@ public class Animation extends AbstractAnimation {
         ResourceLocation key = Main.animationRegistry().getKey(this);
         return key != null && key.equals(other.getId());
     }
+
+    @Override
+    public boolean is(AbstractAnimation other) {
+        return other instanceof Animation anim && anim.id().equals(this.id());
+    }
+
+    @Override
+    public String toString() {
+        return "[normal animation " + id() + "]";
+    }
 }

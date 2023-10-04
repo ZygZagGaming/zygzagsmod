@@ -34,4 +34,20 @@ public class TransitionAnimation extends AbstractAnimation {
         ResourceLocation key = Main.transitionAnimationRegistry().getKey(this);
         return key != null && key.equals(other.getId());
     }
+
+    @Override
+    public boolean is(AbstractAnimation other) {
+        return other instanceof TransitionAnimation transition && transition.id().equals(this.id());
+    }
+
+    public ResourceLocation id() {
+        ResourceLocation loc = Main.transitionAnimationRegistry().getKey(this);
+        assert loc != null;
+        return loc;
+    }
+
+    @Override
+    public String toString() {
+        return "[transition animation " + id() + "]";
+    }
 }

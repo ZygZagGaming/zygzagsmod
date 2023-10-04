@@ -37,7 +37,7 @@ public class AnimationRegistry extends Registry<Animation> {
 
     @Override
     public void registerTo(IEventBus bus) {
-        IridiumGolem.init();
+        IridiumGolem.init(); // make the IridiumGolem class load, subclasses don't load unless they're used
         super.registerTo(bus);
     }
 }

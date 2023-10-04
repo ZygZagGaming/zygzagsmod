@@ -2,7 +2,7 @@ package com.zygzag.zygzagsmod.common.util;
 
 import com.zygzag.zygzagsmod.common.Config;
 import com.zygzag.zygzagsmod.common.Main;
-import com.zygzag.zygzagsmod.common.entity.Animation;
+import com.zygzag.zygzagsmod.common.entity.AbstractAnimation;
 import com.zygzag.zygzagsmod.common.entity.TransitionAnimation;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ParticleOptions;
@@ -108,7 +108,13 @@ public class GeneralUtil {
         return elements[rng.nextInt(elements.length)];
     }
 
-    public static @Nullable TransitionAnimation getTransitionAnimation(Animation from, Animation to) {
-        return Main.transitionAnimationRegistry().getValues().stream().filter((it) -> it.from() == from && it.to() == to).findFirst().orElse(null);
+    public static @Nullable TransitionAnimation getTransitionAnimation(AbstractAnimation from, AbstractAnimation to) {
+        TransitionAnimation anim = Main.transitionAnimationRegistry().getValues().stream().filter((it) -> it.from().is(from) && it.to().is(to)).findFirst().orElse(null);
+        if (anim == null) System.out.println("no transition exists from " + from + " to " + to);
+        return anim;
+    }
+
+    public static String stringCS(Level level) {
+        return level.isClientSide() ? "client" : "server";
     }
 }

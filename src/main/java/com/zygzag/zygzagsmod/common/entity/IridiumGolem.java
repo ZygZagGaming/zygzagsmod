@@ -94,13 +94,17 @@ public class IridiumGolem extends AbstractGolem implements NeutralMob, GeoAnimat
         entityData.define(DATA_TICKS_REMAINING_IN_ANIMATION, 0);
     }
 
-    public Animation getAnimation() {
+    public @Nullable Animation getAnimation() {
         return entityData.get(DATA_ANIMATION);
     }
 
     public void setAnimation(Animation anim) {
-        Animation oldAnim = getAnimation();
-        if (oldAnim != anim) entityData.set(DATA_ANIMATION, anim);
+        if (!level().isClientSide()) {
+            Animation oldAnim = getAnimation();
+            if (oldAnim != anim) {
+                entityData.set(DATA_ANIMATION, anim);
+            }
+        }
     }
 
     public @Nullable TransitionAnimation getTransitionAnimation() {
@@ -109,7 +113,9 @@ public class IridiumGolem extends AbstractGolem implements NeutralMob, GeoAnimat
 
     public void setTransitionAnimation(@Nullable TransitionAnimation anim) {
         TransitionAnimation oldAnim = getTransitionAnimation();
-        if (oldAnim != anim) entityData.set(DATA_TRANSITION_ANIMATION, Optional.ofNullable(anim));
+        if (oldAnim != anim) {
+            entityData.set(DATA_TRANSITION_ANIMATION, Optional.ofNullable(anim));
+        }
     }
 
     public MindState getMindState() {
@@ -117,8 +123,10 @@ public class IridiumGolem extends AbstractGolem implements NeutralMob, GeoAnimat
     }
 
     public void playAnimation(AbstractAnimation animation) {
-        if (animation instanceof Animation normalAnim) setAnimation(normalAnim);
-        else if (animation instanceof TransitionAnimation transition) setTransitionAnimation(transition);
+        if (animation instanceof Animation normalAnim) {
+            setAnimation(normalAnim);
+            setTransitionAnimation(null);
+        } else if (animation instanceof TransitionAnimation transition) setTransitionAnimation(transition);
     }
 
     public void setMindState(MindState mindState) {
@@ -145,7 +153,7 @@ public class IridiumGolem extends AbstractGolem implements NeutralMob, GeoAnimat
     @Override
     public void addAdditionalSaveData(CompoundTag tag) {
         super.addAdditionalSaveData(tag);
-        tag.putString("animation", getAnimation().id().toString());
+        tag.putString("animation", Optional.ofNullable(getAnimation()).map((it) -> it.id().toString()).orElse("null"));
         tag.putString("mind_state", getMindState().name());
         tag.putInt("time_until_next_anim", getTicksRemainingInAnimation());
     }
@@ -208,10 +216,12 @@ public class IridiumGolem extends AbstractGolem implements NeutralMob, GeoAnimat
         super.tick();
         if (isIdle()) timeUntilIdleAnimation--;
         var animation = getNavigation().getPath() == null || (getTransitionAnimation() != null && getTransitionAnimation().speedModifier(getTicksRemainingInAnimation()) == 0) ? getMindState().nonMovingAnim : getMindState().movingAnim;
-        if (animation != null && !level().isClientSide) setAnimation(animation);
-        if (!level().isClientSide && getTicksRemainingInAnimation() > 0) setTicksRemainingInAnimation(getTicksRemainingInAnimation() - 1);
+        if (animation != null && !level().isClientSide()) setAnimation(animation);
+        if (!level().isClientSide() && getTicksRemainingInAnimation() > 0) setTicksRemainingInAnimation(getTicksRemainingInAnimation() - 1);
 
-        tickAnimations();
+        if (!level().isClientSide()) tickAnimations();
+
+        lastAnimation = getTransitionAnimation() != null ? getTransitionAnimation() : getAnimation();
     }
 
     public void tickAnimations() {
@@ -238,6 +248,7 @@ public class IridiumGolem extends AbstractGolem implements NeutralMob, GeoAnimat
             } else {
                 anim = queuedAnims.poll();
             }
+
             if (anim != null) {
                 playAnimation(anim);
                 setTicksRemainingInAnimation(anim.lengthInTicks());
@@ -469,7 +480,7 @@ public class IridiumGolem extends AbstractGolem implements NeutralMob, GeoAnimat
             LivingEntity target = getTarget();
             if (target != null) {
                 if (ticksUntilNextAttack == attackDuration + endLag) {
-                    if (target.getBoundingBox().intersects(getAttackHitbox()))
+                    if (getTransitionAnimation() == null && target.getBoundingBox().intersects(getAttackHitbox()))
                         ticksUntilNextAttack--; // start attack
                 } else {
                     if (ticksUntilNextAttack == endLag) doAttack();

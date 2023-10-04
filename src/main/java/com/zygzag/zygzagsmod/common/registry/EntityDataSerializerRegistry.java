@@ -20,21 +20,15 @@ public class EntityDataSerializerRegistry extends Registry<EntityDataSerializer<
     public static final RegistryObject<EntityDataSerializer<Animation>> ANIMATION = INSTANCE.register(
             "iridium_golem_animation",
             () -> EntityDataSerializer.simple(
-                    (buf, animation) -> {
-                        ResourceLocation loc = Main.animationRegistry().getKey(animation);
-                        assert loc != null;
-                        buf.writeUtf(loc.toString());
-                    }, (buf) -> Main.animationRegistry().getValue(new ResourceLocation(buf.readUtf()))
+                    (buf, animation) -> buf.writeUtf(animation.id().toString()),
+                    (buf) -> Main.animationRegistry().getValue(new ResourceLocation(buf.readUtf()))
             )
     );
     public static final RegistryObject<EntityDataSerializer<Optional<TransitionAnimation>>> TRANSITION_ANIMATION = INSTANCE.register(
             "iridium_golem_transition_animation",
             () -> EntityDataSerializer.optional(
-                    (buf, animation) -> {
-                        ResourceLocation loc = Main.transitionAnimationRegistry().getKey(animation);
-                        assert loc != null;
-                        buf.writeUtf(loc.toString());
-                    }, (buf) -> Main.transitionAnimationRegistry().getValue(new ResourceLocation(buf.readUtf()))
+                    (buf, animation) -> buf.writeUtf(animation.id().toString()),
+                    (buf) -> Main.transitionAnimationRegistry().getValue(new ResourceLocation(buf.readUtf()))
             )
     );
     public static final RegistryObject<EntityDataSerializer<IridiumGolem.MindState>> IRIDIUM_GOLEM_MIND_STATE = INSTANCE.register(
