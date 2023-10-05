@@ -96,9 +96,10 @@ public class IridiumGolem extends AbstractGolem implements NeutralMob, AnimatedE
 
     @Override
     public @Nullable Animation getAnimationChange() {
-        return getNavigation().getPath() == null ||
-                (animator.getTransitionAnimation() != null && animator.getTransitionAnimation().speedModifier(getTicksRemainingInAnimation()) == 0) ?
+        Animation anim = getNavigation().getPath() == null ?
                 getMindState().nonMovingAnim : getMindState().movingAnim;
+        //System.out.println(anim);
+        return anim;
     }
 
     @Override
@@ -221,7 +222,7 @@ public class IridiumGolem extends AbstractGolem implements NeutralMob, AnimatedE
 
     @Override
     public float getStepHeight() {
-        return getTarget() == null ? 0.2f : 1.2f;
+        return 1.2f;
     }
 
     private class IridiumGolemRandomStrollGoal extends RandomStrollGoal {
@@ -407,7 +408,7 @@ public class IridiumGolem extends AbstractGolem implements NeutralMob, AnimatedE
             LivingEntity target = getTarget();
             if (target != null) {
                 if (ticksUntilNextAttack == attackDuration + endLag) {
-                    if (animator.getTransitionAnimation() == null && target.getBoundingBox().intersects(getAttackHitbox()))
+                    if (animator.getTransitionAnimation() == null && animator.getAnimation().is(AnimationRegistry.IridiumGolem.AGRO_BASE) && target.getBoundingBox().intersects(getAttackHitbox()))
                         ticksUntilNextAttack--; // start attack
                 } else {
                     if (ticksUntilNextAttack == endLag) doAttack();

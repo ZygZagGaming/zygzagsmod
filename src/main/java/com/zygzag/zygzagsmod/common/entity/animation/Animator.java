@@ -55,6 +55,7 @@ public class Animator<T extends LivingEntity & AnimatedEntity<T>> {
 
     public void setAnimation(Animation animation) {
         if (!level().isClientSide()) {
+            //System.out.println("animation changed from " + getAnimation() + " to " + animation);
             this.animation = animation;
         }
     }
@@ -69,8 +70,8 @@ public class Animator<T extends LivingEntity & AnimatedEntity<T>> {
 
     public void tick() {
         if (parent.isIdle()) timeUntilIdleAnimation--;
-        var animation = parent.getAnimationChange();
         if (!level().isClientSide()) {
+            var animation = parent.getAnimationChange();
             if (animation != null) setAnimation(animation);
             if (getTicksRemainingInAnimation() > 0)
                 setTicksRemainingInAnimation(getTicksRemainingInAnimation() - 1);
@@ -78,7 +79,7 @@ public class Animator<T extends LivingEntity & AnimatedEntity<T>> {
             Animation currentAnimation = getAnimation();
 
             // Check if transition should be played
-            if (currentAnimation != lastNonTransitionAnimation) {
+            if (currentAnimation != null && !currentAnimation.is(lastNonTransitionAnimation)) {
                 TransitionAnimation transitionAnim = GeneralUtil.getTransitionAnimation(lastNonTransitionAnimation, currentAnimation);
                 if (transitionAnim != null) queueAnimation(transitionAnim);
                 lastNonTransitionAnimation = currentAnimation;
@@ -120,6 +121,7 @@ public class Animator<T extends LivingEntity & AnimatedEntity<T>> {
     }
 
     public void queueAnimation(AbstractAnimation anim) {
+        //System.out.println("queueing animation " + anim);
         queuedAnims.add(anim);
     }
 
