@@ -1,6 +1,6 @@
 package com.zygzag.zygzagsmod.common.registry;
 
-import com.zygzag.zygzagsmod.common.entity.TransitionAnimation;
+import com.zygzag.zygzagsmod.common.entity.animation.TransitionAnimation;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.registries.DeferredRegister;

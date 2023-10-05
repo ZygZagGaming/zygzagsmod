@@ -1,7 +1,6 @@
 package com.zygzag.zygzagsmod.common.registry;
 
-import com.zygzag.zygzagsmod.common.entity.Animation;
-import com.zygzag.zygzagsmod.common.entity.TransitionAnimation;
+import com.zygzag.zygzagsmod.common.entity.animation.Animation;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.registries.DeferredRegister;
@@ -26,9 +25,9 @@ public class AnimationRegistry extends Registry<Animation> {
         public static final RegistryObject<Animation> AGRO_BASE = INSTANCE.register("iridium_golem_agro_base", () -> new Animation(RawAnimation.begin().thenPlay("animation.iridium_golem.agro_idle"), 16));
         public static final RegistryObject<Animation> ATTACK_SMASH = INSTANCE.register("iridium_golem_attack_smash", () -> new Animation(RawAnimation.begin().thenPlay("animation.iridium_golem.attack2"), 48));
 
-        public static final RegistryObject<Animation> IDLE_1 = INSTANCE.register("iridium_golem_idle_1", () -> new Animation(RawAnimation.begin().thenPlay("animation.iridium_golem.idle1"), 0));
-        public static final RegistryObject<Animation> IDLE_2 = INSTANCE.register("iridium_golem_idle_2", () -> new Animation(RawAnimation.begin().thenPlay("animation.iridium_golem.idle2"), 0));
-        public static final RegistryObject<Animation> IDLE_3 = INSTANCE.register("iridium_golem_idle_3", () -> new Animation(RawAnimation.begin().thenPlay("animation.iridium_golem.idle3"), 0));
+        public static final RegistryObject<Animation> IDLE_1 = INSTANCE.register("iridium_golem_idle_1", () -> new Animation(RawAnimation.begin().thenPlay("animation.iridium_golem.idle1"), 0, false));
+        public static final RegistryObject<Animation> IDLE_2 = INSTANCE.register("iridium_golem_idle_2", () -> new Animation(RawAnimation.begin().thenPlay("animation.iridium_golem.idle2"), 0, false));
+        public static final RegistryObject<Animation> IDLE_3 = INSTANCE.register("iridium_golem_idle_3", () -> new Animation(RawAnimation.begin().thenPlay("animation.iridium_golem.idle3"), 0, false));
     }
 
     public AnimationRegistry(DeferredRegister<Animation> register) {

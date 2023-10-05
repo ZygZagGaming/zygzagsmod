@@ -1,5 +1,8 @@
 package com.zygzag.zygzagsmod.common.entity;
 
+import com.zygzag.zygzagsmod.common.entity.animation.AnimatedEntity;
+import com.zygzag.zygzagsmod.common.entity.animation.Animation;
+import com.zygzag.zygzagsmod.common.entity.animation.Animator;
 import com.zygzag.zygzagsmod.common.registry.AnimationRegistry;
 import com.zygzag.zygzagsmod.common.registry.EntityDataSerializerRegistry;
 import net.minecraft.MethodsReturnNonnullByDefault;

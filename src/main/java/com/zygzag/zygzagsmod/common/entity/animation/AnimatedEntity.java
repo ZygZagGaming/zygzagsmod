@@ -1,4 +1,4 @@
-package com.zygzag.zygzagsmod.common.entity;
+package com.zygzag.zygzagsmod.common.entity.animation;
 
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.world.entity.LivingEntity;

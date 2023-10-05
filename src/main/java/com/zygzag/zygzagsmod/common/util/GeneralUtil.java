@@ -2,8 +2,8 @@ package com.zygzag.zygzagsmod.common.util;
 
 import com.zygzag.zygzagsmod.common.Config;
 import com.zygzag.zygzagsmod.common.Main;
-import com.zygzag.zygzagsmod.common.entity.AbstractAnimation;
-import com.zygzag.zygzagsmod.common.entity.TransitionAnimation;
+import com.zygzag.zygzagsmod.common.entity.animation.AbstractAnimation;
+import com.zygzag.zygzagsmod.common.entity.animation.TransitionAnimation;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ParticleOptions;
 import net.minecraft.util.RandomSource;

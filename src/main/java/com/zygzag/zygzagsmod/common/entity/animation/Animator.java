@@ -1,4 +1,4 @@
-package com.zygzag.zygzagsmod.common.entity;
+package com.zygzag.zygzagsmod.common.entity.animation;
 
 import com.zygzag.zygzagsmod.common.Main;
 import com.zygzag.zygzagsmod.common.util.GeneralUtil;

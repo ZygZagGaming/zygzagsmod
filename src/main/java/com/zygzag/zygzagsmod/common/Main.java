@@ -2,8 +2,8 @@ package com.zygzag.zygzagsmod.common;
 
 import com.mojang.logging.LogUtils;
 import com.zygzag.zygzagsmod.common.capability.PlayerSightCache;
-import com.zygzag.zygzagsmod.common.entity.Animation;
-import com.zygzag.zygzagsmod.common.entity.TransitionAnimation;
+import com.zygzag.zygzagsmod.common.entity.animation.Animation;
+import com.zygzag.zygzagsmod.common.entity.animation.TransitionAnimation;
 import com.zygzag.zygzagsmod.common.item.iridium.ISocketable;
 import com.zygzag.zygzagsmod.common.registry.*;
 import net.minecraft.core.registries.Registries;
