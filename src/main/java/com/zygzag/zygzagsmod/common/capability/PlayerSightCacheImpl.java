@@ -42,7 +42,6 @@ public class PlayerSightCacheImpl implements PlayerSightCache {
                     BlockState blockStateToCheck = world.getBlockState(blockPos);
                     if (sightEffect.test(blockStateToCheck)) {
                         Color colorToUse = new Color(sightEffect.color(blockStateToCheck));
-                        //System.out.println("color " + colorToUse);
                         if (colorToUse != Color.BLACK) {
                             var alpha = (int) (0xff * (1 - player.getEyePosition().distanceTo(Vec3.atCenterOf(blockPos)) / (sightRange * Math.sqrt(3))));
                             minimap.put(blockPos, new Color(colorToUse.getRed(), colorToUse.getGreen(), colorToUse.getBlue(), alpha));
