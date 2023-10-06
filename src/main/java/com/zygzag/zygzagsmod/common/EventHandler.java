@@ -189,8 +189,8 @@ public class EventHandler {
                 }
 
                 if (chestItem instanceof IridiumChestplateItem chestplate && chestplate.getSocket() == Socket.SKULL) {
-                    float heal = amt / 4;
-                    living.heal(heal);
+                    float heal = (float) Math.log(amt) / 4;
+                    if (heal >= 0) living.heal(heal);
                 }
             } else if (attacker instanceof HomingWitherSkull hws) {
                 int i = 0;
@@ -276,10 +276,19 @@ public class EventHandler {
                     player.addEffect(new MobEffectInstance(MobEffects.HERO_OF_THE_VILLAGE, 5, 0, true, false));
                 }
             } else if (socket == Socket.AMETHYST) {
-                MobEffectInstance effect = player.getEffect(MobEffects.NIGHT_VISION);
-                var duration = 10 * 20 + 1;
-                if (effect == null || effect.getDuration() <= duration) {
-                    player.addEffect(new MobEffectInstance(MobEffects.NIGHT_VISION, duration, 0, true, false));
+                MobEffectInstance nightVision = player.getEffect(MobEffects.NIGHT_VISION);
+                var nightVisionDuration = 10 * 20 + 1;
+                if (nightVision == null || nightVision.getDuration() <= nightVisionDuration) {
+                    player.addEffect(new MobEffectInstance(MobEffects.NIGHT_VISION, nightVisionDuration, 0, true, false));
+                }
+
+                var entities = world.getEntitiesOfClass(LivingEntity.class, player.getBoundingBox().inflate(Config.amethystChestplateRange), (it) -> !it.is(player));
+                for (LivingEntity entity : entities) {
+                    MobEffectInstance preexisting = entity.getEffect(MobEffects.GLOWING);
+                    if (preexisting == null || preexisting.getDuration() <= 1) {
+                        MobEffectInstance glowing = new MobEffectInstance(MobEffects.GLOWING, 5, 0, true, true);
+                        entity.addEffect(glowing);
+                    }
                 }
             }
         }

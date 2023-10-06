@@ -77,6 +77,10 @@ public class Config {
             .comment("Damage multiplier for Emerald-Socketed Iridium Swords")
             .defineInRange("emeraldSwordUndeadDamageMultiplier", 2, 0, Double.MAX_VALUE);
 
+    private static final ForgeConfigSpec.DoubleValue AMETHYST_CHESTPLATE_RANGE = BUILDER
+            .comment("Range for Amethyst-Socketed Iridium Chestplates")
+            .defineInRange("amethystChestplateRange", 25, 0, Double.MAX_VALUE);
+
     private static final ForgeConfigSpec.IntValue COPPER_ORE_COLOR = BUILDER
             .comment("Color for Copper Ores during Sight")
             .defineInRange("copperOreColor", 0xe77c56, 0, 0xffffff);
@@ -171,7 +175,8 @@ public class Config {
             skullSwordInstakillChance,
             skullSwordInstakillChanceBosses,
             skullSwordInstakillChancePlayers,
-            emeraldSwordUndeadDamageMultiplier;
+            emeraldSwordUndeadDamageMultiplier,
+            amethystChestplateRange;
 
 
     @SubscribeEvent
@@ -206,6 +211,7 @@ public class Config {
         skullSwordInstakillChancePlayers = SKULL_SWORD_INSTAKILL_CHANCE_PLAYERS.get();
         amethystSwordDamageBonus = AMETHYST_SWORD_DAMAGE_BONUS.get();
         emeraldSwordUndeadDamageMultiplier = EMERALD_SWORD_UNDEAD_DAMAGE_MULTIPLIER.get();
+        amethystChestplateRange = AMETHYST_CHESTPLATE_RANGE.get();
         emeraldScepterCooldown = EMERALD_SCEPTER_COOLDOWN.get();
         skullScepterCooldown = SKULL_SCEPTER_COOLDOWN.get();
         witherSkullScepterCooldown = WITHER_SKULL_SCEPTER_COOLDOWN.get();

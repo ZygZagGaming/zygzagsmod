@@ -37,10 +37,10 @@ public class IridiumArmorMaterial implements ArmorMaterial {
     public static final IridiumArmorMaterial _8_5 = new IridiumArmorMaterial("iridium_5", 40, new int[]{4, 9, 7, 4}, 16);
     public static final IridiumArmorMaterial _8_6 = new IridiumArmorMaterial("iridium_6", 41, new int[]{4, 9, 7, 4}, 17);
     public static final IridiumArmorMaterial _8_7 = new IridiumArmorMaterial("iridium_7", 41, new int[]{4, 9, 7, 4}, 17);
-    public static final IridiumArmorMaterial DIAMOND_SOCKETED = new IridiumArmorMaterial("diamond_iridium", 45, new int[]{8, 8, 8, 8}, 12, SoundEvents.ARMOR_EQUIP_NETHERITE, 3.5f, 0.4f, () -> {
+    public static final IridiumArmorMaterial DIAMOND_SOCKETED = new IridiumArmorMaterial("diamond_iridium", 45, new int[]{9, 9, 9, 9}, 12, SoundEvents.ARMOR_EQUIP_NETHERITE, 3.5f, 0.4f, () -> {
         return Ingredient.of(ItemRegistry.IRIDIUM_PLATING.get());
     });
-    public static final IridiumArmorMaterial EMERALD_SOCKETED = new IridiumArmorMaterial("emerald_iridium", 38, new int[]{7, 7, 7, 7}, 19, SoundEvents.ARMOR_EQUIP_NETHERITE, 3.0f, 0.6f, () -> {
+    public static final IridiumArmorMaterial EMERALD_SOCKETED = new IridiumArmorMaterial("emerald_iridium", 38, new int[]{6, 6, 6, 6}, 19, SoundEvents.ARMOR_EQUIP_NETHERITE, 3.0f, 0.0f, () -> {
         return Ingredient.of(ItemRegistry.IRIDIUM_PLATING.get());
     });
 
