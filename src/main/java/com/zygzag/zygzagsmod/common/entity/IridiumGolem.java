@@ -433,4 +433,9 @@ public class IridiumGolem extends AbstractGolem implements NeutralMob, AnimatedE
             ticksUntilNextAttack = attackDuration + endLag;
         }
     }
+
+    @Override
+    public boolean doesIdleAnimations() {
+        return true;
+    }
 }

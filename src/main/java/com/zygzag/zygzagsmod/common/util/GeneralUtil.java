@@ -6,6 +6,7 @@ import com.zygzag.zygzagsmod.common.entity.animation.AbstractAnimation;
 import com.zygzag.zygzagsmod.common.entity.animation.TransitionAnimation;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ParticleOptions;
+import net.minecraft.util.Mth;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
@@ -116,5 +117,64 @@ public class GeneralUtil {
 
     public static String stringCS(Level level) {
         return level.isClientSide() ? "client" : "server";
+    }
+
+    public static float degreesToRadians(float degrees) {
+        return (float) (degrees * Math.PI / 180);
+    }
+
+    public static float radiansToDegrees(float radians) {
+        return (float) (radians * 180 / Math.PI);
+    }
+
+    public static double degreesToRadians(double degrees) {
+        return degrees * Math.PI / 180;
+    }
+
+    public static double radiansToDegrees(double radians) {
+        return radians * 180 / Math.PI;
+    }
+
+    public static float rotlerp(float a, float b, float changeBound) {
+        float f = Mth.wrapDegrees(b - a);
+        if (f > changeBound) {
+            f = changeBound;
+        }
+
+        if (f < -changeBound) {
+            f = -changeBound;
+        }
+
+        return a + f;
+    }
+
+    public static double shortAngleDist(double a0, double a1) {
+        double max = Math.PI * 2;
+        double da = (a1 - a0) % max;
+        return (2 * da) % max - da;
+    }
+
+    public static double angleLerp(double a0, double a1, double t) {
+        return a0 + shortAngleDist(a0,a1) * t;
+    }
+
+    public static float shortAngleDist(float a0, float a1) {
+        float max = (float) Math.PI * 2;
+        float da = (a1 - a0) % max;
+        return 2 * da % max - da;
+    }
+
+    public static float angleLerp(float a0, float a1, float t) {
+        return a0 + shortAngleDist(a0,a1) * t;
+    }
+
+    public static double mod(double a, double b) {
+        if (a < 0) return b + (a % b);
+        return a % b;
+    }
+
+    public static float mod(float a, float b) {
+        if (a < 0) return b - ((-a) % b);
+        return a % b;
     }
 }

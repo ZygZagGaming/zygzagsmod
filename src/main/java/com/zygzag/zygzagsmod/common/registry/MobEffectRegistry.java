@@ -2,8 +2,8 @@ package com.zygzag.zygzagsmod.common.registry;
 
 
 import com.zygzag.zygzagsmod.common.Config;
-import com.zygzag.zygzagsmod.common.util.GeneralUtil;
 import com.zygzag.zygzagsmod.common.effect.SightEffect;
+import com.zygzag.zygzagsmod.common.util.GeneralUtil;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffectCategory;

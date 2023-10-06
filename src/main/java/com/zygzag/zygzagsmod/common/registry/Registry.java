@@ -25,7 +25,7 @@ public class Registry<T> {
             BlockEntityRegistry.INSTANCE::registerTo,
             BlockItemEntityRegistry.INSTANCE::registerTo,
             EnchantmentRegistry.INSTANCE::registerTo,
-            EntityRegistry.INSTANCE::registerTo,
+            EntityTypeRegistry.INSTANCE::registerTo,
             GlobalLootModifierSerializerRegistry.INSTANCE::registerTo,
             IridiumGearRegistry.INSTANCE::registerTo,
             MobEffectRegistry.INSTANCE::registerTo,

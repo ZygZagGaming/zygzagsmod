@@ -1,6 +1,5 @@
 package com.zygzag.zygzagsmod.common.registry;
 
-import net.minecraft.client.resources.sounds.Sound;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;

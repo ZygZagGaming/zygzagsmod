@@ -30,6 +30,13 @@ public class AnimationRegistry extends Registry<Animation> {
         public static final RegistryObject<Animation> IDLE_3 = INSTANCE.register("iridium_golem_idle_3", () -> new Animation(RawAnimation.begin().thenPlay("animation.iridium_golem.idle3"), 0, false));
     }
 
+    public static class BlazeSentry {
+        public static void init() { }
+
+        public static final RegistryObject<Animation> IDLE_BASE = INSTANCE.register("blaze_sentry_idle_base", () -> new Animation(RawAnimation.begin().thenPlay("animation.blaze_sentry.idle_rotation"), 60));
+        public static final RegistryObject<Animation> SHOOT_BASE = INSTANCE.register("blaze_sentry_shoot_base", () -> new Animation(RawAnimation.begin().thenPlay("animation.blaze_sentry.shooting_loop"), 60));
+    }
+
     public AnimationRegistry(DeferredRegister<Animation> register) {
         super(register);
     }
@@ -37,6 +44,7 @@ public class AnimationRegistry extends Registry<Animation> {
     @Override
     public void registerTo(IEventBus bus) {
         IridiumGolem.init(); // make the IridiumGolem class load, subclasses don't load unless they're used
+        BlazeSentry.init();
         super.registerTo(bus);
     }
 }

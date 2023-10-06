@@ -1,6 +1,6 @@
 package com.zygzag.zygzagsmod.common.entity;
 
-import com.zygzag.zygzagsmod.common.registry.EntityRegistry;
+import com.zygzag.zygzagsmod.common.registry.EntityTypeRegistry;
 import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ParticleTypes;
@@ -47,7 +47,7 @@ public class HomingWitherSkull extends WitherSkull {
     }
 
     public HomingWitherSkull(Level world, LivingEntity owner, double xPower, double yPower, double zPower) {
-        super(EntityRegistry.HOMING_WITHER_SKULL.get(), world);
+        super(EntityTypeRegistry.HOMING_WITHER_SKULL.get(), world);
         setOwner(owner);
         this.setRot(owner.getYRot(), owner.getXRot());
         this.moveTo(owner.getX(), owner.getY() + owner.getEyeHeight() - 0.5, owner.getZ(), owner.getYRot(), owner.getXRot());

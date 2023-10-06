@@ -1,6 +1,5 @@
 package com.zygzag.zygzagsmod.common.registry;
 
-import com.zygzag.zygzagsmod.common.Main;
 import com.zygzag.zygzagsmod.common.block.EndSandBlock;
 import com.zygzag.zygzagsmod.common.block.EndStoneSwitchBlock;
 import com.zygzag.zygzagsmod.common.registry.object.BlockWithItemRegistryObject;

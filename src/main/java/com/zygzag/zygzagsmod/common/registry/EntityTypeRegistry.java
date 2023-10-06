@@ -1,9 +1,6 @@
 package com.zygzag.zygzagsmod.common.registry;
 
-import com.zygzag.zygzagsmod.common.entity.HomingWitherSkull;
-import com.zygzag.zygzagsmod.common.entity.IridiumGolem;
-import com.zygzag.zygzagsmod.common.entity.PlayerAlliedSkeleton;
-import com.zygzag.zygzagsmod.common.entity.ThrownTransmutationCharge;
+import com.zygzag.zygzagsmod.common.entity.*;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.MobCategory;
@@ -13,9 +10,9 @@ import net.minecraftforge.registries.RegistryObject;
 
 import static com.zygzag.zygzagsmod.common.Main.MODID;
 
-public class EntityRegistry extends Registry<EntityType<?>> {
-    public static final EntityRegistry INSTANCE = new EntityRegistry(DeferredRegister.create(Registries.ENTITY_TYPE, MODID));
-    public EntityRegistry(DeferredRegister<EntityType<?>> register) {
+public class EntityTypeRegistry extends Registry<EntityType<?>> {
+    public static final EntityTypeRegistry INSTANCE = new EntityTypeRegistry(DeferredRegister.create(Registries.ENTITY_TYPE, MODID));
+    public EntityTypeRegistry(DeferredRegister<EntityType<?>> register) {
         super(register);
     }
 
@@ -47,5 +44,12 @@ public class EntityRegistry extends Registry<EntityType<?>> {
                     .fireImmune()
                     .sized(1.4F, 2.7F)
                     .build("iridium_golem")
+    );
+    public static final RegistryObject<EntityType<BlazeSentry>> BLAZE_SENTRY = INSTANCE.register(
+            "blaze_sentry",
+            () -> EntityType.Builder.<BlazeSentry>of(BlazeSentry::new, MobCategory.MONSTER)
+                    .fireImmune()
+                    .sized(1f, 0.8f)
+                    .build("blaze_sentry")
     );
 }

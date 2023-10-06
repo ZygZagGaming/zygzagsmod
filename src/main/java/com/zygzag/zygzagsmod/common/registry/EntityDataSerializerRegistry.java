@@ -1,7 +1,7 @@
 package com.zygzag.zygzagsmod.common.registry;
 
-import com.zygzag.zygzagsmod.common.entity.animation.Animator;
 import com.zygzag.zygzagsmod.common.entity.IridiumGolem;
+import com.zygzag.zygzagsmod.common.entity.animation.Animator;
 import net.minecraft.network.syncher.EntityDataSerializer;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;

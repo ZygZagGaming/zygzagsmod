@@ -13,6 +13,9 @@ public interface AnimatedEntity<T extends LivingEntity & AnimatedEntity<T>> exte
     @Nullable Animation getAnimationChange();
     List<Animation> idleAnimations();
     EntityDataAccessor<Animator.State> animatorStateAccessor();
+    default boolean doesIdleAnimations() {
+        return !idleAnimations().isEmpty();
+    }
 //    default boolean isMoving() {
 //        Animator<T> animator = getAnimator();
 //        if (animator.getTransitionAnimation() != null && animator.getTransitionAnimation().speedModifier(animator.getTicksRemainingInAnimation()) == 0) return true;

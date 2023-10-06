@@ -1,7 +1,7 @@
 package com.zygzag.zygzagsmod.common.entity;
 
 import com.zygzag.zygzagsmod.common.recipe.TransmutationRecipe;
-import com.zygzag.zygzagsmod.common.registry.EntityRegistry;
+import com.zygzag.zygzagsmod.common.registry.EntityTypeRegistry;
 import com.zygzag.zygzagsmod.common.registry.ItemRegistry;
 import com.zygzag.zygzagsmod.common.registry.RecipeTypeRegistry;
 import net.minecraft.MethodsReturnNonnullByDefault;
@@ -28,11 +28,11 @@ public class ThrownTransmutationCharge extends ThrowableItemProjectile {
     }
 
     public ThrownTransmutationCharge(Level world, double xPos, double yPos, double zPos) {
-        super(EntityRegistry.TRANSMUTATION_CHARGE_ENTITY.get(), xPos, yPos, zPos, world);
+        super(EntityTypeRegistry.TRANSMUTATION_CHARGE_ENTITY.get(), xPos, yPos, zPos, world);
     }
 
     public ThrownTransmutationCharge(Level world, LivingEntity thrower) {
-        super(EntityRegistry.TRANSMUTATION_CHARGE_ENTITY.get(), thrower, world);
+        super(EntityTypeRegistry.TRANSMUTATION_CHARGE_ENTITY.get(), thrower, world);
     }
 
     protected Item getDefaultItem() {

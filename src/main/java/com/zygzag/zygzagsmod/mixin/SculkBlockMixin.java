@@ -1,7 +1,7 @@
 package com.zygzag.zygzagsmod.mixin;
 
-import com.zygzag.zygzagsmod.common.util.GeneralUtil;
 import com.zygzag.zygzagsmod.common.Main;
+import com.zygzag.zygzagsmod.common.util.GeneralUtil;
 import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.core.BlockPos;
 import net.minecraft.util.RandomSource;

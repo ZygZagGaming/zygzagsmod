@@ -1,10 +1,9 @@
 package com.zygzag.zygzagsmod.common.registry;
 
-import com.zygzag.zygzagsmod.common.Main;
 import com.zygzag.zygzagsmod.common.block.SculkJawBlock;
 import com.zygzag.zygzagsmod.common.block.SuspiciousEndSandBlock;
-import com.zygzag.zygzagsmod.common.block.entity.SculkJawBlockEntity;
 import com.zygzag.zygzagsmod.common.block.entity.CustomBrushableBlockEntity;
+import com.zygzag.zygzagsmod.common.block.entity.SculkJawBlockEntity;
 import com.zygzag.zygzagsmod.common.registry.object.BlockItemEntityRegistryObject;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvents;

@@ -32,9 +32,16 @@ public class TransitionAnimationRegistry extends Registry<TransitionAnimation> {
         public static final RegistryObject<TransitionAnimation> WALK_BASE_TO_RUN_BASE = INSTANCE.register("iridium_golem_walk_base_to_run_base", () -> new TransitionAnimation(AnimationRegistry.IridiumGolem.WALK_BASE.get(), AnimationRegistry.IridiumGolem.RUN_BASE.get(), RawAnimation.begin().thenPlay("animation.iridium_golem.stop_walk").thenPlay("animation.iridium_golem.start_run_from_idle"), 38, (ticks) -> 1f));
     }
 
+    public static class BlazeSentry {
+        public static void init() { }
+        public static final RegistryObject<TransitionAnimation> IDLE_BASE_TO_SHOOT_BASE = INSTANCE.register("blaze_sentry_idle_base_to_shoot_base", () -> new TransitionAnimation(AnimationRegistry.BlazeSentry.IDLE_BASE.get(), AnimationRegistry.BlazeSentry.SHOOT_BASE.get(), RawAnimation.begin().thenPlay("animation.blaze_sentry.start_shooting"), 60, (ticks) -> 1f));
+        public static final RegistryObject<TransitionAnimation> SHOOT_BASE_TO_IDLE_BASE = INSTANCE.register("blaze_sentry_shoot_base_to_idle_base", () -> new TransitionAnimation(AnimationRegistry.BlazeSentry.SHOOT_BASE.get(), AnimationRegistry.BlazeSentry.IDLE_BASE.get(), RawAnimation.begin().thenPlay("animation.blaze_sentry.stop_shooting"), 60, (ticks) -> 1f));
+    }
+
     @Override
     public void registerTo(IEventBus bus) {
         IridiumGolem.init(); // make the IridiumGolem class load, subclasses don't load unless they're used
+        BlazeSentry.init();
         super.registerTo(bus);
     }
 

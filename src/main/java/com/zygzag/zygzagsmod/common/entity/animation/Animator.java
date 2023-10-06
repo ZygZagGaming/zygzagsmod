@@ -90,7 +90,7 @@ public class Animator<T extends LivingEntity & AnimatedEntity<T>> {
                 AbstractAnimation animToChangeTo;
                 if (queuedAnims.isEmpty()) {
                     //Does not continue with another Idle animation until the animation is complete
-                    if (parent.isIdle() && timeUntilIdleAnimation <= 0) {
+                    if (parent.doesIdleAnimations() && parent.isIdle() && timeUntilIdleAnimation <= 0) {
                         timeUntilIdleAnimation = (int) (20 * (10 + 15 * level().getRandom().nextDouble())); // 10-25s
                         animToChangeTo = GeneralUtil.randomElement(parent.idleAnimations(), level().getRandom());
                     } else {

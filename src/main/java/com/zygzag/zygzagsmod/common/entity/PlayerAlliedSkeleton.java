@@ -1,6 +1,6 @@
 package com.zygzag.zygzagsmod.common.entity;
 
-import com.zygzag.zygzagsmod.common.registry.EntityRegistry;
+import com.zygzag.zygzagsmod.common.registry.EntityTypeRegistry;
 import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.entity.Entity;
@@ -26,7 +26,7 @@ public class PlayerAlliedSkeleton extends WitherSkeleton {
     }
 
     public PlayerAlliedSkeleton(Level world, Player player) {
-        this(EntityRegistry.PLAYER_ALLIED_SKELETON.get(), world);
+        this(EntityTypeRegistry.PLAYER_ALLIED_SKELETON.get(), world);
         alliedPlayerUUID = player.getUUID();
     }
 

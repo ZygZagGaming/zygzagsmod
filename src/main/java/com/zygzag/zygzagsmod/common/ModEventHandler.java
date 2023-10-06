@@ -2,16 +2,12 @@ package com.zygzag.zygzagsmod.common;
 
 import com.zygzag.zygzagsmod.common.datagen.AkomiItemModelProvider;
 import com.zygzag.zygzagsmod.common.datagen.AkomiRecipeProvider;
+import com.zygzag.zygzagsmod.common.entity.BlazeSentry;
 import com.zygzag.zygzagsmod.common.entity.IridiumGolem;
 import com.zygzag.zygzagsmod.common.item.iridium.ISocketable;
-import com.zygzag.zygzagsmod.common.registry.EntityRegistry;
+import com.zygzag.zygzagsmod.common.registry.EntityTypeRegistry;
 import com.zygzag.zygzagsmod.common.registry.IridiumGearRegistry;
-import net.minecraft.Util;
-import net.minecraft.core.HolderLookup;
 import net.minecraft.data.DataProvider;
-import net.minecraft.data.registries.VanillaRegistries;
-import net.minecraft.data.tags.ItemTagsProvider;
-import net.minecraft.data.tags.TagsProvider;
 import net.minecraft.data.recipes.RecipeProvider;
 import net.minecraft.world.entity.monster.AbstractSkeleton;
 import net.minecraft.world.item.Item;
@@ -21,10 +17,7 @@ import net.minecraftforge.data.event.GatherDataEvent;
 import net.minecraftforge.event.entity.EntityAttributeCreationEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
-
-import java.util.concurrent.CompletableFuture;
 
 import static com.zygzag.zygzagsmod.common.Main.MODID;
 
@@ -32,8 +25,9 @@ import static com.zygzag.zygzagsmod.common.Main.MODID;
 public class ModEventHandler {
     @SubscribeEvent
     public static void doAttributes(final EntityAttributeCreationEvent event) {
-        event.put(EntityRegistry.PLAYER_ALLIED_SKELETON.get(), AbstractSkeleton.createAttributes().build());
-        event.put(EntityRegistry.IRIDIUM_GOLEM.get(), IridiumGolem.createAttributes().build());
+        event.put(EntityTypeRegistry.PLAYER_ALLIED_SKELETON.get(), AbstractSkeleton.createAttributes().build());
+        event.put(EntityTypeRegistry.IRIDIUM_GOLEM.get(), IridiumGolem.createAttributes().build());
+        event.put(EntityTypeRegistry.BLAZE_SENTRY.get(), BlazeSentry.createAttributes().build());
     }
 
     @SubscribeEvent

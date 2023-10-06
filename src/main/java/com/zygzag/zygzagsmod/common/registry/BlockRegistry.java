@@ -1,6 +1,5 @@
 package com.zygzag.zygzagsmod.common.registry;
 
-import com.zygzag.zygzagsmod.common.Main;
 import com.zygzag.zygzagsmod.common.block.BlessedSoilBlock;
 import com.zygzag.zygzagsmod.common.block.GlowingSoilBlock;
 import net.minecraft.world.level.block.Block;
