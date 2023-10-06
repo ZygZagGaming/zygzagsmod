@@ -1,0 +1,8 @@
+{
+  "type": "zygzagsmod:transmutation",
+  "input": {
+    "item": "minecraft:sponge"
+  },
+  "output": "minecraft:sponge",
+  "rate": "1.1"
+}

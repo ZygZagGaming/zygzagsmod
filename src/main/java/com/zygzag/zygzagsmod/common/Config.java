@@ -15,7 +15,7 @@ public class Config {
 
     private static final ForgeConfigSpec.IntValue EMERALD_AXE_COOLDOWN = BUILDER
             .comment("Cooldown for Emerald-Socketed Iridium Axes in ticks")
-            .defineInRange("emeraldAxeCooldown", 20 * 20, 0, Integer.MAX_VALUE);
+            .defineInRange("emeraldAxeCooldown", 40 * 20, 0, Integer.MAX_VALUE);
 
     private static final ForgeConfigSpec.IntValue WITHER_SKULL_AXE_COOLDOWN = BUILDER
             .comment("Cooldown for Wither Skull-Socketed Iridium Axes in ticks")

@@ -1,0 +1,8 @@
+{
+  "type": "zygzagsmod:transmutation",
+  "input": {
+    "item": "minecraft:nether_wart_block"
+  },
+  "output": "minecraft:nether_wart",
+  "rate": "1.5"
+}

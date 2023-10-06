@@ -12,6 +12,7 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.projectile.ThrowableItemProjectile;
 import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.HitResult;
@@ -54,7 +55,13 @@ public class ThrownTransmutationCharge extends ThrowableItemProjectile {
                 for (TransmutationRecipe recipe : recipes) {
                     SimpleContainer holder = new SimpleContainer(itemEntity.getItem());
                     if (recipe.matches(holder, level)) {
-                        ItemEntity newItem = new ItemEntity(level, itemEntity.getX(), itemEntity.getY(), itemEntity.getZ(), recipe.assemble(holder, level.registryAccess()));
+                        ItemStack output = recipe.assemble(holder, level.registryAccess());
+                        int stackSize = output.getItem().getMaxStackSize(output);
+                        while (output.getCount() > stackSize) {
+                            ItemEntity newItem = new ItemEntity(level, itemEntity.getX(), itemEntity.getY(), itemEntity.getZ(), output.split(stackSize));
+                            level.addFreshEntity(newItem);
+                        }
+                        ItemEntity newItem = new ItemEntity(level, itemEntity.getX(), itemEntity.getY(), itemEntity.getZ(), output);
                         level.addFreshEntity(newItem);
                         itemEntity.kill();
                     }

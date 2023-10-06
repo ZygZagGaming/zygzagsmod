@@ -146,7 +146,7 @@
   "description.passive_ability.zygzagsmod.pickaxe.diamond": "You can mine faster. 'Nuff said.",
 
   "passive_ability.zygzagsmod.axe.emerald": "Call of the Gods",
-  "description.passive_ability.zygzagsmod.axe.emerald": "Each strike has a 5% chance to smite your foes with holy lightning.",
+  "description.passive_ability.zygzagsmod.axe.emerald": "Each strike calls down holy lightning.",
   "passive_ability.zygzagsmod.axe.amethyst": "Diurnal",
   "description.passive_ability.zygzagsmod.axe.amethyst": "The sunlight powers up your axe, dealing more damage based on current sunlight level.",
   "passive_ability.zygzagsmod.axe.skull": "Executioner",

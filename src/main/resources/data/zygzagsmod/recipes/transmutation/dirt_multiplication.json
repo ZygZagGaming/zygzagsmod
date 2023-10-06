@@ -1,0 +1,8 @@
+{
+  "type": "zygzagsmod:transmutation",
+  "input": {
+    "item": "minecraft:dirt"
+  },
+  "output": "minecraft:dirt",
+  "rate": "2.5"
+}
