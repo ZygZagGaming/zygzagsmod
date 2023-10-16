@@ -212,8 +212,11 @@
   "subtitles.block.end_sand.reform": "End Sand reforms",
   "subtitles.block.sculk_jaw.close": "Sculk Jaws close",
 
-  "death.attack.sculk_jaw": "%1$s got chomped to death",
-  "death.attack.sculk_jaw.player": "%1$s got chomped by %2$s",
+  "death.attack.sculk_jaw": "%1$s was chomped to death",
+  "death.attack.sculk_jaw.player": "%1$s was chomped by %2$s",
+
+  "death.attack.overheat": "%1$s was incinerated",
+  "death.attack.overheat.player": "%1$s was incinerated by %2$s",
 
   "painting.zygzagsmod.golem.title": "Golem",
   "painting.zygzagsmod.golem.author": "BLAZEDShard",

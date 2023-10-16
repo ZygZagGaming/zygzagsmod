@@ -52,4 +52,23 @@ public class EntityTypeRegistry extends Registry<EntityType<?>> {
                     .sized(1f, 0.8f)
                     .build("blaze_sentry")
     );
+
+    public static final RegistryObject<EntityType<BeamAreaEffectCloud>> BEAM_AREA_EFFECT_CLOUD = INSTANCE.register(
+            "beam_area_effect_cloud",
+            () -> EntityType.Builder.<BeamAreaEffectCloud>of(BeamAreaEffectCloud::new, MobCategory.MISC)
+                    .fireImmune()
+                    .sized(0.4f, 7f)
+                    .clientTrackingRange(10)
+                    .updateInterval(Integer.MAX_VALUE)
+                    .build("beam_area_effect_cloud")
+    );
+    public static final RegistryObject<EntityType<SphereAreaEffectCloud>> SPHERE_AREA_EFFECT_CLOUD = INSTANCE.register(
+            "sphere_area_effect_cloud",
+            () -> EntityType.Builder.<SphereAreaEffectCloud>of(SphereAreaEffectCloud::new, MobCategory.MISC)
+                    .fireImmune()
+                    .sized(5f, 5f)
+                    .clientTrackingRange(10)
+                    .updateInterval(Integer.MAX_VALUE)
+                    .build("sphere_area_effect_cloud")
+    );
 }

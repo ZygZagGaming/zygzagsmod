@@ -27,4 +27,12 @@ public class ParticleTypeRegistry extends Registry<ParticleType<?>> {
             "shockwave",
             () -> new SimpleParticleType(false)
     );
+    public static RegistryObject<SimpleParticleType> OVERHEAT_BEAM_PARTICLES = INSTANCE.register(
+            "overheat_beam",
+            () -> new SimpleParticleType(false)
+    );
+    public static RegistryObject<SimpleParticleType> OVERHEAT_SPHERE_PARTICLES = INSTANCE.register(
+            "overheat_sphere",
+            () -> new SimpleParticleType(false)
+    );
 }

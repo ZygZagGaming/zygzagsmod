@@ -8,6 +8,10 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ParticleOptions;
 import net.minecraft.util.Mth;
 import net.minecraft.util.RandomSource;
+import net.minecraft.world.effect.MobEffects;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.item.enchantment.EnchantmentHelper;
+import net.minecraft.world.item.enchantment.Enchantments;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
@@ -176,5 +180,19 @@ public class GeneralUtil {
     public static float mod(float a, float b) {
         if (a < 0) return b - ((-a) % b);
         return a % b;
+    }
+
+    public static int fireResistance(LivingEntity entity) {
+        int value = EnchantmentHelper.getEnchantmentLevel(Enchantments.FIRE_PROTECTION, entity);
+        if (entity.hasEffect(MobEffects.FIRE_RESISTANCE)) value += 6;
+        return value;
+    }
+
+    public static int clamp(int value, int min, int max) {
+        return Math.max(min, Math.min(max, value));
+    }
+
+    public static float clamp(float value, float min, float max) {
+        return Math.max(min, Math.min(max, value));
     }
 }

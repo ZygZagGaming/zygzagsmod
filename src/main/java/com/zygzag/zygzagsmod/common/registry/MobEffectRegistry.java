@@ -2,6 +2,7 @@ package com.zygzag.zygzagsmod.common.registry;
 
 
 import com.zygzag.zygzagsmod.common.Config;
+import com.zygzag.zygzagsmod.common.effect.OverheatEffect;
 import com.zygzag.zygzagsmod.common.effect.SightEffect;
 import com.zygzag.zygzagsmod.common.util.GeneralUtil;
 import net.minecraft.core.registries.Registries;
@@ -27,5 +28,10 @@ public class MobEffectRegistry extends Registry<MobEffect> {
                     (b) -> b.is(Tags.Blocks.ORES),
                     GeneralUtil::getColor
             )
+    );
+
+    public static RegistryObject<MobEffect> OVERHEAT_EFFECT = INSTANCE.register(
+            "overheat",
+            OverheatEffect::new
     );
 }
