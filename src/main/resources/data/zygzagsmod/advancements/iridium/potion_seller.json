@@ -1,0 +1,43 @@
+{
+  "parent": "zygzagsmod:iridium/socket",
+  "criteria": {
+    "scepter": {
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "zygzagsmod:skull_socketed_iridium_scepter"
+            ],
+            "enchantments": [
+              {
+                "enchantment": "zygzagsmod:cooldown",
+                "levels": 4
+              }
+            ]
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    }
+  },
+  "display": {
+    "announce_to_chat": true,
+    "description": {
+      "translate": "advancements.iridium.potion_seller.description"
+    },
+    "frame": "challenge",
+    "hidden": false,
+    "icon": {
+      "item": "zygzagsmod:skull_socketed_iridium_scepter"
+    },
+    "show_toast": true,
+    "title": {
+      "translate": "advancements.iridium.potion_seller.title"
+    }
+  },
+  "requirements": [
+    [
+      "scepter"
+    ]
+  ]
+}

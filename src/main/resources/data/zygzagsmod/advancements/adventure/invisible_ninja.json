@@ -1,0 +1,61 @@
+{
+  "parent": "minecraft:adventure/root",
+  "criteria": {
+    "sneak_around": {
+      "conditions": {
+        "player": {
+          "flags": {
+            "is_sneaking": true
+          },
+          "effects": {
+            "minecraft:invisibility": { }
+          },
+          "equipment": {
+            "head": {
+              "items": [
+                "minecraft:air"
+              ]
+            },
+            "chest": {
+              "items": [
+                "minecraft:air"
+              ]
+            },
+            "legs": {
+              "items": [
+                "minecraft:air"
+              ]
+            },
+            "feet": {
+              "items": [
+                "minecraft:air"
+              ]
+            }
+          }
+        }
+      },
+      "trigger": "minecraft:tick"
+    }
+  },
+  "display": {
+    "announce_to_chat": true,
+    "description": {
+      "translate": "advancements.adventure.invisible_ninja.description"
+    },
+    "frame": "goal",
+    "hidden": false,
+    "icon": {
+      "item": "minecraft:potion",
+      "nbt": "{Potion:\"minecraft:invisibility\"}"
+    },
+    "show_toast": true,
+    "title": {
+      "translate": "advancements.adventure.invisible_ninja.title"
+    }
+  },
+  "requirements": [
+    [
+      "sneak_around"
+    ]
+  ]
+}

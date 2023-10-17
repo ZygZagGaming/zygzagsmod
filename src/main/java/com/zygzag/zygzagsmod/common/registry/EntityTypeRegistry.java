@@ -57,7 +57,7 @@ public class EntityTypeRegistry extends Registry<EntityType<?>> {
             "beam_area_effect_cloud",
             () -> EntityType.Builder.<BeamAreaEffectCloud>of(BeamAreaEffectCloud::new, MobCategory.MISC)
                     .fireImmune()
-                    .sized(0.4f, 7f)
+                    .sized(1f, 1f)
                     .clientTrackingRange(10)
                     .updateInterval(Integer.MAX_VALUE)
                     .build("beam_area_effect_cloud")

@@ -1,6 +1,7 @@
 package com.zygzag.zygzagsmod.common.registry;
 
 import com.zygzag.zygzagsmod.common.trigger.MultikillTrigger;
+import com.zygzag.zygzagsmod.common.trigger.ThrowSnowballsAtMobTrigger;
 import net.minecraft.advancements.CriteriaTriggers;
 import net.minecraft.resources.ResourceLocation;
 
@@ -12,4 +13,8 @@ public class CriterionTriggerRegistry {
                     new ResourceLocation(MODID, "multikill")
             )
     );
+
+    public static final ThrowSnowballsAtMobTrigger THROW_SNOWBALLS_AT_MOB = CriteriaTriggers.register(new ThrowSnowballsAtMobTrigger());
+
+    public static void init() { }
 }

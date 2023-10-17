@@ -117,6 +117,11 @@ public class Main {
             event.acceptAll(IridiumGearRegistry.AXES.values().stream().map((it) -> it.get().getDefaultInstance()).collect(Collectors.toList()));
             event.acceptAll(IridiumGearRegistry.SHOVELS.values().stream().map((it) -> it.get().getDefaultInstance()).collect(Collectors.toList()));
             event.acceptAll(IridiumGearRegistry.HOES.values().stream().map((it) -> it.get().getDefaultInstance()).collect(Collectors.toList()));
+        } else if (event.getTabKey() == CreativeModeTabs.SPAWN_EGGS) {
+            event.acceptAll(Stream.of(
+                    ItemRegistry.IRIDIUM_GOLEM_SPAWN_EGG,
+                    ItemRegistry.BLAZE_SENTRY_SPAWN_EGG
+            ).map((it) -> it.get().getDefaultInstance()).collect(Collectors.toSet()));
         }
     }
 

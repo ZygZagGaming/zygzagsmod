@@ -21,6 +21,12 @@ public class AkomiItemModelProvider extends ItemModelProvider {
         makeIridiumNonSocketableArmor("helmet");
         makeIridiumNonSocketableArmor("leggings");
         makeIridiumNonSocketableArmor("boots");
+        makeSpawnEgg("iridium_golem");
+        makeSpawnEgg("blaze_sentry");
+    }
+
+    private void makeSpawnEgg(String entityName) {
+        getBuilder(MODID + ":" + entityName + "_spawn_egg").parent(new ModelFile.UncheckedModelFile("minecraft:item/template_spawn_egg"));
     }
 
     private void makeSocketedIridiumStuff() {

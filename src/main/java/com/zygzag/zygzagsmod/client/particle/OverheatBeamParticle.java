@@ -19,9 +19,9 @@ public class OverheatBeamParticle extends TextureSheetParticle {
         setSprite(sprites.get(world.random));
         quadSize = 3 / 32f;
         setSize(3 / 32f, 3 / 32f);
-        xd = 0;
-        yd = 1;
-        zd = 0;
+        xd = dX;
+        yd = dY;
+        zd = dZ;
     }
 
     @Override

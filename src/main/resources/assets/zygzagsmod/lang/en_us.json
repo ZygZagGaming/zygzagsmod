@@ -240,5 +240,12 @@
   "advancements.iridium.multikill.title": "Reply All",
   "advancements.iridium.multikill.description": "Kill 5 Wither Skeletons with one Wither Skull",
   "advancements.nether.nether_roof.title": "Holy Hell",
-  "advancements.nether.nether_roof.description": "Reach the Nether Roof"
+  "advancements.nether.nether_roof.description": "Reach the Nether Roof",
+  "advancements.adventure.invisible_ninja.title": "THE INVISIBLE NINJA",
+  "advancements.adventure.invisible_ninja.description": "Sneak around with no armor and an Invisibility Potion applied",
+  "advancements.iridium.potion_seller.title": "My Potions are Too Strong",
+  "advancements.iridium.potion_seller.description": "Obtain a Skull-Socketed Iridium Scepter enchanted with Cooldown IV",
+
+  "item.zygzagsmod.iridium_golem_spawn_egg": "Iridium Golem Spawn Egg",
+  "item.zygzagsmod.blaze_sentry_spawn_egg": "Blaze Sentry Spawn Egg"
 }

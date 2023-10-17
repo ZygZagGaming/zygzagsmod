@@ -5,6 +5,7 @@ import net.minecraft.core.registries.Registries;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.Block;
+import net.minecraftforge.common.ForgeSpawnEggItem;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.RegistryObject;
 
@@ -57,6 +58,9 @@ public class ItemRegistry extends Registry<Item> {
             WITHER_SKULL_SOCKET_SCHEMATIC,
             AMETHYST_SOCKET_SCHEMATIC
     );
+
+    public static final RegistryObject<Item> IRIDIUM_GOLEM_SPAWN_EGG = INSTANCE.register("iridium_golem_spawn_egg", () -> new ForgeSpawnEggItem(EntityTypeRegistry.IRIDIUM_GOLEM, 0x78bbd6, 0xcfcfcf, new Item.Properties()));
+    public static final RegistryObject<Item> BLAZE_SENTRY_SPAWN_EGG = INSTANCE.register("blaze_sentry_spawn_egg", () -> new ForgeSpawnEggItem(EntityTypeRegistry.BLAZE_SENTRY, 0xc79002, 0xc7c263, new Item.Properties()));
 
     private static RegistryObject<Item> basicItem(String id) {
         return INSTANCE.register(id, () -> new Item(new Item.Properties()));

@@ -2,6 +2,7 @@ package com.zygzag.zygzagsmod.common.registry;
 
 import com.zygzag.zygzagsmod.common.block.EndSandBlock;
 import com.zygzag.zygzagsmod.common.block.EndStoneSwitchBlock;
+import com.zygzag.zygzagsmod.common.block.MagmaticNetherBrickBlock;
 import com.zygzag.zygzagsmod.common.registry.object.BlockWithItemRegistryObject;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.BlockItem;

@@ -1,4 +1,4 @@
-// 1.20.1	2023-09-13T19:48:27.608203	Item Models: zygzagsmod
+// 1.20.1	2023-10-06T18:17:19.1542465	Item Models: zygzagsmod
 15435321a16b6a9adcb19a948c2af0fa7344d370 assets/zygzagsmod/models/item/amethyst_socketed_iridium_axe.json
 15eb5bc299660d213b1379316f4264e348e7a421 assets/zygzagsmod/models/item/amethyst_socketed_iridium_chestplate.json
 da43fd45392876686e6ebd43c9df8c0d4bd150aa assets/zygzagsmod/models/item/amethyst_socketed_iridium_hoe.json
@@ -6,6 +6,7 @@ bade30421091ea03effcf8c802638edbf3e22359 assets/zygzagsmod/models/item/amethyst_
 1d761c767051e54bf873d3d8e7a36751436fe2d9 assets/zygzagsmod/models/item/amethyst_socketed_iridium_scepter.json
 a2bfba0f70e5b646923c91fa22be16a0ec6d811b assets/zygzagsmod/models/item/amethyst_socketed_iridium_shovel.json
 9673e4d3214bd63e7d3b7bc8bd729477fa7e314a assets/zygzagsmod/models/item/amethyst_socketed_iridium_sword.json
+63ec6c618a3a23eab4cab9c52d7d3250de9b516e assets/zygzagsmod/models/item/blaze_sentry_spawn_egg.json
 15435321a16b6a9adcb19a948c2af0fa7344d370 assets/zygzagsmod/models/item/diamond_socketed_iridium_axe.json
 15eb5bc299660d213b1379316f4264e348e7a421 assets/zygzagsmod/models/item/diamond_socketed_iridium_chestplate.json
 da43fd45392876686e6ebd43c9df8c0d4bd150aa assets/zygzagsmod/models/item/diamond_socketed_iridium_hoe.json
@@ -23,6 +24,7 @@ a2bfba0f70e5b646923c91fa22be16a0ec6d811b assets/zygzagsmod/models/item/emerald_s
 1229fc9fffc79daff48819d6e5145dc102193c4d assets/zygzagsmod/models/item/iridium_axe.json
 7c71a76bb6d75f0824f1062308c6b162dea88360 assets/zygzagsmod/models/item/iridium_boots.json
 e26275cf0f2ea7ae0b55f54bb486000ed4bd5e79 assets/zygzagsmod/models/item/iridium_chestplate.json
+63ec6c618a3a23eab4cab9c52d7d3250de9b516e assets/zygzagsmod/models/item/iridium_golem_spawn_egg.json
 8189a4906e504ce41dcdf309b5efa9f4aabf8b4a assets/zygzagsmod/models/item/iridium_helmet.json
 01bb4b40662c0efde0da809f73d6ff520bc3ae4d assets/zygzagsmod/models/item/iridium_hoe.json
 1fbee712fffb34adcafc754e6023fbb70217a948 assets/zygzagsmod/models/item/iridium_leggings.json

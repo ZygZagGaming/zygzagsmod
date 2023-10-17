@@ -6,6 +6,7 @@ import com.zygzag.zygzagsmod.common.entity.animation.Animator;
 import com.zygzag.zygzagsmod.common.registry.AnimationRegistry;
 import com.zygzag.zygzagsmod.common.registry.EntityDataSerializerRegistry;
 import com.zygzag.zygzagsmod.common.registry.EntityTypeRegistry;
+import com.zygzag.zygzagsmod.common.registry.ItemRegistry;
 import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
@@ -18,6 +19,7 @@ import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.goal.target.HurtByTargetGoal;
 import net.minecraft.world.entity.monster.Monster;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.pathfinder.BlockPathTypes;
 import net.minecraft.world.phys.Vec3;
@@ -143,6 +145,10 @@ public class BlazeSentry extends Monster implements GeoAnimatable, AnimatedEntit
 
     @Override
     public void tick() {
+        setRot(0, 0);
+        setYHeadRot(0);
+        setYBodyRot(0);
+        setNoGravity(true);
         super.tick();
         animator.tick();
         oldHeadXRot = headXRot;
@@ -191,5 +197,11 @@ public class BlazeSentry extends Monster implements GeoAnimatable, AnimatedEntit
     @Override
     public boolean isPushable() {
         return false;
+    }
+
+    @Nullable
+    @Override
+    public ItemStack getPickResult() {
+        return ItemRegistry.BLAZE_SENTRY_SPAWN_EGG.get().getDefaultInstance();
     }
 }

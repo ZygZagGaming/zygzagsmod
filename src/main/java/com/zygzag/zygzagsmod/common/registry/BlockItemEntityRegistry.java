@@ -1,10 +1,13 @@
 package com.zygzag.zygzagsmod.common.registry;
 
+import com.zygzag.zygzagsmod.common.block.MagmaticNetherBrickBlock;
 import com.zygzag.zygzagsmod.common.block.SculkJawBlock;
 import com.zygzag.zygzagsmod.common.block.SuspiciousEndSandBlock;
 import com.zygzag.zygzagsmod.common.block.entity.CustomBrushableBlockEntity;
+import com.zygzag.zygzagsmod.common.block.entity.MagmaticNetherBrickBlockEntity;
 import com.zygzag.zygzagsmod.common.block.entity.SculkJawBlockEntity;
 import com.zygzag.zygzagsmod.common.registry.object.BlockItemEntityRegistryObject;
+import com.zygzag.zygzagsmod.common.registry.object.BlockWithItemRegistryObject;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.item.BlockItem;
@@ -45,6 +48,12 @@ public class BlockItemEntityRegistry {
             "suspicious_end_sand",
             () -> new SuspiciousEndSandBlock(BlockBehaviour.Properties.copy(Blocks.SAND).pushReaction(PushReaction.DESTROY), SoundEvents.BRUSH_SAND, SoundEvents.BRUSH_SAND_COMPLETED),
             CustomBrushableBlockEntity::new
+    );
+
+    public static final BlockItemEntityRegistryObject<MagmaticNetherBrickBlock, BlockItem, MagmaticNetherBrickBlockEntity> MAGMATIC_NETHER_BRICKS = INSTANCE.register(
+            "magmatic_nether_bricks",
+            () -> new MagmaticNetherBrickBlock(BlockBehaviour.Properties.copy(Blocks.RED_NETHER_BRICKS).strength(0.5f, 1f)),
+            MagmaticNetherBrickBlockEntity::new
     );
 
     public <B extends Block, E extends BlockEntity> BlockItemEntityRegistryObject<B, BlockItem, E> register(String id, Supplier<B> blockSupplier, Item.Properties properties, BlockEntityType.BlockEntitySupplier<E> beSupplier) {

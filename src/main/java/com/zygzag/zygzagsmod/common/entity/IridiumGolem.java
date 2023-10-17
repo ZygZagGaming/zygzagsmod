@@ -5,6 +5,7 @@ import com.zygzag.zygzagsmod.common.entity.animation.Animation;
 import com.zygzag.zygzagsmod.common.entity.animation.Animator;
 import com.zygzag.zygzagsmod.common.registry.AnimationRegistry;
 import com.zygzag.zygzagsmod.common.registry.EntityDataSerializerRegistry;
+import com.zygzag.zygzagsmod.common.registry.ItemRegistry;
 import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
@@ -20,6 +21,7 @@ import net.minecraft.world.entity.ai.goal.RandomStrollGoal;
 import net.minecraft.world.entity.ai.goal.target.HurtByTargetGoal;
 import net.minecraft.world.entity.animal.AbstractGolem;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.pathfinder.Node;
 import net.minecraft.world.level.pathfinder.Path;
@@ -202,7 +204,7 @@ public class IridiumGolem extends AbstractGolem implements NeutralMob, AnimatedE
     }
 
     public static AttributeSupplier.Builder createAttributes() {
-        return Mob.createMobAttributes().add(Attributes.MAX_HEALTH, 100.0D).add(Attributes.MOVEMENT_SPEED, 0.08).add(Attributes.KNOCKBACK_RESISTANCE, 1.0D).add(Attributes.ATTACK_DAMAGE, 15.0D);
+        return Mob.createMobAttributes().add(Attributes.MAX_HEALTH, 100.0D).add(Attributes.MOVEMENT_SPEED, 0.12).add(Attributes.KNOCKBACK_RESISTANCE, 1.0D).add(Attributes.ATTACK_DAMAGE, 15.0D);
     }
 
     @Override
@@ -437,5 +439,11 @@ public class IridiumGolem extends AbstractGolem implements NeutralMob, AnimatedE
     @Override
     public boolean doesIdleAnimations() {
         return true;
+    }
+
+    @Nullable
+    @Override
+    public ItemStack getPickResult() {
+        return ItemRegistry.IRIDIUM_GOLEM_SPAWN_EGG.get().getDefaultInstance();
     }
 }
