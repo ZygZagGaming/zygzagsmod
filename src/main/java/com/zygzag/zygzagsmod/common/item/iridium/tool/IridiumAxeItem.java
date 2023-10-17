@@ -37,6 +37,7 @@ import java.util.List;
 @MethodsReturnNonnullByDefault
 public class IridiumAxeItem extends AxeItem implements ISocketable {
     Socket socket;
+
     public IridiumAxeItem(Tier tier, float damage, float speed, Properties properties, Socket socket) {
         super(tier, damage, speed, properties);
         this.socket = socket;
@@ -80,7 +81,8 @@ public class IridiumAxeItem extends AxeItem implements ISocketable {
                                 player.getBlockY() + y,
                                 player.getBlockZ() + z
                         );
-                        if (player.getBoundingBox().getCenter().distanceToSqr(Vec3.atCenterOf(blockPos)) > range * range) continue;
+                        if (player.getBoundingBox().getCenter().distanceToSqr(Vec3.atCenterOf(blockPos)) > range * range)
+                            continue;
                         var blockState = world.getBlockState(blockPos);
                         if (blockState.is(Main.VEGETATION_TAG)) {
                             var fluid = blockState.getFluidState();
@@ -99,7 +101,8 @@ public class IridiumAxeItem extends AxeItem implements ISocketable {
                 }
             }
             List<LivingEntity> entities = world.getEntitiesOfClass(LivingEntity.class, player.getBoundingBox().inflate(range), (living) -> living.isAlive() && living.distanceToSqr(player) <= range * range && !living.is(player));
-            for (LivingEntity living : entities) living.addEffect(new MobEffectInstance(MobEffects.WITHER, (int) ((range * range - living.distanceToSqr(player)) * 4), 1));
+            for (LivingEntity living : entities)
+                living.addEffect(new MobEffectInstance(MobEffects.WITHER, (int) ((range * range - living.distanceToSqr(player)) * 4), 1));
             if (!player.getAbilities().instabuild) addCooldown(player, stack);
             return InteractionResultHolder.consume(stack);
         }

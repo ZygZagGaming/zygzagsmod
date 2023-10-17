@@ -16,5 +16,6 @@ public class CriterionTriggerRegistry {
 
     public static final ThrowSnowballsAtMobTrigger THROW_SNOWBALLS_AT_MOB = CriteriaTriggers.register(new ThrowSnowballsAtMobTrigger());
 
-    public static void init() { }
+    public static void init() {
+    }
 }

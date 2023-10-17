@@ -14,6 +14,12 @@ import java.util.List;
 @ParametersAreNonnullByDefault
 @MethodsReturnNonnullByDefault
 public class MultikillTrigger extends SimpleCriterionTrigger<MultikillTrigger.Instance> {
+    final ResourceLocation id;
+
+    public MultikillTrigger(ResourceLocation id) {
+        this.id = id;
+    }
+
     @Override
     protected Instance createInstance(JsonObject json, ContextAwarePredicate predicate, DeserializationContext context) {
         return new Instance(id, predicate, EntityPredicate.fromJson(json, "all_entities", context), json.get("number").getAsInt());
@@ -25,12 +31,6 @@ public class MultikillTrigger extends SimpleCriterionTrigger<MultikillTrigger.In
         });
     }
 
-    final ResourceLocation id;
-
-    public MultikillTrigger(ResourceLocation id) {
-        this.id = id;
-    }
-
     public ResourceLocation getId() {
         return this.id;
     }
@@ -38,6 +38,7 @@ public class MultikillTrigger extends SimpleCriterionTrigger<MultikillTrigger.In
     public static class Instance extends AbstractCriterionTriggerInstance {
         ContextAwarePredicate entityPredicate;
         int number;
+
         public Instance(ResourceLocation id, ContextAwarePredicate playerPredicate, ContextAwarePredicate entityPredicate, int number) {
             super(id, playerPredicate);
             this.entityPredicate = entityPredicate;

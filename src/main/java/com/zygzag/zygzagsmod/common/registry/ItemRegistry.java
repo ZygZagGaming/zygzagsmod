@@ -15,15 +15,11 @@ import static com.zygzag.zygzagsmod.common.Main.MODID;
 
 public class ItemRegistry extends Registry<Item> {
     public static final ItemRegistry INSTANCE = new ItemRegistry(DeferredRegister.create(Registries.ITEM, MODID));
-    public ItemRegistry(DeferredRegister<Item> register) {
-        super(register);
-    }
     public static final RegistryObject<Item> IRIDIUM_PLATING = basicItem("iridium_plating");
     public static final RegistryObject<Item> TRANSMUTATION_CHARGE = INSTANCE.register(
             "transmutation_charge",
             () -> new TransmutationCharge(new Item.Properties())
     );
-
     public static final RegistryObject<Item> RAW_IRIDIUM = basicItem("raw_iridium");
     public static final RegistryObject<Item> IRIDIUM_HELMET_BLUEPRINT = basicItem("iridium_helmet_blueprint");
     public static final RegistryObject<Item> IRIDIUM_CHESTPLATE_BLUEPRINT = basicItem("iridium_chestplate_blueprint");
@@ -45,7 +41,6 @@ public class ItemRegistry extends Registry<Item> {
             IRIDIUM_SHOVEL_BLUEPRINT,
             IRIDIUM_HOE_BLUEPRINT
     );
-
     public static final RegistryObject<Item> DIAMOND_SOCKET_SCHEMATIC = basicItem("diamond_socket_schematic");
     public static final RegistryObject<Item> EMERALD_SOCKET_SCHEMATIC = basicItem("emerald_socket_schematic");
     public static final RegistryObject<Item> SKULL_SOCKET_SCHEMATIC = basicItem("skull_socket_schematic");
@@ -58,9 +53,11 @@ public class ItemRegistry extends Registry<Item> {
             WITHER_SKULL_SOCKET_SCHEMATIC,
             AMETHYST_SOCKET_SCHEMATIC
     );
-
     public static final RegistryObject<Item> IRIDIUM_GOLEM_SPAWN_EGG = INSTANCE.register("iridium_golem_spawn_egg", () -> new ForgeSpawnEggItem(EntityTypeRegistry.IRIDIUM_GOLEM, 0x78bbd6, 0xcfcfcf, new Item.Properties()));
     public static final RegistryObject<Item> BLAZE_SENTRY_SPAWN_EGG = INSTANCE.register("blaze_sentry_spawn_egg", () -> new ForgeSpawnEggItem(EntityTypeRegistry.BLAZE_SENTRY, 0xc79002, 0xc7c263, new Item.Properties()));
+    public ItemRegistry(DeferredRegister<Item> register) {
+        super(register);
+    }
 
     private static RegistryObject<Item> basicItem(String id) {
         return INSTANCE.register(id, () -> new Item(new Item.Properties()));

@@ -22,15 +22,14 @@ import java.util.Queue;
 @MethodsReturnNonnullByDefault
 public class Animator<T extends LivingEntity & AnimatedEntity<T>> {
     private final T parent;
+    private final Queue<AbstractAnimation> queuedAnims = new LinkedList<>();
+    private final AnimationController<T> mainAnimController;
     private Animation lastNonTransitionAnimation;
     private AbstractAnimation lastAnimation;
-    private final Queue<AbstractAnimation> queuedAnims = new LinkedList<>();
     private Animation animation;
     private @Nullable TransitionAnimation transitionAnimation;
     private int timeUntilIdleAnimation = 5 * 20;
     private int ticksRemainingInAnimation = 0;
-
-    private final AnimationController<T> mainAnimController;
 
     public Animator(T parent) {
         this.parent = parent;
@@ -45,14 +44,6 @@ public class Animator<T extends LivingEntity & AnimatedEntity<T>> {
         return animation;
     }
 
-    public @Nullable TransitionAnimation getTransitionAnimation() {
-        return transitionAnimation;
-    }
-
-    public int getTicksRemainingInAnimation() {
-        return ticksRemainingInAnimation;
-    }
-
     public void setAnimation(Animation animation) {
         if (!level().isClientSide()) {
             //System.out.println("animation changed from " + getAnimation() + " to " + animation);
@@ -60,8 +51,16 @@ public class Animator<T extends LivingEntity & AnimatedEntity<T>> {
         }
     }
 
+    public @Nullable TransitionAnimation getTransitionAnimation() {
+        return transitionAnimation;
+    }
+
     public void setTransitionAnimation(@Nullable TransitionAnimation transitionAnimation) {
         this.transitionAnimation = transitionAnimation;
+    }
+
+    public int getTicksRemainingInAnimation() {
+        return ticksRemainingInAnimation;
     }
 
     public void setTicksRemainingInAnimation(int ticksRemainingInAnimation) {
@@ -178,21 +177,6 @@ public class Animator<T extends LivingEntity & AnimatedEntity<T>> {
             AbstractAnimation lastAnimation,
             Animation lastNonTransitionAnimation
     ) {
-        public void toNetwork(FriendlyByteBuf buf) {
-            buf.writeUtf(animation.id().toString());
-            buf.writeUtf(transitionAnimation == null ? "null" : transitionAnimation.id().toString());
-            buf.writeInt(timeUntilIdleAnimation);
-            buf.writeInt(ticksRemainingInAnimation);
-            buf.writeInt(queuedAnims.size());
-            for (AbstractAnimation queued : queuedAnims) {
-                buf.writeBoolean(queued instanceof TransitionAnimation);
-                buf.writeUtf(queued.id().toString());
-            }
-            buf.writeBoolean(lastAnimation instanceof TransitionAnimation);
-            buf.writeUtf(lastAnimation.id().toString());
-            buf.writeUtf(lastNonTransitionAnimation.id().toString());
-        }
-
         public static State fromNetwork(FriendlyByteBuf buf) {
             ResourceLocation animationLoc = new ResourceLocation(buf.readUtf());
             Animation animation = Main.animationRegistry().getValue(animationLoc);
@@ -215,8 +199,24 @@ public class Animator<T extends LivingEntity & AnimatedEntity<T>> {
             if (lastAnimation == null) throw new IllegalArgumentException("Invalid animation id recieved: " + lastLoc);
             ResourceLocation lastNonTransitionLoc = new ResourceLocation(buf.readUtf());
             Animation lastNonTransitionAnimation = Main.animationRegistry().getValue(lastNonTransitionLoc);
-            if (lastNonTransitionAnimation == null) throw new IllegalArgumentException("Invalid animation id recieved: " + lastNonTransitionLoc);
+            if (lastNonTransitionAnimation == null)
+                throw new IllegalArgumentException("Invalid animation id recieved: " + lastNonTransitionLoc);
             return new State(animation, transitionAnimation, timeUntilIdleAnimation, ticksRemainingInAnimation, queuedAnims, lastAnimation, lastNonTransitionAnimation);
+        }
+
+        public void toNetwork(FriendlyByteBuf buf) {
+            buf.writeUtf(animation.id().toString());
+            buf.writeUtf(transitionAnimation == null ? "null" : transitionAnimation.id().toString());
+            buf.writeInt(timeUntilIdleAnimation);
+            buf.writeInt(ticksRemainingInAnimation);
+            buf.writeInt(queuedAnims.size());
+            for (AbstractAnimation queued : queuedAnims) {
+                buf.writeBoolean(queued instanceof TransitionAnimation);
+                buf.writeUtf(queued.id().toString());
+            }
+            buf.writeBoolean(lastAnimation instanceof TransitionAnimation);
+            buf.writeUtf(lastAnimation.id().toString());
+            buf.writeUtf(lastNonTransitionAnimation.id().toString());
         }
     }
 }

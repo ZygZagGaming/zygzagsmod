@@ -29,6 +29,7 @@ import javax.annotation.ParametersAreNonnullByDefault;
 public class EndSandBlock extends Block {
     public static Property<Boolean> ETHEREAL = BooleanProperty.create("ethereal");
     public static Property<Integer> POWER = IntegerProperty.create("power", 0, 15);
+
     public EndSandBlock(Properties pProperties) {
         super(pProperties);
         registerDefaultState(defaultBlockState().setValue(ETHEREAL, false).setValue(POWER, 0));
@@ -61,7 +62,8 @@ public class EndSandBlock extends Block {
         }
         var effectivePower = Math.max(redstonePower, blockPower - 1);
         world.setBlockAndUpdate(pos, state.setValue(POWER, effectivePower));
-        if (effectivePower == 0 && state.getValue(POWER) > 0) world.playSound(null, pos, SoundEventRegistry.END_SAND_REFORM.get(), SoundSource.BLOCKS);
+        if (effectivePower == 0 && state.getValue(POWER) > 0)
+            world.playSound(null, pos, SoundEventRegistry.END_SAND_REFORM.get(), SoundSource.BLOCKS);
         world.scheduleTick(pos, this, 2);
     }
 
@@ -78,9 +80,9 @@ public class EndSandBlock extends Block {
         if (state.getBlock() == this && world instanceof ServerLevel sWorld) {
             sWorld.sendParticles(
                     ParticleTypeRegistry.END_SAND_PARTICLES.get(),
-                    (double)pos.getX() + 0.5,
-                    (double)pos.getY() + 0.5,
-                    (double)pos.getZ() + 0.5,
+                    (double) pos.getX() + 0.5,
+                    (double) pos.getY() + 0.5,
+                    (double) pos.getZ() + 0.5,
                     8,
                     0.25,
                     0.25,

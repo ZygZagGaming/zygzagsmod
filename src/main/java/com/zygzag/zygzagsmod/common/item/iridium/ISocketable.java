@@ -17,6 +17,19 @@ import java.util.List;
 
 
 public interface ISocketable {
+    static void addCooldown(Player player, ItemStack stack, int amount) {
+        if (!player.getAbilities().instabuild) {
+            int level = EnchantmentHelper.getTagEnchantmentLevel(EnchantmentRegistry.COOLDOWN_ENCHANTMENT.get(), stack);
+            player.getCooldowns().addCooldown(stack.getItem(), amount - (amount * level) / 6);
+        }
+    }
+
+    static int getColor(ItemStack stack, int layer) {
+        if (stack.getItem() instanceof ISocketable socketable && layer == 1) {
+            return socketable.getSocket().color;
+        } else return 0xffffff;
+    }
+
     Socket getSocket();
 
     boolean hasCooldown();
@@ -29,13 +42,6 @@ public interface ISocketable {
 
     default void addCooldown(Player player, ItemStack stack) {
         addCooldown(player, stack, getBaseCooldown(stack, player.level()));
-    }
-
-    static void addCooldown(Player player, ItemStack stack, int amount) {
-        if (!player.getAbilities().instabuild) {
-            int level = EnchantmentHelper.getTagEnchantmentLevel(EnchantmentRegistry.COOLDOWN_ENCHANTMENT.get(), stack);
-            player.getCooldowns().addCooldown(stack.getItem(), amount - (amount * level) / 6);
-        }
     }
 
     default void appendHoverText(ItemStack stack, @Nullable Level world, List<Component> text, TooltipFlag flag, String type) {
@@ -51,10 +57,11 @@ public interface ISocketable {
             Socket socket = getSocket();
             text.add(Component.literal(""));
             MutableComponent m;
-            if (hasUseAbility()) m = Minecraft.getInstance().options.keyUse.getKey().getDisplayName().copy().withStyle(ChatFormatting.GRAY);
+            if (hasUseAbility())
+                m = Minecraft.getInstance().options.keyUse.getKey().getDisplayName().copy().withStyle(ChatFormatting.GRAY);
             else m = Component.translatable(str + ".zygzagsmod").withStyle(ChatFormatting.GRAY);
-            m.append(Component.literal( ": ").withStyle(ChatFormatting.GRAY));
-            m.append(Component.translatable( str + "_ability.zygzagsmod." + type + "." + socket.name().toLowerCase()).withStyle(ChatFormatting.GOLD));
+            m.append(Component.literal(": ").withStyle(ChatFormatting.GRAY));
+            m.append(Component.translatable(str + "_ability.zygzagsmod." + type + "." + socket.name().toLowerCase()).withStyle(ChatFormatting.GOLD));
             text.add(m);
             text.add(Component.translatable("description." + str + "_ability.zygzagsmod." + type + "." + socket.name().toLowerCase()));
             if (hasCooldown()) {
@@ -67,11 +74,5 @@ public interface ISocketable {
                 text.add(comp);
             }
         }
-    }
-
-    static int getColor(ItemStack stack, int layer) {
-        if (stack.getItem() instanceof ISocketable socketable && layer == 1) {
-            return socketable.getSocket().color;
-        } else return 0xffffff;
     }
 }

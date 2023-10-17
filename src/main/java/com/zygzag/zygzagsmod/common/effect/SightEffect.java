@@ -14,6 +14,7 @@ import java.util.function.Predicate;
 public class SightEffect extends MobEffect {
     public Predicate<BlockState> predicate;
     public Function<BlockState, Integer> selector;
+
     public SightEffect(MobEffectCategory category, int color, Predicate<BlockState> blockPredicate, Function<BlockState, Integer> colorSelector) {
         super(category, color);
         this.predicate = blockPredicate;

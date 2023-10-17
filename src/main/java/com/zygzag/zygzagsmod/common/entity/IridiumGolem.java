@@ -44,23 +44,19 @@ import java.util.function.Supplier;
 @ParametersAreNonnullByDefault
 @MethodsReturnNonnullByDefault
 public class IridiumGolem extends AbstractGolem implements NeutralMob, AnimatedEntity<IridiumGolem> {
-    private static final EntityDataAccessor<Integer> DATA_REMAINING_ANGER_TIME = SynchedEntityData.defineId(IridiumGolem.class, EntityDataSerializers.INT);
-    private static final UniformInt PERSISTENT_ANGER_TIME = TimeUtil.rangeOfSeconds(10 * 60, 20 * 60);
-
+    public static final List<Function<IridiumGolem, StandingAttackGoal>> standstillAttacks = List.of(
+            (golem) -> golem.new StandingAttackGoal(RawAnimation.begin().thenPlay("animation.iridium_golem.attack2"))
+    );
     protected static final Supplier<List<Animation>> IDLE_ANIMATIONS = () -> List.of(
             AnimationRegistry.IridiumGolem.IDLE_1.get(),
             AnimationRegistry.IridiumGolem.IDLE_2.get(),
             AnimationRegistry.IridiumGolem.IDLE_3.get()
     );
-
-    public static final List<Function<IridiumGolem, StandingAttackGoal>> standstillAttacks = List.of(
-            (golem) -> golem.new StandingAttackGoal(RawAnimation.begin().thenPlay("animation.iridium_golem.attack2"))
-    );
-
     protected static final EntityDataAccessor<MindState> DATA_MIND_STATE = SynchedEntityData.defineId(IridiumGolem.class, EntityDataSerializerRegistry.IRIDIUM_GOLEM_MIND_STATE.get());
     protected static final EntityDataAccessor<Integer> DATA_TICKS_REMAINING_IN_ANIMATION = SynchedEntityData.defineId(IridiumGolem.class, EntityDataSerializers.INT);
     protected static final EntityDataAccessor<Animator.State> DATA_ANIMATOR_STATE = SynchedEntityData.defineId(IridiumGolem.class, EntityDataSerializerRegistry.ANIMATOR_STATE.get());
-
+    private static final EntityDataAccessor<Integer> DATA_REMAINING_ANGER_TIME = SynchedEntityData.defineId(IridiumGolem.class, EntityDataSerializers.INT);
+    private static final UniformInt PERSISTENT_ANGER_TIME = TimeUtil.rangeOfSeconds(10 * 60, 20 * 60);
     private final Animator<IridiumGolem> animator = new Animator<>(this);
 
     private final AnimatableInstanceCache instanceCache = GeckoLibUtil.createInstanceCache(this);
@@ -69,6 +65,10 @@ public class IridiumGolem extends AbstractGolem implements NeutralMob, AnimatedE
 
     public IridiumGolem(EntityType<? extends AbstractGolem> type, Level world) {
         super(type, world);
+    }
+
+    public static AttributeSupplier.Builder createAttributes() {
+        return Mob.createMobAttributes().add(Attributes.MAX_HEALTH, 100.0D).add(Attributes.MOVEMENT_SPEED, 0.12).add(Attributes.KNOCKBACK_RESISTANCE, 1.0D).add(Attributes.ATTACK_DAMAGE, 15.0D);
     }
 
     protected void registerGoals() {
@@ -155,7 +155,8 @@ public class IridiumGolem extends AbstractGolem implements NeutralMob, AnimatedE
         try {
             MindState mindState = MindState.valueOf(tag.getString("mind_state"));
             setMindState(mindState);
-        } catch (IllegalArgumentException ignored) { }
+        } catch (IllegalArgumentException ignored) {
+        }
     }
 
     @Override
@@ -203,10 +204,6 @@ public class IridiumGolem extends AbstractGolem implements NeutralMob, AnimatedE
         animator.tick();
     }
 
-    public static AttributeSupplier.Builder createAttributes() {
-        return Mob.createMobAttributes().add(Attributes.MAX_HEALTH, 100.0D).add(Attributes.MOVEMENT_SPEED, 0.12).add(Attributes.KNOCKBACK_RESISTANCE, 1.0D).add(Attributes.ATTACK_DAMAGE, 15.0D);
-    }
-
     @Override
     public void registerControllers(AnimatableManager.ControllerRegistrar controllerRegistrar) {
         animator.register(controllerRegistrar);
@@ -227,8 +224,34 @@ public class IridiumGolem extends AbstractGolem implements NeutralMob, AnimatedE
         return 1.2f;
     }
 
+    @Override
+    public boolean doesIdleAnimations() {
+        return true;
+    }
+
+    @Nullable
+    @Override
+    public ItemStack getPickResult() {
+        return ItemRegistry.IRIDIUM_GOLEM_SPAWN_EGG.get().getDefaultInstance();
+    }
+
+    public enum MindState {
+        IDLE(AnimationRegistry.IridiumGolem.IDLE_BASE.get(), AnimationRegistry.IridiumGolem.WALK_BASE.get()),
+        AGRO(AnimationRegistry.IridiumGolem.AGRO_BASE.get(), AnimationRegistry.IridiumGolem.RUN_BASE.get()),
+        ATTACK_2(AnimationRegistry.IridiumGolem.ATTACK_SMASH.get(), null);
+
+        public final @Nullable Animation nonMovingAnim;
+        public final @Nullable Animation movingAnim;
+
+        MindState(@Nullable Animation nonMovingAnim, @Nullable Animation movingAnim) {
+            this.nonMovingAnim = nonMovingAnim;
+            this.movingAnim = movingAnim;
+        }
+    }
+
     private class IridiumGolemRandomStrollGoal extends RandomStrollGoal {
         double runningSpeedModifier;
+
         public IridiumGolemRandomStrollGoal(PathfinderMob entity, double speedModifier, double runningSpeedModifier) {
             super(entity, speedModifier);
             this.runningSpeedModifier = runningSpeedModifier;
@@ -246,20 +269,12 @@ public class IridiumGolem extends AbstractGolem implements NeutralMob, AnimatedE
         }
     }
 
-    public enum MindState {
-        IDLE(AnimationRegistry.IridiumGolem.IDLE_BASE.get(), AnimationRegistry.IridiumGolem.WALK_BASE.get()),
-        AGRO(AnimationRegistry.IridiumGolem.AGRO_BASE.get(), AnimationRegistry.IridiumGolem.RUN_BASE.get()),
-        ATTACK_2(AnimationRegistry.IridiumGolem.ATTACK_SMASH.get(), null);
-
-        public final @Nullable Animation nonMovingAnim;
-        public final @Nullable Animation movingAnim;
-        MindState(@Nullable Animation nonMovingAnim, @Nullable Animation movingAnim) {
-            this.nonMovingAnim = nonMovingAnim;
-            this.movingAnim = movingAnim;
-        }
-    }
-
     public class StandingAttackGoal extends Goal {
+        public final RawAnimation animation;
+        public final int attackDuration = 20;
+        public final int endLag = 28;
+        public final float speedModifier = 7.5f;
+        private final boolean canPenalize = false;
         private Path path;
         private double pathedTargetX;
         private double pathedTargetY;
@@ -268,11 +283,7 @@ public class IridiumGolem extends AbstractGolem implements NeutralMob, AnimatedE
         private int ticksUntilNextAttack;
         private long lastCanUseCheck;
         private int failedPathFindingPenalty = 0;
-        private final boolean canPenalize = false;
-        public final RawAnimation animation;
-        public final int attackDuration = 20;
-        public final int endLag = 28;
-        public final float speedModifier = 7.5f;
+
         public StandingAttackGoal(RawAnimation animation) {
             this.animation = animation;
             setFlags(EnumSet.of(Flag.MOVE, Flag.LOOK));
@@ -336,7 +347,7 @@ public class IridiumGolem extends AbstractGolem implements NeutralMob, AnimatedE
 
         public boolean canContinueToUse() {
             LivingEntity target = getTarget();
-            return (!(target == null || !target.isAlive() || !isWithinRestriction(target.blockPosition())) && (!(target instanceof Player) || !target.isSpectator() && !((Player)target).isCreative()));
+            return (!(target == null || !target.isAlive() || !isWithinRestriction(target.blockPosition())) && (!(target instanceof Player) || !target.isSpectator() && !((Player) target).isCreative()));
         }
 
         protected double getAttackReachSqr(LivingEntity living) {
@@ -401,7 +412,8 @@ public class IridiumGolem extends AbstractGolem implements NeutralMob, AnimatedE
                     ticksUntilNextPathRecalculation = adjustedTickDelay(ticksUntilNextPathRecalculation);
                 }
 
-                if (ticksUntilNextAttack != attackDuration + endLag) ticksUntilNextAttack = Math.max(ticksUntilNextAttack - 1, 0);
+                if (ticksUntilNextAttack != attackDuration + endLag)
+                    ticksUntilNextAttack = Math.max(ticksUntilNextAttack - 1, 0);
                 checkAndPerformAttack();
             }
         }
@@ -434,16 +446,5 @@ public class IridiumGolem extends AbstractGolem implements NeutralMob, AnimatedE
         protected void resetAttackCooldown() {
             ticksUntilNextAttack = attackDuration + endLag;
         }
-    }
-
-    @Override
-    public boolean doesIdleAnimations() {
-        return true;
-    }
-
-    @Nullable
-    @Override
-    public ItemStack getPickResult() {
-        return ItemRegistry.IRIDIUM_GOLEM_SPAWN_EGG.get().getDefaultInstance();
     }
 }

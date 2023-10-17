@@ -29,6 +29,15 @@ public class OverheatSphereParticle extends TextureSheetParticle {
         return ParticleRenderType.PARTICLE_SHEET_TRANSLUCENT;
     }
 
+    public void tick() {
+        super.tick();
+        yd -= 0.0375;
+        xd *= 0.8;
+        yd *= 0.8;
+        zd *= 0.8;
+        this.setSpriteFromAge(this.sprites);
+    }
+
     public static class Provider implements ParticleProvider<SimpleParticleType> {
         private final SpriteSet sprites;
 
@@ -39,14 +48,5 @@ public class OverheatSphereParticle extends TextureSheetParticle {
         public Particle createParticle(SimpleParticleType pType, ClientLevel pLevel, double pX, double pY, double pZ, double pXSpeed, double pYSpeed, double pZSpeed) {
             return new OverheatSphereParticle(pLevel, pX, pY, pZ, pXSpeed, pYSpeed, pZSpeed, sprites);
         }
-    }
-
-    public void tick() {
-        super.tick();
-        yd -= 0.0375;
-        xd *= 0.8;
-        yd *= 0.8;
-        zd *= 0.8;
-        this.setSpriteFromAge(this.sprites);
     }
 }

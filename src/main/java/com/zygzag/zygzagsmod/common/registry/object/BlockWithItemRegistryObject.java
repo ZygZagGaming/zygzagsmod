@@ -7,7 +7,9 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.registries.RegistryObject;
 
-public record BlockWithItemRegistryObject<B extends Block, I extends BlockItem>(ResourceLocation id, RegistryObject<B> block, RegistryObject<I> item) {
+public record BlockWithItemRegistryObject<B extends Block, I extends BlockItem>(ResourceLocation id,
+                                                                                RegistryObject<B> block,
+                                                                                RegistryObject<I> item) {
     public I getItem() {
         return item.get();
     }

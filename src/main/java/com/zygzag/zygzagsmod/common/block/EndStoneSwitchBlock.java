@@ -27,6 +27,7 @@ import javax.annotation.ParametersAreNonnullByDefault;
 public class EndStoneSwitchBlock extends Block {
     public static final DirectionProperty FACING = BlockStateProperties.FACING;
     public static final BooleanProperty POWERED = BlockStateProperties.POWERED;
+
     public EndStoneSwitchBlock(Properties pProperties) {
         super(pProperties);
         registerDefaultState(defaultBlockState()

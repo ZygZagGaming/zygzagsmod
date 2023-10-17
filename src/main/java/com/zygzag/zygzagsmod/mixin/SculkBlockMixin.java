@@ -26,21 +26,13 @@ public abstract class SculkBlockMixin extends DropExperienceBlock implements Scu
         throw new UnsupportedOperationException();
     }
 
-    @Inject(at = @At("HEAD"), cancellable = true, method = "getRandomGrowthState(Lnet/minecraft/world/level/LevelAccessor;Lnet/minecraft/core/BlockPos;Lnet/minecraft/util/RandomSource;Z)Lnet/minecraft/world/level/block/state/BlockState;")
-    private void getRandomGrowthState(LevelAccessor world, BlockPos pos, RandomSource rng, boolean flag, CallbackInfoReturnable<BlockState> callback) {
-        BlockState blockstate = GeneralUtil.randomElement(Main.EXTRANEOUS_SCULK_GROWTHS.get().keySet().stream().toList(), Main.EXTRANEOUS_SCULK_GROWTHS.get().values().stream().toList(), rng);
-        if (blockstate.is(Blocks.SCULK_SHRIEKER)) blockstate = blockstate.setValue(SculkShriekerBlock.CAN_SUMMON, flag);
-
-        callback.setReturnValue(blockstate.hasProperty(BlockStateProperties.WATERLOGGED) && !world.getFluidState(pos).isEmpty() ? blockstate.setValue(BlockStateProperties.WATERLOGGED, true) : blockstate);
-    }
-
     @Inject(at = @At("HEAD"), cancellable = true, method = "canPlaceGrowth(Lnet/minecraft/world/level/LevelAccessor;Lnet/minecraft/core/BlockPos;)Z")
     private static void canPlaceGrowth(LevelAccessor world, BlockPos pos, CallbackInfoReturnable<Boolean> callback) {
         BlockState blockstateAbove = world.getBlockState(pos.above());
         if (blockstateAbove.isAir() || blockstateAbove.is(Blocks.WATER) && blockstateAbove.getFluidState().is(Fluids.WATER)) {
             int numSculkGrowths = 0;
 
-            for(BlockPos blockpos : BlockPos.betweenClosed(pos.offset(-4, 0, -4), pos.offset(4, 2, 4))) {
+            for (BlockPos blockpos : BlockPos.betweenClosed(pos.offset(-4, 0, -4), pos.offset(4, 2, 4))) {
                 BlockState blockstate1 = world.getBlockState(blockpos);
                 if (Main.EXTRANEOUS_SCULK_GROWTHS.get().keySet().stream().anyMatch((it) -> blockstate1.is(it.getBlock()))) {
                     ++numSculkGrowths;
@@ -55,5 +47,13 @@ public abstract class SculkBlockMixin extends DropExperienceBlock implements Scu
         } else {
             callback.setReturnValue(false);
         }
+    }
+
+    @Inject(at = @At("HEAD"), cancellable = true, method = "getRandomGrowthState(Lnet/minecraft/world/level/LevelAccessor;Lnet/minecraft/core/BlockPos;Lnet/minecraft/util/RandomSource;Z)Lnet/minecraft/world/level/block/state/BlockState;")
+    private void getRandomGrowthState(LevelAccessor world, BlockPos pos, RandomSource rng, boolean flag, CallbackInfoReturnable<BlockState> callback) {
+        BlockState blockstate = GeneralUtil.randomElement(Main.EXTRANEOUS_SCULK_GROWTHS.get().keySet().stream().toList(), Main.EXTRANEOUS_SCULK_GROWTHS.get().values().stream().toList(), rng);
+        if (blockstate.is(Blocks.SCULK_SHRIEKER)) blockstate = blockstate.setValue(SculkShriekerBlock.CAN_SUMMON, flag);
+
+        callback.setReturnValue(blockstate.hasProperty(BlockStateProperties.WATERLOGGED) && !world.getFluidState(pos).isEmpty() ? blockstate.setValue(BlockStateProperties.WATERLOGGED, true) : blockstate);
     }
 }

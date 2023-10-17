@@ -23,6 +23,7 @@ import java.util.List;
 @ParametersAreNonnullByDefault
 public class IridiumSwordItem extends SwordItem implements ISocketable {
     Socket socket;
+
     public IridiumSwordItem(Tier tier, int damage, float speed, Properties properties, Socket socket) {
         super(tier, damage, speed, properties);
         this.socket = socket;

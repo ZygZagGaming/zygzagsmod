@@ -18,6 +18,7 @@ import java.util.UUID;
 @MethodsReturnNonnullByDefault
 public class PlayerAlliedSkeleton extends WitherSkeleton {
     public UUID alliedPlayerUUID;
+
     public PlayerAlliedSkeleton(EntityType<? extends WitherSkeleton> pEntityType, Level pLevel) {
         super(pEntityType, pLevel);
         var optional = pLevel.players().stream().min((a, b) -> (int) (a.distanceTo(this) - b.distanceTo(this)));

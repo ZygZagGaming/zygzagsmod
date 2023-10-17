@@ -10,6 +10,7 @@ import static com.zygzag.zygzagsmod.common.Main.MODID;
 
 public class StructurePieceTypeRegistry extends Registry<StructurePieceType> {
     public static final StructurePieceTypeRegistry INSTANCE = new StructurePieceTypeRegistry(DeferredRegister.create(Registries.STRUCTURE_PIECE, MODID));
+
     public StructurePieceTypeRegistry(DeferredRegister<StructurePieceType> register) {
         super(register);
     }

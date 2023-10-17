@@ -8,6 +8,7 @@ import static com.zygzag.zygzagsmod.common.Main.MODID;
 
 public class BlockEntityRegistry extends Registry<BlockEntityType<?>> {
     public static final BlockEntityRegistry INSTANCE = new BlockEntityRegistry(DeferredRegister.create(ForgeRegistries.BLOCK_ENTITY_TYPES, MODID));
+
     public BlockEntityRegistry(DeferredRegister<BlockEntityType<?>> register) {
         super(register);
     }

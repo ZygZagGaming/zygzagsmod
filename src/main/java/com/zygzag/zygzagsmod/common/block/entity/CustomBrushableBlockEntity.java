@@ -93,13 +93,13 @@ public class CustomBrushableBlockEntity extends BlockEntity {
     public void unpackLootTable(Player pPlayer) {
         if (this.lootTable != null && this.level != null && !this.level.isClientSide() && this.level.getServer() != null) {
             if (pPlayer instanceof ServerPlayer) {
-                ServerPlayer serverplayer = (ServerPlayer)pPlayer;
+                ServerPlayer serverplayer = (ServerPlayer) pPlayer;
                 CriteriaTriggers.GENERATE_LOOT.trigger(serverplayer, this.lootTable);
             }
 
             //System.out.println(this.lootTable);
             LootTable loottable = this.level.getServer().getLootData().getLootTable(this.lootTable);
-            LootParams lootparams = (new LootParams.Builder((ServerLevel)this.level))
+            LootParams lootparams = (new LootParams.Builder((ServerLevel) this.level))
                     .withParameter(LootContextParams.ORIGIN, Vec3.atCenterOf(this.worldPosition))
                     .withOptionalParameter(LootContextParams.THIS_ENTITY, pPlayer)
                     .create(LootContextParamSets.CHEST);
@@ -128,7 +128,7 @@ public class CustomBrushableBlockEntity extends BlockEntity {
             Block block = this.getBlockState().getBlock();
             Block block1;
             if (block instanceof BrushableBlock) {
-                BrushableBlock brushableblock = (BrushableBlock)block;
+                BrushableBlock brushableblock = (BrushableBlock) block;
                 block1 = brushableblock.getTurnsInto();
             } else {
                 block1 = Blocks.AIR;
@@ -143,14 +143,14 @@ public class CustomBrushableBlockEntity extends BlockEntity {
         if (this.level != null && this.level.getServer() != null) {
             this.unpackLootTable(pPlayer);
             if (!this.item.isEmpty()) {
-                double d0 = (double) EntityType.ITEM.getWidth();
+                double d0 = EntityType.ITEM.getWidth();
                 double d1 = 1.0D - d0;
                 double d2 = d0 / 2.0D;
                 Direction direction = Objects.requireNonNullElse(this.hitDirection, Direction.UP);
                 BlockPos blockpos = this.worldPosition.relative(direction, 1);
-                double d3 = (double)blockpos.getX() + 0.5D * d1 + d2;
-                double d4 = (double)blockpos.getY() + 0.5D + (double)(EntityType.ITEM.getHeight() / 2.0F);
-                double d5 = (double)blockpos.getZ() + 0.5D * d1 + d2;
+                double d3 = (double) blockpos.getX() + 0.5D * d1 + d2;
+                double d4 = (double) blockpos.getY() + 0.5D + (double) (EntityType.ITEM.getHeight() / 2.0F);
+                double d5 = (double) blockpos.getZ() + 0.5D * d1 + d2;
                 ItemEntity itementity = new ItemEntity(this.level, d3, d4, d5, this.item.split(this.level.random.nextInt(21) + 10));
                 itementity.setDeltaMovement(Vec3.ZERO);
                 this.level.addFreshEntity(itementity);
@@ -179,7 +179,7 @@ public class CustomBrushableBlockEntity extends BlockEntity {
                 this.brushCountResetsAtTick = 0L;
                 this.coolDownEndsAtTick = 0L;
             } else {
-                this.level.scheduleTick(this.getBlockPos(), this.getBlockState().getBlock(), (int)(this.brushCountResetsAtTick - this.level.getGameTime()));
+                this.level.scheduleTick(this.getBlockPos(), this.getBlockState().getBlock(), (int) (this.brushCountResetsAtTick - this.level.getGameTime()));
             }
 
         }

@@ -31,6 +31,15 @@ public class ShockwaveParticle extends TextureSheetParticle {
         return ParticleRenderType.PARTICLE_SHEET_LIT;
     }
 
+    public void tick() {
+        super.tick();
+        xd /= 8;
+        yd /= 8;
+        zd /= 8;
+        yd -= 8;
+        this.setSpriteFromAge(this.sprites);
+    }
+
     public static class Provider implements ParticleProvider<SimpleParticleType> {
         private final SpriteSet sprites;
         private final int minLifetime, maxLifetime;
@@ -44,14 +53,5 @@ public class ShockwaveParticle extends TextureSheetParticle {
         public Particle createParticle(SimpleParticleType pType, ClientLevel pLevel, double pX, double pY, double pZ, double pXSpeed, double pYSpeed, double pZSpeed) {
             return new ShockwaveParticle(pLevel, pX, pY, pZ, pXSpeed, pYSpeed, pZSpeed, sprites, minLifetime, maxLifetime);
         }
-    }
-
-    public void tick() {
-        super.tick();
-        xd /= 8;
-        yd /= 8;
-        zd /= 8;
-        yd -= 8;
-        this.setSpriteFromAge(this.sprites);
     }
 }

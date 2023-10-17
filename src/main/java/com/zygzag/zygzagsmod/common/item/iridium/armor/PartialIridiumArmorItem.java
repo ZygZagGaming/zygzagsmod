@@ -17,6 +17,7 @@ import java.util.List;
 public class PartialIridiumArmorItem extends ArmorItem {
     int numberOfPlates;
     int maxNumOfPlates;
+
     public PartialIridiumArmorItem(ArmorMaterial material, ArmorItem.Type type, Properties properties, int maxNumOfPlates, int numberOfPlates) {
         super(material, type, properties);
         this.numberOfPlates = numberOfPlates;

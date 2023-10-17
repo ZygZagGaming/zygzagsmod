@@ -32,6 +32,7 @@ public class ThrowSnowballsAtMobTrigger extends SimpleCriterionTrigger<ThrowSnow
 
         return new TriggerInstance(player, numberOfSnowballs, target);
     }
+
     public static class TriggerInstance extends AbstractCriterionTriggerInstance {
         private final int numberOfSnowballs;
         private final ContextAwarePredicate target;

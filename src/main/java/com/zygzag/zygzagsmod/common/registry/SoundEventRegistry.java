@@ -17,6 +17,15 @@ public class SoundEventRegistry extends Registry<SoundEvent> {
             "end_sand_break",
             () -> SoundEvent.createVariableRangeEvent(new ResourceLocation(MODID, "end_sand_break"))
     );
+    public static final ForgeSoundType END_SAND = new ForgeSoundType(
+            1.0F,
+            1.0F,
+            END_SAND_BREAK,
+            () -> SoundEvents.SAND_STEP,
+            () -> SoundEvents.SAND_PLACE,
+            () -> SoundEvents.SAND_HIT,
+            () -> SoundEvents.SAND_FALL
+    );
     public static final RegistryObject<SoundEvent> END_SAND_DISSIPATE = INSTANCE.register(
             "end_sand_dissipate",
             () -> SoundEvent.createVariableRangeEvent(new ResourceLocation(MODID, "end_sand_dissipate"))
@@ -28,16 +37,6 @@ public class SoundEventRegistry extends Registry<SoundEvent> {
     public static final RegistryObject<SoundEvent> SCULK_JAW_CLOSE = INSTANCE.register(
             "sculk_jaw_close",
             () -> SoundEvent.createVariableRangeEvent(new ResourceLocation(MODID, "sculk_jaw_close"))
-    );
-
-    public static final ForgeSoundType END_SAND = new ForgeSoundType(
-            1.0F,
-            1.0F,
-            END_SAND_BREAK,
-            () -> SoundEvents.SAND_STEP,
-            () -> SoundEvents.SAND_PLACE,
-            () -> SoundEvents.SAND_HIT,
-            () -> SoundEvents.SAND_FALL
     );
 
     public SoundEventRegistry(DeferredRegister<SoundEvent> register) {

@@ -57,6 +57,8 @@ public class ModTiers {
         return this.repairIngredient.get();
     }
 
-    public TagKey<Block> getTag() { return Main.NEEDS_IRIDIUM_TOOL_TAG; }
+    public TagKey<Block> getTag() {
+        return Main.NEEDS_IRIDIUM_TOOL_TAG;
+    }
 
 }

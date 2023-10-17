@@ -15,10 +15,6 @@ import static com.zygzag.zygzagsmod.common.Main.MODID;
 @MethodsReturnNonnullByDefault
 public class ParticleTypeRegistry extends Registry<ParticleType<?>> {
     public static final ParticleTypeRegistry INSTANCE = new ParticleTypeRegistry(DeferredRegister.create(Registries.PARTICLE_TYPE, MODID));
-    public ParticleTypeRegistry(DeferredRegister<ParticleType<?>> register) {
-        super(register);
-    }
-
     public static RegistryObject<SimpleParticleType> END_SAND_PARTICLES = INSTANCE.register(
             "end_sand_particles",
             () -> new SimpleParticleType(false)
@@ -35,4 +31,7 @@ public class ParticleTypeRegistry extends Registry<ParticleType<?>> {
             "overheat_sphere",
             () -> new SimpleParticleType(false)
     );
+    public ParticleTypeRegistry(DeferredRegister<ParticleType<?>> register) {
+        super(register);
+    }
 }

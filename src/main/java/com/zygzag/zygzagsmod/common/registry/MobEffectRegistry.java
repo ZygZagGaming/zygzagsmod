@@ -16,10 +16,6 @@ import static com.zygzag.zygzagsmod.common.Main.MODID;
 
 public class MobEffectRegistry extends Registry<MobEffect> {
     public static final MobEffectRegistry INSTANCE = new MobEffectRegistry(DeferredRegister.create(Registries.MOB_EFFECT, MODID));
-    public MobEffectRegistry(DeferredRegister<MobEffect> register) {
-        super(register);
-    }
-
     public static RegistryObject<MobEffect> SIGHT_EFFECT = INSTANCE.register(
             "sight",
             () -> new SightEffect(
@@ -29,9 +25,12 @@ public class MobEffectRegistry extends Registry<MobEffect> {
                     GeneralUtil::getColor
             )
     );
-
     public static RegistryObject<MobEffect> OVERHEAT_EFFECT = INSTANCE.register(
             "overheat",
             OverheatEffect::new
     );
+
+    public MobEffectRegistry(DeferredRegister<MobEffect> register) {
+        super(register);
+    }
 }

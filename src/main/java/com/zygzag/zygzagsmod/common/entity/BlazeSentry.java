@@ -47,6 +47,9 @@ public class BlazeSentry extends Monster implements GeoAnimatable, AnimatedEntit
     private final Animator<BlazeSentry> animator = new Animator<>(this);
     public float headXRot = 0, headYRot = 0, oldHeadXRot = 0, oldHeadYRot = 0;
     public float bodyXRot = 0, bodyYRot = 0, oldBodyXRot = 0, oldBodyYRot = 0;
+    @Nullable
+    private LivingEntity cachedTarget;
+
     public BlazeSentry(EntityType<? extends BlazeSentry> type, Level world) {
         super(type, world);
         setPathfindingMalus(BlockPathTypes.WATER, -1);
@@ -58,6 +61,10 @@ public class BlazeSentry extends Monster implements GeoAnimatable, AnimatedEntit
 
     public BlazeSentry(Level world) {
         this(EntityTypeRegistry.BLAZE_SENTRY.get(), world);
+    }
+
+    public static AttributeSupplier.Builder createAttributes() {
+        return Monster.createMonsterAttributes().add(Attributes.ATTACK_DAMAGE, 6.0D).add(Attributes.MOVEMENT_SPEED, 0.23).add(Attributes.FOLLOW_RANGE, 48.0D).add(Attributes.KNOCKBACK_RESISTANCE, 1.0D);
     }
 
     @Override
@@ -76,13 +83,11 @@ public class BlazeSentry extends Monster implements GeoAnimatable, AnimatedEntit
     }
 
     @Nullable
-    private LivingEntity cachedTarget;
-
-    @Nullable
     @Override
     public LivingEntity getTarget() {
         Optional<UUID> targetUUID = entityData.get(DATA_TARGET);
-        if (!((cachedTarget == null && targetUUID.isEmpty()) || (cachedTarget != null && targetUUID.isPresent() && cachedTarget.getUUID().equals(targetUUID.get())))) cachedTarget = targetUUID.flatMap((uuid) -> level().getEntities(this, getBoundingBox().inflate(50), (it) -> it.getUUID().equals(uuid)).stream().findFirst()).flatMap((it) -> it instanceof LivingEntity living ? Optional.of(living) : Optional.empty()).orElse(null);
+        if (!((cachedTarget == null && targetUUID.isEmpty()) || (cachedTarget != null && targetUUID.isPresent() && cachedTarget.getUUID().equals(targetUUID.get()))))
+            cachedTarget = targetUUID.flatMap((uuid) -> level().getEntities(this, getBoundingBox().inflate(50), (it) -> it.getUUID().equals(uuid)).stream().findFirst()).flatMap((it) -> it instanceof LivingEntity living ? Optional.of(living) : Optional.empty()).orElse(null);
         return cachedTarget;
     }
 
@@ -92,10 +97,6 @@ public class BlazeSentry extends Monster implements GeoAnimatable, AnimatedEntit
         else {
             entityData.set(DATA_TARGET, Optional.of(entity.getUUID()));
         }
-    }
-
-    public static AttributeSupplier.Builder createAttributes() {
-        return Monster.createMonsterAttributes().add(Attributes.ATTACK_DAMAGE, 6.0D).add(Attributes.MOVEMENT_SPEED, 0.23).add(Attributes.FOLLOW_RANGE, 48.0D).add(Attributes.KNOCKBACK_RESISTANCE, 1.0D);
     }
 
     public boolean isSensitiveToWater() {

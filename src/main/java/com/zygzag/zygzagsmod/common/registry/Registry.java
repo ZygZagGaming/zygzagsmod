@@ -11,13 +11,6 @@ import java.util.function.Consumer;
 import java.util.function.Supplier;
 
 public class Registry<T> {
-    final DeferredRegister<T> register;
-    Supplier<IForgeRegistry<T>> forgeRegistrySupplier;
-
-    public void registerTo(IEventBus bus) {
-        register.register(bus);
-    }
-
     public static final Supplier<List<Consumer<IEventBus>>> REGISTRATION_QUEUE = () -> List.of(
             BlockRegistry.INSTANCE::registerTo,
             ItemRegistry.INSTANCE::registerTo,
@@ -42,19 +35,25 @@ public class Registry<T> {
             TransitionAnimationRegistry.INSTANCE::registerTo,
             (a) -> CriterionTriggerRegistry.init()
     );
+    final DeferredRegister<T> register;
+    Supplier<IForgeRegistry<T>> forgeRegistrySupplier;
 
     public Registry(DeferredRegister<T> register) {
         this.register = register;
-    }
-
-    public <P extends T> RegistryObject<P> register(String id, Supplier<P> supplier) {
-        return register.register(id, supplier);
     }
 
     public static void register(IEventBus bus) {
         for (Consumer<IEventBus> consumer : REGISTRATION_QUEUE.get()) {
             consumer.accept(bus);
         }
+    }
+
+    public void registerTo(IEventBus bus) {
+        register.register(bus);
+    }
+
+    public <P extends T> RegistryObject<P> register(String id, Supplier<P> supplier) {
+        return register.register(id, supplier);
     }
 
     public IForgeRegistry<T> basicRegistry() {

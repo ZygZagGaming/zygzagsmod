@@ -11,6 +11,8 @@ import java.util.Map;
 @AutoRegisterCapability
 public interface PlayerSightCache {
     Map<SightEffect, Map<BlockPos, Color>> blockStateColorMap();
+
     Player getPlayer();
+
     void update(SightEffect s, int amplifier);
 }

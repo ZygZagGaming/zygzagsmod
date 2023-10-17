@@ -37,6 +37,7 @@ import java.util.List;
 @MethodsReturnNonnullByDefault
 public class IridiumPickaxeItem extends PickaxeItem implements ISocketable {
     Socket socket;
+
     public IridiumPickaxeItem(Tier tier, int damage, float speed, Properties properties, Socket socket) {
         super(tier, damage, speed, properties);
         this.socket = socket;
@@ -106,7 +107,8 @@ public class IridiumPickaxeItem extends PickaxeItem implements ISocketable {
                                 }
                             }
                         }
-                        stack.hurtAndBreak(n * 4, player, (e) -> { });
+                        stack.hurtAndBreak(n * 4, player, (e) -> {
+                        });
                     }
                     return InteractionResultHolder.success(stack);
                 }
@@ -126,13 +128,15 @@ public class IridiumPickaxeItem extends PickaxeItem implements ISocketable {
                                     dura += in;
                                     ItemEntity newItem = new ItemEntity(world, itemEntity.getX(), itemEntity.getY(), itemEntity.getZ(), recipe.assemble(holder, world.registryAccess()));
                                     world.addFreshEntity(newItem);
-                                    if (!player.getAbilities().instabuild) stack.hurtAndBreak(in, player, (it) -> {});
+                                    if (!player.getAbilities().instabuild) stack.hurtAndBreak(in, player, (it) -> {
+                                    });
                                     itemEntity.kill();
                                     n++;
                                 }
                             }
                         }
-                        stack.hurtAndBreak(dura, player, (p) -> {});
+                        stack.hurtAndBreak(dura, player, (p) -> {
+                        });
                         return InteractionResultHolder.success(stack);
                     }
                 }

@@ -17,6 +17,7 @@ import java.util.List;
 public class PartialIridiumHoeItem extends HoeItem {
     int numberOfPlates;
     int maxNumOfPlates;
+
     public PartialIridiumHoeItem(Tier tier, int damage, float speed, Properties properties, int maxNumOfPlates, int numberOfPlates) {
         super(tier, damage, speed, properties);
         this.numberOfPlates = numberOfPlates;

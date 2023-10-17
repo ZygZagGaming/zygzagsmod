@@ -62,7 +62,7 @@ public class SculkJawBlock extends Block implements EntityBlock, SimpleWaterlogg
             },
             Direction.EAST,
             new VoxelShape[]{
-                    Block.box(0, 0, 0, 1, 16,16),
+                    Block.box(0, 0, 0, 1, 16, 16),
                     Block.box(0, 0, 2, 4, 16, 14),
                     Block.box(0, 0, 4, 6, 16, 12),
                     Block.box(0, 0, 6, 8, 16, 10),
@@ -83,7 +83,7 @@ public class SculkJawBlock extends Block implements EntityBlock, SimpleWaterlogg
             },
             Direction.SOUTH,
             new VoxelShape[]{
-                    Block.box(0, 0, 0, 16, 16,1),
+                    Block.box(0, 0, 0, 16, 16, 1),
                     Block.box(2, 0, 0, 14, 16, 4),
                     Block.box(4, 0, 0, 12, 16, 6),
                     Block.box(6, 0, 0, 10, 16, 8),
@@ -115,7 +115,8 @@ public class SculkJawBlock extends Block implements EntityBlock, SimpleWaterlogg
     @Override
     public void entityInside(BlockState state, Level world, BlockPos pos, Entity entity) {
         var be = world.getBlockEntity(pos);
-        if (be instanceof SculkJawBlockEntity sculkJaw && !entity.getType().is(Main.SCULK_JAW_IMMUNE) && sculkJaw.latchedEntity == null && state.getValue(CLOSED) == 0 && !state.getValue(POWERED) && getShape(state, world, pos, CollisionContext.empty()).bounds().move(pos).intersects(entity.getBoundingBox())) sculkJaw.latchOnto(world, pos, state, entity);
+        if (be instanceof SculkJawBlockEntity sculkJaw && !entity.getType().is(Main.SCULK_JAW_IMMUNE) && sculkJaw.latchedEntity == null && state.getValue(CLOSED) == 0 && !state.getValue(POWERED) && getShape(state, world, pos, CollisionContext.empty()).bounds().move(pos).intersects(entity.getBoundingBox()))
+            sculkJaw.latchOnto(world, pos, state, entity);
     }
 
     @Override
@@ -132,7 +133,8 @@ public class SculkJawBlock extends Block implements EntityBlock, SimpleWaterlogg
     @Nullable
     @Override
     public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level world, BlockState state, BlockEntityType<T> type) {
-        if (type == BlockItemEntityRegistry.SCULK_JAW.getBlockEntityType()) return (a, b, c, d) -> ((SculkJawBlockEntity) d).tick(a, b, c);
+        if (type == BlockItemEntityRegistry.SCULK_JAW.getBlockEntityType())
+            return (a, b, c, d) -> ((SculkJawBlockEntity) d).tick(a, b, c);
         else return null;
     }
 

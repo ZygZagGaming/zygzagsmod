@@ -24,9 +24,9 @@ import java.util.Map;
 @ParametersAreNonnullByDefault
 @MethodsReturnNonnullByDefault
 public class BeamAreaEffectCloud extends AreaEffectCloud {
+    private static final EntityDataAccessor<Direction> DATA_DIRECTION = SynchedEntityData.defineId(BeamAreaEffectCloud.class, EntityDataSerializers.DIRECTION);
     private final int duration = 5 * 20;
     private final float height = 7.5f;
-    private static final EntityDataAccessor<Direction> DATA_DIRECTION = SynchedEntityData.defineId(BeamAreaEffectCloud.class, EntityDataSerializers.DIRECTION);
     private final MobEffectInstance overheatInstance = new MobEffectInstance(MobEffectRegistry.OVERHEAT_EFFECT.get(), 22, 0, true, false, false);
     private final Map<Entity, Integer> victims = Maps.newHashMap();
 
@@ -54,36 +54,38 @@ public class BeamAreaEffectCloud extends AreaEffectCloud {
 
     public void tick() {
         baseTick();
-        if (level().isClientSide) {
-            for (int particles = 0; particles < 24; ++particles) {
-                double x = getX() + random.nextGaussian() * 0.2;
-                double y = getY() + random.nextGaussian() * 0.125;
-                double z = getZ() + random.nextGaussian() * 0.2;
-                Vec3i delta = getDirection().getNormal();
+        if (level().getBlockState(blockPosition()).isCollisionShapeFullBlock(level(), blockPosition())) discard();
+        else {
+            if (level().isClientSide) {
+                for (int particles = 0; particles < 24; ++particles) {
+                    double x = getX() + random.nextGaussian() * 0.2;
+                    double y = getY() + random.nextGaussian() * 0.125;
+                    double z = getZ() + random.nextGaussian() * 0.2;
+                    Vec3i delta = getDirection().getNormal();
 
-                level().addAlwaysVisibleParticle(ParticleTypeRegistry.OVERHEAT_BEAM_PARTICLES.get(), x, y, z, delta.getX(), delta.getY(), delta.getZ());
-            }
-        } else {
-            if (tickCount >= duration) {
-                discard();
-                return;
-            }
+                    level().addAlwaysVisibleParticle(ParticleTypeRegistry.OVERHEAT_BEAM_PARTICLES.get(), x, y, z, delta.getX(), delta.getY(), delta.getZ());
+                }
+            } else {
+                if (tickCount >= duration) {
+                    discard();
+                    return;
+                }
 
-            if (tickCount % 5 == 0) {
-                victims.entrySet().removeIf((entry) -> tickCount >= entry.getValue());
+                if (tickCount % 5 == 0) {
+                    victims.entrySet().removeIf((entry) -> tickCount >= entry.getValue());
 
-                List<LivingEntity> entitiesInBoundingBox = level().getEntitiesOfClass(LivingEntity.class, getBoundingBox());
-                if (!entitiesInBoundingBox.isEmpty()) {
-                    for (LivingEntity living : entitiesInBoundingBox) {
-                        if (!victims.containsKey(living) && living.isAffectedByPotions()) {
-                            victims.put(living, tickCount + 20);
-                            living.addEffect(new MobEffectInstance(overheatInstance), this);
+                    List<LivingEntity> entitiesInBoundingBox = level().getEntitiesOfClass(LivingEntity.class, getBoundingBox());
+                    if (!entitiesInBoundingBox.isEmpty()) {
+                        for (LivingEntity living : entitiesInBoundingBox) {
+                            if (!victims.containsKey(living) && living.isAffectedByPotions()) {
+                                victims.put(living, tickCount + 20);
+                                living.addEffect(new MobEffectInstance(overheatInstance), this);
+                            }
                         }
                     }
                 }
             }
         }
-
     }
 
     @Override

@@ -37,11 +37,6 @@ public class HomingWitherSkull extends WitherSkull {
     Predicate<Entity> targetSelector = (e) -> e instanceof LivingEntity && e != getOwner();
     double speed = 1.2;
 
-    @Override
-    public boolean isDangerous() {
-        return false;
-    }
-
     public HomingWitherSkull(EntityType<? extends HomingWitherSkull> type, Level world) {
         super(type, world);
     }
@@ -64,6 +59,11 @@ public class HomingWitherSkull extends WitherSkull {
         this(world, owner, x, y, z);
         setTarget(target.getUUID());
         setAutoTarget(false);
+    }
+
+    @Override
+    public boolean isDangerous() {
+        return false;
     }
 
     public Optional<UUID> getTargetUUID() {
@@ -208,7 +208,7 @@ public class HomingWitherSkull extends WitherSkull {
             HitResult.Type type = result.getType();
             if (type == HitResult.Type.ENTITY) {
                 this.onHitEntity((EntityHitResult) result);
-                this.level().gameEvent(GameEvent.PROJECTILE_LAND, result.getLocation(), GameEvent.Context.of(this, (BlockState)null));
+                this.level().gameEvent(GameEvent.PROJECTILE_LAND, result.getLocation(), GameEvent.Context.of(this, null));
             } else if (type == HitResult.Type.BLOCK) {
                 BlockHitResult blockhitresult = (BlockHitResult) result;
                 this.onHitBlock(blockhitresult);

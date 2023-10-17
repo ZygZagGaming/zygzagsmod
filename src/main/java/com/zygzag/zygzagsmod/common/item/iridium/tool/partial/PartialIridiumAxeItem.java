@@ -17,6 +17,7 @@ import java.util.List;
 public class PartialIridiumAxeItem extends AxeItem {
     int numberOfPlates;
     int maxNumOfPlates;
+
     public PartialIridiumAxeItem(Tier tier, int damage, float speed, Properties properties, int maxNumOfPlates, int numberOfPlates) {
         super(tier, damage, speed, properties);
         this.numberOfPlates = numberOfPlates;

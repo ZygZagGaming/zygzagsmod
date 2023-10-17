@@ -40,9 +40,14 @@ import java.util.stream.Collectors;
 @ParametersAreNonnullByDefault
 public class IridiumShovelItem extends ShovelItem implements ISocketable {
     Socket socket;
+
     public IridiumShovelItem(Tier tier, float damage, float speed, Properties properties, Socket socket) {
         super(tier, damage, speed, properties);
         this.socket = socket;
+    }
+
+    private static boolean isAirLike(BlockState state) {
+        return state.isAir() || state.is(Blocks.GRASS) || state.is(Blocks.TALL_GRASS);
     }
 
     @Override
@@ -103,7 +108,8 @@ public class IridiumShovelItem extends ShovelItem implements ISocketable {
                     arr = tempList;
                 }
             }
-            stack.hurtAndBreak((int) (numDestroyed * Config.diamondShovelDurabilityMultiplier), user, (e) -> { });
+            stack.hurtAndBreak((int) (numDestroyed * Config.diamondShovelDurabilityMultiplier), user, (e) -> {
+            });
         }
         return super.mineBlock(stack, level, state, pos, user);
     }
@@ -143,7 +149,9 @@ public class IridiumShovelItem extends ShovelItem implements ISocketable {
                     return InteractionResultHolder.consume(stack);
                 }
                 case WITHER_SKULL -> {
-                    BiConsumer<BlockPos, BlockState> setBlock = (pos, state) -> { if (!world.isClientSide) world.setBlockAndUpdate(pos, state); };
+                    BiConsumer<BlockPos, BlockState> setBlock = (pos, state) -> {
+                        if (!world.isClientSide) world.setBlockAndUpdate(pos, state);
+                    };
                     Supplier<Double> random = () -> world.getRandom().nextDouble();
                     boolean isCrimson = random.get() <= .75;
                     BlockState nylium = isCrimson ? Blocks.CRIMSON_NYLIUM.defaultBlockState() : Blocks.WARPED_NYLIUM.defaultBlockState();
@@ -185,17 +193,14 @@ public class IridiumShovelItem extends ShovelItem implements ISocketable {
                         }
                     }
                     ISocketable.addCooldown(player, stack, Config.witherSkullShovelCooldown);
-                    stack.hurtAndBreak(4, player, (e) -> { });
+                    stack.hurtAndBreak(4, player, (e) -> {
+                    });
 
                     return InteractionResultHolder.consume(stack);
                 }
             }
         }
         return InteractionResultHolder.pass(stack);
-    }
-
-    private static boolean isAirLike(BlockState state) {
-        return state.isAir() || state.is(Blocks.GRASS) || state.is(Blocks.TALL_GRASS);
     }
 
     private BlockPos[] getNeighboringBlocks(BlockPos pos) {

@@ -25,10 +25,6 @@ import static com.zygzag.zygzagsmod.common.Main.MODID;
 @SuppressWarnings("unused")
 public class IridiumGearRegistry extends Registry<Item> {
     public static final IridiumGearRegistry INSTANCE = new IridiumGearRegistry(DeferredRegister.create(Registries.ITEM, MODID));
-    public IridiumGearRegistry(DeferredRegister<Item> register) {
-        super(register);
-    }
-
     public static final RegistryObject<Item> IRIDIUM_HELMET = INSTANCE.register(
             "iridium_helmet",
             () -> new ArmorItem(
@@ -59,28 +55,29 @@ public class IridiumGearRegistry extends Registry<Item> {
                             .stacksTo(1)
             )
     );
-
     public static final Map<Socket, RegistryObject<Item>> SWORDS = makeAllSocketsForGearType(SocketedGearType.SWORD);
     public static final Set<RegistryObject<Item>> SOCKETED_SWORDS = SWORDS.entrySet().stream().filter((entry) -> entry.getKey() != Socket.NONE).map(Map.Entry::getValue).collect(Collectors.toSet());
-
     public static final Map<Socket, RegistryObject<Item>> PICKAXES = makeAllSocketsForGearType(SocketedGearType.PICKAXE);
     public static final Set<RegistryObject<Item>> SOCKETED_PICKAXES = PICKAXES.entrySet().stream().filter((entry) -> entry.getKey() != Socket.NONE).map(Map.Entry::getValue).collect(Collectors.toSet());
-
     public static final Map<Socket, RegistryObject<Item>> AXES = makeAllSocketsForGearType(SocketedGearType.AXE);
     public static final Set<RegistryObject<Item>> SOCKETED_AXES = AXES.entrySet().stream().filter((entry) -> entry.getKey() != Socket.NONE).map(Map.Entry::getValue).collect(Collectors.toSet());
-
     public static final Map<Socket, RegistryObject<Item>> SHOVELS = makeAllSocketsForGearType(SocketedGearType.SHOVEL);
     public static final Set<RegistryObject<Item>> SOCKETED_SHOVELS = SHOVELS.entrySet().stream().filter((entry) -> entry.getKey() != Socket.NONE).map(Map.Entry::getValue).collect(Collectors.toSet());
-
     public static final Map<Socket, RegistryObject<Item>> HOES = makeAllSocketsForGearType(SocketedGearType.HOE);
     public static final Set<RegistryObject<Item>> SOCKETED_HOES = HOES.entrySet().stream().filter((entry) -> entry.getKey() != Socket.NONE).map(Map.Entry::getValue).collect(Collectors.toSet());
-
     public static final Map<Socket, RegistryObject<Item>> CHESTPLATES = makeAllSocketsForGearType(SocketedGearType.CHESTPLATE);
     public static final Set<RegistryObject<Item>> SOCKETED_CHESTPLATES = CHESTPLATES.entrySet().stream().filter((entry) -> entry.getKey() != Socket.NONE).map(Map.Entry::getValue).collect(Collectors.toSet());
-
     public static final Map<Socket, RegistryObject<Item>> SCEPTERS = makeAllSocketsForGearType(SocketedGearType.SCEPTER);
     public static final Set<RegistryObject<Item>> SOCKETED_SCEPTERS = SCEPTERS.entrySet().stream().filter((entry) -> entry.getKey() != Socket.NONE).map(Map.Entry::getValue).collect(Collectors.toSet());
-
+    public static List<RegistryObject<Item>> SOCKETED_ITEMS = Stream.of(
+            SOCKETED_AXES,
+            SOCKETED_SWORDS,
+            SOCKETED_PICKAXES,
+            SOCKETED_SHOVELS,
+            SOCKETED_HOES,
+            SOCKETED_CHESTPLATES,
+            SOCKETED_SCEPTERS
+    ).flatMap(Collection::stream).collect(Collectors.toList());
     public static final Map<Integer, RegistryObject<Item>> PARTIAL_SWORDS = makeAllPartialsForGearType(PartialGearType.SWORD);
     public static final Map<Integer, RegistryObject<Item>> PARTIAL_PICKAXES = makeAllPartialsForGearType(PartialGearType.PICKAXE);
     public static final Map<Integer, RegistryObject<Item>> PARTIAL_AXES = makeAllPartialsForGearType(PartialGearType.AXE);
@@ -89,6 +86,10 @@ public class IridiumGearRegistry extends Registry<Item> {
     public static final Map<Integer, RegistryObject<Item>> PARTIAL_CHESTPLATES = makeAllPartialsForGearType(PartialGearType.CHESTPLATE);
     public static final Map<Integer, RegistryObject<Item>> PARTIAL_LEGGINGS = makeAllPartialsForGearType(PartialGearType.LEGGINGS);
     public static final Map<Integer, RegistryObject<Item>> PARTIAL_BOOTS = makeAllPartialsForGearType(PartialGearType.BOOTS);
+
+    public IridiumGearRegistry(DeferredRegister<Item> register) {
+        super(register);
+    }
 
     private static Map<Socket, RegistryObject<Item>> makeAllSocketsForGearType(SocketedGearType gearType) {
         Map<Socket, RegistryObject<Item>> map = new HashMap<>();
@@ -111,81 +112,6 @@ public class IridiumGearRegistry extends Registry<Item> {
         );
     }
 
-    private interface SocketedItemFactory {
-        Item provideItem(Item.Properties properties, Socket socket);
-    }
-
-    public static List<RegistryObject<Item>> SOCKETED_ITEMS = Stream.of(
-            SOCKETED_AXES,
-            SOCKETED_SWORDS,
-            SOCKETED_PICKAXES,
-            SOCKETED_SHOVELS,
-            SOCKETED_HOES,
-            SOCKETED_CHESTPLATES,
-            SOCKETED_SCEPTERS
-    ).flatMap(Collection::stream).collect(Collectors.toList());
-
-    public enum SocketedGearType {
-        SWORD((properties, socket) -> new IridiumSwordItem(
-                socket == Socket.DIAMOND ? IridiumToolTier.DIAMOND_SOCKETED :
-                socket == Socket.EMERALD ? IridiumToolTier.EMERALD_SOCKETED :
-                IridiumToolTier.FULL,
-                3,
-                -2.4f,
-                properties,
-                socket
-        )),
-        PICKAXE((properties, socket) -> new IridiumPickaxeItem(
-                socket == Socket.DIAMOND ? IridiumToolTier.DIAMOND_SOCKETED_PICK :
-                socket == Socket.EMERALD ? IridiumToolTier.EMERALD_SOCKETED :
-                socket == Socket.WITHER_SKULL ? IridiumToolTier.WITHER_SOCKETED_PICK :
-                IridiumToolTier.FULL,
-                1,
-                -2.8f,
-                properties,
-                socket
-        )),
-        AXE((properties, socket) -> new IridiumAxeItem(
-                socket == Socket.DIAMOND ? IridiumToolTier.DIAMOND_SOCKETED :
-                socket == Socket.EMERALD ? IridiumToolTier.EMERALD_SOCKETED :
-                IridiumToolTier.FULL,
-                socket == Socket.DIAMOND ? 4.5f : 5,
-                -3,
-                properties,
-                socket
-        )),
-        SHOVEL((properties, socket) -> new IridiumShovelItem(
-                socket == Socket.DIAMOND ? IridiumToolTier.DIAMOND_SOCKETED :
-                socket == Socket.EMERALD ? IridiumToolTier.EMERALD_SOCKETED :
-                IridiumToolTier.FULL,
-                1.5f,
-                -3,
-                properties,
-                socket
-        )),
-        HOE((properties, socket) -> new IridiumHoeItem(
-                socket == Socket.DIAMOND ? IridiumToolTier.DIAMOND_SOCKETED :
-                socket == Socket.EMERALD ? IridiumToolTier.EMERALD_SOCKETED :
-                IridiumToolTier.FULL,
-                socket == Socket.WITHER_SKULL ? 3 : -1,
-                socket == Socket.WITHER_SKULL ? -2.4f : 0,
-                properties,
-                socket
-        )),
-        CHESTPLATE((properties, socket) -> new IridiumChestplateItem(
-                socket == Socket.DIAMOND ? IridiumArmorMaterial.DIAMOND_SOCKETED :
-                socket == Socket.EMERALD ? IridiumArmorMaterial.EMERALD_SOCKETED :
-                IridiumArmorMaterial.IRIDIUM,
-                properties,
-                socket
-        )),
-        SCEPTER(IridiumScepterItem::new);
-
-        public SocketedItemFactory itemFactory;
-        SocketedGearType(SocketedItemFactory factory) {
-            itemFactory = factory;
-        }
-    }
     private static Map<Integer, RegistryObject<Item>> makeAllPartialsForGearType(PartialGearType gearType) {
         Map<Integer, RegistryObject<Item>> map = new HashMap<>();
         //Main.LOGGER.debug("making partials for gear type " + gearType);
@@ -208,8 +134,67 @@ public class IridiumGearRegistry extends Registry<Item> {
         );
     }
 
-    private interface PartialItemFactory {
-        Item provideItem(Item.Properties properties, int platings);
+    public enum SocketedGearType {
+        SWORD((properties, socket) -> new IridiumSwordItem(
+                socket == Socket.DIAMOND ? IridiumToolTier.DIAMOND_SOCKETED :
+                        socket == Socket.EMERALD ? IridiumToolTier.EMERALD_SOCKETED :
+                                IridiumToolTier.FULL,
+                3,
+                -2.4f,
+                properties,
+                socket
+        )),
+        PICKAXE((properties, socket) -> new IridiumPickaxeItem(
+                socket == Socket.DIAMOND ? IridiumToolTier.DIAMOND_SOCKETED_PICK :
+                        socket == Socket.EMERALD ? IridiumToolTier.EMERALD_SOCKETED :
+                                socket == Socket.WITHER_SKULL ? IridiumToolTier.WITHER_SOCKETED_PICK :
+                                        IridiumToolTier.FULL,
+                1,
+                -2.8f,
+                properties,
+                socket
+        )),
+        AXE((properties, socket) -> new IridiumAxeItem(
+                socket == Socket.DIAMOND ? IridiumToolTier.DIAMOND_SOCKETED :
+                        socket == Socket.EMERALD ? IridiumToolTier.EMERALD_SOCKETED :
+                                IridiumToolTier.FULL,
+                socket == Socket.DIAMOND ? 4.5f : 5,
+                -3,
+                properties,
+                socket
+        )),
+        SHOVEL((properties, socket) -> new IridiumShovelItem(
+                socket == Socket.DIAMOND ? IridiumToolTier.DIAMOND_SOCKETED :
+                        socket == Socket.EMERALD ? IridiumToolTier.EMERALD_SOCKETED :
+                                IridiumToolTier.FULL,
+                1.5f,
+                -3,
+                properties,
+                socket
+        )),
+        HOE((properties, socket) -> new IridiumHoeItem(
+                socket == Socket.DIAMOND ? IridiumToolTier.DIAMOND_SOCKETED :
+                        socket == Socket.EMERALD ? IridiumToolTier.EMERALD_SOCKETED :
+                                IridiumToolTier.FULL,
+                socket == Socket.WITHER_SKULL ? 3 : -1,
+                socket == Socket.WITHER_SKULL ? -2.4f : 0,
+                properties,
+                socket
+        )),
+        CHESTPLATE((properties, socket) -> new IridiumChestplateItem(
+                socket == Socket.DIAMOND ? IridiumArmorMaterial.DIAMOND_SOCKETED :
+                        socket == Socket.EMERALD ? IridiumArmorMaterial.EMERALD_SOCKETED :
+                                IridiumArmorMaterial.IRIDIUM,
+                properties,
+                socket
+        )),
+        SCEPTER(IridiumScepterItem::new);
+
+        public SocketedItemFactory itemFactory;
+
+        SocketedGearType(SocketedItemFactory factory) {
+            itemFactory = factory;
+        }
     }
 
     enum PartialGearType {
@@ -276,9 +261,18 @@ public class IridiumGearRegistry extends Registry<Item> {
 
         public int maxPlatings;
         public PartialItemFactory itemFactory;
+
         PartialGearType(int maxPlatings, PartialItemFactory factory) {
             this.maxPlatings = maxPlatings;
             itemFactory = factory;
         }
+    }
+
+    private interface SocketedItemFactory {
+        Item provideItem(Item.Properties properties, Socket socket);
+    }
+
+    private interface PartialItemFactory {
+        Item provideItem(Item.Properties properties, int platings);
     }
 }

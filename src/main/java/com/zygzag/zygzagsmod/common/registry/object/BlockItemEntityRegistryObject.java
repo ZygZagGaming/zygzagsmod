@@ -9,7 +9,9 @@ import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.registries.RegistryObject;
 
-public record BlockItemEntityRegistryObject<B extends Block, I extends BlockItem, E extends BlockEntity> (ResourceLocation id, RegistryObject<B> block, RegistryObject<I> item, RegistryObject<BlockEntityType<E>> entity) {
+public record BlockItemEntityRegistryObject<B extends Block, I extends BlockItem, E extends BlockEntity>(
+        ResourceLocation id, RegistryObject<B> block, RegistryObject<I> item,
+        RegistryObject<BlockEntityType<E>> entity) {
     public I getItem() {
         return item.get();
     }

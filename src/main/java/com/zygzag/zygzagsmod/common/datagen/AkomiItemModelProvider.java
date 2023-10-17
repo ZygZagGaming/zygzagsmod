@@ -14,6 +14,18 @@ public class AkomiItemModelProvider extends ItemModelProvider {
         super(output, MODID, existingFileHelper);
     }
 
+    private static ItemModelBuilder generatedHandheld(ItemModelBuilder builder) {
+        return builder.parent(new ModelFile.UncheckedModelFile("item/generated")).transforms()
+                .transform(ItemDisplayContext.THIRD_PERSON_RIGHT_HAND)
+                .rotation(0, -90, 55).translation(0, 4, .5f).scale(.85f).end()
+                .transform(ItemDisplayContext.THIRD_PERSON_LEFT_HAND)
+                .rotation(0, 90, -55).translation(0, 4, .5f).scale(.85f).end()
+                .transform(ItemDisplayContext.FIRST_PERSON_RIGHT_HAND)
+                .rotation(0, -90, 25).translation(1.13f, 3.2f, 1.13f).scale(.68f).end()
+                .transform(ItemDisplayContext.FIRST_PERSON_LEFT_HAND)
+                .rotation(0, 90, -25).translation(1.13f, 3.2f, 1.13f).scale(.68f).end().end();
+    }
+
     @Override
     protected void registerModels() {
         makeSocketedIridiumStuff();
@@ -108,17 +120,5 @@ public class AkomiItemModelProvider extends ItemModelProvider {
                 .parent(new ModelFile.UncheckedModelFile("item/generated"))
                 .texture("layer0", "zygzagsmod:item/" + type + "/iridium_" + type)
                 .texture("layer1", "zygzagsmod:item/socket/" + type + "_socket");
-    }
-
-    private static ItemModelBuilder generatedHandheld(ItemModelBuilder builder) {
-        return builder.parent(new ModelFile.UncheckedModelFile("item/generated")).transforms()
-                .transform(ItemDisplayContext.THIRD_PERSON_RIGHT_HAND)
-                .rotation(0, -90, 55).translation(0, 4, .5f).scale(.85f).end()
-                .transform(ItemDisplayContext.THIRD_PERSON_LEFT_HAND)
-                .rotation(0, 90, -55).translation(0, 4, .5f).scale(.85f).end()
-                .transform(ItemDisplayContext.FIRST_PERSON_RIGHT_HAND)
-                .rotation(0, -90, 25).translation(1.13f, 3.2f, 1.13f).scale(.68f).end()
-                .transform(ItemDisplayContext.FIRST_PERSON_LEFT_HAND)
-                .rotation(0, 90, -25).translation(1.13f, 3.2f, 1.13f).scale(.68f).end().end();
     }
 }

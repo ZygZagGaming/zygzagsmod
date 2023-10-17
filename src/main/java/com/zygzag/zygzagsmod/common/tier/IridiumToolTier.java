@@ -33,6 +33,10 @@ public enum IridiumToolTier implements Tier {
         this.enchantLevel = enchantLevel;
     }
 
+    public static IridiumToolTier getToolTier(int platings, int outOf) {
+        return outOf == 2 ? HALF : platings == 1 ? _3_1 : _3_2;
+    }
+
     @Override
     public int getUses() {
         return this.uses;
@@ -66,9 +70,5 @@ public enum IridiumToolTier implements Tier {
     @Override
     public TagKey<Block> getTag() {
         return Main.NEEDS_IRIDIUM_TOOL_TAG;
-    }
-
-    public static IridiumToolTier getToolTier(int platings, int outOf) {
-        return outOf == 2 ? HALF : platings == 1 ? _3_1 : _3_2;
     }
 }

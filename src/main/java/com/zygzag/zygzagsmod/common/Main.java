@@ -54,7 +54,8 @@ public class Main {
     public static final TagKey<EntityType<?>> BOSS_TAG = TagKey.create(Registries.ENTITY_TYPE, new ResourceLocation("zygzagsmod:bosses"));
     public static final TagKey<EntityType<?>> SCULK_JAW_IMMUNE = TagKey.create(Registries.ENTITY_TYPE, new ResourceLocation("zygzagsmod:sculk_jaw_immune"));
 
-    public static final Capability<PlayerSightCache> PLAYER_SIGHT_CACHE = CapabilityManager.get(new CapabilityToken<>(){});
+    public static final Capability<PlayerSightCache> PLAYER_SIGHT_CACHE = CapabilityManager.get(new CapabilityToken<>() {
+    });
 
     public static final Supplier<Map<BlockState, Integer>> EXTRANEOUS_SCULK_GROWTHS = () -> Map.of(
             Blocks.SCULK_SENSOR.defaultBlockState(), 10,
@@ -79,9 +80,19 @@ public class Main {
         //System.out.println("Grass is " + (Blocks.GRASS.defaultBlockState().is(VEGETATION_TAG) ? "" : "not ") + "in the vegetation tag");
     }
 
-    private void commonSetup(final FMLCommonSetupEvent event) { }
+    public static IForgeRegistry<Animation> animationRegistry() {
+        return AnimationRegistry.FORGE_REGISTRY_SUPPLIER.get();
+    }
 
-    private void clientSetup(final FMLClientSetupEvent event) { }
+    public static IForgeRegistry<TransitionAnimation> transitionAnimationRegistry() {
+        return TransitionAnimationRegistry.FORGE_REGISTRY_SUPPLIER.get();
+    }
+
+    private void commonSetup(final FMLCommonSetupEvent event) {
+    }
+
+    private void clientSetup(final FMLClientSetupEvent event) {
+    }
 
     private void addCreative(BuildCreativeModeTabContentsEvent event) {
         if (event.getTabKey() == CreativeModeTabs.COMBAT) {
@@ -123,13 +134,5 @@ public class Main {
                     ItemRegistry.BLAZE_SENTRY_SPAWN_EGG
             ).map((it) -> it.get().getDefaultInstance()).collect(Collectors.toSet()));
         }
-    }
-
-    public static IForgeRegistry<Animation> animationRegistry() {
-        return AnimationRegistry.FORGE_REGISTRY_SUPPLIER.get();
-    }
-
-    public static IForgeRegistry<TransitionAnimation> transitionAnimationRegistry() {
-        return TransitionAnimationRegistry.FORGE_REGISTRY_SUPPLIER.get();
     }
 }

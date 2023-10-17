@@ -22,16 +22,18 @@ import java.util.List;
 @ParametersAreNonnullByDefault
 @MethodsReturnNonnullByDefault
 public class EndSandParticle extends TextureSheetParticle {
+    public static final double tolerance = 0.0625;
+    public static final int ticksToReturn = 2;
     private static final double MAXIMUM_COLLISION_VELOCITY_SQUARED = 100 * 100; // stolen from Particle class :3
     private final float uo;
     private final float vo;
     private final Vec3 origin;
     private final BlockPos originBlock;
+    boolean stoppedByCollision = false;
     private int whenReversed;
     private boolean savingTrajectory = true;
-    private List<Vec3> pastPositionsPerTick = new ArrayList<>();
-    public static final double tolerance = 0.0625;
-    public static final int ticksToReturn = 2;
+    private final List<Vec3> pastPositionsPerTick = new ArrayList<>();
+
     protected EndSandParticle(ClientLevel pLevel, double pX, double pY, double pZ, double dX, double dY, double dZ) {
         super(pLevel, pX, pY, pZ, dX, dY, dZ);
         this.quadSize /= 2.0F;
@@ -80,25 +82,24 @@ public class EndSandParticle extends TextureSheetParticle {
         if (this.age++ >= this.lifetime) {
             this.remove();
         } else {
-            this.yd -= 0.04D * (double)this.gravity;
+            this.yd -= 0.04D * (double) this.gravity;
             if (savingTrajectory) this.move(this.xd, this.yd, this.zd);
             if (this.speedUpWhenYMotionIsBlocked && this.y == this.yo) {
                 this.xd *= 1.1D;
                 this.zd *= 1.1D;
             }
 
-            this.xd *= (double)this.friction;
-            this.yd *= (double)this.friction;
-            this.zd *= (double)this.friction;
+            this.xd *= this.friction;
+            this.yd *= this.friction;
+            this.zd *= this.friction;
             if (this.onGround) {
-                this.xd *= (double)0.7F;
-                this.zd *= (double)0.7F;
+                this.xd *= 0.7F;
+                this.zd *= 0.7F;
             }
 
         }
     }
 
-    boolean stoppedByCollision = false;
     @Override
     public void move(double pX, double pY, double pZ) {
         double d0 = pX;
@@ -133,7 +134,8 @@ public class EndSandParticle extends TextureSheetParticle {
     }
 
     public void savePosition() {
-        if (pastPositionsPerTick.size() == 0 || position().distanceToSqr(pastPositionsPerTick.get(pastPositionsPerTick.size() - 1)) <= tolerance) pastPositionsPerTick.add(position());
+        if (pastPositionsPerTick.size() == 0 || position().distanceToSqr(pastPositionsPerTick.get(pastPositionsPerTick.size() - 1)) <= tolerance)
+            pastPositionsPerTick.add(position());
     }
 
     public Vec3 position() {
@@ -172,15 +174,15 @@ public class EndSandParticle extends TextureSheetParticle {
         return ParticleRenderType.TERRAIN_SHEET;
     }
 
+    public Particle updateSprite(BlockState state, BlockPos pos) {
+        this.setSprite(Minecraft.getInstance().getBlockRenderer().getBlockModelShaper().getTexture(state, level, pos));
+        return this;
+    }
+
     public static class Provider implements ParticleProvider<SimpleParticleType> {
         public Particle createParticle(SimpleParticleType pType, ClientLevel pLevel, double pX, double pY, double pZ, double pXSpeed, double pYSpeed, double pZSpeed) {
             return new EndSandParticle(pLevel, pX, pY, pZ, pXSpeed, pYSpeed, pZSpeed)
                     .updateSprite(BlockWithItemRegistry.END_SAND.getDefaultBlockState(), BlockPos.ZERO);
         }
-    }
-
-    public Particle updateSprite(BlockState state, BlockPos pos) {
-        this.setSprite(Minecraft.getInstance().getBlockRenderer().getBlockModelShaper().getTexture(state, level, pos));
-        return this;
     }
 }

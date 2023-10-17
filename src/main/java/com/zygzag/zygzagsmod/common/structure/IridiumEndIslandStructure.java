@@ -38,6 +38,7 @@ import static com.zygzag.zygzagsmod.common.util.GeneralUtil.randomElement;
 @MethodsReturnNonnullByDefault
 public class IridiumEndIslandStructure extends Structure {
     public static final Codec<IridiumEndIslandStructure> CODEC = simpleCodec(IridiumEndIslandStructure::new);
+
     public IridiumEndIslandStructure(StructureSettings settings) {
         super(settings);
     }
@@ -78,28 +79,30 @@ public class IridiumEndIslandStructure extends Structure {
             for (int k = 0; k < pillarHeight; k++) {
                 structure.put(pos.offset(0, k, 0), Blocks.END_STONE_BRICKS.defaultBlockState());
             }
-            for (int x = (int) (-size * 1.414); x < size * 1.414; x++) for (int z = (int) (-size * 1.414); z < size * 1.414; z++) {
-                if (x * x + z * z <= size * size * 1.3) {
-                    structure.put(pos.offset(x, pillarHeight, z), Blocks.END_STONE_BRICKS.defaultBlockState());
-                } else if (x * x + z * z <= size * size * 1.7) {
-                    var random = rng.nextDouble();
-                    var state = random < .5 ? Blocks.END_STONE_BRICKS.defaultBlockState() :
-                            random < .85 ? Blocks.AIR.defaultBlockState() :
-                                    Blocks.END_STONE.defaultBlockState();
-                    structure.put(pos.offset(x, pillarHeight, z), state);
+            for (int x = (int) (-size * 1.414); x < size * 1.414; x++)
+                for (int z = (int) (-size * 1.414); z < size * 1.414; z++) {
+                    if (x * x + z * z <= size * size * 1.3) {
+                        structure.put(pos.offset(x, pillarHeight, z), Blocks.END_STONE_BRICKS.defaultBlockState());
+                    } else if (x * x + z * z <= size * size * 1.7) {
+                        var random = rng.nextDouble();
+                        var state = random < .5 ? Blocks.END_STONE_BRICKS.defaultBlockState() :
+                                random < .85 ? Blocks.AIR.defaultBlockState() :
+                                        Blocks.END_STONE.defaultBlockState();
+                        structure.put(pos.offset(x, pillarHeight, z), state);
+                    }
                 }
-            }
-            for (int x = -size; x < size; x++) for (int z = -size; z < size; z++) {
-                if (x * x + z * z <= size * size * 0.3) {
-                    structure.put(pos.offset(x, pillarHeight - 1, z), Blocks.END_STONE_BRICKS.defaultBlockState());
-                } else if (x * x + z * z <= size * size * 0.85) {
-                    var random = rng.nextDouble();
-                    var state = random < .5 ? Blocks.END_STONE_BRICKS.defaultBlockState() :
-                            random < .85 ? Blocks.AIR.defaultBlockState() :
-                                    Blocks.END_STONE.defaultBlockState();
-                    structure.put(pos.offset(x, pillarHeight - 1, z), state);
+            for (int x = -size; x < size; x++)
+                for (int z = -size; z < size; z++) {
+                    if (x * x + z * z <= size * size * 0.3) {
+                        structure.put(pos.offset(x, pillarHeight - 1, z), Blocks.END_STONE_BRICKS.defaultBlockState());
+                    } else if (x * x + z * z <= size * size * 0.85) {
+                        var random = rng.nextDouble();
+                        var state = random < .5 ? Blocks.END_STONE_BRICKS.defaultBlockState() :
+                                random < .85 ? Blocks.AIR.defaultBlockState() :
+                                        Blocks.END_STONE.defaultBlockState();
+                        structure.put(pos.offset(x, pillarHeight - 1, z), state);
+                    }
                 }
-            }
             float radius = (float) size - 1.5f;
 
             int layer;
@@ -109,7 +112,8 @@ public class IridiumEndIslandStructure extends Structure {
                         if ((float) (x * x + z * z) <= (radius + 1f) * (radius + 1f)) {
                             var state = BlockWithItemRegistry.END_SAND.getDefaultBlockState();
                             var random = rng.nextDouble();
-                            if (random < 0.03) state = BlockItemEntityRegistry.SUSPICIOUS_END_SAND.getDefaultBlockState();
+                            if (random < 0.03)
+                                state = BlockItemEntityRegistry.SUSPICIOUS_END_SAND.getDefaultBlockState();
                             if (random > 0.95) state = BlockWithItemRegistry.IRIDIUM_END_SAND.getDefaultBlockState();
                             structure.put(pos.offset(x, layer + pillarHeight + 1, z), state);
                         }
@@ -121,31 +125,32 @@ public class IridiumEndIslandStructure extends Structure {
             var pillarPos = 2;
             var placedSwitch = false;
             var pillarsHeight = 9;
-            for (double x = -0.5; x <= 0.5; x++) for (double z = -0.5; z <= 0.5; z++) {
-                for (int height = 1; height < pillarsHeight; height++) {
-                    var p = pos.offset((int) (x * 2 * pillarPos), height + pillarHeight, (int) (z * 2 * pillarPos));
-                    var k = structure.put(p, Blocks.END_STONE_BRICKS.defaultBlockState());
-                    if (k == null && !placedSwitch) {
-                        structure.put(p,
-                                BlockWithItemRegistry.END_STONE_SWITCH.getDefaultBlockState()
-                                        .setValue(EndStoneSwitchBlock.FACING, Direction.WEST)
-                        );
-                        structure.put(p.relative(Direction.EAST),
-                                BlockWithItemRegistry.END_SAND.getDefaultBlockState()
-                        );
-                        structure.put(p.relative(Direction.EAST).offset(0, -1, 0),
-                                BlockWithItemRegistry.END_SAND.getDefaultBlockState()
-                        );
-                        structure.put(p.relative(Direction.SOUTH),
-                                BlockWithItemRegistry.END_SAND.getDefaultBlockState()
-                        );
-                        structure.put(p.relative(Direction.SOUTH).offset(0, -1, 0),
-                                BlockWithItemRegistry.END_SAND.getDefaultBlockState()
-                        );
-                        placedSwitch = true;
+            for (double x = -0.5; x <= 0.5; x++)
+                for (double z = -0.5; z <= 0.5; z++) {
+                    for (int height = 1; height < pillarsHeight; height++) {
+                        var p = pos.offset((int) (x * 2 * pillarPos), height + pillarHeight, (int) (z * 2 * pillarPos));
+                        var k = structure.put(p, Blocks.END_STONE_BRICKS.defaultBlockState());
+                        if (k == null && !placedSwitch) {
+                            structure.put(p,
+                                    BlockWithItemRegistry.END_STONE_SWITCH.getDefaultBlockState()
+                                            .setValue(EndStoneSwitchBlock.FACING, Direction.WEST)
+                            );
+                            structure.put(p.relative(Direction.EAST),
+                                    BlockWithItemRegistry.END_SAND.getDefaultBlockState()
+                            );
+                            structure.put(p.relative(Direction.EAST).offset(0, -1, 0),
+                                    BlockWithItemRegistry.END_SAND.getDefaultBlockState()
+                            );
+                            structure.put(p.relative(Direction.SOUTH),
+                                    BlockWithItemRegistry.END_SAND.getDefaultBlockState()
+                            );
+                            structure.put(p.relative(Direction.SOUTH).offset(0, -1, 0),
+                                    BlockWithItemRegistry.END_SAND.getDefaultBlockState()
+                            );
+                            placedSwitch = true;
+                        }
                     }
                 }
-            }
             List<Direction> directions = List.of(Direction.NORTH, Direction.SOUTH, Direction.EAST, Direction.WEST);
             for (Direction direction : directions) {
                 int branchLength = rng.nextInt(6) + 2;

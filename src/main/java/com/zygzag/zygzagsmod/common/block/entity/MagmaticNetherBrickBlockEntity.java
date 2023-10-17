@@ -4,7 +4,6 @@ import com.zygzag.zygzagsmod.common.registry.BlockItemEntityRegistry;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
-import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 
 import static com.zygzag.zygzagsmod.common.block.MagmaticNetherBrickBlock.PULSE;

@@ -17,6 +17,7 @@ import java.util.List;
 public class PartialIridiumSwordItem extends SwordItem {
     int numberOfPlates;
     int maxNumOfPlates;
+
     public PartialIridiumSwordItem(Tier tier, int damage, float speed, Properties properties, int maxNumOfPlates, int numberOfPlates) {
         super(tier, damage, speed, properties);
         this.numberOfPlates = numberOfPlates;

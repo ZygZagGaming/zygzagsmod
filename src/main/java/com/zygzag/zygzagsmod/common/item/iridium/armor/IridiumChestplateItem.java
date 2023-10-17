@@ -16,6 +16,7 @@ import java.util.List;
 @ParametersAreNonnullByDefault
 public class IridiumChestplateItem extends ArmorItem implements ISocketable {
     Socket socket;
+
     public IridiumChestplateItem(ArmorMaterial material, Properties properties, Socket socket) {
         super(material, Type.CHESTPLATE, properties);
         this.socket = socket;

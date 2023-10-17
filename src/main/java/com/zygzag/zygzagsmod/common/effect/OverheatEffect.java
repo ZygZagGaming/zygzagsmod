@@ -20,12 +20,13 @@ import static com.zygzag.zygzagsmod.common.Main.MODID;
 @MethodsReturnNonnullByDefault
 public class OverheatEffect extends MobEffect {
     public static final ResourceKey<DamageType> OVERHEAT_DAMAGE_TYPE = ResourceKey.create(Registries.DAMAGE_TYPE, new ResourceLocation(MODID, "overheat"));
-    public static DamageSource overheatDamage(RegistryAccess registryAccess) {
-        return new DamageSource(registryAccess.registryOrThrow(Registries.DAMAGE_TYPE).getHolderOrThrow(OVERHEAT_DAMAGE_TYPE));
-    }
 
     public OverheatEffect() {
         super(MobEffectCategory.HARMFUL, 0xff6633);
+    }
+
+    public static DamageSource overheatDamage(RegistryAccess registryAccess) {
+        return new DamageSource(registryAccess.registryOrThrow(Registries.DAMAGE_TYPE).getHolderOrThrow(OVERHEAT_DAMAGE_TYPE));
     }
 
     @Override
@@ -33,7 +34,8 @@ public class OverheatEffect extends MobEffect {
         super.applyEffectTick(entity, amplifier);
         entity.setRemainingFireTicks((amplifier + 1) * 3 * 20);
         int fireResistance = GeneralUtil.fireResistance(entity);
-        float dmg = 8 - 8 * GeneralUtil.clamp(fireResistance / 10f, 0, 1);
+        float maxDmg = 3;
+        float dmg = maxDmg - maxDmg * GeneralUtil.clamp(fireResistance / 10f, 0, 1);
         if (dmg > 0) entity.hurt(overheatDamage(entity.level().registryAccess()), dmg);
     }
 

@@ -77,8 +77,6 @@ public class AkomiRecipeProvider extends RecipeProvider {
         }
     }
 
-    private record IridiumPlatingRecipeType(String name, Item blueprint, Item finalItem, Item baseItem, Map<Integer, RegistryObject<Item>> partials, int itemPlatings, RecipeCategory category) { }
-
     private void makeIridiumSocketingRecipes(Consumer<FinishedRecipe> consumer) {
         for (IridiumSocketingRecipeType recipeType : SOCKETING_RECIPE_TYPES) {
             makeIridiumSocketingRecipesForType(recipeType, consumer);
@@ -86,19 +84,27 @@ public class AkomiRecipeProvider extends RecipeProvider {
     }
 
     private void makeIridiumSocketingRecipesForType(IridiumSocketingRecipeType recipeType, Consumer<FinishedRecipe> consumer) {
-        for (Socket socket : Socket.values()) if (socket != Socket.NONE && socket.gearTypeFilter.test(recipeType.type)) {
-            SmithingTransformRecipeBuilder.smithing(
-                    Ingredient.of(socket.schematicSupplier.get()),
-                    Ingredient.of(recipeType.finalItems().get(Socket.NONE).get()),
-                    Ingredient.of(socket.itemSupplier.get()),
-                    recipeType.category(),
-                    recipeType.finalItems().get(socket).get()
-            ).unlocks(
-                    "has_iridium_plating",
-                    has(ItemRegistry.IRIDIUM_PLATING.get())
-            ).save(consumer, new ResourceLocation(MODID, socket.name().toLowerCase() + "_socketed_iridium_" + recipeType.name()));
-        }
+        for (Socket socket : Socket.values())
+            if (socket != Socket.NONE && socket.gearTypeFilter.test(recipeType.type)) {
+                SmithingTransformRecipeBuilder.smithing(
+                        Ingredient.of(socket.schematicSupplier.get()),
+                        Ingredient.of(recipeType.finalItems().get(Socket.NONE).get()),
+                        Ingredient.of(socket.itemSupplier.get()),
+                        recipeType.category(),
+                        recipeType.finalItems().get(socket).get()
+                ).unlocks(
+                        "has_iridium_plating",
+                        has(ItemRegistry.IRIDIUM_PLATING.get())
+                ).save(consumer, new ResourceLocation(MODID, socket.name().toLowerCase() + "_socketed_iridium_" + recipeType.name()));
+            }
     }
 
-    private record IridiumSocketingRecipeType(String name, IridiumGearRegistry.SocketedGearType type, Map<Socket, RegistryObject<Item>> finalItems, RecipeCategory category) { }
+    private record IridiumPlatingRecipeType(String name, Item blueprint, Item finalItem, Item baseItem,
+                                            Map<Integer, RegistryObject<Item>> partials, int itemPlatings,
+                                            RecipeCategory category) {
+    }
+
+    private record IridiumSocketingRecipeType(String name, IridiumGearRegistry.SocketedGearType type,
+                                              Map<Socket, RegistryObject<Item>> finalItems, RecipeCategory category) {
+    }
 }

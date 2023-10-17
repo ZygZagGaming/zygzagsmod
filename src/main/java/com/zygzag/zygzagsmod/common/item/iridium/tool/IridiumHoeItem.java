@@ -24,6 +24,7 @@ import java.util.List;
 @MethodsReturnNonnullByDefault
 public class IridiumHoeItem extends HoeItem implements ISocketable {
     Socket socket;
+
     public IridiumHoeItem(Tier tier, int damage, float speed, Properties properties, Socket socket) {
         super(tier, damage, speed, properties);
         this.socket = socket;

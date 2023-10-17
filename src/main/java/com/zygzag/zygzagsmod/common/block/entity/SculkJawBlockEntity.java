@@ -39,18 +39,18 @@ import static com.zygzag.zygzagsmod.common.block.SculkJawBlock.*;
 @MethodsReturnNonnullByDefault
 public class SculkJawBlockEntity extends BlockEntity {
     public static final ResourceKey<DamageType> SCULK_JAW_DAMAGE_TYPE = ResourceKey.create(Registries.DAMAGE_TYPE, new ResourceLocation(MODID, "sculk_jaw"));
-    public static DamageSource sculkJawDamage(RegistryAccess registryAccess) {
-        return new DamageSource(registryAccess.registryOrThrow(Registries.DAMAGE_TYPE).getHolderOrThrow(SCULK_JAW_DAMAGE_TYPE));
-    }
-
+    private final SculkSpreader sculkSpreader = SculkSpreader.createLevelSpreader();
     @Nullable
     public Entity latchedEntity = null;
     @Nullable
     public Entity lastLatchedEntity = null;
     public int ticksSinceEntityLatched = 0, ticksEntityLatched = 0;
-    private final SculkSpreader sculkSpreader = SculkSpreader.createLevelSpreader();
     public SculkJawBlockEntity(BlockPos pos, BlockState state) {
         super(BlockItemEntityRegistry.SCULK_JAW.getBlockEntityType(), pos, state);
+    }
+
+    public static DamageSource sculkJawDamage(RegistryAccess registryAccess) {
+        return new DamageSource(registryAccess.registryOrThrow(Registries.DAMAGE_TYPE).getHolderOrThrow(SCULK_JAW_DAMAGE_TYPE));
     }
 
     public void tick(Level world, BlockPos pos, BlockState state) {
@@ -81,7 +81,8 @@ public class SculkJawBlockEntity extends BlockEntity {
             if (closed < 3) {
                 if (!isClient) world.setBlockAndUpdate(pos, state.setValue(CLOSED, closed + 1));
                 latchedEntity.setPos(latchedEntity.position().scale((3.5 - closed) / (4 - closed)).add(targetPos.scale(0.5 / (4 - closed))));
-                if (closed == 0 && world instanceof ServerLevel serverWorld) serverWorld.playSound(null, worldPosition, SoundEventRegistry.SCULK_JAW_CLOSE.get(), SoundSource.BLOCKS);
+                if (closed == 0 && world instanceof ServerLevel serverWorld)
+                    serverWorld.playSound(null, worldPosition, SoundEventRegistry.SCULK_JAW_CLOSE.get(), SoundSource.BLOCKS);
             } else {
                 latchedEntity.setPos(targetPos.add(latchedEntity.position()).scale(0.5));
                 latchedEntity.setDeltaMovement(Vec3.ZERO);
@@ -99,7 +100,8 @@ public class SculkJawBlockEntity extends BlockEntity {
                     }
 
                     if (xp > 0) {
-                        if (world.getBlockState(pos.relative(state.getValue(FACE).getOpposite())).is(BlockTags.SCULK_REPLACEABLE)) world.setBlockAndUpdate(pos.relative(state.getValue(FACE).getOpposite()), Blocks.SCULK.defaultBlockState());
+                        if (world.getBlockState(pos.relative(state.getValue(FACE).getOpposite())).is(BlockTags.SCULK_REPLACEABLE))
+                            world.setBlockAndUpdate(pos.relative(state.getValue(FACE).getOpposite()), Blocks.SCULK.defaultBlockState());
                         this.sculkSpreader.addCursors(pos.relative(state.getValue(FACE).getOpposite()), xp);
                     }
                 }

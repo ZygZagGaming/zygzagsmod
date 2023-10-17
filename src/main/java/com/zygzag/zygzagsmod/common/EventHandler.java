@@ -126,8 +126,7 @@ public class EventHandler {
                             map.put(block, 1);
                             extra++;
                         } else map.put(block, map.get(block) + 1);
-                    }
-                    else map.put(block, 1);
+                    } else map.put(block, 1);
                 }
             }
             extra += map.size();
@@ -246,7 +245,8 @@ public class EventHandler {
                         }
                         if (world instanceof Level level) {
                             ItemEntity e;
-                            if (player != null) e = new ItemEntity(level, player.getX(), player.getY(), player.getZ(), i);
+                            if (player != null)
+                                e = new ItemEntity(level, player.getX(), player.getY(), player.getZ(), i);
                             else e = new ItemEntity(level, blockpos.getX(), blockpos.getY(), blockpos.getZ(), i);
                             world.addFreshEntity(e);
                         }
@@ -331,8 +331,7 @@ public class EventHandler {
                                             p_279044_.broadcastBreakEvent(equipmentslot);
                                         });
                                     }
-                                }
-                                else if (blockentity instanceof BrushableBlockEntity brushableblockentity) {
+                                } else if (blockentity instanceof BrushableBlockEntity brushableblockentity) {
                                     boolean flag1 = brush(brushableblockentity, world, world.getGameTime(), player, blockhitresult.getDirection());
                                     if (flag1) {
                                         EquipmentSlot equipmentslot = stack.equals(player.getItemBySlot(EquipmentSlot.OFFHAND)) ? EquipmentSlot.OFFHAND : EquipmentSlot.MAINHAND;

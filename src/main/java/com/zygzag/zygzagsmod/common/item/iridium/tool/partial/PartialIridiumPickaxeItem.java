@@ -18,6 +18,7 @@ import java.util.List;
 public class PartialIridiumPickaxeItem extends PickaxeItem {
     int numberOfPlates;
     int maxNumOfPlates;
+
     public PartialIridiumPickaxeItem(Tier tier, int damage, float speed, Properties properties, int maxNumOfPlates, int numberOfPlates) {
         super(tier, damage, speed, properties);
         this.numberOfPlates = numberOfPlates;

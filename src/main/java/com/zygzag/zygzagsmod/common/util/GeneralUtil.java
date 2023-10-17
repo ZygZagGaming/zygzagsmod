@@ -10,7 +10,8 @@ import net.minecraft.util.Mth;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.item.enchantment.EnchantmentHelper;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.item.enchantment.Enchantments;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
@@ -21,7 +22,9 @@ import net.minecraftforge.common.capabilities.ICapabilityProvider;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Consumer;
 import java.util.function.Function;
 
@@ -159,7 +162,7 @@ public class GeneralUtil {
     }
 
     public static double angleLerp(double a0, double a1, double t) {
-        return a0 + shortAngleDist(a0,a1) * t;
+        return a0 + shortAngleDist(a0, a1) * t;
     }
 
     public static float shortAngleDist(float a0, float a1) {
@@ -169,7 +172,7 @@ public class GeneralUtil {
     }
 
     public static float angleLerp(float a0, float a1, float t) {
-        return a0 + shortAngleDist(a0,a1) * t;
+        return a0 + shortAngleDist(a0, a1) * t;
     }
 
     public static double mod(double a, double b) {
@@ -183,9 +186,22 @@ public class GeneralUtil {
     }
 
     public static int fireResistance(LivingEntity entity) {
-        int value = EnchantmentHelper.getEnchantmentLevel(Enchantments.FIRE_PROTECTION, entity);
-        if (entity.hasEffect(MobEffects.FIRE_RESISTANCE)) value += 6;
-        return value;
+        AtomicInteger value = new AtomicInteger(); // thanks intellij
+        runIterationOnInventory((enchant, level) -> {
+            if (enchant == Enchantments.FIRE_PROTECTION) value.addAndGet(level);
+        }, entity.getArmorSlots());
+        if (entity.hasEffect(MobEffects.FIRE_RESISTANCE)) value.addAndGet(6);
+        return value.get();
+    }
+
+    public static void runIterationOnInventory(EnchantmentVisitor visitor, Iterable<ItemStack> inventory) {
+        for (var item : inventory) runIterationOnItem(visitor, item);
+    }
+
+    public static void runIterationOnItem(EnchantmentVisitor visitor, ItemStack stack) {
+        if (!stack.isEmpty()) for (Map.Entry<Enchantment, Integer> entry : stack.getAllEnchantments().entrySet()) {
+            visitor.accept(entry.getKey(), entry.getValue());
+        }
     }
 
     public static int clamp(int value, int min, int max) {
@@ -194,5 +210,10 @@ public class GeneralUtil {
 
     public static float clamp(float value, float min, float max) {
         return Math.max(min, Math.min(max, value));
+    }
+
+    @FunctionalInterface
+    public interface EnchantmentVisitor {
+        void accept(Enchantment enchant, int level);
     }
 }

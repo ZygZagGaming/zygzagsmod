@@ -29,6 +29,7 @@ public class TransmutationRecipe implements Recipe<SimpleContainer> {
     Item outItem;
     double rate;
     ResourceLocation id;
+
     public TransmutationRecipe(Ingredient inItem, Item outItem, double rate, ResourceLocation id) {
         this.inItem = inItem;
         this.outItem = outItem;

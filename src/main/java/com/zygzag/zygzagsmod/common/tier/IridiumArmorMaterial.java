@@ -16,7 +16,7 @@ import java.util.function.Supplier;
 @SuppressWarnings("unused")
 @MethodsReturnNonnullByDefault
 public class IridiumArmorMaterial implements ArmorMaterial {
-    public static final IridiumArmorMaterial IRIDIUM = new IridiumArmorMaterial ("iridium", 42, new int[]{4, 9, 7, 4}, 17);
+    public static final IridiumArmorMaterial IRIDIUM = new IridiumArmorMaterial("iridium", 42, new int[]{4, 9, 7, 4}, 17);
     public static final IridiumArmorMaterial _4_1 = new IridiumArmorMaterial("iridium_1", 38, new int[]{3, 8, 6, 3}, 15);
     public static final IridiumArmorMaterial _4_2 = new IridiumArmorMaterial("iridium_2", 40, new int[]{4, 9, 7, 4}, 16);
     public static final IridiumArmorMaterial _4_3 = new IridiumArmorMaterial("iridium_3", 41, new int[]{4, 9, 7, 4}, 17);
@@ -69,6 +69,18 @@ public class IridiumArmorMaterial implements ArmorMaterial {
         this.repairIngredient = new LazyLoadedValue<>(repair);
     }
 
+    public static IridiumArmorMaterial getArmorForPartial(int plating, int outOf) {
+        if (outOf == 4) {
+            return plating == 1 ? _4_1 : plating == 2 ? _4_2 : _4_3;
+        } else if (outOf == 5) {
+            return plating == 1 ? _5_1 : plating == 2 ? _5_2 : plating == 3 ? _5_3 : _5_4;
+        } else if (outOf == 7) {
+            return plating == 1 ? _7_1 : plating == 2 ? _7_2 : plating == 3 ? _7_3 : plating == 4 ? _7_4 : plating == 5 ? _7_5 : _7_6;
+        } else {
+            return plating == 1 ? _8_1 : plating == 2 ? _8_2 : plating == 3 ? _8_3 : plating == 4 ? _8_4 : plating == 5 ? _8_5 : plating == 6 ? _8_6 : _8_7;
+        }
+    }
+
     public int getDurabilityForType(ArmorItem.Type type) {
         return HEALTH_PER_SLOT[type.ordinal()] * this.durabilityMultiplier;
     }
@@ -100,17 +112,5 @@ public class IridiumArmorMaterial implements ArmorMaterial {
 
     public float getKnockbackResistance() {
         return this.knockbackResistance;
-    }
-
-    public static IridiumArmorMaterial getArmorForPartial(int plating, int outOf) {
-        if (outOf == 4) {
-            return plating == 1 ? _4_1 : plating == 2 ? _4_2 : _4_3;
-        } else if (outOf == 5) {
-            return plating == 1 ? _5_1 : plating == 2 ? _5_2 : plating == 3 ? _5_3 : _5_4;
-        } else if (outOf == 7) {
-            return plating == 1 ? _7_1 : plating == 2 ? _7_2 : plating == 3 ? _7_3 : plating == 4 ? _7_4 : plating == 5 ? _7_5 : _7_6;
-        } else {
-            return plating == 1 ? _8_1 : plating == 2 ? _8_2 : plating == 3 ? _8_3 : plating == 4 ? _8_4 : plating == 5 ? _8_5 : plating == 6 ? _8_6 : _8_7;
-        }
     }
 }

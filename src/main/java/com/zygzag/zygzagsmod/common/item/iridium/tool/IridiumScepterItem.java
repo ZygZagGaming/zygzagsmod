@@ -42,6 +42,7 @@ import java.util.List;
 @MethodsReturnNonnullByDefault
 public class IridiumScepterItem extends Item implements ISocketable {
     Socket socket;
+
     public IridiumScepterItem(Properties properties, Socket socket) {
         super(properties.durability(2048));
         this.socket = socket;
@@ -70,7 +71,8 @@ public class IridiumScepterItem extends Item implements ISocketable {
                         ExperienceOrb orb = new ExperienceOrb(world, v.getX(), v.getY(), v.getZ(), amount);
                         world.addFreshEntity(orb);
                         v.kill();
-                        item.hurtAndBreak(1, player, (p) -> { });
+                        item.hurtAndBreak(1, player, (p) -> {
+                        });
                     }
                 }
             }
@@ -83,7 +85,8 @@ public class IridiumScepterItem extends Item implements ISocketable {
                         MerchantOffer offer = offers.get(i);
                         while (offer.isOutOfStock()) {
                             offer.increaseUses();
-                            item.hurtAndBreak(1, player, (p) -> { });
+                            item.hurtAndBreak(1, player, (p) -> {
+                            });
                         }
                     }
                 }
@@ -105,7 +108,8 @@ public class IridiumScepterItem extends Item implements ISocketable {
                     for (LivingEntity e : entities) {
                         e.addEffect(new MobEffectInstance(MobEffects.BLINDNESS, 200));
                         e.addEffect(new MobEffectInstance(MobEffects.GLOWING, 200));
-                        item.hurtAndBreak(1, player, (p) -> { });
+                        item.hurtAndBreak(1, player, (p) -> {
+                        });
                     }
                     addCooldown(player, item);
                 }
@@ -123,27 +127,32 @@ public class IridiumScepterItem extends Item implements ISocketable {
 
                 player.awardStat(Stats.ITEM_USED.get(this));
                 if (!player.getAbilities().instabuild) {
-                    item.hurtAndBreak(4, player, (e) -> { });
+                    item.hurtAndBreak(4, player, (e) -> {
+                    });
                 }
-                item.hurtAndBreak(1, player, (p) -> { });
+                item.hurtAndBreak(1, player, (p) -> {
+                });
                 addCooldown(player, item);
             }
         }
         return InteractionResultHolder.consume(item);
     }
-    
+
     @Override
     public void appendHoverText(ItemStack stack, @Nullable Level world, List<Component> text, TooltipFlag flag) {
         appendHoverText(stack, world, text, flag, "scepter");
     }
+
     @Override
     public boolean hasCooldown() {
         return socket != Socket.NONE && socket != Socket.DIAMOND;
     }
+
     @Override
     public boolean hasUseAbility() {
         return true;
     }
+
     @Override
     public int getBaseCooldown(ItemStack stack, Level world) {
         switch (socket) {

@@ -12,10 +12,6 @@ import static com.zygzag.zygzagsmod.common.Main.MODID;
 
 public class EntityTypeRegistry extends Registry<EntityType<?>> {
     public static final EntityTypeRegistry INSTANCE = new EntityTypeRegistry(DeferredRegister.create(Registries.ENTITY_TYPE, MODID));
-    public EntityTypeRegistry(DeferredRegister<EntityType<?>> register) {
-        super(register);
-    }
-
     public static final RegistryObject<EntityType<ThrownTransmutationCharge>> TRANSMUTATION_CHARGE_ENTITY = INSTANCE.register(
             "transmutation_charge",
             () -> EntityType.Builder.<ThrownTransmutationCharge>of(ThrownTransmutationCharge::new, MobCategory.MISC)
@@ -52,7 +48,6 @@ public class EntityTypeRegistry extends Registry<EntityType<?>> {
                     .sized(1f, 0.8f)
                     .build("blaze_sentry")
     );
-
     public static final RegistryObject<EntityType<BeamAreaEffectCloud>> BEAM_AREA_EFFECT_CLOUD = INSTANCE.register(
             "beam_area_effect_cloud",
             () -> EntityType.Builder.<BeamAreaEffectCloud>of(BeamAreaEffectCloud::new, MobCategory.MISC)
@@ -71,4 +66,7 @@ public class EntityTypeRegistry extends Registry<EntityType<?>> {
                     .updateInterval(Integer.MAX_VALUE)
                     .build("sphere_area_effect_cloud")
     );
+    public EntityTypeRegistry(DeferredRegister<EntityType<?>> register) {
+        super(register);
+    }
 }
