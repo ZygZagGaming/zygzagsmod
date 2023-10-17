@@ -1,7 +1,8 @@
 package com.zygzag.zygzagsmod.common.block;
 
 import com.zygzag.zygzagsmod.common.block.entity.MagmaticNetherBrickBlockEntity;
-import com.zygzag.zygzagsmod.common.entity.BeamAreaEffectCloud;
+import com.zygzag.zygzagsmod.common.entity.AbstractBeamAreaEffectCloud;
+import com.zygzag.zygzagsmod.common.entity.OverheatBeamAreaEffectCloud;
 import com.zygzag.zygzagsmod.common.entity.SphereAreaEffectCloud;
 import com.zygzag.zygzagsmod.common.registry.BlockItemEntityRegistry;
 import net.minecraft.MethodsReturnNonnullByDefault;
@@ -58,7 +59,7 @@ public class MagmaticNetherBrickBlock extends Block implements EntityBlock {
         } else {
             for (Direction dir : Direction.values())
                 if (!world.getBlockState(pos.relative(dir)).isFaceSturdy(world, pos.relative(dir), dir.getOpposite())) {
-                    BeamAreaEffectCloud cloud = new BeamAreaEffectCloud(world);
+                    OverheatBeamAreaEffectCloud cloud = new OverheatBeamAreaEffectCloud(world);
                     cloud.setDirection(dir);
                     cloud.setPos(pos.getX() + 0.5 + dir.getNormal().getX(), pos.getY() + 0.5 + dir.getNormal().getY(), pos.getZ() + 0.5 + dir.getNormal().getZ());
                     world.addFreshEntity(cloud);

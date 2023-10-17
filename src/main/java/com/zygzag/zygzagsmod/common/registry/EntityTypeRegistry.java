@@ -48,6 +48,15 @@ public class EntityTypeRegistry extends Registry<EntityType<?>> {
                     .sized(1f, 0.8f)
                     .build("blaze_sentry")
     );
+    public static final RegistryObject<EntityType<OverheatBeamAreaEffectCloud>> OVERHEAT_BEAM_AREA_EFFECT_CLOUD = INSTANCE.register(
+            "overheat_beam_area_effect_cloud",
+            () -> EntityType.Builder.<OverheatBeamAreaEffectCloud>of(OverheatBeamAreaEffectCloud::new, MobCategory.MISC)
+                    .fireImmune()
+                    .sized(1f, 1f)
+                    .clientTrackingRange(10)
+                    .updateInterval(Integer.MAX_VALUE)
+                    .build("overheat_beam_area_effect_cloud")
+    );
     public static final RegistryObject<EntityType<BeamAreaEffectCloud>> BEAM_AREA_EFFECT_CLOUD = INSTANCE.register(
             "beam_area_effect_cloud",
             () -> EntityType.Builder.<BeamAreaEffectCloud>of(BeamAreaEffectCloud::new, MobCategory.MISC)
