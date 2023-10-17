@@ -11,6 +11,7 @@ import net.minecraft.world.damagesource.DamageType;
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffectCategory;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.player.Player;
 
 import javax.annotation.ParametersAreNonnullByDefault;
 
@@ -36,7 +37,7 @@ public class OverheatEffect extends MobEffect {
         int fireResistance = GeneralUtil.fireResistance(entity);
         float maxDmg = 3;
         float dmg = maxDmg - maxDmg * GeneralUtil.clamp(fireResistance / 10f, 0, 1);
-        if (dmg > 0) entity.hurt(overheatDamage(entity.level().registryAccess()), dmg);
+        if (dmg > 0 && (!(entity instanceof Player player) || (!player.isCreative() && !player.isSpectator()))) entity.hurt(overheatDamage(entity.level().registryAccess()), dmg);
     }
 
     @Override

@@ -1,7 +1,6 @@
 package com.zygzag.zygzagsmod.common.block;
 
 import com.zygzag.zygzagsmod.common.block.entity.MagmaticNetherBrickBlockEntity;
-import com.zygzag.zygzagsmod.common.entity.AbstractBeamAreaEffectCloud;
 import com.zygzag.zygzagsmod.common.entity.OverheatBeamAreaEffectCloud;
 import com.zygzag.zygzagsmod.common.entity.SphereAreaEffectCloud;
 import com.zygzag.zygzagsmod.common.registry.BlockItemEntityRegistry;
@@ -42,9 +41,11 @@ public class MagmaticNetherBrickBlock extends Block implements EntityBlock {
     @Override
     public void playerWillDestroy(Level world, BlockPos pos, BlockState state, Player player) {
         super.playerWillDestroy(world, pos, state, player);
-        SphereAreaEffectCloud cloud = new SphereAreaEffectCloud(world);
-        cloud.setPos(pos.getX() + 0.5, pos.getY() + 0.5 - cloud.getRadius(), pos.getZ() + 0.5);
-        world.addFreshEntity(cloud);
+        if (!player.isCreative()) {
+            SphereAreaEffectCloud cloud = new SphereAreaEffectCloud(world);
+            cloud.setPos(pos.getX() + 0.5, pos.getY() + 0.5 - cloud.getRadius(), pos.getZ() + 0.5);
+            world.addFreshEntity(cloud);
+        }
     }
 
     @Override
@@ -54,17 +55,20 @@ public class MagmaticNetherBrickBlock extends Block implements EntityBlock {
 
     public void chargeOrRelease(BlockState state, Level world, BlockPos pos) {
         int charges = state.getValue(CHARGES);
-        if (charges < 3) {
-            world.setBlockAndUpdate(pos, state.setValue(CHARGES, charges + 1).setValue(PULSE, 4));
-        } else {
-            for (Direction dir : Direction.values())
-                if (!world.getBlockState(pos.relative(dir)).isFaceSturdy(world, pos.relative(dir), dir.getOpposite())) {
-                    OverheatBeamAreaEffectCloud cloud = new OverheatBeamAreaEffectCloud(world);
-                    cloud.setDirection(dir);
-                    cloud.setPos(pos.getX() + 0.5 + dir.getNormal().getX(), pos.getY() + 0.5 + dir.getNormal().getY(), pos.getZ() + 0.5 + dir.getNormal().getZ());
-                    world.addFreshEntity(cloud);
-                }
-            world.setBlockAndUpdate(pos, state.setValue(CHARGES, 0).setValue(PULSE, 104));
+        int pulses = state.getValue(PULSE);
+        if (pulses == 0) {
+            if (charges < 3) {
+                world.setBlockAndUpdate(pos, state.setValue(CHARGES, charges + 1).setValue(PULSE, 4));
+            } else {
+                for (Direction dir : Direction.values())
+                    if (!world.getBlockState(pos.relative(dir)).isFaceSturdy(world, pos.relative(dir), dir.getOpposite())) {
+                        OverheatBeamAreaEffectCloud cloud = new OverheatBeamAreaEffectCloud(world);
+                        cloud.setDirection(dir);
+                        cloud.setPos(pos.getX() + 0.5 + dir.getNormal().getX(), pos.getY() + 0.5 + dir.getNormal().getY(), pos.getZ() + 0.5 + dir.getNormal().getZ());
+                        world.addFreshEntity(cloud);
+                    }
+                world.setBlockAndUpdate(pos, state.setValue(CHARGES, 0).setValue(PULSE, 104));
+            }
         }
     }
 
