@@ -17,48 +17,52 @@
         {
           "type": "minecraft:item",
           "name": "zygzagsmod:raw_iridium",
-          "weight": 8
+          "weight": 2
         },
         {
           "type": "minecraft:item",
-          "name": "minecraft:diamond",
+          "name": "zygzagsmod:iridium_helmet_blueprint",
           "weight": 5
         },
         {
           "type": "minecraft:item",
-          "name": "zygzagsmod:iridium_helmet_blueprint"
+          "name": "zygzagsmod:iridium_chestplate_blueprint",
+          "weight": 8
         },
         {
           "type": "minecraft:item",
-          "name": "zygzagsmod:iridium_chestplate_blueprint"
+          "name": "zygzagsmod:iridium_leggings_blueprint",
+          "weight": 7
         },
         {
           "type": "minecraft:item",
-          "name": "zygzagsmod:iridium_leggings_blueprint"
+          "name": "zygzagsmod:iridium_boots_blueprint",
+          "weight": 4
         },
         {
           "type": "minecraft:item",
-          "name": "zygzagsmod:iridium_boots_blueprint"
+          "name": "zygzagsmod:iridium_sword_blueprint",
+          "weight": 2
         },
         {
           "type": "minecraft:item",
-          "name": "zygzagsmod:iridium_sword_blueprint"
+          "name": "zygzagsmod:iridium_pickaxe_blueprint",
+          "weight": 3
         },
         {
           "type": "minecraft:item",
-          "name": "zygzagsmod:iridium_pickaxe_blueprint"
+          "name": "zygzagsmod:iridium_axe_blueprint",
+          "weight": 3
         },
         {
           "type": "minecraft:item",
-          "name": "zygzagsmod:iridium_axe_blueprint"
+          "name": "zygzagsmod:iridium_shovel_blueprint",
+          "weight": 1
         },
         {
           "type": "minecraft:item",
-          "name": "zygzagsmod:iridium_shovel_blueprint"
-        },
-        {
-          "type": "minecraft:item",
-          "name": "zygzagsmod:iridium_hoe_blueprint"
+          "name": "zygzagsmod:iridium_hoe_blueprint",
+          "weight": 2
         }
       ],
       "rolls": 1
