@@ -26,7 +26,6 @@ public class Config {
     public static final ForgeConfigSpec.IntValue AMETHYST_SCEPTER_COOLDOWN = BUILDER
             .comment("Cooldown for the ability of Amethyst-Socketed Iridium Scepters")
             .defineInRange("amethystScepterCooldown", 400, 0, Integer.MAX_VALUE);
-    static final ForgeConfigSpec SPEC = BUILDER.build();
     private static final ForgeConfigSpec.IntValue AMETHYST_PICKAXE_COOLDOWN = BUILDER
             .comment("Cooldown for Amethyst-Socketed Iridium Pickaxes in ticks")
             .defineInRange("amethystPickaxeCooldown", 15 * 30, 0, Integer.MAX_VALUE);
@@ -114,6 +113,7 @@ public class Config {
     private static final ForgeConfigSpec.IntValue MISC_ORE_COLOR = BUILDER
             .comment("Color for non-vanilla ores during Sight")
             .defineInRange("miscOreColor", 0x888888, 0, 0xffffff);
+    static final ForgeConfigSpec SPEC = BUILDER.build();
     public static int amethystPickaxeCooldown,
             emeraldAxeCooldown,
             witherSkullAxeCooldown,
@@ -152,7 +152,7 @@ public class Config {
 
 
     @SubscribeEvent
-    static void onLoad(final ModConfigEvent event) {
+    public static void onLoad(final ModConfigEvent event) {
         amethystPickaxeCooldown = AMETHYST_PICKAXE_COOLDOWN.get();
         emeraldAxeCooldown = EMERALD_AXE_COOLDOWN.get();
         witherSkullAxeCooldown = WITHER_SKULL_AXE_COOLDOWN.get();
