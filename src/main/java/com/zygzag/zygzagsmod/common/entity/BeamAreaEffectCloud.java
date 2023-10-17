@@ -15,7 +15,6 @@ import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.*;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.AABB;
-import net.minecraft.world.phys.Vec3;
 
 import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.List;
@@ -28,7 +27,7 @@ public class BeamAreaEffectCloud extends AreaEffectCloud {
     private final int duration = 5 * 20;
     private final float height = 7.5f;
     private static final EntityDataAccessor<Direction> DATA_DIRECTION = SynchedEntityData.defineId(BeamAreaEffectCloud.class, EntityDataSerializers.DIRECTION);
-    private final MobEffectInstance overheatInstance = new MobEffectInstance(MobEffectRegistry.OVERHEAT_EFFECT.get(), 22);
+    private final MobEffectInstance overheatInstance = new MobEffectInstance(MobEffectRegistry.OVERHEAT_EFFECT.get(), 22, 0, true, false, false);
     private final Map<Entity, Integer> victims = Maps.newHashMap();
 
     public BeamAreaEffectCloud(EntityType<? extends BeamAreaEffectCloud> type, Level world) {

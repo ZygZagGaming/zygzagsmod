@@ -18,7 +18,7 @@ import java.util.Map;
 public class SphereAreaEffectCloud extends AreaEffectCloud {
     private final int duration = 3 * 20;
     private final float radius = 2.5f;
-    private final MobEffectInstance overheatInstance = new MobEffectInstance(MobEffectRegistry.OVERHEAT_EFFECT.get(), 22);
+    private final MobEffectInstance overheatInstance = new MobEffectInstance(MobEffectRegistry.OVERHEAT_EFFECT.get(), 22, 0, true, false, false);
     private final Map<Entity, Integer> victims = Maps.newHashMap();
 
     public SphereAreaEffectCloud(EntityType<? extends SphereAreaEffectCloud> type, Level world) {
