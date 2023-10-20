@@ -56,7 +56,7 @@ public class Main {
     public static final TagKey<EntityType<?>> BOSS_TAG = TagKey.create(Registries.ENTITY_TYPE, new ResourceLocation("zygzagsmod:bosses"));
     public static final TagKey<EntityType<?>> SCULK_JAW_IMMUNE = TagKey.create(Registries.ENTITY_TYPE, new ResourceLocation("zygzagsmod:sculk_jaw_immune"));
 
-    public static final TagKey<Structure> CAIRN_LOCATED = TagKey.create(Registries.STRUCTURE, new ResourceLocation("zygzagsmod:cairn_located"));
+    public static final TagKey<Structure> CAIRN_BASIC = TagKey.create(Registries.STRUCTURE, new ResourceLocation("zygzagsmod:cairn/basic"));
 
     public static final Capability<PlayerSightCache> PLAYER_SIGHT_CACHE = CapabilityManager.get(new CapabilityToken<>() {
     });

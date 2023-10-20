@@ -2,6 +2,7 @@ package com.zygzag.zygzagsmod.common.registry;
 
 import com.zygzag.zygzagsmod.common.block.BlessedSoilBlock;
 import com.zygzag.zygzagsmod.common.block.GlowingSoilBlock;
+import com.zygzag.zygzagsmod.common.block.StructurePlacerBlock;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockBehaviour;
@@ -17,6 +18,7 @@ public class BlockRegistry extends Registry<Block> {
     public static final BlockRegistry INSTANCE = new BlockRegistry(DeferredRegister.create(ForgeRegistries.BLOCKS, MODID));
     public static final RegistryObject<Block> BLESSED_SOIL = INSTANCE.register("blessed_soil", () -> new BlessedSoilBlock(BlockBehaviour.Properties.copy(Blocks.FARMLAND)));
     public static final RegistryObject<Block> GLOWING_SOIL = INSTANCE.register("glowing_soil", () -> new GlowingSoilBlock(BlockBehaviour.Properties.copy(Blocks.FARMLAND)));
+    public static final RegistryObject<Block> STRUCTURE_PLACER = INSTANCE.register("structure_placer", () -> new StructurePlacerBlock(BlockBehaviour.Properties.copy(Blocks.STONE)));
     private BlockRegistry(DeferredRegister<Block> register) {
         super(register);
     }

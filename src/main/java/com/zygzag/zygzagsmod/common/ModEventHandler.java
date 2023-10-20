@@ -1,5 +1,6 @@
 package com.zygzag.zygzagsmod.common;
 
+import com.zygzag.zygzagsmod.common.datagen.AkomiBlockstateProvider;
 import com.zygzag.zygzagsmod.common.datagen.AkomiItemModelProvider;
 import com.zygzag.zygzagsmod.common.datagen.AkomiRecipeProvider;
 import com.zygzag.zygzagsmod.common.entity.BlazeSentry;
@@ -12,6 +13,7 @@ import net.minecraft.data.recipes.RecipeProvider;
 import net.minecraft.world.entity.monster.AbstractSkeleton;
 import net.minecraft.world.item.Item;
 import net.minecraftforge.client.event.RegisterColorHandlersEvent;
+import net.minecraftforge.client.model.generators.BlockStateProvider;
 import net.minecraftforge.client.model.generators.ItemModelProvider;
 import net.minecraftforge.data.event.GatherDataEvent;
 import net.minecraftforge.event.entity.EntityAttributeCreationEvent;
@@ -46,6 +48,10 @@ public class ModEventHandler {
         event.getGenerator().addProvider(
                 true,
                 (DataProvider.Factory<RecipeProvider>) AkomiRecipeProvider::new
+        );
+        event.getGenerator().addProvider(
+                true,
+                (DataProvider.Factory<BlockStateProvider>) (output) -> new AkomiBlockstateProvider(output, event.getExistingFileHelper())
         );
     }
 }

@@ -1,0 +1,316 @@
+{
+  "variants": {
+    "pulse=0": {
+      "model": "zygzagsmod:block/magmatic_nether_bricks_0"
+    },
+    "pulse=1": {
+      "model": "zygzagsmod:block/magmatic_nether_bricks_1"
+    },
+    "pulse=10": {
+      "model": "zygzagsmod:block/magmatic_nether_bricks_2"
+    },
+    "pulse=100": {
+      "model": "zygzagsmod:block/magmatic_nether_bricks_0"
+    },
+    "pulse=101": {
+      "model": "zygzagsmod:block/magmatic_nether_bricks_1"
+    },
+    "pulse=102": {
+      "model": "zygzagsmod:block/magmatic_nether_bricks_2"
+    },
+    "pulse=103": {
+      "model": "zygzagsmod:block/magmatic_nether_bricks_3"
+    },
+    "pulse=11": {
+      "model": "zygzagsmod:block/magmatic_nether_bricks_3"
+    },
+    "pulse=12": {
+      "model": "zygzagsmod:block/magmatic_nether_bricks_0"
+    },
+    "pulse=13": {
+      "model": "zygzagsmod:block/magmatic_nether_bricks_1"
+    },
+    "pulse=14": {
+      "model": "zygzagsmod:block/magmatic_nether_bricks_2"
+    },
+    "pulse=15": {
+      "model": "zygzagsmod:block/magmatic_nether_bricks_3"
+    },
+    "pulse=16": {
+      "model": "zygzagsmod:block/magmatic_nether_bricks_0"
+    },
+    "pulse=17": {
+      "model": "zygzagsmod:block/magmatic_nether_bricks_1"
+    },
+    "pulse=18": {
+      "model": "zygzagsmod:block/magmatic_nether_bricks_2"
+    },
+    "pulse=19": {
+      "model": "zygzagsmod:block/magmatic_nether_bricks_3"
+    },
+    "pulse=2": {
+      "model": "zygzagsmod:block/magmatic_nether_bricks_2"
+    },
+    "pulse=20": {
+      "model": "zygzagsmod:block/magmatic_nether_bricks_0"
+    },
+    "pulse=21": {
+      "model": "zygzagsmod:block/magmatic_nether_bricks_1"
+    },
+    "pulse=22": {
+      "model": "zygzagsmod:block/magmatic_nether_bricks_2"
+    },
+    "pulse=23": {
+      "model": "zygzagsmod:block/magmatic_nether_bricks_3"
+    },
+    "pulse=24": {
+      "model": "zygzagsmod:block/magmatic_nether_bricks_0"
+    },
+    "pulse=25": {
+      "model": "zygzagsmod:block/magmatic_nether_bricks_1"
+    },
+    "pulse=26": {
+      "model": "zygzagsmod:block/magmatic_nether_bricks_2"
+    },
+    "pulse=27": {
+      "model": "zygzagsmod:block/magmatic_nether_bricks_3"
+    },
+    "pulse=28": {
+      "model": "zygzagsmod:block/magmatic_nether_bricks_0"
+    },
+    "pulse=29": {
+      "model": "zygzagsmod:block/magmatic_nether_bricks_1"
+    },
+    "pulse=3": {
+      "model": "zygzagsmod:block/magmatic_nether_bricks_3"
+    },
+    "pulse=30": {
+      "model": "zygzagsmod:block/magmatic_nether_bricks_2"
+    },
+    "pulse=31": {
+      "model": "zygzagsmod:block/magmatic_nether_bricks_3"
+    },
+    "pulse=32": {
+      "model": "zygzagsmod:block/magmatic_nether_bricks_0"
+    },
+    "pulse=33": {
+      "model": "zygzagsmod:block/magmatic_nether_bricks_1"
+    },
+    "pulse=34": {
+      "model": "zygzagsmod:block/magmatic_nether_bricks_2"
+    },
+    "pulse=35": {
+      "model": "zygzagsmod:block/magmatic_nether_bricks_3"
+    },
+    "pulse=36": {
+      "model": "zygzagsmod:block/magmatic_nether_bricks_0"
+    },
+    "pulse=37": {
+      "model": "zygzagsmod:block/magmatic_nether_bricks_1"
+    },
+    "pulse=38": {
+      "model": "zygzagsmod:block/magmatic_nether_bricks_2"
+    },
+    "pulse=39": {
+      "model": "zygzagsmod:block/magmatic_nether_bricks_3"
+    },
+    "pulse=4": {
+      "model": "zygzagsmod:block/magmatic_nether_bricks_0"
+    },
+    "pulse=40": {
+      "model": "zygzagsmod:block/magmatic_nether_bricks_0"
+    },
+    "pulse=41": {
+      "model": "zygzagsmod:block/magmatic_nether_bricks_1"
+    },
+    "pulse=42": {
+      "model": "zygzagsmod:block/magmatic_nether_bricks_2"
+    },
+    "pulse=43": {
+      "model": "zygzagsmod:block/magmatic_nether_bricks_3"
+    },
+    "pulse=44": {
+      "model": "zygzagsmod:block/magmatic_nether_bricks_0"
+    },
+    "pulse=45": {
+      "model": "zygzagsmod:block/magmatic_nether_bricks_1"
+    },
+    "pulse=46": {
+      "model": "zygzagsmod:block/magmatic_nether_bricks_2"
+    },
+    "pulse=47": {
+      "model": "zygzagsmod:block/magmatic_nether_bricks_3"
+    },
+    "pulse=48": {
+      "model": "zygzagsmod:block/magmatic_nether_bricks_0"
+    },
+    "pulse=49": {
+      "model": "zygzagsmod:block/magmatic_nether_bricks_1"
+    },
+    "pulse=5": {
+      "model": "zygzagsmod:block/magmatic_nether_bricks_1"
+    },
+    "pulse=50": {
+      "model": "zygzagsmod:block/magmatic_nether_bricks_2"
+    },
+    "pulse=51": {
+      "model": "zygzagsmod:block/magmatic_nether_bricks_3"
+    },
+    "pulse=52": {
+      "model": "zygzagsmod:block/magmatic_nether_bricks_0"
+    },
+    "pulse=53": {
+      "model": "zygzagsmod:block/magmatic_nether_bricks_1"
+    },
+    "pulse=54": {
+      "model": "zygzagsmod:block/magmatic_nether_bricks_2"
+    },
+    "pulse=55": {
+      "model": "zygzagsmod:block/magmatic_nether_bricks_3"
+    },
+    "pulse=56": {
+      "model": "zygzagsmod:block/magmatic_nether_bricks_0"
+    },
+    "pulse=57": {
+      "model": "zygzagsmod:block/magmatic_nether_bricks_1"
+    },
+    "pulse=58": {
+      "model": "zygzagsmod:block/magmatic_nether_bricks_2"
+    },
+    "pulse=59": {
+      "model": "zygzagsmod:block/magmatic_nether_bricks_3"
+    },
+    "pulse=6": {
+      "model": "zygzagsmod:block/magmatic_nether_bricks_2"
+    },
+    "pulse=60": {
+      "model": "zygzagsmod:block/magmatic_nether_bricks_0"
+    },
+    "pulse=61": {
+      "model": "zygzagsmod:block/magmatic_nether_bricks_1"
+    },
+    "pulse=62": {
+      "model": "zygzagsmod:block/magmatic_nether_bricks_2"
+    },
+    "pulse=63": {
+      "model": "zygzagsmod:block/magmatic_nether_bricks_3"
+    },
+    "pulse=64": {
+      "model": "zygzagsmod:block/magmatic_nether_bricks_0"
+    },
+    "pulse=65": {
+      "model": "zygzagsmod:block/magmatic_nether_bricks_1"
+    },
+    "pulse=66": {
+      "model": "zygzagsmod:block/magmatic_nether_bricks_2"
+    },
+    "pulse=67": {
+      "model": "zygzagsmod:block/magmatic_nether_bricks_3"
+    },
+    "pulse=68": {
+      "model": "zygzagsmod:block/magmatic_nether_bricks_0"
+    },
+    "pulse=69": {
+      "model": "zygzagsmod:block/magmatic_nether_bricks_1"
+    },
+    "pulse=7": {
+      "model": "zygzagsmod:block/magmatic_nether_bricks_3"
+    },
+    "pulse=70": {
+      "model": "zygzagsmod:block/magmatic_nether_bricks_2"
+    },
+    "pulse=71": {
+      "model": "zygzagsmod:block/magmatic_nether_bricks_3"
+    },
+    "pulse=72": {
+      "model": "zygzagsmod:block/magmatic_nether_bricks_0"
+    },
+    "pulse=73": {
+      "model": "zygzagsmod:block/magmatic_nether_bricks_1"
+    },
+    "pulse=74": {
+      "model": "zygzagsmod:block/magmatic_nether_bricks_2"
+    },
+    "pulse=75": {
+      "model": "zygzagsmod:block/magmatic_nether_bricks_3"
+    },
+    "pulse=76": {
+      "model": "zygzagsmod:block/magmatic_nether_bricks_0"
+    },
+    "pulse=77": {
+      "model": "zygzagsmod:block/magmatic_nether_bricks_1"
+    },
+    "pulse=78": {
+      "model": "zygzagsmod:block/magmatic_nether_bricks_2"
+    },
+    "pulse=79": {
+      "model": "zygzagsmod:block/magmatic_nether_bricks_3"
+    },
+    "pulse=8": {
+      "model": "zygzagsmod:block/magmatic_nether_bricks_0"
+    },
+    "pulse=80": {
+      "model": "zygzagsmod:block/magmatic_nether_bricks_0"
+    },
+    "pulse=81": {
+      "model": "zygzagsmod:block/magmatic_nether_bricks_1"
+    },
+    "pulse=82": {
+      "model": "zygzagsmod:block/magmatic_nether_bricks_2"
+    },
+    "pulse=83": {
+      "model": "zygzagsmod:block/magmatic_nether_bricks_3"
+    },
+    "pulse=84": {
+      "model": "zygzagsmod:block/magmatic_nether_bricks_0"
+    },
+    "pulse=85": {
+      "model": "zygzagsmod:block/magmatic_nether_bricks_1"
+    },
+    "pulse=86": {
+      "model": "zygzagsmod:block/magmatic_nether_bricks_2"
+    },
+    "pulse=87": {
+      "model": "zygzagsmod:block/magmatic_nether_bricks_3"
+    },
+    "pulse=88": {
+      "model": "zygzagsmod:block/magmatic_nether_bricks_0"
+    },
+    "pulse=89": {
+      "model": "zygzagsmod:block/magmatic_nether_bricks_1"
+    },
+    "pulse=9": {
+      "model": "zygzagsmod:block/magmatic_nether_bricks_1"
+    },
+    "pulse=90": {
+      "model": "zygzagsmod:block/magmatic_nether_bricks_2"
+    },
+    "pulse=91": {
+      "model": "zygzagsmod:block/magmatic_nether_bricks_3"
+    },
+    "pulse=92": {
+      "model": "zygzagsmod:block/magmatic_nether_bricks_0"
+    },
+    "pulse=93": {
+      "model": "zygzagsmod:block/magmatic_nether_bricks_1"
+    },
+    "pulse=94": {
+      "model": "zygzagsmod:block/magmatic_nether_bricks_2"
+    },
+    "pulse=95": {
+      "model": "zygzagsmod:block/magmatic_nether_bricks_3"
+    },
+    "pulse=96": {
+      "model": "zygzagsmod:block/magmatic_nether_bricks_0"
+    },
+    "pulse=97": {
+      "model": "zygzagsmod:block/magmatic_nether_bricks_1"
+    },
+    "pulse=98": {
+      "model": "zygzagsmod:block/magmatic_nether_bricks_2"
+    },
+    "pulse=99": {
+      "model": "zygzagsmod:block/magmatic_nether_bricks_3"
+    }
+  }
+}

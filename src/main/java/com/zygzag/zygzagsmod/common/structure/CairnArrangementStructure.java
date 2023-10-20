@@ -3,6 +3,8 @@ package com.zygzag.zygzagsmod.common.structure;
 import com.mojang.datafixers.util.Pair;
 import com.mojang.serialization.Codec;
 import com.zygzag.zygzagsmod.common.Main;
+import com.zygzag.zygzagsmod.common.block.entity.StructurePlacerBlockEntity;
+import com.zygzag.zygzagsmod.common.registry.BlockRegistry;
 import com.zygzag.zygzagsmod.common.registry.StructurePieceTypeRegistry;
 import com.zygzag.zygzagsmod.common.registry.StructureTypeRegistry;
 import it.unimi.dsi.fastutil.objects.Object2ObjectArrayMap;
@@ -11,7 +13,10 @@ import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.core.*;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.tags.BlockTags;
+import net.minecraft.tags.FluidTags;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.LevelReader;
@@ -33,6 +38,8 @@ import net.minecraft.world.level.levelgen.structure.placement.StructurePlacement
 import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.*;
+
+import static com.zygzag.zygzagsmod.common.Main.MODID;
 
 @ParametersAreNonnullByDefault
 @MethodsReturnNonnullByDefault
@@ -65,7 +72,7 @@ public class CairnArrangementStructure extends Structure {
                                     y,
                                     z
                             ),
-                            CairnType.SINGLE
+                            ctx.random().nextBoolean() ? CairnType.SINGLE : CairnType.DOUBLE
                     )
             );
         });
@@ -105,30 +112,25 @@ public class CairnArrangementStructure extends Structure {
         public void postProcess(WorldGenLevel world, StructureManager manager, ChunkGenerator chunkGen, RandomSource rng, BoundingBox bounds, ChunkPos chunk, BlockPos origin) {
             if (world instanceof ServerLevel serverLevel) place(serverLevel, manager, chunkGen, rng, bounds, chunk, origin);
             else {
-                //TODO: spawn command/structure block that will /place the structure when loaded
+                world.setBlock(origin, BlockRegistry.STRUCTURE_PLACER.get().defaultBlockState(), 3);
+                if (world.getBlockEntity(origin) instanceof StructurePlacerBlockEntity be) // should always be
+                    be.structure = world.registryAccess().registryOrThrow(Registries.STRUCTURE).get(new ResourceLocation(MODID, "cairn_arrangement"));
             }
         }
 
         public void place(ServerLevel world, StructureManager manager, ChunkGenerator chunkGen, RandomSource rng, BoundingBox bounds, ChunkPos chunk, BlockPos origin) {
             Map<BlockPos, BlockState> structure = new HashMap<>();
             Registry<Structure> registry = world.registryAccess().registryOrThrow(Registries.STRUCTURE);
-            Optional<HolderSet.Named<Structure>> cairnLocatedTag = registry.getTag(Main.CAIRN_LOCATED);
-
-            CairnType functionalType = type;
-            if (cairnLocatedTag.isEmpty()) functionalType = CairnType.SINGLE;
-
-            if (!world.getBlockState(origin.below()).isCollisionShapeFullBlock(world, origin.below())) return;
+            Optional<HolderSet.Named<Structure>> cairnBasicTag = registry.getTag(Main.CAIRN_BASIC);
 
             structure.put(origin, Blocks.AIR.defaultBlockState());
 
-            switch (functionalType) {
+            switch (type) {
                 case SINGLE -> {
-                    cairnPillar(structure, origin, rng, 3, 4, 0, 2);
+                    singleCairn(structure, origin, rng, world);
                 }
                 case DOUBLE -> {
-                    Pair<BlockPos, Holder<Structure>> pair = findNearestMapStructure(world, cairnLocatedTag.get(), origin, 100, false);
-                    cairnPillar(structure, origin, rng, 1, 2, 1, 2);
-                    cairnPillar(structure, origin, rng, 5, 9, 1, 2);
+                    doubleCairn(structure, origin, rng, world, cairnBasicTag.orElse(null));
                 }
             }
 
@@ -138,17 +140,55 @@ public class CairnArrangementStructure extends Structure {
             }
         }
 
-        public static void cairnPillar(Map<BlockPos, BlockState> structure, BlockPos origin, RandomSource rng, int minHeight, int maxHeight, int minMossHeight, int maxMossHeight) {
+        public static void singleCairn(Map<BlockPos, BlockState> structure, BlockPos origin, RandomSource rng, ServerLevel world) {
+            cairnPillar(structure, origin, rng, world, 3, 4, 1, 3);
+        }
+
+        public static void doubleCairn(Map<BlockPos, BlockState> structure, BlockPos origin, RandomSource rng, ServerLevel world, @Nullable HolderSet<Structure> cairnLocatedTag) {
+            if (cairnLocatedTag == null) {
+                //System.out.println("cairn tag null");
+                singleCairn(structure, origin, rng, world);
+                return;
+            }
+            //System.out.println("looking for structure");
+            Pair<BlockPos, Holder<Structure>> pair = findNearestMapStructure(world, cairnLocatedTag, origin, 100, false);
+            //System.out.println("found structure");
+            if (pair == null) {
+                //System.out.println("cant find structure");
+                singleCairn(structure, origin, rng, world);
+            }
+            else {
+                cairnPillar(structure, origin, rng, world, 2, 4, 1, 2);
+                int x = pair.getFirst().getX() - origin.getX();
+                int z = pair.getFirst().getZ() - origin.getZ();
+                int intendedDistance = rng.nextIntBetweenInclusive(8, 24);
+                double fullDistance = Math.sqrt(x * x + z * z);
+                int transformedX = (int) Math.round(x * intendedDistance / fullDistance);
+                int transformedZ = (int) Math.round(z * intendedDistance / fullDistance);
+                cairnPillar(structure, origin.offset(transformedX, 0, transformedZ), rng, world, 5, 9, 4, 7);
+                //System.out.println("Generated a double cairn, pointing towards location " + pair.getFirst());
+            }
+        }
+
+        public static boolean isGoodPosition(BlockState state) {
+            return state.is(BlockTags.REPLACEABLE) || state.getFluidState().is(FluidTags.WATER) || state.is(BlockTags.LEAVES);
+        }
+
+        public static void cairnPillar(Map<BlockPos, BlockState> structure, BlockPos origin, RandomSource rng, ServerLevel world, int minHeight, int maxHeight, int minMossHeight, int maxMossHeight) {
+            int maxSearchDistanceVertical = 80;
+            int yOffset = -3;
+            while (isGoodPosition(world.getBlockState(origin.offset(0, yOffset, 0))) && yOffset > -maxSearchDistanceVertical) yOffset--;
+            while (!isGoodPosition(world.getBlockState(origin.offset(0, yOffset, 0))) && yOffset < maxSearchDistanceVertical) yOffset++;
+            if (!isGoodPosition(world.getBlockState(origin.offset(0, yOffset, 0)))) return;
             int height = rng.nextIntBetweenInclusive(minHeight, maxHeight);
             int mossHeight = rng.nextIntBetweenInclusive(minMossHeight, maxMossHeight);
-            System.out.println("trying to place cairn pillar");
-            for (int y = 0; y < Math.min(mossHeight, height); y++) structure.put(origin.offset(0, y, 0), Blocks.MOSSY_COBBLESTONE.defaultBlockState());
-            for (int y = Math.min(mossHeight, height); y < height; y++) structure.put(origin.offset(0, y, 0), Blocks.COBBLESTONE.defaultBlockState());
+            for (int y = 0; y < Math.min(mossHeight, height); y++) structure.put(origin.offset(0, yOffset + y, 0), Blocks.MOSSY_COBBLESTONE.defaultBlockState());
+            for (int y = Math.min(mossHeight, height); y < height; y++) structure.put(origin.offset(0, yOffset + y, 0), Blocks.COBBLESTONE.defaultBlockState());
         }
     }
 
     @Nullable
-    public static Pair<BlockPos, Holder<Structure>> findNearestMapStructure(ServerLevel world, HolderSet<Structure> structures, BlockPos pos, int height, boolean flag7) {
+    public static Pair<BlockPos, Holder<Structure>> findNearestMapStructure(ServerLevel world, HolderSet<Structure> structures, BlockPos pos, int range, boolean flag7) {
         ChunkGeneratorStructureState chunkGenStructureState = world.getChunkSource().getGeneratorState();
         Map<StructurePlacement, Set<Holder<Structure>>> placementMap = new Object2ObjectArrayMap<>();
 
@@ -158,6 +198,7 @@ public class CairnArrangementStructure extends Structure {
             }
         }
 
+        //System.out.println(placementMap);
         if (placementMap.isEmpty()) {
             return null;
         } else {
@@ -183,16 +224,20 @@ public class CairnArrangementStructure extends Structure {
                 }
             }
 
+            //System.out.println(structurePosAndHolder);
+
             if (!entries.isEmpty()) {
                 int sectionX = SectionPos.blockToSectionCoord(pos.getX());
                 int sectionZ = SectionPos.blockToSectionCoord(pos.getZ());
 
-                for (int y = 0; y <= height; ++y) {
+                for (int lookRange = 0; lookRange <= range; ++lookRange) {
                     boolean found = false;
 
                     for (Map.Entry<StructurePlacement, Set<Holder<Structure>>> entry : entries) {
                         RandomSpreadStructurePlacement placement = (RandomSpreadStructurePlacement) entry.getKey();
-                        Pair<BlockPos, Holder<Structure>> otherStructure = getNearestGeneratedStructure(entry.getValue(), world, manager, sectionX, sectionZ, y, flag7, chunkGenStructureState.getLevelSeed(), placement);
+                        //System.out.println("getting nearest generated structure for entry " + entry);
+                        Pair<BlockPos, Holder<Structure>> otherStructure = getNearestGeneratedStructure(entry.getValue(), world, manager, sectionX, sectionZ, lookRange, flag7, chunkGenStructureState.getLevelSeed(), placement);
+                        //System.out.println("done");
                         if (otherStructure != null) {
                             found = true;
                             double distance = pos.distSqr(otherStructure.getFirst());
@@ -218,8 +263,9 @@ public class CairnArrangementStructure extends Structure {
     private static Pair<BlockPos, Holder<Structure>> getNearestGeneratedStructure(Set<Holder<Structure>> structures, LevelReader world, StructureManager manager, int originX, int originZ, int distance, boolean flag, long seed, RandomSpreadStructurePlacement placement) {
         int spacing = placement.spacing();
 
-        for (int x = -distance; x <= distance; x += distance + distance) {
-            for (int z = -distance; z <= distance; z += distance + distance) {
+        for (int x = -distance; x <= distance; x += Math.max(1, distance + distance)) {
+            for (int z = -distance; z <= distance; z += Math.max(1, distance + distance)) {
+                //System.out.println("xz loop, x = " + x + ", z = " + z + ", distance = " + distance + ", spacing = " + spacing);
                 int structureX = originX + spacing * x;
                 int structureZ = originZ + spacing * z;
                 ChunkPos chunkpos = placement.getPotentialStructureChunk(seed, structureX, structureZ);
