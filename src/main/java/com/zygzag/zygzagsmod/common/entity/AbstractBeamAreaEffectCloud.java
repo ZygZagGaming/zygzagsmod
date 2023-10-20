@@ -49,7 +49,7 @@ public abstract class AbstractBeamAreaEffectCloud extends AreaEffectCloud {
             double y = getY() + random.nextGaussian() * 0.2;
             double z = getZ() + random.nextGaussian() * 0.2;
             Vec3i delta = getDirection().getNormal();
-
+ 
             level().addAlwaysVisibleParticle(particle, x, y, z, delta.getX(), delta.getY(), delta.getZ());
         }
     }

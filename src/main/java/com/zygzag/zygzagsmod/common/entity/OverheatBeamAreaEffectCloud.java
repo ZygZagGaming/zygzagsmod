@@ -4,11 +4,14 @@ import com.zygzag.zygzagsmod.common.registry.EntityTypeRegistry;
 import com.zygzag.zygzagsmod.common.registry.MobEffectRegistry;
 import com.zygzag.zygzagsmod.common.registry.ParticleTypeRegistry;
 import net.minecraft.MethodsReturnNonnullByDefault;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
 import net.minecraft.core.particles.ParticleOptions;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.state.BlockState;
 
 import javax.annotation.ParametersAreNonnullByDefault;
 
@@ -44,5 +47,12 @@ public class OverheatBeamAreaEffectCloud extends AbstractBeamAreaEffectCloud {
     @Override
     public float getBeamHeight() {
         return height;
+    }
+
+    public static void spawn(Level world, BlockPos pos, Direction direction) {
+        OverheatBeamAreaEffectCloud cloud = new OverheatBeamAreaEffectCloud(world);
+        cloud.setDirection(direction);
+        cloud.setPos(pos.getX() + 0.5 + direction.getNormal().getX(), pos.getY() + 0.5 + direction.getNormal().getY(), pos.getZ() + 0.5 + direction.getNormal().getZ());
+        world.addFreshEntity(cloud);
     }
 }

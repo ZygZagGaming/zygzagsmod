@@ -62,10 +62,7 @@ public class MagmaticNetherBrickBlock extends Block implements EntityBlock {
             } else {
                 for (Direction dir : Direction.values())
                     if (!world.getBlockState(pos.relative(dir)).isFaceSturdy(world, pos.relative(dir), dir.getOpposite())) {
-                        OverheatBeamAreaEffectCloud cloud = new OverheatBeamAreaEffectCloud(world);
-                        cloud.setDirection(dir);
-                        cloud.setPos(pos.getX() + 0.5 + dir.getNormal().getX(), pos.getY() + 0.5 + dir.getNormal().getY(), pos.getZ() + 0.5 + dir.getNormal().getZ());
-                        world.addFreshEntity(cloud);
+                        OverheatBeamAreaEffectCloud.spawn(world, pos, dir);
                     }
                 world.setBlockAndUpdate(pos, state.setValue(CHARGES, 0).setValue(PULSE, 104));
             }

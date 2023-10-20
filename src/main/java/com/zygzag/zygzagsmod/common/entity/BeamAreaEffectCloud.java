@@ -2,10 +2,13 @@ package com.zygzag.zygzagsmod.common.entity;
 
 import com.zygzag.zygzagsmod.common.registry.EntityTypeRegistry;
 import net.minecraft.MethodsReturnNonnullByDefault;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
 import net.minecraft.core.particles.ParticleOptions;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.item.alchemy.Potion;
 import net.minecraft.world.level.Level;
 
 import javax.annotation.ParametersAreNonnullByDefault;
@@ -41,5 +44,13 @@ public class BeamAreaEffectCloud extends AbstractBeamAreaEffectCloud {
     @Override
     public int getDurationInTicks() {
         return 2 * 20;
+    }
+
+    public static void spawn(Level world, BlockPos pos, Direction direction, Potion potion) {
+        BeamAreaEffectCloud cloud = new BeamAreaEffectCloud(world);
+        cloud.setDirection(direction);
+        cloud.setPos(pos.getX() + 0.5 + direction.getNormal().getX(), pos.getY() + 0.5 + direction.getNormal().getY(), pos.getZ() + 0.5 + direction.getNormal().getZ());
+        cloud.setPotion(potion);
+        world.addFreshEntity(cloud);
     }
 }

@@ -1,5 +1,6 @@
 package com.zygzag.zygzagsmod.common.registry;
 
+import com.zygzag.zygzagsmod.common.structure.CairnArrangementStructure;
 import com.zygzag.zygzagsmod.common.structure.IridiumEndIslandStructure;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.world.level.levelgen.structure.pieces.StructurePieceType;
@@ -18,5 +19,10 @@ public class StructurePieceTypeRegistry extends Registry<StructurePieceType> {
     public static final RegistryObject<StructurePieceType> IRIDIUM_END_ISLAND = INSTANCE.register(
             "iridium_end_island",
             () -> (StructurePieceType.ContextlessType) IridiumEndIslandStructure.IridiumEndIslandPiece::new
+    );
+
+    public static final RegistryObject<StructurePieceType> CAIRN_ARRANGEMENT = INSTANCE.register(
+            "cairn_arrangement",
+            () -> (StructurePieceType.ContextlessType) CairnArrangementStructure.CairnArrangementStructurePiece::new
     );
 }
