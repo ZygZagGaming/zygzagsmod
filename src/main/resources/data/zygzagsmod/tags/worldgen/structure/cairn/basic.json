@@ -3,7 +3,6 @@
     "#minecraft:village",
     "minecraft:desert_pyramid",
     "minecraft:jungle_pyramid",
-    "minecraft:monument",
-    "minecraft:trail_ruins"
+    "minecraft:monument"
   ]
 }

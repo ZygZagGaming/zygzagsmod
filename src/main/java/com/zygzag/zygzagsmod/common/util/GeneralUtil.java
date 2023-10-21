@@ -15,6 +15,7 @@ import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.item.enchantment.Enchantments;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.common.Tags;
 import net.minecraftforge.common.capabilities.Capability;
@@ -215,5 +216,25 @@ public class GeneralUtil {
     @FunctionalInterface
     public interface EnchantmentVisitor {
         void accept(Enchantment enchant, int level);
+    }
+
+    public static <K, V> void map(Map<K, V> map, K key, Function<V, V> function) {
+        if (map.containsKey(key)) {
+            map.put(key, function.apply(map.get(key)));
+        }
+    }
+
+    public static BlockState mossify(BlockState original) {
+        if (original.is(Blocks.COBBLESTONE)) return Blocks.MOSSY_COBBLESTONE.withPropertiesOf(original);
+        if (original.is(Blocks.COBBLESTONE_WALL)) return Blocks.MOSSY_COBBLESTONE_WALL.withPropertiesOf(original);
+        if (original.is(Blocks.COBBLESTONE_SLAB)) return Blocks.MOSSY_COBBLESTONE_SLAB.withPropertiesOf(original);
+        if (original.is(Blocks.COBBLESTONE_STAIRS)) return Blocks.MOSSY_COBBLESTONE_STAIRS.withPropertiesOf(original);
+
+        if (original.is(Blocks.STONE_BRICKS)) return Blocks.MOSSY_STONE_BRICKS.withPropertiesOf(original);
+        if (original.is(Blocks.STONE_BRICK_WALL)) return Blocks.MOSSY_STONE_BRICK_WALL.withPropertiesOf(original);
+        if (original.is(Blocks.STONE_BRICK_SLAB)) return Blocks.MOSSY_STONE_BRICK_SLAB.withPropertiesOf(original);
+        if (original.is(Blocks.STONE_BRICK_STAIRS)) return Blocks.MOSSY_STONE_BRICK_STAIRS.withPropertiesOf(original);
+
+        return original;
     }
 }

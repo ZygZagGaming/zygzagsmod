@@ -1,0 +1,12 @@
+{
+    "values": [
+        "#minecraft:air",
+        "#minecraft:water",
+        "#minecraft:replaceable",
+        "#minecraft:leaves",
+        "#minecraft:flowers",
+        "minecraft:kelp",
+        "minecraft:kelp_plant"
+    ],
+    "override": false
+}

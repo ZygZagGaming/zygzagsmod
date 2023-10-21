@@ -7,6 +7,7 @@ import com.zygzag.zygzagsmod.common.block.entity.StructurePlacerBlockEntity;
 import com.zygzag.zygzagsmod.common.registry.BlockRegistry;
 import com.zygzag.zygzagsmod.common.registry.StructurePieceTypeRegistry;
 import com.zygzag.zygzagsmod.common.registry.StructureTypeRegistry;
+import com.zygzag.zygzagsmod.common.util.GeneralUtil;
 import it.unimi.dsi.fastutil.objects.Object2ObjectArrayMap;
 import it.unimi.dsi.fastutil.objects.ObjectArraySet;
 import net.minecraft.MethodsReturnNonnullByDefault;
@@ -15,8 +16,6 @@ import net.minecraft.core.registries.Registries;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
-import net.minecraft.tags.BlockTags;
-import net.minecraft.tags.FluidTags;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.LevelReader;
@@ -24,6 +23,7 @@ import net.minecraft.world.level.StructureManager;
 import net.minecraft.world.level.WorldGenLevel;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.chunk.ChunkAccess;
 import net.minecraft.world.level.chunk.ChunkGenerator;
 import net.minecraft.world.level.chunk.ChunkGeneratorStructureState;
@@ -34,6 +34,8 @@ import net.minecraft.world.level.levelgen.structure.pieces.StructurePieceSeriali
 import net.minecraft.world.level.levelgen.structure.placement.ConcentricRingsStructurePlacement;
 import net.minecraft.world.level.levelgen.structure.placement.RandomSpreadStructurePlacement;
 import net.minecraft.world.level.levelgen.structure.placement.StructurePlacement;
+import net.minecraft.world.level.material.FluidState;
+import net.minecraft.world.level.material.Fluids;
 
 import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
@@ -125,65 +127,70 @@ public class CairnArrangementStructure extends Structure {
 
             structure.put(origin, Blocks.AIR.defaultBlockState());
 
+            BlockPos actualOrigin = origin.offset(rng.nextIntBetweenInclusive(0, 15), 0, rng.nextIntBetweenInclusive(0, 15));
+
             switch (type) {
                 case SINGLE -> {
-                    singleCairn(structure, origin, rng, world);
+                    placeBasicCairn(structure, actualOrigin, rng, world);
                 }
                 case DOUBLE -> {
-                    doubleCairn(structure, origin, rng, world, cairnBasicTag.orElse(null));
+                    doubleCairn(structure, actualOrigin, rng, world, cairnBasicTag.orElse(null));
                 }
             }
 
             for (BlockPos position : structure.keySet()) {
                 BlockState state = structure.get(position);
+                FluidState fluid = world.getFluidState(position);
+                if (fluid.is(Fluids.WATER) && state.hasProperty(BlockStateProperties.WATERLOGGED)) state = state.setValue(BlockStateProperties.WATERLOGGED, true);
                 world.setBlock(position, state, 3);
             }
         }
 
-        public static void singleCairn(Map<BlockPos, BlockState> structure, BlockPos origin, RandomSource rng, ServerLevel world) {
-            cairnPillar(structure, origin, rng, world, 3, 4, 1, 3);
+        public static void placeShortCairn(Map<BlockPos, BlockState> structure, BlockPos origin, RandomSource rng, ServerLevel world) {
+            cairnPillar(structure, origin, rng, world, 0, 0, 1, 1, 0, 1);
+        }
+
+        public static void placeBasicCairn(Map<BlockPos, BlockState> structure, BlockPos origin, RandomSource rng, ServerLevel world) {
+            cairnPillar(structure, origin, rng, world, 1, 3, 1, 2, 1, 2);
+        }
+
+        public static void placeTallCairn(Map<BlockPos, BlockState> structure, BlockPos origin, RandomSource rng, ServerLevel world) {
+            cairnPillar(structure, origin, rng, world, 1, 3, 1, 2, 1, 2);
         }
 
         public static void doubleCairn(Map<BlockPos, BlockState> structure, BlockPos origin, RandomSource rng, ServerLevel world, @Nullable HolderSet<Structure> cairnLocatedTag) {
-            if (cairnLocatedTag == null) {
-                //System.out.println("cairn tag null");
-                singleCairn(structure, origin, rng, world);
-                return;
-            }
-            //System.out.println("looking for structure");
+            placeBasicCairn(structure, origin, rng, world);
+
+            if (cairnLocatedTag == null) return;
             Pair<BlockPos, Holder<Structure>> pair = findNearestMapStructure(world, cairnLocatedTag, origin, 100, false);
-            //System.out.println("found structure");
-            if (pair == null) {
-                //System.out.println("cant find structure");
-                singleCairn(structure, origin, rng, world);
-            }
-            else {
-                cairnPillar(structure, origin, rng, world, 2, 4, 1, 2);
+            if (pair != null) {
                 int x = pair.getFirst().getX() - origin.getX();
                 int z = pair.getFirst().getZ() - origin.getZ();
                 int intendedDistance = rng.nextIntBetweenInclusive(8, 24);
                 double fullDistance = Math.sqrt(x * x + z * z);
                 int transformedX = (int) Math.round(x * intendedDistance / fullDistance);
                 int transformedZ = (int) Math.round(z * intendedDistance / fullDistance);
-                cairnPillar(structure, origin.offset(transformedX, 0, transformedZ), rng, world, 5, 9, 4, 7);
-                //System.out.println("Generated a double cairn, pointing towards location " + pair.getFirst());
+                placeTallCairn(structure, origin.offset(transformedX, 0, transformedZ), rng, world);
             }
         }
 
-        public static boolean isGoodPosition(BlockState state) {
-            return state.is(BlockTags.REPLACEABLE) || state.getFluidState().is(FluidTags.WATER) || state.is(BlockTags.LEAVES);
+        public static boolean isReplaceable(BlockState state) {
+            return state.is(Main.REPLACEABLE_BY_CAIRN);
         }
 
-        public static void cairnPillar(Map<BlockPos, BlockState> structure, BlockPos origin, RandomSource rng, ServerLevel world, int minHeight, int maxHeight, int minMossHeight, int maxMossHeight) {
+        public static void cairnPillar(Map<BlockPos, BlockState> structure, BlockPos origin, RandomSource rng, ServerLevel world, int minBlocks, int maxBlocks, int minWalls, int maxWalls, int minMoss, int maxMoss) {
+            cairnPillar(structure, origin, world, rng.nextIntBetweenInclusive(minBlocks, maxBlocks), rng.nextIntBetweenInclusive(minWalls, maxWalls), rng.nextIntBetweenInclusive(minMoss, maxMoss));
+        }
+
+        public static void cairnPillar(Map<BlockPos, BlockState> structure, BlockPos origin, ServerLevel world, int blockHeight, int wallHeight, int mossHeight) {
             int maxSearchDistanceVertical = 80;
             int yOffset = -3;
-            while (isGoodPosition(world.getBlockState(origin.offset(0, yOffset, 0))) && yOffset > -maxSearchDistanceVertical) yOffset--;
-            while (!isGoodPosition(world.getBlockState(origin.offset(0, yOffset, 0))) && yOffset < maxSearchDistanceVertical) yOffset++;
-            if (!isGoodPosition(world.getBlockState(origin.offset(0, yOffset, 0)))) return;
-            int height = rng.nextIntBetweenInclusive(minHeight, maxHeight);
-            int mossHeight = rng.nextIntBetweenInclusive(minMossHeight, maxMossHeight);
-            for (int y = 0; y < Math.min(mossHeight, height); y++) structure.put(origin.offset(0, yOffset + y, 0), Blocks.MOSSY_COBBLESTONE.defaultBlockState());
-            for (int y = Math.min(mossHeight, height); y < height; y++) structure.put(origin.offset(0, yOffset + y, 0), Blocks.COBBLESTONE.defaultBlockState());
+            while (isReplaceable(world.getBlockState(origin.offset(0, yOffset, 0))) && yOffset > -maxSearchDistanceVertical) yOffset--;
+            while (!isReplaceable(world.getBlockState(origin.offset(0, yOffset, 0))) && yOffset < maxSearchDistanceVertical) yOffset++;
+            if (!isReplaceable(world.getBlockState(origin.offset(0, yOffset, 0)))) return;
+            for (int y = 0; y < blockHeight; y++) structure.put(origin.offset(0, yOffset + y, 0), Blocks.COBBLESTONE.defaultBlockState());
+            for (int y = blockHeight; y < blockHeight + wallHeight; y++) structure.put(origin.offset(0, yOffset + y, 0), Blocks.COBBLESTONE_WALL.defaultBlockState());
+            for (int y = 0; y < mossHeight; y++) GeneralUtil.map(structure, origin.offset(0, yOffset + y, 0), GeneralUtil::mossify);
         }
     }
 
