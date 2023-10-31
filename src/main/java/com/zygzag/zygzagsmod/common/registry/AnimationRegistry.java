@@ -30,13 +30,13 @@ public class AnimationRegistry extends Registry<Animation> {
 
     public static class IridiumGolem {
         public static final RegistryObject<Animation> IDLE_BASE = INSTANCE.register("iridium_golem_idle_base", () -> new Animation(RawAnimation.begin().thenPlay("animation.iridium_golem.idle_loop"), 160));
-        public static final RegistryObject<Animation> WALK_BASE = INSTANCE.register("iridium_golem_walk_base", () -> new Animation(RawAnimation.begin().thenPlay("animation.iridium_golem.walk_cycle"), 33));
-        public static final RegistryObject<Animation> RUN_BASE = INSTANCE.register("iridium_golem_run_base", () -> new Animation(RawAnimation.begin().thenPlay("animation.iridium_golem.run_cycle"), 20));
-        public static final RegistryObject<Animation> AGRO_BASE = INSTANCE.register("iridium_golem_agro_base", () -> new Animation(RawAnimation.begin().thenPlay("animation.iridium_golem.agro_idle"), 16));
+        public static final RegistryObject<Animation> WALK_BASE = INSTANCE.register("iridium_golem_walk_base", () -> new Animation(RawAnimation.begin().thenPlay("animation.iridium_golem.walk_cycle"), 31));
+        public static final RegistryObject<Animation> RUN_BASE = INSTANCE.register("iridium_golem_run_base", () -> new Animation(RawAnimation.begin().thenPlay("animation.iridium_golem.run_cycle"), 16));
+        public static final RegistryObject<Animation> AGRO_BASE = INSTANCE.register("iridium_golem_agro_base", () -> new Animation(RawAnimation.begin().thenPlay("animation.iridium_golem.agro_idle"), 40));
         public static final RegistryObject<Animation> ATTACK_SMASH = INSTANCE.register("iridium_golem_attack_smash", () -> new Animation(RawAnimation.begin().thenPlay("animation.iridium_golem.attack2"), 48));
-        public static final RegistryObject<Animation> IDLE_1 = INSTANCE.register("iridium_golem_idle_1", () -> new Animation(RawAnimation.begin().thenPlay("animation.iridium_golem.idle1"), 0, false));
-        public static final RegistryObject<Animation> IDLE_2 = INSTANCE.register("iridium_golem_idle_2", () -> new Animation(RawAnimation.begin().thenPlay("animation.iridium_golem.idle2"), 0, false));
-        public static final RegistryObject<Animation> IDLE_3 = INSTANCE.register("iridium_golem_idle_3", () -> new Animation(RawAnimation.begin().thenPlay("animation.iridium_golem.idle3"), 0, false));
+        public static final RegistryObject<Animation> IDLE_1 = INSTANCE.register("iridium_golem_idle_1", () -> new Animation(RawAnimation.begin().thenPlay("animation.iridium_golem.idle1"), 54, false));
+        public static final RegistryObject<Animation> IDLE_2 = INSTANCE.register("iridium_golem_idle_2", () -> new Animation(RawAnimation.begin().thenPlay("animation.iridium_golem.idle2"), 99, false));
+        public static final RegistryObject<Animation> IDLE_3 = INSTANCE.register("iridium_golem_idle_3", () -> new Animation(RawAnimation.begin().thenPlay("animation.iridium_golem.idle3"), 114, false));
 
         public static void init() {
         }
