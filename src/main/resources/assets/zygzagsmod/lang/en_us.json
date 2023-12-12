@@ -9,8 +9,6 @@
   "block.zygzagsmod.iridium_end_sand": "Iridium-Speckled End Sand",
   "block.zygzagsmod.suspicious_end_sand": "Suspicious End Sand",
   "block.zygzagsmod.sculk_jaw": "Sculk Jaw",
-  "enchantment.zygzagsmod.cooldown": "Cooldown",
-  "enchantment.zygzagsmod.brush_efficiency": "Brush Efficiency",
   "zygzagsmod.recipe.transmutation": "Transmutation",
   "entity.zygzagsmod.empowered_wither": "Empowered Wither",
   "item.minecraft.potion.effect.rage": "Potion of Rage",
@@ -247,5 +245,14 @@
   "advancements.iridium.potion_seller.description": "Obtain a Skull-Socketed Iridium Scepter enchanted with Cooldown IV",
 
   "item.zygzagsmod.iridium_golem_spawn_egg": "Iridium Golem Spawn Egg",
-  "item.zygzagsmod.blaze_sentry_spawn_egg": "Blaze Sentry Spawn Egg"
+  "item.zygzagsmod.blaze_sentry_spawn_egg": "Blaze Sentry Spawn Egg",
+
+  "enchantment.zygzagsmod.cooldown": "Cooldown",
+  "enchantment.zygzagsmod.brush_efficiency": "Brush Efficiency",
+  "enchantment.zygzagsmod.steady": "Steady",
+  "enchantment.zygzagsmod.springs": "Springs",
+  "enchantment.zygzagsmod.curse_of_glass": "Curse of Glass",
+  "enchantment.zygzagsmod.hallowed": "Hallowed",
+
+  "attribute.name.generic.jump_power": "Jump Power"
 }

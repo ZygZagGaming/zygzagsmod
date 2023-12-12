@@ -9,11 +9,12 @@ import com.zygzag.zygzagsmod.common.registry.*;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.BlockTags;
-import net.minecraft.tags.StructureTags;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.item.AxeItem;
 import net.minecraft.world.item.BrushItem;
 import net.minecraft.world.item.CreativeModeTabs;
+import net.minecraft.world.item.SwordItem;
 import net.minecraft.world.item.enchantment.EnchantmentCategory;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
@@ -36,6 +37,7 @@ import net.minecraftforge.registries.IForgeRegistry;
 import org.slf4j.Logger;
 
 import java.util.Map;
+import java.util.UUID;
 import java.util.function.Supplier;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -45,6 +47,7 @@ public class Main {
 
     public static final EnchantmentCategory COOLDOWN_CATEGORY = EnchantmentCategory.create("cooldown", (item) -> item instanceof ISocketable socketable && socketable.hasCooldown());
     public static final EnchantmentCategory BRUSH_CATEGORY = EnchantmentCategory.create("brush", (item) -> item instanceof BrushItem);
+    public static final EnchantmentCategory SWORD_OR_AXE = EnchantmentCategory.create("sword_or_axe", (item) -> item instanceof SwordItem || item instanceof AxeItem);
     public static final String MODID = "zygzagsmod";
     @SuppressWarnings("unused")
     public static final Logger LOGGER = LogUtils.getLogger();
@@ -61,6 +64,11 @@ public class Main {
 
     public static final Capability<PlayerSightCache> PLAYER_SIGHT_CACHE = CapabilityManager.get(new CapabilityToken<>() {
     });
+
+    public static final UUID SPRINGS_ENCHANTMENT_MODIFIER_UUID = UUID.fromString("488b16bb-d01c-49bb-adf2-714c230d035f");
+    public static final UUID STEADY_ENCHANTMENT_MODIFIER_UUID = UUID.fromString("4c0789ca-3380-416b-8d3e-723b24d272c2");
+    public static final UUID CURSE_OF_GLASS_ENCHANTMENT_HEALTH_MODIFIER_UUID = UUID.fromString("82d7ee30-93bc-448b-b16f-77097f9625ec");
+    public static final UUID CURSE_OF_GLASS_ENCHANTMENT_DAMAGE_MODIFIER_UUID = UUID.fromString("4df8ccef-9fee-432a-b3a7-f0178c6f6bfe");
 
     public static final Supplier<Map<BlockState, Integer>> EXTRANEOUS_SCULK_GROWTHS = () -> Map.of(
             Blocks.SCULK_SENSOR.defaultBlockState(), 10,

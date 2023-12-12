@@ -4,12 +4,17 @@ import com.zygzag.zygzagsmod.common.block.entity.CustomBrushableBlockEntity;
 import com.zygzag.zygzagsmod.common.capability.PlayerSightCache;
 import com.zygzag.zygzagsmod.common.capability.PlayerSightCacheImpl;
 import com.zygzag.zygzagsmod.common.effect.SightEffect;
+import com.zygzag.zygzagsmod.common.enchant.CustomEnchantment;
+import com.zygzag.zygzagsmod.common.enchant.SpringsEnchantment;
 import com.zygzag.zygzagsmod.common.entity.HomingWitherSkull;
+import com.zygzag.zygzagsmod.common.item.iridium.IEffectAttackWeapon;
+import com.zygzag.zygzagsmod.common.item.iridium.ISocketable;
 import com.zygzag.zygzagsmod.common.item.iridium.Socket;
 import com.zygzag.zygzagsmod.common.item.iridium.armor.IridiumChestplateItem;
 import com.zygzag.zygzagsmod.common.item.iridium.tool.IridiumAxeItem;
 import com.zygzag.zygzagsmod.common.item.iridium.tool.IridiumHoeItem;
 import com.zygzag.zygzagsmod.common.item.iridium.tool.IridiumSwordItem;
+import com.zygzag.zygzagsmod.common.registry.AttributeRegistry;
 import com.zygzag.zygzagsmod.common.registry.BlockRegistry;
 import com.zygzag.zygzagsmod.common.registry.EnchantmentRegistry;
 import net.minecraft.core.BlockPos;
@@ -27,6 +32,7 @@ import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.*;
+import net.minecraft.world.entity.ai.attributes.AttributeInstance;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.BrushItem;
@@ -51,11 +57,10 @@ import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
 import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.event.AttachCapabilitiesEvent;
+import net.minecraftforge.event.ItemAttributeModifierEvent;
 import net.minecraftforge.event.TickEvent;
-import net.minecraftforge.event.entity.living.LivingDamageEvent;
-import net.minecraftforge.event.entity.living.LivingEntityUseItemEvent;
-import net.minecraftforge.event.entity.living.LivingExperienceDropEvent;
-import net.minecraftforge.event.entity.living.MobEffectEvent;
+import net.minecraftforge.event.entity.living.*;
+import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.event.level.BlockEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
@@ -71,6 +76,17 @@ import static com.zygzag.zygzagsmod.common.util.GeneralUtil.isExposedToSunlight;
 @Mod.EventBusSubscriber(modid = MODID)
 @SuppressWarnings("unused")
 public class EventHandler {
+//    public static float DIURNAL_MULTIPLIER = 1f, NOCTURNAL_MULTIPLIER = 1f;
+//    @SubscribeEvent
+//    public static void tick(final TickEvent.LevelTickEvent event) {
+//        if (event.level.dimensionType().effectsLocation() == BuiltinDimensionTypes.OVERWORLD_EFFECTS) {
+//            long time = event.level.dayTime();
+//            DIURNAL_MULTIPLIER = (float) (1 + Config.amethystAxeDamageBonus * Math.exp(-(time - 12000.0) * (time - 12000.0) / 12000.0));
+//            NOCTURNAL_MULTIPLIER = (float) (1 + Config.amethystSwordDamageBonus * Math.exp(-((time + 12000.0) % 24000.0 - 12000.0) * ((time + 12000.0) % 24000.0 - 12000.0) / 12000.0));
+//        }
+//    }
+
+
     @SubscribeEvent
     public static void attachCapabilitiesToPlayer(final AttachCapabilitiesEvent<Entity> event) {
         var entity = event.getObject();
@@ -147,6 +163,18 @@ public class EventHandler {
                     MobEffectInstance effect = new MobEffectInstance(MobEffects.WITHER, 60 * (3 + th), th / 2);
                     living.addEffect(effect);
                 }
+
+                if (mainhandItem instanceof IEffectAttackWeapon effectAttackWeapon) {
+                    var map = effectAttackWeapon.effects();
+                    for (var entry : map.entries()) {
+                        entity.addEffect(entry.getValue());
+                    }
+                }
+
+                for (var entry : mainhandStack.getAllEnchantments().entrySet())
+                    if (entry.getKey() instanceof CustomEnchantment enchantment)
+                        for (var effect : enchantment.attackEffects())
+                            entity.addEffect(effect);
 
                 if (mainhandItem instanceof IridiumSwordItem sword && sword.getSocket() == Socket.DIAMOND) {
                     int height = attacker.getBlockY();
@@ -380,5 +408,50 @@ public class EventHandler {
         } else {
             return false;
         }
+    }
+
+    @SubscribeEvent
+    public static void itemAttrModifier(final ItemAttributeModifierEvent event) {
+        ItemStack stack = event.getItemStack();
+        for (var entry : stack.getAllEnchantments().entrySet()) if (entry.getKey() instanceof CustomEnchantment customEnchant) {
+            int level = entry.getValue();
+            var attributeMap = customEnchant.attributes(event.getSlotType(), level);
+            for (var attributeModifierEntry : attributeMap.entries()) {
+                event.addModifier(attributeModifierEntry.getKey(), attributeModifierEntry.getValue());
+                //System.out.println(attributeModifierEntry.getValue().getAmount() + (Minecraft.getInstance().isLocalServer() ? " local server" : " not local server"));
+            }
+        }
+
+        if (stack.getItem() instanceof ISocketable socketable) {
+            var attributeMap = socketable.attributes(event.getSlotType());
+            for (var attributeModifierEntry : attributeMap.entries()) event.addModifier(attributeModifierEntry.getKey(), attributeModifierEntry.getValue());
+        }
+    }
+
+    @SubscribeEvent
+    public static void breakSpeed(final PlayerEvent.BreakSpeed event) {
+        int multiplier = EnchantmentHelper.getEnchantmentLevel(EnchantmentRegistry.STEADY_ENCHANTMENT.get(), event.getEntity()) + 1;
+        if (!event.getEntity().onGround()) event.setNewSpeed(event.getNewSpeed() * multiplier);
+    }
+
+    @SubscribeEvent
+    public static void jump(final LivingEvent.LivingJumpEvent event) {
+        LivingEntity entity = event.getEntity();
+        AttributeInstance instance = entity.getAttribute(AttributeRegistry.JUMP_POWER.get());
+        if (instance != null) {
+            instance.setBaseValue(0.42F * entity.getBlockJumpFactor() + entity.getJumpBoostPower());
+            var delta = entity.getDeltaMovement();
+            entity.setDeltaMovement(delta.x, instance.getValue(), delta.z);
+        }
+        if (entity.level().isClientSide) { // TODO: fix this wacky bullshit
+            var delta = entity.getDeltaMovement();
+            var level = entity.getItemBySlot(EquipmentSlot.LEGS).getAllEnchantments().get(EnchantmentRegistry.SPRINGS_ENCHANTMENT.get());
+            if (level != null && level != 0) entity.setDeltaMovement(delta.x, (0.42F * entity.getBlockJumpFactor() + entity.getJumpBoostPower()) * (SpringsEnchantment.JUMP_HEIGHT_MULTIPLIERS[level - 1] + 1), delta.z);
+        }
+    }
+
+    @SubscribeEvent
+    public static void fall(final LivingFallEvent event) {
+        event.setDistance((float) (event.getDistance() - 7.14f * event.getEntity().getAttributeValue(AttributeRegistry.JUMP_POWER.get())) + 3);
     }
 }

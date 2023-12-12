@@ -1,10 +1,15 @@
 package com.zygzag.zygzagsmod.common.item.iridium;
 
+import com.google.common.collect.Multimap;
+import com.google.common.collect.Multimaps;
 import com.zygzag.zygzagsmod.common.registry.EnchantmentRegistry;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
+import net.minecraft.world.entity.EquipmentSlot;
+import net.minecraft.world.entity.ai.attributes.Attribute;
+import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
@@ -13,6 +18,8 @@ import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.level.Level;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 
@@ -75,4 +82,12 @@ public interface ISocketable {
             }
         }
     }
+
+    default Multimap<Attribute, AttributeModifier> attributes(EquipmentSlot slot) {
+        Multimap<Attribute, AttributeModifier> attributeMap = Multimaps.newListMultimap(new HashMap<>(), ArrayList::new);
+        setupAttributes(attributeMap, slot);
+        return attributeMap;
+    }
+
+    default void setupAttributes(Multimap<Attribute, AttributeModifier> attributeMap, EquipmentSlot slot) { }
 }

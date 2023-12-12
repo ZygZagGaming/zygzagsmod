@@ -33,6 +33,7 @@ public class Registry<T> {
             StructurePieceTypeRegistry.INSTANCE::registerTo,
             AnimationRegistry.INSTANCE::registerTo,
             TransitionAnimationRegistry.INSTANCE::registerTo,
+            AttributeRegistry.INSTANCE::registerTo,
             (a) -> CriterionTriggerRegistry.init()
     );
     final DeferredRegister<T> register;

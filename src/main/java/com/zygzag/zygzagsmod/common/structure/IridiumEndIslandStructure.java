@@ -120,7 +120,7 @@ public class IridiumEndIslandStructure extends Structure {
                     }
                 }
 
-                radius -= (float) (rng.nextDouble() * layer + 1) * 0.33;
+                radius -= (float) ((rng.nextDouble() * layer + 1) * 0.33);
             }
             var pillarPos = 2;
             var placedSwitch = false;
