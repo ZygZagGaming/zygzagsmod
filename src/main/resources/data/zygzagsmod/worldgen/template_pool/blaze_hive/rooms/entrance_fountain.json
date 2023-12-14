@@ -4,7 +4,7 @@
       "element": {
         "element_type": "minecraft:single_pool_element",
         "location": "zygzagsmod:blaze_hive/rooms/entrance_fountain/entrance_fountain_1",
-        "processors": [],
+        "processors": "zygzagsmod:blaze_hive_degradation",
         "projection": "rigid"
       },
       "weight": 1

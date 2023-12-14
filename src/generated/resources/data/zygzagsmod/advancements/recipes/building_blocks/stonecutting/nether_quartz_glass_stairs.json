@@ -1,0 +1,35 @@
+{
+  "parent": "minecraft:recipes/root",
+  "criteria": {
+    "has_the_recipe": {
+      "conditions": {
+        "recipe": "zygzagsmod:stonecutting/nether_quartz_glass_stairs"
+      },
+      "trigger": "minecraft:recipe_unlocked"
+    },
+    "has_zygzagsmod:nether_quartz_glass": {
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "zygzagsmod:nether_quartz_glass"
+            ]
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    }
+  },
+  "requirements": [
+    [
+      "has_zygzagsmod:nether_quartz_glass",
+      "has_the_recipe"
+    ]
+  ],
+  "rewards": {
+    "recipes": [
+      "zygzagsmod:stonecutting/nether_quartz_glass_stairs"
+    ]
+  },
+  "sends_telemetry_event": false
+}

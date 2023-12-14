@@ -1,18 +1,17 @@
 package com.zygzag.zygzagsmod.common.datagen;
 
 import com.zygzag.zygzagsmod.common.item.iridium.Socket;
+import com.zygzag.zygzagsmod.common.registry.BlockWithItemRegistry;
 import com.zygzag.zygzagsmod.common.registry.IridiumGearRegistry;
 import com.zygzag.zygzagsmod.common.registry.ItemRegistry;
 import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.data.PackOutput;
-import net.minecraft.data.recipes.FinishedRecipe;
-import net.minecraft.data.recipes.RecipeCategory;
-import net.minecraft.data.recipes.RecipeProvider;
-import net.minecraft.data.recipes.SmithingTransformRecipeBuilder;
+import net.minecraft.data.recipes.*;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.crafting.Ingredient;
+import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
 
 import javax.annotation.ParametersAreNonnullByDefault;
@@ -54,6 +53,23 @@ public class AkomiRecipeProvider extends RecipeProvider {
     protected void buildRecipes(Consumer<FinishedRecipe> consumer) {
         makeIridiumPlatingRecipes(consumer);
         makeIridiumSocketingRecipes(consumer);
+
+        makeSimpleStonecuttingRecipe(Items.RED_NETHER_BRICKS, BlockWithItemRegistry.CHISELED_RED_NETHER_BRICKS.getItem(), RecipeCategory.BUILDING_BLOCKS, "stonecutting", consumer);
+        makeSimpleStonecuttingRecipe(Items.RED_NETHER_BRICKS, BlockWithItemRegistry.CRACKED_RED_NETHER_BRICKS.getItem(), RecipeCategory.BUILDING_BLOCKS, "stonecutting", consumer);
+
+        makeSimpleStonecuttingRecipe(BlockWithItemRegistry.NETHER_QUARTZ_GLASS.getItem(), BlockWithItemRegistry.NETHER_QUARTZ_GLASS_STAIRS.getItem(), RecipeCategory.BUILDING_BLOCKS, "stonecutting", consumer);
+        makeSimpleStonecuttingRecipe(BlockWithItemRegistry.NETHER_QUARTZ_GLASS.getItem(), BlockWithItemRegistry.NETHER_QUARTZ_GLASS_SLAB.getItem(), RecipeCategory.BUILDING_BLOCKS, "stonecutting", 2, consumer);
+
+        SimpleCookingRecipeBuilder.smelting(Ingredient.of(Items.QUARTZ_BLOCK), RecipeCategory.BUILDING_BLOCKS, BlockWithItemRegistry.NETHER_QUARTZ_GLASS_SLAB.getItem(), 0.35f, 200).unlockedBy("has_quartz_block", has(Items.QUARTZ_BLOCK)).save(consumer);
+    }
+    private void makeSimpleStonecuttingRecipe(Item start, Item result, RecipeCategory category, String path, Consumer<FinishedRecipe> consumer) {
+        makeSimpleStonecuttingRecipe(start, result, category, path, 1, consumer);
+    }
+
+    private void makeSimpleStonecuttingRecipe(Item start, Item result, RecipeCategory category, String path, int count, Consumer<FinishedRecipe> consumer) {
+        var startId = ForgeRegistries.ITEMS.getKey(start);
+        var resultId = ForgeRegistries.ITEMS.getKey(result);
+        if (startId != null && resultId != null) SingleItemRecipeBuilder.stonecutting(Ingredient.of(start), category, result, count).unlockedBy("has_" + startId, has(start)).save(consumer, new ResourceLocation(MODID, path + "/" + resultId.getPath()));
     }
 
     private void makeIridiumPlatingRecipes(Consumer<FinishedRecipe> consumer) {

@@ -1,0 +1,9 @@
+{
+  "parent": "minecraft:block/inner_stairs",
+  "textures": {
+    "bottom": "zygzagsmod:block/nether_quartz_glass",
+    "side": "zygzagsmod:block/nether_quartz_glass",
+    "top": "zygzagsmod:block/nether_quartz_glass"
+  },
+  "render_type": "translucent"
+}

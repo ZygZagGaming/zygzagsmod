@@ -1,0 +1,13 @@
+{
+  "variants": {
+    "type=bottom": {
+      "model": "zygzagsmod:block/nether_quartz_glass_slab"
+    },
+    "type=double": {
+      "model": "zygzagsmod:block/nether_quartz_glass"
+    },
+    "type=top": {
+      "model": "zygzagsmod:block/nether_quartz_glass_slab_top"
+    }
+  }
+}

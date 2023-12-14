@@ -1,4 +1,4 @@
-// 1.20.1	2023-10-06T18:17:19.1542465	Item Models: zygzagsmod
+// 1.20.1	2023-12-13T15:07:51.4409614	Item Models: zygzagsmod
 15435321a16b6a9adcb19a948c2af0fa7344d370 assets/zygzagsmod/models/item/amethyst_socketed_iridium_axe.json
 15eb5bc299660d213b1379316f4264e348e7a421 assets/zygzagsmod/models/item/amethyst_socketed_iridium_chestplate.json
 da43fd45392876686e6ebd43c9df8c0d4bd150aa assets/zygzagsmod/models/item/amethyst_socketed_iridium_hoe.json
@@ -7,6 +7,8 @@ bade30421091ea03effcf8c802638edbf3e22359 assets/zygzagsmod/models/item/amethyst_
 a2bfba0f70e5b646923c91fa22be16a0ec6d811b assets/zygzagsmod/models/item/amethyst_socketed_iridium_shovel.json
 9673e4d3214bd63e7d3b7bc8bd729477fa7e314a assets/zygzagsmod/models/item/amethyst_socketed_iridium_sword.json
 63ec6c618a3a23eab4cab9c52d7d3250de9b516e assets/zygzagsmod/models/item/blaze_sentry_spawn_egg.json
+5b5fb228058a3ad89b74db2c3fe494cccbce27e4 assets/zygzagsmod/models/item/chiseled_red_nether_bricks.json
+0406ffbb2006fee674f85f505abd2cbf978af0c3 assets/zygzagsmod/models/item/cracked_red_nether_bricks.json
 15435321a16b6a9adcb19a948c2af0fa7344d370 assets/zygzagsmod/models/item/diamond_socketed_iridium_axe.json
 15eb5bc299660d213b1379316f4264e348e7a421 assets/zygzagsmod/models/item/diamond_socketed_iridium_chestplate.json
 da43fd45392876686e6ebd43c9df8c0d4bd150aa assets/zygzagsmod/models/item/diamond_socketed_iridium_hoe.json
@@ -32,6 +34,9 @@ e26275cf0f2ea7ae0b55f54bb486000ed4bd5e79 assets/zygzagsmod/models/item/iridium_c
 58b8a821eb334e448739984f2e14bcb95b40651c assets/zygzagsmod/models/item/iridium_scepter.json
 311e4829500cd3165fcb36a43eaf8071c498ccef assets/zygzagsmod/models/item/iridium_shovel.json
 012f7513040cac65f8f963b47ca512edcc46a9f5 assets/zygzagsmod/models/item/iridium_sword.json
+adf4a3621dd17b291faa46d445875b2941609ae1 assets/zygzagsmod/models/item/nether_quartz_glass.json
+943499c912fd7eeaace0858896139ef8f3f59ec1 assets/zygzagsmod/models/item/nether_quartz_glass_slab.json
+10c818c2533e05537aa500812ba441448843f7c4 assets/zygzagsmod/models/item/nether_quartz_glass_stairs.json
 400f086844fc3e0747ae627dc933f372979ab2b2 assets/zygzagsmod/models/item/partial_iridium_axe_1.json
 7574ce0ff5297b90a5edcd9bb538e79aee08b61c assets/zygzagsmod/models/item/partial_iridium_axe_2.json
 7053e504ed178e320e970ba3dcef767d9d65a71c assets/zygzagsmod/models/item/partial_iridium_boots_1.json

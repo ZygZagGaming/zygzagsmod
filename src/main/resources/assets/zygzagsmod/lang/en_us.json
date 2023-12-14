@@ -64,6 +64,11 @@
   "block.zygzagsmod.raw_iridium_block": "Raw Iridium Block",
   "item.zygzagsmod.partial_iridium_hoe_1": "Iridium-Plated Netherite Hoe",
   "item.zygzagsmod.transmutation_charge": "Transmutation Charge",
+  "block.zygzagsmod.nether_quartz_glass": "Nether Quartz Glass",
+  "block.zygzagsmod.nether_quartz_glass_stairs": "Nether Quartz Glass Stairs",
+  "block.zygzagsmod.nether_quartz_glass_slab": "Nether Quartz Glass Slab",
+  "block.zygzagsmod.chiseled_red_nether_bricks": "Chiseled Red Nether Bricks",
+  "block.zygzagsmod.cracked_red_nether_bricks": "Cracked Red Nether Bricks",
 
   "item.zygzagsmod.iridium_helmet_blueprint": "Iridium Helmet Blueprint",
   "item.zygzagsmod.iridium_chestplate_blueprint": "Iridium Chestplate Blueprint",
