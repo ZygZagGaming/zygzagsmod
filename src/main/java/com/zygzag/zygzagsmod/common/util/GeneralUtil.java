@@ -17,14 +17,12 @@ import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraftforge.common.Tags;
-import net.minecraftforge.common.capabilities.Capability;
-import net.minecraftforge.common.capabilities.ICapabilityProvider;
+import net.neoforged.neoforge.capabilities.ICapabilityProvider;
+import net.neoforged.neoforge.common.Tags;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Consumer;
 import java.util.function.Function;
@@ -51,15 +49,26 @@ public class GeneralUtil {
         else return base * pow(base, exponent - 1);
     }
 
-    public static <T extends ICapabilityProvider, C> void ifCapability(T t, Capability<C> capability, Consumer<C> function) {
-        Optional<C> op = t.getCapability(capability).resolve();
-        op.ifPresent(function);
+    public static <O, C, T, P extends ICapabilityProvider<O, C, T>> void ifCapability(P provider, O capability, C context, Consumer<T> function) {
+        T capabilityInstance = provider.getCapability(capability, context);
+        if (capabilityInstance != null) function.accept(capabilityInstance);
     }
 
     @Nullable
-    public static <T extends ICapabilityProvider, C, O> O ifCapabilityMap(T t, Capability<C> capability, Function<C, O> function) {
-        Optional<C> op = t.getCapability(capability).resolve();
-        return op.map(function).orElse(null);
+    public static <O, C, T, P extends ICapabilityProvider<O, C, T>, V> V ifCapabilityMap(P provider, O capability, C context, Function<T, V> function) {
+        T capabilityInstance = provider.getCapability(capability, context);
+        return capabilityInstance == null ? null : function.apply(capabilityInstance);
+    }
+
+    public static <O, C, T, P extends ICapabilityProvider<O, C, T>> void ifCapability(P provider, O capability, Consumer<T> function) {
+        T capabilityInstance = provider.getCapability(capability, null);
+        if (capabilityInstance != null) function.accept(capabilityInstance);
+    }
+
+    @Nullable
+    public static <O, C, T, P extends ICapabilityProvider<O, C, T>, V> V ifCapabilityMap(P provider, O capability, Function<T, V> function) {
+        T capabilityInstance = provider.getCapability(capability, null);
+        return capabilityInstance == null ? null : function.apply(capabilityInstance);
     }
 
     public static void particles(Level world, ParticleOptions particleType, BlockPos pos, int number, double dx, double dy, double dz) {
@@ -118,9 +127,7 @@ public class GeneralUtil {
     }
 
     public static @Nullable TransitionAnimation getTransitionAnimation(AbstractAnimation from, AbstractAnimation to) {
-        TransitionAnimation anim = Main.transitionAnimationRegistry().getValues().stream().filter((it) -> it.from().is(from) && it.to().is(to)).findFirst().orElse(null);
-        //  if (anim == null) System.out.println("no transition exists from " + from + " to " + to);
-        return anim;
+        return Main.transitionAnimationRegistry().stream().filter((it) -> it.from().is(from) && it.to().is(to)).findFirst().orElse(null);
     }
 
     public static String stringCS(Level level) {

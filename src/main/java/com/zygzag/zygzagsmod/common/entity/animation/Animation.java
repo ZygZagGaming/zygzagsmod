@@ -2,8 +2,9 @@ package com.zygzag.zygzagsmod.common.entity.animation;
 
 import com.zygzag.zygzagsmod.common.Main;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraftforge.registries.RegistryObject;
 import software.bernie.geckolib.core.animation.RawAnimation;
+
+import java.util.function.Supplier;
 
 public class Animation extends AbstractAnimation {
     public Animation(RawAnimation raw, int lengthInTicks, boolean canBeSkipped) {
@@ -21,9 +22,9 @@ public class Animation extends AbstractAnimation {
         return loc;
     }
 
-    public boolean is(RegistryObject<Animation> other) {
+    public boolean is(Supplier<Animation> other) {
         ResourceLocation key = Main.animationRegistry().getKey(this);
-        return key != null && key.equals(other.getId());
+        return key != null && key.equals(other.get().id());
     }
 
     @Override

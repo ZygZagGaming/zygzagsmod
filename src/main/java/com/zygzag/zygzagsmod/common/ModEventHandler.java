@@ -11,18 +11,18 @@ import com.zygzag.zygzagsmod.common.registry.EntityTypeRegistry;
 import com.zygzag.zygzagsmod.common.registry.IridiumGearRegistry;
 import net.minecraft.data.DataProvider;
 import net.minecraft.data.recipes.RecipeProvider;
-import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.monster.AbstractSkeleton;
 import net.minecraft.world.item.Item;
-import net.minecraftforge.client.event.RegisterColorHandlersEvent;
-import net.minecraftforge.client.model.generators.BlockStateProvider;
-import net.minecraftforge.client.model.generators.ItemModelProvider;
-import net.minecraftforge.data.event.GatherDataEvent;
-import net.minecraftforge.event.entity.EntityAttributeCreationEvent;
-import net.minecraftforge.event.entity.EntityAttributeModificationEvent;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.registries.RegistryObject;
+import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.fml.common.Mod;
+import net.neoforged.neoforge.client.event.RegisterColorHandlersEvent;
+import net.neoforged.neoforge.client.model.generators.BlockStateProvider;
+import net.neoforged.neoforge.client.model.generators.ItemModelProvider;
+import net.neoforged.neoforge.data.event.GatherDataEvent;
+import net.neoforged.neoforge.event.entity.EntityAttributeCreationEvent;
+import net.neoforged.neoforge.event.entity.EntityAttributeModificationEvent;
+
+import java.util.function.Supplier;
 
 import static com.zygzag.zygzagsmod.common.Main.MODID;
 
@@ -44,7 +44,7 @@ public class ModEventHandler {
 
     @SubscribeEvent
     public static void itemColors(final RegisterColorHandlersEvent.Item event) {
-        for (RegistryObject<Item> obj : IridiumGearRegistry.SOCKETED_ITEMS) {
+        for (Supplier<Item> obj : IridiumGearRegistry.SOCKETED_ITEMS) {
             event.register(ISocketable::getColor, obj.get());
         }
     }
@@ -57,7 +57,7 @@ public class ModEventHandler {
         );
         event.getGenerator().addProvider(
                 true,
-                (DataProvider.Factory<RecipeProvider>) AkomiRecipeProvider::new
+                (DataProvider.Factory<RecipeProvider>) (output) -> new AkomiRecipeProvider(output, event.getLookupProvider())
         );
         event.getGenerator().addProvider(
                 true,

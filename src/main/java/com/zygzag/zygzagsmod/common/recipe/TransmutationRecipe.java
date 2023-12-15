@@ -1,23 +1,23 @@
 package com.zygzag.zygzagsmod.common.recipe;
 
 
-import com.google.gson.JsonObject;
 import com.mojang.blaze3d.MethodsReturnNonnullByDefault;
+import com.mojang.serialization.Codec;
+import com.mojang.serialization.codecs.RecordCodecBuilder;
 import com.zygzag.zygzagsmod.common.registry.RecipeSerializerRegistry;
 import com.zygzag.zygzagsmod.common.registry.RecipeTypeRegistry;
 import net.minecraft.core.RegistryAccess;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.SimpleContainer;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.Items;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.item.crafting.Recipe;
 import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraft.world.item.crafting.RecipeType;
 import net.minecraft.world.level.Level;
-import net.minecraftforge.registries.ForgeRegistries;
 import org.jetbrains.annotations.Nullable;
 
 import javax.annotation.ParametersAreNonnullByDefault;
@@ -28,13 +28,11 @@ public class TransmutationRecipe implements Recipe<SimpleContainer> {
     Ingredient inItem;
     Item outItem;
     double rate;
-    ResourceLocation id;
 
-    public TransmutationRecipe(Ingredient inItem, Item outItem, double rate, ResourceLocation id) {
+    public TransmutationRecipe(Ingredient inItem, Item outItem, double rate) {
         this.inItem = inItem;
         this.outItem = outItem;
         this.rate = rate;
-        this.id = id;
     }
 
     @Override
@@ -61,11 +59,6 @@ public class TransmutationRecipe implements Recipe<SimpleContainer> {
     }
 
     @Override
-    public ResourceLocation getId() {
-        return id;
-    }
-
-    @Override
     public RecipeSerializer<?> getSerializer() {
         return RecipeSerializerRegistry.TRANSMUTATION_SERIALIZER.get();
     }
@@ -75,49 +68,44 @@ public class TransmutationRecipe implements Recipe<SimpleContainer> {
         return RecipeTypeRegistry.TRANSMUTATION.get();
     }
 
-    public Ingredient getInItem() {
+    public Ingredient inItem() {
         return inItem;
     }
 
-    public Item getOutItem() {
+    public Item outItem() {
         return outItem;
     }
 
-    public double getRate() {
+    public double rate() {
         return rate;
     }
 
     public static class TransmutationSerializer implements RecipeSerializer<TransmutationRecipe> {
-
-        @Override
-        public TransmutationRecipe fromJson(ResourceLocation id, JsonObject obj) {
-            Item item = ForgeRegistries.ITEMS.getValue(new ResourceLocation(obj.get("output").getAsString()));
-            if (item == null) item = Items.AIR;
-            return new TransmutationRecipe(
-                    Ingredient.fromJson(obj.get("input")),
-                    item,
-                    obj.get("rate").getAsDouble(),
-                    id
-            );
-        }
-
         @Nullable
         @Override
-        public TransmutationRecipe fromNetwork(ResourceLocation id, FriendlyByteBuf buf) {
-            Item item = ForgeRegistries.ITEMS.getValue(new ResourceLocation(buf.readUtf()));
-            if (item == null) item = Items.AIR;
+        public TransmutationRecipe fromNetwork(FriendlyByteBuf buf) {
+            Item item = BuiltInRegistries.ITEM.get(new ResourceLocation(buf.readUtf()));
             return new TransmutationRecipe(
                     Ingredient.fromNetwork(buf),
                     item,
-                    buf.readDouble(),
-                    id
+                    buf.readDouble()
+            );
+        }
+
+        @Override
+        public Codec<TransmutationRecipe> codec() {
+            return RecordCodecBuilder.create(instance ->
+                    instance.group(
+                            Ingredient.VANILLA_CODEC.fieldOf("inItem").forGetter(TransmutationRecipe::inItem),
+                            BuiltInRegistries.ITEM.byNameCodec().fieldOf("inItem").forGetter(TransmutationRecipe::outItem),
+                            Codec.DOUBLE.fieldOf("inItem").forGetter(TransmutationRecipe::rate)
+                    ).apply(instance, TransmutationRecipe::new)
             );
         }
 
         @Override
         public void toNetwork(FriendlyByteBuf buf, TransmutationRecipe recipe) {
-            ResourceLocation id = ForgeRegistries.ITEMS.getKey(recipe.outItem);
-            if (id == null) id = new ResourceLocation("minecraft:air");
+            ResourceLocation id = BuiltInRegistries.ITEM.getKey(recipe.outItem);
             buf.writeUtf(id.toString());
             recipe.inItem.toNetwork(buf);
             buf.writeDouble(recipe.rate);

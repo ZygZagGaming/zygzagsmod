@@ -42,7 +42,7 @@ public class IridiumSwordItem extends SwordItem implements ISocketable {
             AABB aabb = player.getBoundingBox().inflate(8);
             List<Monster> monsters = world.getEntitiesOfClass(Monster.class, aabb, (m) -> m.getHealth() <= 0.0);
             //System.out.println(monsters);
-            if (monsters.size() > 0) {
+            if (!monsters.isEmpty()) {
                 player.heal(100f);
                 ISocketable.addCooldown(player, stack, Config.witherSkullSwordCooldown);
                 return InteractionResultHolder.consume(stack);

@@ -8,15 +8,16 @@ import com.zygzag.zygzagsmod.common.util.GeneralUtil;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffectCategory;
-import net.minecraftforge.common.Tags;
-import net.minecraftforge.registries.DeferredRegister;
-import net.minecraftforge.registries.RegistryObject;
+import net.neoforged.neoforge.common.Tags;
+import net.neoforged.neoforge.registries.DeferredRegister;
+
+import java.util.function.Supplier;
 
 import static com.zygzag.zygzagsmod.common.Main.MODID;
 
-public class MobEffectRegistry extends Registry<MobEffect> {
+public class MobEffectRegistry extends AkomiRegistry<MobEffect> {
     public static final MobEffectRegistry INSTANCE = new MobEffectRegistry(DeferredRegister.create(Registries.MOB_EFFECT, MODID));
-    public static RegistryObject<MobEffect> SIGHT_EFFECT = INSTANCE.register(
+    public static Supplier<MobEffect> SIGHT_EFFECT = INSTANCE.register(
             "sight",
             () -> new SightEffect(
                     MobEffectCategory.BENEFICIAL,
@@ -25,7 +26,7 @@ public class MobEffectRegistry extends Registry<MobEffect> {
                     GeneralUtil::getColor
             )
     );
-    public static RegistryObject<MobEffect> OVERHEAT_EFFECT = INSTANCE.register(
+    public static Supplier<MobEffect> OVERHEAT_EFFECT = INSTANCE.register(
             "overheat",
             OverheatEffect::new
     );

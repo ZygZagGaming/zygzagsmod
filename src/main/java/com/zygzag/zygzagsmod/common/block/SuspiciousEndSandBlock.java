@@ -16,7 +16,7 @@ import javax.annotation.ParametersAreNonnullByDefault;
 @MethodsReturnNonnullByDefault
 public class SuspiciousEndSandBlock extends BrushableBlock {
     public SuspiciousEndSandBlock(Properties pProperties, SoundEvent pBrushSound, SoundEvent pBrushCompletedSound) {
-        super(BlockWithItemRegistry.END_SAND.getBlock(), pProperties, pBrushSound, pBrushCompletedSound);
+        super(BlockWithItemRegistry.END_SAND.getBlock(), pBrushSound, pBrushCompletedSound, pProperties);
     }
 
     public @Nullable BlockEntity newBlockEntity(BlockPos pPos, BlockState pState) {

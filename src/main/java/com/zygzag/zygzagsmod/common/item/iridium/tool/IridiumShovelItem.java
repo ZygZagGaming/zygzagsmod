@@ -47,7 +47,7 @@ public class IridiumShovelItem extends ShovelItem implements ISocketable {
     }
 
     private static boolean isAirLike(BlockState state) {
-        return state.isAir() || state.is(Blocks.GRASS) || state.is(Blocks.TALL_GRASS);
+        return state.isAir() || state.is(Blocks.SHORT_GRASS) || state.is(Blocks.TALL_GRASS);
     }
 
     @Override

@@ -1,8 +1,6 @@
 package com.zygzag.zygzagsmod.common;
 
 import com.zygzag.zygzagsmod.common.block.entity.CustomBrushableBlockEntity;
-import com.zygzag.zygzagsmod.common.capability.PlayerSightCache;
-import com.zygzag.zygzagsmod.common.capability.PlayerSightCacheImpl;
 import com.zygzag.zygzagsmod.common.effect.SightEffect;
 import com.zygzag.zygzagsmod.common.enchant.CustomEnchantment;
 import com.zygzag.zygzagsmod.common.enchant.SpringsEnchantment;
@@ -19,7 +17,6 @@ import com.zygzag.zygzagsmod.common.registry.BlockRegistry;
 import com.zygzag.zygzagsmod.common.registry.EnchantmentRegistry;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvent;
@@ -52,25 +49,18 @@ import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.HitResult;
-import net.minecraftforge.common.Tags;
-import net.minecraftforge.common.capabilities.Capability;
-import net.minecraftforge.common.capabilities.ICapabilityProvider;
-import net.minecraftforge.common.util.LazyOptional;
-import net.minecraftforge.event.AttachCapabilitiesEvent;
-import net.minecraftforge.event.ItemAttributeModifierEvent;
-import net.minecraftforge.event.TickEvent;
-import net.minecraftforge.event.entity.living.*;
-import net.minecraftforge.event.entity.player.PlayerEvent;
-import net.minecraftforge.event.level.BlockEvent;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.common.Mod;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.fml.common.Mod;
+import net.neoforged.neoforge.common.Tags;
+import net.neoforged.neoforge.event.ItemAttributeModifierEvent;
+import net.neoforged.neoforge.event.TickEvent;
+import net.neoforged.neoforge.event.entity.living.*;
+import net.neoforged.neoforge.event.entity.player.PlayerEvent;
+import net.neoforged.neoforge.event.level.BlockEvent;
 
 import java.util.HashMap;
 
 import static com.zygzag.zygzagsmod.common.Main.MODID;
-import static com.zygzag.zygzagsmod.common.util.GeneralUtil.ifCapability;
 import static com.zygzag.zygzagsmod.common.util.GeneralUtil.isExposedToSunlight;
 
 @Mod.EventBusSubscriber(modid = MODID)
@@ -86,38 +76,15 @@ public class EventHandler {
 //        }
 //    }
 
-
     @SubscribeEvent
-    public static void attachCapabilitiesToPlayer(final AttachCapabilitiesEvent<Entity> event) {
-        var entity = event.getObject();
-        if (entity instanceof Player player && entity.level().isClientSide) {
-            PlayerSightCache backend = new PlayerSightCacheImpl(player);
-            LazyOptional<PlayerSightCache> optional = LazyOptional.of(() -> backend);
-            ICapabilityProvider provider = new ICapabilityProvider() {
-                @Override
-                public @NotNull <T> LazyOptional<T> getCapability(@NotNull Capability<T> cap, @Nullable Direction side) {
-                    if (cap == Main.PLAYER_SIGHT_CACHE) {
-                        return optional.cast();
-                    }
-                    return LazyOptional.empty();
-                }
-            };
-
-            event.addCapability(new ResourceLocation(MODID, "player_sight_cache"), provider);
+    public static void onTick(final TickEvent.PlayerTickEvent event) {
+        var player = event.player;
+        if (player.level().isClientSide) for (var effectInstance : player.getActiveEffects()) {
+            if (effectInstance == null) return;
+            var effect = effectInstance.getEffect();
+            if (effect instanceof SightEffect sightEffect)
+                Main.CURRENT_PLAYER_CACHE.update(sightEffect, player, effectInstance.getAmplifier());
         }
-    }
-
-    @SubscribeEvent
-    public static void onEffect(final MobEffectEvent event) {
-        var inst = event.getEffectInstance();
-        if (inst == null) return;
-        var living = event.getEntity();
-        var effect = inst.getEffect();
-        if (effect instanceof SightEffect sightEffect && living instanceof Player) ifCapability(
-                living,
-                Main.PLAYER_SIGHT_CACHE,
-                (playerSightCache) -> playerSightCache.update(sightEffect, inst.getAmplifier())
-        );
     }
 
     @SubscribeEvent
@@ -280,12 +247,8 @@ public class EventHandler {
                         }
                     }
                 }
-                case EMERALD -> {
-                    event.setFinalState(BlockRegistry.BLESSED_SOIL.get().defaultBlockState());
-                }
-                case AMETHYST -> {
-                    event.setFinalState(BlockRegistry.GLOWING_SOIL.get().defaultBlockState());
-                }
+                case EMERALD -> event.setFinalState(BlockRegistry.BLESSED_SOIL.get().defaultBlockState());
+                case AMETHYST -> event.setFinalState(BlockRegistry.GLOWING_SOIL.get().defaultBlockState());
             }
         }
     }
@@ -330,7 +293,7 @@ public class EventHandler {
         var remainingUseDuration = living.getUseItemRemainingTicks();
         if (stack.getItem() instanceof BrushItem brush) {
             if (remainingUseDuration >= 0 && living instanceof Player player) {
-                HitResult hitresult = brush.calculateHitResult(living);
+                HitResult hitresult = brush.calculateHitResult(player);
                 if (hitresult instanceof BlockHitResult blockhitresult) {
                     if (hitresult.getType() == HitResult.Type.BLOCK) {
                         int i = brush.getUseDuration(stack) - remainingUseDuration + 1;
@@ -381,7 +344,7 @@ public class EventHandler {
     }
 
     public static boolean brush(BrushableBlockEntity be, Level level, long pStartTick, Player pPlayer, Direction pHitDirection) {
-        if (be.hitDirection == null) {
+        if (be.getHitDirection() == null) {
             be.hitDirection = pHitDirection;
         }
 

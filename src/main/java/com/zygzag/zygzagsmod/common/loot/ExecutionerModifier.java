@@ -3,6 +3,7 @@ package com.zygzag.zygzagsmod.common.loot;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import it.unimi.dsi.fastutil.objects.ObjectArrayList;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
@@ -12,9 +13,8 @@ import net.minecraft.world.item.Items;
 import net.minecraft.world.level.storage.loot.LootContext;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
 import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
-import net.minecraftforge.common.loot.IGlobalLootModifier;
-import net.minecraftforge.common.loot.LootModifier;
-import net.minecraftforge.registries.ForgeRegistries;
+import net.neoforged.neoforge.common.loot.IGlobalLootModifier;
+import net.neoforged.neoforge.common.loot.LootModifier;
 import org.jetbrains.annotations.NotNull;
 
 public class ExecutionerModifier extends LootModifier {
@@ -23,7 +23,7 @@ public class ExecutionerModifier extends LootModifier {
             inst -> codecStart(inst)
                     .and(
                             inst.group(
-                                    ForgeRegistries.ITEMS.getCodec()
+                                    BuiltInRegistries.ITEM.byNameCodec()
                                             .fieldOf("item_to_drop")
                                             .forGetter(
                                                     (it) -> it.itemOut

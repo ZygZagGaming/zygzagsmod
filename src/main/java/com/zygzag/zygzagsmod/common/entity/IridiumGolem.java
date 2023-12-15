@@ -380,7 +380,7 @@ public class IridiumGolem extends AbstractGolem implements NeutralMob, AnimatedE
             //if (ticksUntilNextAttack >= attackDuration) getNavigation().moveTo(path, 10);
             if (target != null) {
                 getLookControl().setLookAt(target, 30.0F, 30.0F);
-                double perceivedDistanceSqr = getPerceivedTargetDistanceSquareForMeleeAttack(target);
+                double perceivedDistanceSqr = getAttackReachSqr(target);
                 if (ticksUntilNextPathRecalculation > 0) ticksUntilNextPathRecalculation--;
                 if (ticksUntilNextPathRecalculation <= 0 && (pathedTargetX == 0.0 && pathedTargetY == 0.0 && pathedTargetZ == 0.0 || target.distanceToSqr(pathedTargetX, pathedTargetY, pathedTargetZ) >= 1.0D || getRandom().nextFloat() < 0.05F)) {
                     pathedTargetX = target.getX();

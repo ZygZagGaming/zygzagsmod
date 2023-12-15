@@ -13,6 +13,7 @@ import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.projectile.ThrowableItemProjectile;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.crafting.RecipeHolder;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.HitResult;
@@ -50,7 +51,7 @@ public class ThrownTransmutationCharge extends ThrowableItemProjectile {
             level.levelEvent(2002, this.blockPosition(), 0x727175);
             AABB box = getBoundingBox().inflate(5.0);
             List<ItemEntity> entities = level.getEntitiesOfClass(ItemEntity.class, box);
-            List<TransmutationRecipe> recipes = level.getRecipeManager().getAllRecipesFor(RecipeTypeRegistry.TRANSMUTATION.get());
+            List<TransmutationRecipe> recipes = level.getRecipeManager().getAllRecipesFor(RecipeTypeRegistry.TRANSMUTATION.get()).stream().map(RecipeHolder::value).toList();
             for (ItemEntity itemEntity : entities) {
                 for (TransmutationRecipe recipe : recipes) {
                     SimpleContainer holder = new SimpleContainer(itemEntity.getItem());

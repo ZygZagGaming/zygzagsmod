@@ -2,10 +2,10 @@ package com.zygzag.zygzagsmod.common.entity.animation;
 
 import com.zygzag.zygzagsmod.common.Main;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraftforge.registries.RegistryObject;
 import software.bernie.geckolib.core.animation.RawAnimation;
 
 import java.util.function.Function;
+import java.util.function.Supplier;
 
 public class TransitionAnimation extends AbstractAnimation {
     private final AbstractAnimation from, to;
@@ -30,9 +30,9 @@ public class TransitionAnimation extends AbstractAnimation {
         return to;
     }
 
-    public boolean is(RegistryObject<TransitionAnimation> other) {
+    public boolean is(Supplier<TransitionAnimation> other) {
         ResourceLocation key = Main.transitionAnimationRegistry().getKey(this);
-        return key != null && key.equals(other.getId());
+        return key != null && key.equals(other.get().id());
     }
 
     @Override

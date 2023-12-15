@@ -39,13 +39,14 @@ public class MagmaticNetherBrickBlock extends Block implements EntityBlock {
     }
 
     @Override
-    public void playerWillDestroy(Level world, BlockPos pos, BlockState state, Player player) {
+    public BlockState playerWillDestroy(Level world, BlockPos pos, BlockState state, Player player) {
         super.playerWillDestroy(world, pos, state, player);
         if (!player.isCreative()) {
             SphereAreaEffectCloud cloud = new SphereAreaEffectCloud(world);
             cloud.setPos(pos.getX() + 0.5, pos.getY() + 0.5 - cloud.getRadius(), pos.getZ() + 0.5);
             world.addFreshEntity(cloud);
         }
+        return state;
     }
 
     @Override

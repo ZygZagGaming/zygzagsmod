@@ -7,13 +7,13 @@ import net.minecraft.tags.TagKey;
 import net.minecraft.util.LazyLoadedValue;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.level.block.Block;
-import net.minecraftforge.common.ForgeTier;
+import net.neoforged.neoforge.common.SimpleTier;
 
 import java.util.function.Supplier;
 
 @MethodsReturnNonnullByDefault
 public class ModTiers {
-    public static final ForgeTier IRIDIUM = new ForgeTier(5, 2589, 8.85F, 5.5F, 18, Main.NEEDS_IRIDIUM_TOOL_TAG, () -> {
+    public static final SimpleTier IRIDIUM = new SimpleTier(5, 2589, 8.85F, 5.5F, 18, Main.NEEDS_IRIDIUM_TOOL_TAG, () -> {
         return Ingredient.of(ItemRegistry.IRIDIUM_PLATING.get());
     });
 

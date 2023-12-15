@@ -5,6 +5,7 @@ import com.zygzag.zygzagsmod.common.util.GeneralUtil;
 import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.core.BlockPos;
 import net.minecraft.util.RandomSource;
+import net.minecraft.util.valueproviders.IntProvider;
 import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.state.BlockState;
@@ -21,8 +22,8 @@ import javax.annotation.ParametersAreNonnullByDefault;
 @MethodsReturnNonnullByDefault
 @Mixin(SculkBlock.class)
 public abstract class SculkBlockMixin extends DropExperienceBlock implements SculkBehaviour {
-    public SculkBlockMixin(Properties p_221081_) {
-        super(p_221081_);
+    public SculkBlockMixin(IntProvider range, Properties properties) {
+        super(range, properties);
         throw new UnsupportedOperationException();
     }
 

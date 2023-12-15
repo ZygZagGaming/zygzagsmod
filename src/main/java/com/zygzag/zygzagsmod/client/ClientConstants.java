@@ -16,9 +16,7 @@ public class ClientConstants {
             RenderType.CompositeState
                     .builder()
                     .setShaderState(RenderType.RENDERTYPE_LINES_SHADER)
-                    .setLineState(
-                            new RenderStateShard.LineStateShard(OptionalDouble.empty())
-                    )
+                    .setLineState(new RenderStateShard.LineStateShard(OptionalDouble.empty()))
                     .setLayeringState(RenderType.VIEW_OFFSET_Z_LAYERING)
                     .setTransparencyState(RenderType.TRANSLUCENT_TRANSPARENCY)
                     .setOutputState(RenderType.OUTLINE_TARGET)

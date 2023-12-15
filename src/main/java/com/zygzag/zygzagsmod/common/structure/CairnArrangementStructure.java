@@ -255,7 +255,7 @@ public class CairnArrangementStructure extends Structure {
             int treasureOffset = groundLevelOffsetFromPosition(world, treasurePosition, 80) - 3;
             treasurePosition = treasurePosition.above(treasureOffset);
             world.setBlockAndUpdate(treasurePosition, Blocks.BARREL.defaultBlockState().setValue(BlockStateProperties.FACING, Direction.UP));
-            BarrelBlockEntity.setLootTable(world, rng, treasurePosition, new ResourceLocation(MODID, "chests/buried_cairn_treasure"));
+            ((BarrelBlockEntity) world.getBlockEntity(treasurePosition)).setLootTable(new ResourceLocation(MODID, "chests/buried_cairn_treasure"));
         }
 
 //        public static void placeCairnMapCircle(Map<BlockPos, BlockState> structure, BlockPos origin, RandomSource rng, ServerLevel world, @Nullable HolderSet<Structure> cairnLocatedTag) {

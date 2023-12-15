@@ -13,10 +13,10 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.client.event.RenderLevelStageEvent;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.common.Mod;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.fml.common.Mod;
+import net.neoforged.neoforge.client.event.RenderLevelStageEvent;
 
 import java.awt.*;
 import java.util.Map;
@@ -45,30 +45,25 @@ public class ClientEventHandler {
             ClientConstants.SIGHT_RENDER_TYPE.setupRenderState();
             RenderSystem.disableDepthTest();
 
-            ifCapability(
-                    player,
-                    Main.PLAYER_SIGHT_CACHE,
-                    (playerSightCache) -> {
-                        var activeEffects = player.getActiveEffectsMap();
-                        var map = playerSightCache.blockStateColorMap();
-                        for (SightEffect effect : map.keySet()) {
-                            var inst = activeEffects.get(effect);
-                            if (inst != null) {
-                                var minimap = map.get(effect);
-                                for (Map.Entry<BlockPos, Color> entry : minimap.entrySet()) {
-                                    var blockPos = entry.getKey();
-                                    var color = entry.getValue();
-                                    float r = color.getRed() / 255f;
-                                    float g = color.getGreen() / 255f;
-                                    float b = color.getBlue() / 255f;
-                                    float a = color.getAlpha() / 255f;
-                                    if (inst.endsWithin(20)) a *= inst.getDuration() / 20.0;
-                                    LevelRenderer.renderShape(stack, buffer, box, blockPos.getX(), blockPos.getY(), blockPos.getZ(), r, g, b, a);
-                                }
-                            }
-                        }
+            var activeEffects = player.getActiveEffectsMap();
+            var map = Main.CURRENT_PLAYER_CACHE.blockStateColorMap();
+            for (SightEffect effect : map.keySet()) {
+                var inst = activeEffects.get(effect);
+                if (inst != null) {
+                    var minimap = map.get(effect);
+                    for (Map.Entry<BlockPos, Color> entry : minimap.entrySet()) {
+                        var blockPos = entry.getKey();
+                        var color = entry.getValue();
+                        float r = color.getRed() / 255f;
+                        float g = color.getGreen() / 255f;
+                        float b = color.getBlue() / 255f;
+                        float a = color.getAlpha() / 255f;
+                        if (inst.endsWithin(20)) a *= (float) (inst.getDuration() / 20.0);
+                        LevelRenderer.renderShape(stack, buffer, box, blockPos.getX(), blockPos.getY(), blockPos.getZ(), r, g, b, a);
                     }
-            );
+                }
+            }
+
             RenderSystem.enableDepthTest();
             ClientConstants.SIGHT_RENDER_TYPE.clearRenderState();
             src.endBatch(ClientConstants.SIGHT_RENDER_TYPE);

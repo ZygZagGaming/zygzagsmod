@@ -3,10 +3,10 @@ package com.zygzag.zygzagsmod.common.block.entity;
 import net.minecraft.core.Direction;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.GlassBlock;
+import net.minecraft.world.level.block.TransparentBlock;
 import net.minecraft.world.level.block.state.BlockState;
 
-public class GlassGroupBlock extends GlassBlock {
+public class GlassGroupBlock extends TransparentBlock {
     private TagKey<Block> group;
     public GlassGroupBlock(TagKey<Block> group, Properties properties) {
         super(properties);

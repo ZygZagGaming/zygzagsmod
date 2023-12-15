@@ -1,4 +1,4 @@
-// 1.20.1	2023-12-13T15:07:51.4409614	Item Models: zygzagsmod
+// 1.20.1	2023-12-14T07:19:26.7452026	Item Models: zygzagsmod
 15435321a16b6a9adcb19a948c2af0fa7344d370 assets/zygzagsmod/models/item/amethyst_socketed_iridium_axe.json
 15eb5bc299660d213b1379316f4264e348e7a421 assets/zygzagsmod/models/item/amethyst_socketed_iridium_chestplate.json
 da43fd45392876686e6ebd43c9df8c0d4bd150aa assets/zygzagsmod/models/item/amethyst_socketed_iridium_hoe.json
@@ -63,6 +63,7 @@ c9156f06e9cdf2d670505032d02e20ce146273ff assets/zygzagsmod/models/item/partial_i
 58ccd7d92d17bf87a6f355530fb2bd83a87471f1 assets/zygzagsmod/models/item/partial_iridium_pickaxe_1.json
 a878bbf74ade40fb95189c35a1c3dc9e23684a72 assets/zygzagsmod/models/item/partial_iridium_pickaxe_2.json
 b2b5535bea82793234bb8262455fefb72b41cfbc assets/zygzagsmod/models/item/partial_iridium_sword_1.json
+91504e18376d2878588f59b3c3dab984e804a9cc assets/zygzagsmod/models/item/red_nether_brick_pillar.json
 15435321a16b6a9adcb19a948c2af0fa7344d370 assets/zygzagsmod/models/item/skull_socketed_iridium_axe.json
 15eb5bc299660d213b1379316f4264e348e7a421 assets/zygzagsmod/models/item/skull_socketed_iridium_chestplate.json
 da43fd45392876686e6ebd43c9df8c0d4bd150aa assets/zygzagsmod/models/item/skull_socketed_iridium_hoe.json

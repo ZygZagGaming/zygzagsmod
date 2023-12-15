@@ -13,19 +13,19 @@ import com.zygzag.zygzagsmod.common.tier.IridiumToolTier;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.world.item.ArmorItem;
 import net.minecraft.world.item.Item;
-import net.minecraftforge.registries.DeferredRegister;
-import net.minecraftforge.registries.RegistryObject;
+import net.neoforged.neoforge.registries.DeferredRegister;
 
 import java.util.*;
+import java.util.function.Supplier;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import static com.zygzag.zygzagsmod.common.Main.MODID;
 
 @SuppressWarnings("unused")
-public class IridiumGearRegistry extends Registry<Item> {
+public class IridiumGearRegistry extends AkomiRegistry<Item> {
     public static final IridiumGearRegistry INSTANCE = new IridiumGearRegistry(DeferredRegister.create(Registries.ITEM, MODID));
-    public static final RegistryObject<Item> IRIDIUM_HELMET = INSTANCE.register(
+    public static final Supplier<Item> IRIDIUM_HELMET = INSTANCE.register(
             "iridium_helmet",
             () -> new ArmorItem(
                     IridiumArmorMaterial.IRIDIUM,
@@ -35,7 +35,7 @@ public class IridiumGearRegistry extends Registry<Item> {
                             .stacksTo(1)
             )
     );
-    public static final RegistryObject<Item> IRIDIUM_LEGGINGS = INSTANCE.register(
+    public static final Supplier<Item> IRIDIUM_LEGGINGS = INSTANCE.register(
             "iridium_leggings",
             () -> new ArmorItem(
                     IridiumArmorMaterial.IRIDIUM,
@@ -45,7 +45,7 @@ public class IridiumGearRegistry extends Registry<Item> {
                             .stacksTo(1)
             )
     );
-    public static final RegistryObject<Item> IRIDIUM_BOOTS = INSTANCE.register(
+    public static final Supplier<Item> IRIDIUM_BOOTS = INSTANCE.register(
             "iridium_boots",
             () -> new ArmorItem(
                     IridiumArmorMaterial.IRIDIUM,
@@ -55,21 +55,21 @@ public class IridiumGearRegistry extends Registry<Item> {
                             .stacksTo(1)
             )
     );
-    public static final Map<Socket, RegistryObject<Item>> SWORDS = makeAllSocketsForGearType(SocketedGearType.SWORD);
-    public static final Set<RegistryObject<Item>> SOCKETED_SWORDS = SWORDS.entrySet().stream().filter((entry) -> entry.getKey() != Socket.NONE).map(Map.Entry::getValue).collect(Collectors.toSet());
-    public static final Map<Socket, RegistryObject<Item>> PICKAXES = makeAllSocketsForGearType(SocketedGearType.PICKAXE);
-    public static final Set<RegistryObject<Item>> SOCKETED_PICKAXES = PICKAXES.entrySet().stream().filter((entry) -> entry.getKey() != Socket.NONE).map(Map.Entry::getValue).collect(Collectors.toSet());
-    public static final Map<Socket, RegistryObject<Item>> AXES = makeAllSocketsForGearType(SocketedGearType.AXE);
-    public static final Set<RegistryObject<Item>> SOCKETED_AXES = AXES.entrySet().stream().filter((entry) -> entry.getKey() != Socket.NONE).map(Map.Entry::getValue).collect(Collectors.toSet());
-    public static final Map<Socket, RegistryObject<Item>> SHOVELS = makeAllSocketsForGearType(SocketedGearType.SHOVEL);
-    public static final Set<RegistryObject<Item>> SOCKETED_SHOVELS = SHOVELS.entrySet().stream().filter((entry) -> entry.getKey() != Socket.NONE).map(Map.Entry::getValue).collect(Collectors.toSet());
-    public static final Map<Socket, RegistryObject<Item>> HOES = makeAllSocketsForGearType(SocketedGearType.HOE);
-    public static final Set<RegistryObject<Item>> SOCKETED_HOES = HOES.entrySet().stream().filter((entry) -> entry.getKey() != Socket.NONE).map(Map.Entry::getValue).collect(Collectors.toSet());
-    public static final Map<Socket, RegistryObject<Item>> CHESTPLATES = makeAllSocketsForGearType(SocketedGearType.CHESTPLATE);
-    public static final Set<RegistryObject<Item>> SOCKETED_CHESTPLATES = CHESTPLATES.entrySet().stream().filter((entry) -> entry.getKey() != Socket.NONE).map(Map.Entry::getValue).collect(Collectors.toSet());
-    public static final Map<Socket, RegistryObject<Item>> SCEPTERS = makeAllSocketsForGearType(SocketedGearType.SCEPTER);
-    public static final Set<RegistryObject<Item>> SOCKETED_SCEPTERS = SCEPTERS.entrySet().stream().filter((entry) -> entry.getKey() != Socket.NONE).map(Map.Entry::getValue).collect(Collectors.toSet());
-    public static List<RegistryObject<Item>> SOCKETED_ITEMS = Stream.of(
+    public static final Map<Socket, Supplier<Item>> SWORDS = makeAllSocketsForGearType(SocketedGearType.SWORD);
+    public static final Set<Supplier<Item>> SOCKETED_SWORDS = SWORDS.entrySet().stream().filter((entry) -> entry.getKey() != Socket.NONE).map(Map.Entry::getValue).collect(Collectors.toSet());
+    public static final Map<Socket, Supplier<Item>> PICKAXES = makeAllSocketsForGearType(SocketedGearType.PICKAXE);
+    public static final Set<Supplier<Item>> SOCKETED_PICKAXES = PICKAXES.entrySet().stream().filter((entry) -> entry.getKey() != Socket.NONE).map(Map.Entry::getValue).collect(Collectors.toSet());
+    public static final Map<Socket, Supplier<Item>> AXES = makeAllSocketsForGearType(SocketedGearType.AXE);
+    public static final Set<Supplier<Item>> SOCKETED_AXES = AXES.entrySet().stream().filter((entry) -> entry.getKey() != Socket.NONE).map(Map.Entry::getValue).collect(Collectors.toSet());
+    public static final Map<Socket, Supplier<Item>> SHOVELS = makeAllSocketsForGearType(SocketedGearType.SHOVEL);
+    public static final Set<Supplier<Item>> SOCKETED_SHOVELS = SHOVELS.entrySet().stream().filter((entry) -> entry.getKey() != Socket.NONE).map(Map.Entry::getValue).collect(Collectors.toSet());
+    public static final Map<Socket, Supplier<Item>> HOES = makeAllSocketsForGearType(SocketedGearType.HOE);
+    public static final Set<Supplier<Item>> SOCKETED_HOES = HOES.entrySet().stream().filter((entry) -> entry.getKey() != Socket.NONE).map(Map.Entry::getValue).collect(Collectors.toSet());
+    public static final Map<Socket, Supplier<Item>> CHESTPLATES = makeAllSocketsForGearType(SocketedGearType.CHESTPLATE);
+    public static final Set<Supplier<Item>> SOCKETED_CHESTPLATES = CHESTPLATES.entrySet().stream().filter((entry) -> entry.getKey() != Socket.NONE).map(Map.Entry::getValue).collect(Collectors.toSet());
+    public static final Map<Socket, Supplier<Item>> SCEPTERS = makeAllSocketsForGearType(SocketedGearType.SCEPTER);
+    public static final Set<Supplier<Item>> SOCKETED_SCEPTERS = SCEPTERS.entrySet().stream().filter((entry) -> entry.getKey() != Socket.NONE).map(Map.Entry::getValue).collect(Collectors.toSet());
+    public static List<Supplier<Item>> SOCKETED_ITEMS = Stream.of(
             SOCKETED_AXES,
             SOCKETED_SWORDS,
             SOCKETED_PICKAXES,
@@ -78,28 +78,28 @@ public class IridiumGearRegistry extends Registry<Item> {
             SOCKETED_CHESTPLATES,
             SOCKETED_SCEPTERS
     ).flatMap(Collection::stream).collect(Collectors.toList());
-    public static final Map<Integer, RegistryObject<Item>> PARTIAL_SWORDS = makeAllPartialsForGearType(PartialGearType.SWORD);
-    public static final Map<Integer, RegistryObject<Item>> PARTIAL_PICKAXES = makeAllPartialsForGearType(PartialGearType.PICKAXE);
-    public static final Map<Integer, RegistryObject<Item>> PARTIAL_AXES = makeAllPartialsForGearType(PartialGearType.AXE);
-    public static final Map<Integer, RegistryObject<Item>> PARTIAL_HOES = makeAllPartialsForGearType(PartialGearType.HOE);
-    public static final Map<Integer, RegistryObject<Item>> PARTIAL_HELMETS = makeAllPartialsForGearType(PartialGearType.HELMET);
-    public static final Map<Integer, RegistryObject<Item>> PARTIAL_CHESTPLATES = makeAllPartialsForGearType(PartialGearType.CHESTPLATE);
-    public static final Map<Integer, RegistryObject<Item>> PARTIAL_LEGGINGS = makeAllPartialsForGearType(PartialGearType.LEGGINGS);
-    public static final Map<Integer, RegistryObject<Item>> PARTIAL_BOOTS = makeAllPartialsForGearType(PartialGearType.BOOTS);
+    public static final Map<Integer, Supplier<Item>> PARTIAL_SWORDS = makeAllPartialsForGearType(PartialGearType.SWORD);
+    public static final Map<Integer, Supplier<Item>> PARTIAL_PICKAXES = makeAllPartialsForGearType(PartialGearType.PICKAXE);
+    public static final Map<Integer, Supplier<Item>> PARTIAL_AXES = makeAllPartialsForGearType(PartialGearType.AXE);
+    public static final Map<Integer, Supplier<Item>> PARTIAL_HOES = makeAllPartialsForGearType(PartialGearType.HOE);
+    public static final Map<Integer, Supplier<Item>> PARTIAL_HELMETS = makeAllPartialsForGearType(PartialGearType.HELMET);
+    public static final Map<Integer, Supplier<Item>> PARTIAL_CHESTPLATES = makeAllPartialsForGearType(PartialGearType.CHESTPLATE);
+    public static final Map<Integer, Supplier<Item>> PARTIAL_LEGGINGS = makeAllPartialsForGearType(PartialGearType.LEGGINGS);
+    public static final Map<Integer, Supplier<Item>> PARTIAL_BOOTS = makeAllPartialsForGearType(PartialGearType.BOOTS);
 
     public IridiumGearRegistry(DeferredRegister<Item> register) {
         super(register);
     }
 
-    private static Map<Socket, RegistryObject<Item>> makeAllSocketsForGearType(SocketedGearType gearType) {
-        Map<Socket, RegistryObject<Item>> map = new HashMap<>();
+    private static Map<Socket, Supplier<Item>> makeAllSocketsForGearType(SocketedGearType gearType) {
+        Map<Socket, Supplier<Item>> map = new HashMap<>();
         for (Socket socket : Socket.values()) {
             if (socket.gearTypeFilter.test(gearType)) map.put(socket, makeIridiumGear(socket, gearType));
         }
         return map;
     }
 
-    private static RegistryObject<Item> makeIridiumGear(Socket socket, SocketedGearType gearType) {
+    private static Supplier<Item> makeIridiumGear(Socket socket, SocketedGearType gearType) {
         return INSTANCE.register(
                 (socket == Socket.NONE ? "" : socket.name().toLowerCase() + "_socketed_") + "iridium_" + gearType.name().toLowerCase(),
                 () -> gearType.itemFactory.provideItem(
@@ -112,8 +112,8 @@ public class IridiumGearRegistry extends Registry<Item> {
         );
     }
 
-    private static Map<Integer, RegistryObject<Item>> makeAllPartialsForGearType(PartialGearType gearType) {
-        Map<Integer, RegistryObject<Item>> map = new HashMap<>();
+    private static Map<Integer, Supplier<Item>> makeAllPartialsForGearType(PartialGearType gearType) {
+        Map<Integer, Supplier<Item>> map = new HashMap<>();
         //Main.LOGGER.debug("making partials for gear type " + gearType);
         for (int platings = 1; platings < gearType.maxPlatings; platings++) {
             map.put(platings, makePartialIridiumGear(platings, gearType));
@@ -122,7 +122,7 @@ public class IridiumGearRegistry extends Registry<Item> {
         return map;
     }
 
-    private static RegistryObject<Item> makePartialIridiumGear(int platings, PartialGearType gearType) {
+    private static Supplier<Item> makePartialIridiumGear(int platings, PartialGearType gearType) {
         return INSTANCE.register(
                 "partial_iridium_" + gearType.name().toLowerCase() + "_" + platings,
                 () -> gearType.itemFactory.provideItem(
@@ -190,7 +190,7 @@ public class IridiumGearRegistry extends Registry<Item> {
         )),
         SCEPTER(IridiumScepterItem::new);
 
-        public SocketedItemFactory itemFactory;
+        public final SocketedItemFactory itemFactory;
 
         SocketedGearType(SocketedItemFactory factory) {
             itemFactory = factory;
@@ -259,8 +259,8 @@ public class IridiumGearRegistry extends Registry<Item> {
                 platings
         ));
 
-        public int maxPlatings;
-        public PartialItemFactory itemFactory;
+        public final int maxPlatings;
+        public final PartialItemFactory itemFactory;
 
         PartialGearType(int maxPlatings, PartialItemFactory factory) {
             this.maxPlatings = maxPlatings;
@@ -268,11 +268,11 @@ public class IridiumGearRegistry extends Registry<Item> {
         }
     }
 
-    private interface SocketedItemFactory {
+    public interface SocketedItemFactory {
         Item provideItem(Item.Properties properties, Socket socket);
     }
 
-    private interface PartialItemFactory {
+    public interface PartialItemFactory {
         Item provideItem(Item.Properties properties, int platings);
     }
 }

@@ -1,16 +1,15 @@
 package com.zygzag.zygzagsmod.common.registry;
 
-import net.minecraftforge.eventbus.api.IEventBus;
-import net.minecraftforge.registries.DeferredRegister;
-import net.minecraftforge.registries.IForgeRegistry;
-import net.minecraftforge.registries.RegistryBuilder;
-import net.minecraftforge.registries.RegistryObject;
+
+import net.minecraft.core.Registry;
+import net.neoforged.bus.api.IEventBus;
+import net.neoforged.neoforge.registries.DeferredRegister;
 
 import java.util.List;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
 
-public class Registry<T> {
+public class AkomiRegistry<T> {
     public static final Supplier<List<Consumer<IEventBus>>> REGISTRATION_QUEUE = () -> List.of(
             BlockRegistry.INSTANCE::registerTo,
             ItemRegistry.INSTANCE::registerTo,
@@ -33,13 +32,12 @@ public class Registry<T> {
             StructurePieceTypeRegistry.INSTANCE::registerTo,
             AnimationRegistry.INSTANCE::registerTo,
             TransitionAnimationRegistry.INSTANCE::registerTo,
-            AttributeRegistry.INSTANCE::registerTo,
-            (a) -> CriterionTriggerRegistry.init()
+            AttributeRegistry.INSTANCE::registerTo
     );
     final DeferredRegister<T> register;
-    Supplier<IForgeRegistry<T>> forgeRegistrySupplier;
+    Registry<T> backingRegistry;
 
-    public Registry(DeferredRegister<T> register) {
+    public AkomiRegistry(DeferredRegister<T> register) {
         this.register = register;
     }
 
@@ -53,12 +51,12 @@ public class Registry<T> {
         register.register(bus);
     }
 
-    public <P extends T> RegistryObject<P> register(String id, Supplier<P> supplier) {
+    public <P extends T> Supplier<P> register(String id, Supplier<P> supplier) {
         return register.register(id, supplier);
     }
 
-    public IForgeRegistry<T> basicRegistry() {
-        if (forgeRegistrySupplier == null) forgeRegistrySupplier = register.makeRegistry(RegistryBuilder::new);
-        return forgeRegistrySupplier.get();
+    public Registry<T> backingRegistry() {
+        if (backingRegistry == null) backingRegistry = register.makeRegistry(builder -> {});
+        return backingRegistry;
     }
 }

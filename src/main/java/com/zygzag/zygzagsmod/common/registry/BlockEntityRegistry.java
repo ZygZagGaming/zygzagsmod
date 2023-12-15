@@ -1,17 +1,18 @@
 package com.zygzag.zygzagsmod.common.registry;
 
 import com.zygzag.zygzagsmod.common.block.entity.StructurePlacerBlockEntity;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.world.level.block.entity.BlockEntityType;
-import net.minecraftforge.registries.DeferredRegister;
-import net.minecraftforge.registries.ForgeRegistries;
-import net.minecraftforge.registries.RegistryObject;
+import net.neoforged.neoforge.registries.DeferredRegister;
+
+import java.util.function.Supplier;
 
 import static com.zygzag.zygzagsmod.common.Main.MODID;
 
-public class BlockEntityRegistry extends Registry<BlockEntityType<?>> {
-    public static final BlockEntityRegistry INSTANCE = new BlockEntityRegistry(DeferredRegister.create(ForgeRegistries.BLOCK_ENTITY_TYPES, MODID));
+public class BlockEntityRegistry extends AkomiRegistry<BlockEntityType<?>> {
+    public static final BlockEntityRegistry INSTANCE = new BlockEntityRegistry(DeferredRegister.create(BuiltInRegistries.BLOCK_ENTITY_TYPE, MODID));
 
-    public static final RegistryObject<BlockEntityType<?>> STRUCTURE_PLACER = INSTANCE.register("structure_placer", () ->
+    public static final Supplier<BlockEntityType<?>> STRUCTURE_PLACER = INSTANCE.register("structure_placer", () ->
             BlockEntityType.Builder.of(StructurePlacerBlockEntity::new, BlockRegistry.STRUCTURE_PLACER.get()).build(null)
     );
 

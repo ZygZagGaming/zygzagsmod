@@ -179,10 +179,10 @@ public class Animator<T extends LivingEntity & AnimatedEntity<T>> {
     ) {
         public static State fromNetwork(FriendlyByteBuf buf) {
             ResourceLocation animationLoc = new ResourceLocation(buf.readUtf());
-            Animation animation = Main.animationRegistry().getValue(animationLoc);
+            Animation animation = Main.animationRegistry().get(animationLoc);
             if (animation == null) throw new IllegalArgumentException("Invalid animation id recieved: " + animationLoc);
             String transString = buf.readUtf();
-            TransitionAnimation transitionAnimation = transString.equals("null") ? null : Main.transitionAnimationRegistry().getValue(new ResourceLocation(transString));
+            TransitionAnimation transitionAnimation = transString.equals("null") ? null : Main.transitionAnimationRegistry().get(new ResourceLocation(transString));
             int timeUntilIdleAnimation = buf.readInt();
             int ticksRemainingInAnimation = buf.readInt();
             int numQueuedAnims = buf.readInt();
@@ -190,15 +190,15 @@ public class Animator<T extends LivingEntity & AnimatedEntity<T>> {
             for (int i = 0; i < numQueuedAnims; i++) {
                 boolean isTransition = buf.readBoolean();
                 ResourceLocation loc = new ResourceLocation(buf.readUtf());
-                AbstractAnimation anim = isTransition ? Main.transitionAnimationRegistry().getValue(loc) : Main.animationRegistry().getValue(loc);
+                AbstractAnimation anim = isTransition ? Main.transitionAnimationRegistry().get(loc) : Main.animationRegistry().get(loc);
                 queuedAnims.add(anim);
             }
             boolean lastTransition = buf.readBoolean();
             ResourceLocation lastLoc = new ResourceLocation(buf.readUtf());
-            AbstractAnimation lastAnimation = lastTransition ? Main.transitionAnimationRegistry().getValue(lastLoc) : Main.animationRegistry().getValue(lastLoc);
+            AbstractAnimation lastAnimation = lastTransition ? Main.transitionAnimationRegistry().get(lastLoc) : Main.animationRegistry().get(lastLoc);
             if (lastAnimation == null) throw new IllegalArgumentException("Invalid animation id recieved: " + lastLoc);
             ResourceLocation lastNonTransitionLoc = new ResourceLocation(buf.readUtf());
-            Animation lastNonTransitionAnimation = Main.animationRegistry().getValue(lastNonTransitionLoc);
+            Animation lastNonTransitionAnimation = Main.animationRegistry().get(lastNonTransitionLoc);
             if (lastNonTransitionAnimation == null)
                 throw new IllegalArgumentException("Invalid animation id recieved: " + lastNonTransitionLoc);
             return new State(animation, transitionAnimation, timeUntilIdleAnimation, ticksRemainingInAnimation, queuedAnims, lastAnimation, lastNonTransitionAnimation);

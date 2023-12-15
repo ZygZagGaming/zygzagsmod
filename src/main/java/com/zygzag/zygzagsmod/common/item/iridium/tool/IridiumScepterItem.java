@@ -5,7 +5,6 @@ import com.zygzag.zygzagsmod.common.entity.HomingWitherSkull;
 import com.zygzag.zygzagsmod.common.item.iridium.ISocketable;
 import com.zygzag.zygzagsmod.common.item.iridium.Socket;
 import net.minecraft.MethodsReturnNonnullByDefault;
-import net.minecraft.core.Vec3i;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvents;
@@ -63,7 +62,8 @@ public class IridiumScepterItem extends Item implements ISocketable {
                 return InteractionResultHolder.fail(item);
             }
             case DIAMOND -> {
-                aabb = new AABB(player.blockPosition().subtract(new Vec3i(20, 20, 20)), player.blockPosition().offset(new Vec3i(20, 20, 20)));
+                int x = player.blockPosition().getX(), y = player.blockPosition().getY(), z = player.blockPosition().getZ();
+                aabb = new AABB(x - 20, y - 20, z - 20, x + 20, y + 20, z + 20);
                 List<ItemEntity> items = world.getEntities(EntityType.ITEM, aabb, (v) -> true);
                 for (ItemEntity v : items) {
                     if (v.getItem().is(ItemTags.create(new ResourceLocation("zygzagsmod:diamond_scepter_consumable")))) {
@@ -77,7 +77,8 @@ public class IridiumScepterItem extends Item implements ISocketable {
                 }
             }
             case EMERALD -> {
-                aabb = new AABB(player.blockPosition().subtract(new Vec3i(6, 3, 6)), player.blockPosition().offset(new Vec3i(6, 3, 6)));
+                int x = player.blockPosition().getX(), y = player.blockPosition().getY(), z = player.blockPosition().getZ();
+                aabb = new AABB(x - 6, y - 3, z - 6, x + 6, y + 3, z + 6);
                 List<Villager> villagers = world.getEntities(EntityType.VILLAGER, aabb, (v) -> true);
                 for (Villager v : villagers) {
                     MerchantOffers offers = v.getOffers();

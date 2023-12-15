@@ -1,11 +1,16 @@
 package com.zygzag.zygzagsmod.common.block;
 
+import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.core.Direction;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.state.BlockState;
 
+import javax.annotation.ParametersAreNonnullByDefault;
+
+@ParametersAreNonnullByDefault
+@MethodsReturnNonnullByDefault
 public class GlassGroupSlabBlock extends GlassSlabBlock {
     private TagKey<Block> group;
     public GlassGroupSlabBlock(TagKey<Block> group, BlockBehaviour.Properties properties) {

@@ -6,6 +6,8 @@ import com.zygzag.zygzagsmod.common.entity.animation.Animation;
 import com.zygzag.zygzagsmod.common.entity.animation.TransitionAnimation;
 import com.zygzag.zygzagsmod.common.item.iridium.ISocketable;
 import com.zygzag.zygzagsmod.common.registry.*;
+import net.minecraft.core.Registry;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.BlockTags;
@@ -20,20 +22,14 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.levelgen.structure.Structure;
-import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.common.capabilities.Capability;
-import net.minecraftforge.common.capabilities.CapabilityManager;
-import net.minecraftforge.common.capabilities.CapabilityToken;
-import net.minecraftforge.event.BuildCreativeModeTabContentsEvent;
-import net.minecraftforge.eventbus.api.IEventBus;
-import net.minecraftforge.fml.ModLoadingContext;
-import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.fml.config.ModConfig;
-import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
-import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
-import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
-import net.minecraftforge.registries.ForgeRegistries;
-import net.minecraftforge.registries.IForgeRegistry;
+import net.neoforged.bus.api.IEventBus;
+import net.neoforged.fml.ModLoadingContext;
+import net.neoforged.fml.common.Mod;
+import net.neoforged.fml.config.ModConfig;
+import net.neoforged.fml.event.lifecycle.FMLClientSetupEvent;
+import net.neoforged.fml.event.lifecycle.FMLCommonSetupEvent;
+import net.neoforged.neoforge.common.NeoForge;
+import net.neoforged.neoforge.event.BuildCreativeModeTabContentsEvent;
 import org.slf4j.Logger;
 
 import java.util.Map;
@@ -56,20 +52,18 @@ public class Main {
     public static final TagKey<EntityType<?>> VILLAGER_HATED = TagKey.create(Registries.ENTITY_TYPE, new ResourceLocation("zygzagsmod:villager_hated"));
     public static final TagKey<Block> VEINMINEABLE = TagKey.create(Registries.BLOCK, new ResourceLocation("zygzagsmod:veinmineable"));
     public static final TagKey<Block> NETHER_QUARTZ_GLASS = TagKey.create(Registries.BLOCK, new ResourceLocation("zygzagsmod:nether_quartz_glass"));
-    public static final TagKey<Block> SCULK_VEIN_LIKE = TagKey.create(ForgeRegistries.Keys.BLOCKS, new ResourceLocation("zygzagsmod:sculk_vein_like"));
-    public static final TagKey<Block> REPLACEABLE_BY_CAIRN = TagKey.create(ForgeRegistries.Keys.BLOCKS, new ResourceLocation("zygzagsmod:replaceable_by_cairn"));
+    public static final TagKey<Block> SCULK_VEIN_LIKE = TagKey.create(BuiltInRegistries.BLOCK.key(), new ResourceLocation("zygzagsmod:sculk_vein_like"));
+    public static final TagKey<Block> REPLACEABLE_BY_CAIRN = TagKey.create(BuiltInRegistries.BLOCK.key(), new ResourceLocation("zygzagsmod:replaceable_by_cairn"));
     public static final TagKey<EntityType<?>> BOSS_TAG = TagKey.create(Registries.ENTITY_TYPE, new ResourceLocation("zygzagsmod:bosses"));
     public static final TagKey<EntityType<?>> SCULK_JAW_IMMUNE = TagKey.create(Registries.ENTITY_TYPE, new ResourceLocation("zygzagsmod:sculk_jaw_immune"));
 
     public static final TagKey<Structure> CAIRN_BASIC = TagKey.create(Registries.STRUCTURE, new ResourceLocation("zygzagsmod:cairn/basic"));
 
-    public static final Capability<PlayerSightCache> PLAYER_SIGHT_CACHE = CapabilityManager.get(new CapabilityToken<>() {
-    });
-
     public static final UUID SPRINGS_ENCHANTMENT_MODIFIER_UUID = UUID.fromString("488b16bb-d01c-49bb-adf2-714c230d035f");
     public static final UUID STEADY_ENCHANTMENT_MODIFIER_UUID = UUID.fromString("4c0789ca-3380-416b-8d3e-723b24d272c2");
     public static final UUID CURSE_OF_GLASS_ENCHANTMENT_HEALTH_MODIFIER_UUID = UUID.fromString("82d7ee30-93bc-448b-b16f-77097f9625ec");
     public static final UUID CURSE_OF_GLASS_ENCHANTMENT_DAMAGE_MODIFIER_UUID = UUID.fromString("4df8ccef-9fee-432a-b3a7-f0178c6f6bfe");
+    public static PlayerSightCache CURRENT_PLAYER_CACHE = null;
 
     public static final Supplier<Map<BlockState, Integer>> EXTRANEOUS_SCULK_GROWTHS = () -> Map.of(
             Blocks.SCULK_SENSOR.defaultBlockState(), 10,
@@ -77,35 +71,31 @@ public class Main {
             BlockItemEntityRegistry.SCULK_JAW.getDefaultBlockState(), 2
     );
 
-    public Main() {
-        IEventBus modEventBus = FMLJavaModLoadingContext.get().getModEventBus();
-
+    public Main(IEventBus modEventBus) {
         modEventBus.addListener(this::commonSetup);
         modEventBus.addListener(this::clientSetup);
 
-        Registry.register(modEventBus);
+        AkomiRegistry.register(modEventBus);
 
-        MinecraftForge.EVENT_BUS.register(this);
+        //NeoForge.EVENT_BUS.register(this);
 
         modEventBus.addListener(this::addCreative);
 
         ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, Config.SPEC);
-
-        //System.out.println("Grass is " + (Blocks.GRASS.defaultBlockState().is(VEGETATION_TAG) ? "" : "not ") + "in the vegetation tag");
     }
 
-    public static IForgeRegistry<Animation> animationRegistry() {
-        return AnimationRegistry.FORGE_REGISTRY_SUPPLIER.get();
+    public static Registry<Animation> animationRegistry() {
+        return AnimationRegistry.registry();
     }
 
-    public static IForgeRegistry<TransitionAnimation> transitionAnimationRegistry() {
-        return TransitionAnimationRegistry.FORGE_REGISTRY_SUPPLIER.get();
+    public static Registry<TransitionAnimation> transitionAnimationRegistry() {
+        return TransitionAnimationRegistry.registry();
     }
 
-    private void commonSetup(final FMLCommonSetupEvent event) {
-    }
+    private void commonSetup(final FMLCommonSetupEvent event) { }
 
     private void clientSetup(final FMLClientSetupEvent event) {
+        CURRENT_PLAYER_CACHE = new PlayerSightCache();
     }
 
     private void addCreative(BuildCreativeModeTabContentsEvent event) {

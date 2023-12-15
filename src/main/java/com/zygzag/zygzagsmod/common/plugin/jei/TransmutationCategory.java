@@ -67,13 +67,13 @@ public class TransmutationCategory implements IRecipeCategory<TransmutationRecip
 
     @Override
     public void setRecipe(IRecipeLayoutBuilder recipeLayout, TransmutationRecipe recipe, IFocusGroup ingredients) {
-        recipeLayout.addSlot(RecipeIngredientRole.INPUT, 1, 9).addIngredients(recipe.getInItem());
-        recipeLayout.addSlot(RecipeIngredientRole.OUTPUT, 61, 9).addIngredients(Ingredient.of(recipe.getOutItem()));
+        recipeLayout.addSlot(RecipeIngredientRole.INPUT, 1, 9).addIngredients(recipe.inItem());
+        recipeLayout.addSlot(RecipeIngredientRole.OUTPUT, 61, 9).addIngredients(Ingredient.of(recipe.outItem()));
     }
 
     @Override
     public void draw(TransmutationRecipe recipe, IRecipeSlotsView recipeSlotsView, GuiGraphics graphics, double mouseX, double mouseY) {
-        drawRateCost(Minecraft.getInstance(), graphics, "Rate: " + recipe.getRate() + "x");
+        drawRateCost(Minecraft.getInstance(), graphics, "Rate: " + recipe.rate() + "x");
     }
 
     private void drawRateCost(Minecraft minecraft, GuiGraphics graphics, String text) {

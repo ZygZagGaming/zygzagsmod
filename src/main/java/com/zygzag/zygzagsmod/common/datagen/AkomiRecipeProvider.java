@@ -5,18 +5,19 @@ import com.zygzag.zygzagsmod.common.registry.BlockWithItemRegistry;
 import com.zygzag.zygzagsmod.common.registry.IridiumGearRegistry;
 import com.zygzag.zygzagsmod.common.registry.ItemRegistry;
 import net.minecraft.MethodsReturnNonnullByDefault;
+import net.minecraft.core.HolderLookup;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.data.PackOutput;
 import net.minecraft.data.recipes.*;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.crafting.Ingredient;
-import net.minecraftforge.registries.ForgeRegistries;
-import net.minecraftforge.registries.RegistryObject;
 
 import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.Map;
-import java.util.function.Consumer;
+import java.util.concurrent.CompletableFuture;
+import java.util.function.Supplier;
 
 import static com.zygzag.zygzagsmod.common.Main.MODID;
 
@@ -45,40 +46,41 @@ public class AkomiRecipeProvider extends RecipeProvider {
             new IridiumSocketingRecipeType("scepter", IridiumGearRegistry.SocketedGearType.SCEPTER, IridiumGearRegistry.SCEPTERS, RecipeCategory.TOOLS),
     };
 
-    public AkomiRecipeProvider(PackOutput output) {
-        super(output);
+    public AkomiRecipeProvider(PackOutput output, CompletableFuture<HolderLookup.Provider> lookupProvider) {
+        super(output, lookupProvider);
     }
 
     @Override
-    protected void buildRecipes(Consumer<FinishedRecipe> consumer) {
-        makeIridiumPlatingRecipes(consumer);
-        makeIridiumSocketingRecipes(consumer);
+    protected void buildRecipes(RecipeOutput output) {
+        makeIridiumPlatingRecipes(output);
+        makeIridiumSocketingRecipes(output);
 
-        makeSimpleStonecuttingRecipe(Items.RED_NETHER_BRICKS, BlockWithItemRegistry.CHISELED_RED_NETHER_BRICKS.getItem(), RecipeCategory.BUILDING_BLOCKS, "stonecutting", consumer);
-        makeSimpleStonecuttingRecipe(Items.RED_NETHER_BRICKS, BlockWithItemRegistry.CRACKED_RED_NETHER_BRICKS.getItem(), RecipeCategory.BUILDING_BLOCKS, "stonecutting", consumer);
+        makeSimpleStonecuttingRecipe(Items.RED_NETHER_BRICKS, BlockWithItemRegistry.CHISELED_RED_NETHER_BRICKS.getItem(), RecipeCategory.BUILDING_BLOCKS, "stonecutting", output);
+        makeSimpleStonecuttingRecipe(Items.RED_NETHER_BRICKS, BlockWithItemRegistry.CRACKED_RED_NETHER_BRICKS.getItem(), RecipeCategory.BUILDING_BLOCKS, "stonecutting", output);
+        makeSimpleStonecuttingRecipe(Items.RED_NETHER_BRICKS, BlockWithItemRegistry.RED_NETHER_BRICK_PILLAR.getItem(), RecipeCategory.BUILDING_BLOCKS, "stonecutting", output);
 
-        makeSimpleStonecuttingRecipe(BlockWithItemRegistry.NETHER_QUARTZ_GLASS.getItem(), BlockWithItemRegistry.NETHER_QUARTZ_GLASS_STAIRS.getItem(), RecipeCategory.BUILDING_BLOCKS, "stonecutting", consumer);
-        makeSimpleStonecuttingRecipe(BlockWithItemRegistry.NETHER_QUARTZ_GLASS.getItem(), BlockWithItemRegistry.NETHER_QUARTZ_GLASS_SLAB.getItem(), RecipeCategory.BUILDING_BLOCKS, "stonecutting", 2, consumer);
+        makeSimpleStonecuttingRecipe(BlockWithItemRegistry.NETHER_QUARTZ_GLASS.getItem(), BlockWithItemRegistry.NETHER_QUARTZ_GLASS_STAIRS.getItem(), RecipeCategory.BUILDING_BLOCKS, "stonecutting", output);
+        makeSimpleStonecuttingRecipe(BlockWithItemRegistry.NETHER_QUARTZ_GLASS.getItem(), BlockWithItemRegistry.NETHER_QUARTZ_GLASS_SLAB.getItem(), RecipeCategory.BUILDING_BLOCKS, "stonecutting", 2, output);
 
-        SimpleCookingRecipeBuilder.smelting(Ingredient.of(Items.QUARTZ_BLOCK), RecipeCategory.BUILDING_BLOCKS, BlockWithItemRegistry.NETHER_QUARTZ_GLASS_SLAB.getItem(), 0.35f, 200).unlockedBy("has_quartz_block", has(Items.QUARTZ_BLOCK)).save(consumer);
+        SimpleCookingRecipeBuilder.smelting(Ingredient.of(Items.QUARTZ_BLOCK), RecipeCategory.BUILDING_BLOCKS, BlockWithItemRegistry.NETHER_QUARTZ_GLASS_SLAB.getItem(), 0.35f, 200).unlockedBy("has_quartz_block", has(Items.QUARTZ_BLOCK)).save(output);
     }
-    private void makeSimpleStonecuttingRecipe(Item start, Item result, RecipeCategory category, String path, Consumer<FinishedRecipe> consumer) {
-        makeSimpleStonecuttingRecipe(start, result, category, path, 1, consumer);
-    }
-
-    private void makeSimpleStonecuttingRecipe(Item start, Item result, RecipeCategory category, String path, int count, Consumer<FinishedRecipe> consumer) {
-        var startId = ForgeRegistries.ITEMS.getKey(start);
-        var resultId = ForgeRegistries.ITEMS.getKey(result);
-        if (startId != null && resultId != null) SingleItemRecipeBuilder.stonecutting(Ingredient.of(start), category, result, count).unlockedBy("has_" + startId, has(start)).save(consumer, new ResourceLocation(MODID, path + "/" + resultId.getPath()));
+    private void makeSimpleStonecuttingRecipe(Item start, Item result, RecipeCategory category, String path, RecipeOutput output) {
+        makeSimpleStonecuttingRecipe(start, result, category, path, 1, output);
     }
 
-    private void makeIridiumPlatingRecipes(Consumer<FinishedRecipe> consumer) {
+    private void makeSimpleStonecuttingRecipe(Item start, Item result, RecipeCategory category, String path, int count, RecipeOutput output) {
+        var startId = BuiltInRegistries.ITEM.getKey(start);
+        var resultId = BuiltInRegistries.ITEM.getKey(result);
+        SingleItemRecipeBuilder.stonecutting(Ingredient.of(start), category, result, count).unlockedBy("has_" + startId, has(start)).save(output, new ResourceLocation(MODID, path + "/" + resultId.getPath()));
+    }
+
+    private void makeIridiumPlatingRecipes(RecipeOutput output) {
         for (IridiumPlatingRecipeType recipeType : PLATING_RECIPE_TYPES) {
-            makeIridiumPlatingRecipesForType(recipeType, consumer);
+            makeIridiumPlatingRecipesForType(recipeType, output);
         }
     }
 
-    private void makeIridiumPlatingRecipesForType(IridiumPlatingRecipeType recipeType, Consumer<FinishedRecipe> consumer) {
+    private void makeIridiumPlatingRecipesForType(IridiumPlatingRecipeType recipeType, RecipeOutput output) {
         for (int platings = 0; platings < recipeType.itemPlatings(); platings++) {
             SmithingTransformRecipeBuilder.smithing(
                     Ingredient.of(recipeType.blueprint()),
@@ -89,17 +91,17 @@ public class AkomiRecipeProvider extends RecipeProvider {
             ).unlocks(
                     "has_iridium_plating",
                     has(ItemRegistry.IRIDIUM_PLATING.get())
-            ).save(consumer, new ResourceLocation(MODID, "iridium_" + recipeType.name() + "_plating_" + platings));
+            ).save(output, new ResourceLocation(MODID, "iridium_" + recipeType.name() + "_plating_" + platings));
         }
     }
 
-    private void makeIridiumSocketingRecipes(Consumer<FinishedRecipe> consumer) {
+    private void makeIridiumSocketingRecipes(RecipeOutput output) {
         for (IridiumSocketingRecipeType recipeType : SOCKETING_RECIPE_TYPES) {
-            makeIridiumSocketingRecipesForType(recipeType, consumer);
+            makeIridiumSocketingRecipesForType(recipeType, output);
         }
     }
 
-    private void makeIridiumSocketingRecipesForType(IridiumSocketingRecipeType recipeType, Consumer<FinishedRecipe> consumer) {
+    private void makeIridiumSocketingRecipesForType(IridiumSocketingRecipeType recipeType, RecipeOutput output) {
         for (Socket socket : Socket.values())
             if (socket != Socket.NONE && socket.gearTypeFilter.test(recipeType.type)) {
                 SmithingTransformRecipeBuilder.smithing(
@@ -111,16 +113,16 @@ public class AkomiRecipeProvider extends RecipeProvider {
                 ).unlocks(
                         "has_iridium_plating",
                         has(ItemRegistry.IRIDIUM_PLATING.get())
-                ).save(consumer, new ResourceLocation(MODID, socket.name().toLowerCase() + "_socketed_iridium_" + recipeType.name()));
+                ).save(output, new ResourceLocation(MODID, socket.name().toLowerCase() + "_socketed_iridium_" + recipeType.name()));
             }
     }
 
     private record IridiumPlatingRecipeType(String name, Item blueprint, Item finalItem, Item baseItem,
-                                            Map<Integer, RegistryObject<Item>> partials, int itemPlatings,
+                                            Map<Integer, Supplier<Item>> partials, int itemPlatings,
                                             RecipeCategory category) {
     }
 
     private record IridiumSocketingRecipeType(String name, IridiumGearRegistry.SocketedGearType type,
-                                              Map<Socket, RegistryObject<Item>> finalItems, RecipeCategory category) {
+                                              Map<Socket, Supplier<Item>> finalItems, RecipeCategory category) {
     }
 }
