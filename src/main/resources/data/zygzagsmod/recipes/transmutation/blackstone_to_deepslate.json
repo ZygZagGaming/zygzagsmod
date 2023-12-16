@@ -1,8 +1,8 @@
 {
   "type": "zygzagsmod:transmutation",
-  "input": {
+  "inItem": {
     "item": "minecraft:blackstone"
   },
-  "output": "minecraft:deepslate",
-  "rate": "0.95"
+  "outItem": "minecraft:deepslate",
+  "rate": 0.95
 }

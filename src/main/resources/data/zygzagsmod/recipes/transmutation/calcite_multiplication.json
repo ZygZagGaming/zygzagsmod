@@ -1,8 +1,8 @@
 {
   "type": "zygzagsmod:transmutation",
-  "input": {
+  "inItem": {
     "item": "minecraft:calcite"
   },
-  "output": "minecraft:calcite",
-  "rate": "1.5"
+  "outItem": "minecraft:calcite",
+  "rate": 1.5
 }

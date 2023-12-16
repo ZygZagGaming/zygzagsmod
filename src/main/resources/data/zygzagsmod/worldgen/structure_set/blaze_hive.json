@@ -1,0 +1,15 @@
+{
+  "placement": {
+    "type": "minecraft:random_spread",
+    "salt": 103343699,
+    "separation": 15,
+    "spacing": 22,
+    "spread_type": "triangular"
+  },
+  "structures": [
+    {
+      "structure": "zygzagsmod:blaze_hive",
+      "weight": 1
+    }
+  ]
+}

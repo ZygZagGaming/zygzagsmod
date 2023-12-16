@@ -1,8 +1,8 @@
 {
   "type": "zygzagsmod:transmutation",
-  "input": {
+  "inItem": {
     "item": "minecraft:tuff"
   },
-  "output": "minecraft:deepslate",
-  "rate": "0.875"
+  "outItem": "minecraft:deepslate",
+  "rate": 0.875
 }

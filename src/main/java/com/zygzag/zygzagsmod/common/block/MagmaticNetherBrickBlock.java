@@ -27,7 +27,7 @@ import javax.annotation.ParametersAreNonnullByDefault;
 @MethodsReturnNonnullByDefault
 public class MagmaticNetherBrickBlock extends Block implements EntityBlock {
     public static final IntegerProperty PULSE = IntegerProperty.create("pulse", 0, 103);
-    public static final IntegerProperty CHARGES = IntegerProperty.create("charges", 0, 3);
+    public static final IntegerProperty CHARGES = IntegerProperty.create("charges", 0, 4);
 
     public MagmaticNetherBrickBlock(Properties properties) {
         super(properties);
@@ -65,7 +65,7 @@ public class MagmaticNetherBrickBlock extends Block implements EntityBlock {
                     if (!world.getBlockState(pos.relative(dir)).isFaceSturdy(world, pos.relative(dir), dir.getOpposite())) {
                         OverheatBeamAreaEffectCloud.spawn(world, pos, dir);
                     }
-                world.setBlockAndUpdate(pos, state.setValue(CHARGES, 0).setValue(PULSE, 103));
+                world.setBlockAndUpdate(pos, state.setValue(CHARGES, 4).setValue(PULSE, 103));
             }
         }
     }

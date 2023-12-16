@@ -1,8 +1,8 @@
 {
   "type": "zygzagsmod:transmutation",
-  "input": {
+  "inItem": {
     "item": "minecraft:bone_block"
   },
-  "output": "minecraft:bone",
-  "rate": "1.5"
+  "outItem": "minecraft:bone",
+  "rate": 1.5
 }

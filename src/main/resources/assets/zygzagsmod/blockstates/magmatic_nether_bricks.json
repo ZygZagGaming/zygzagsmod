@@ -1,0 +1,19 @@
+{
+  "variants": {
+    "charges=0": {
+      "model": "zygzagsmod:block/magmatic_nether_bricks/magmatic_nether_bricks_0"
+    },
+    "charges=1": {
+      "model": "zygzagsmod:block/magmatic_nether_bricks/magmatic_nether_bricks_1"
+    },
+    "charges=2": {
+      "model": "zygzagsmod:block/magmatic_nether_bricks/magmatic_nether_bricks_2"
+    },
+    "charges=3": {
+      "model": "zygzagsmod:block/magmatic_nether_bricks/magmatic_nether_bricks_3"
+    },
+    "charges=4": {
+      "model": "zygzagsmod:block/magmatic_nether_bricks/magmatic_nether_bricks_4"
+    }
+  }
+}

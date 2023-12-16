@@ -1,8 +1,8 @@
 {
   "type": "zygzagsmod:transmutation",
-  "input": {
+  "inItem": {
     "item": "minecraft:diorite"
   },
-  "output": "minecraft:quartz",
-  "rate": "0.25"
+  "outItem": "minecraft:quartz",
+  "rate": 0.25
 }

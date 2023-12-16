@@ -1,8 +1,8 @@
 {
   "type": "zygzagsmod:transmutation",
-  "input": {
+  "inItem": {
     "item": "minecraft:smooth_basalt"
   },
-  "output": "minecraft:basalt",
-  "rate": "1"
+  "outItem": "minecraft:basalt",
+  "rate": 1
 }

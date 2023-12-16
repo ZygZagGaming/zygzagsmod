@@ -1,8 +1,8 @@
 {
   "type": "zygzagsmod:transmutation",
-  "input": {
+  "inItem": {
     "item": "minecraft:apple"
   },
-  "output": "minecraft:golden_apple",
-  "rate": "0.05"
+  "outItem": "minecraft:golden_apple",
+  "rate": 0.05
 }

@@ -57,7 +57,7 @@ public class AkomiRecipeProvider extends RecipeProvider {
 
         makeSimpleStonecuttingRecipe(Items.RED_NETHER_BRICKS, BlockWithItemRegistry.CHISELED_RED_NETHER_BRICKS.getItem(), RecipeCategory.BUILDING_BLOCKS, "stonecutting", output);
         makeSimpleStonecuttingRecipe(Items.RED_NETHER_BRICKS, BlockWithItemRegistry.CRACKED_RED_NETHER_BRICKS.getItem(), RecipeCategory.BUILDING_BLOCKS, "stonecutting", output);
-        makeSimpleStonecuttingRecipe(Items.RED_NETHER_BRICKS, BlockWithItemRegistry.RED_NETHER_BRICK_PILLAR.getItem(), RecipeCategory.BUILDING_BLOCKS, "stonecutting", output);
+        makeSimpleStonecuttingRecipe(Items.RED_NETHER_BRICKS, BlockWithItemRegistry.GIRDED_RED_NETHER_BRICKS.getItem(), RecipeCategory.BUILDING_BLOCKS, "stonecutting", output);
 
         makeSimpleStonecuttingRecipe(BlockWithItemRegistry.NETHER_QUARTZ_GLASS.getItem(), BlockWithItemRegistry.NETHER_QUARTZ_GLASS_STAIRS.getItem(), RecipeCategory.BUILDING_BLOCKS, "stonecutting", output);
         makeSimpleStonecuttingRecipe(BlockWithItemRegistry.NETHER_QUARTZ_GLASS.getItem(), BlockWithItemRegistry.NETHER_QUARTZ_GLASS_SLAB.getItem(), RecipeCategory.BUILDING_BLOCKS, "stonecutting", 2, output);

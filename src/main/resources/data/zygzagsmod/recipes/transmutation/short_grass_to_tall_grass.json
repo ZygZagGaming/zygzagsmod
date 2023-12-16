@@ -1,0 +1,8 @@
+{
+  "type": "zygzagsmod:transmutation",
+  "inItem": {
+    "item": "minecraft:short_grass"
+  },
+  "outItem": "minecraft:tall_grass",
+  "rate": 0.5
+}

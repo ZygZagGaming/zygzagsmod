@@ -1,8 +1,8 @@
 {
   "type": "zygzagsmod:transmutation",
-  "input": {
+  "inItem": {
     "item": "minecraft:gold_ingot"
   },
-  "output": "minecraft:iron_ingot",
+  "outItem": "minecraft:iron_ingot",
   "rate": 1.5
 }

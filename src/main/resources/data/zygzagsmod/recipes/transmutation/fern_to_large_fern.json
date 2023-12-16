@@ -1,8 +1,8 @@
 {
   "type": "zygzagsmod:transmutation",
-  "input": {
+  "inItem": {
     "item": "minecraft:fern"
   },
-  "output": "minecraft:large_fern",
-  "rate": "0.5"
+  "outItem": "minecraft:large_fern",
+  "rate": 0.5
 }

@@ -81,7 +81,6 @@ public class TransmutationRecipe implements Recipe<SimpleContainer> {
     }
 
     public static class TransmutationSerializer implements RecipeSerializer<TransmutationRecipe> {
-        @Nullable
         @Override
         public TransmutationRecipe fromNetwork(FriendlyByteBuf buf) {
             Item item = BuiltInRegistries.ITEM.get(new ResourceLocation(buf.readUtf()));
@@ -97,8 +96,8 @@ public class TransmutationRecipe implements Recipe<SimpleContainer> {
             return RecordCodecBuilder.create(instance ->
                     instance.group(
                             Ingredient.VANILLA_CODEC.fieldOf("inItem").forGetter(TransmutationRecipe::inItem),
-                            BuiltInRegistries.ITEM.byNameCodec().fieldOf("inItem").forGetter(TransmutationRecipe::outItem),
-                            Codec.DOUBLE.fieldOf("inItem").forGetter(TransmutationRecipe::rate)
+                            BuiltInRegistries.ITEM.byNameCodec().fieldOf("outItem").forGetter(TransmutationRecipe::outItem),
+                            Codec.DOUBLE.fieldOf("rate").forGetter(TransmutationRecipe::rate)
                     ).apply(instance, TransmutationRecipe::new)
             );
         }

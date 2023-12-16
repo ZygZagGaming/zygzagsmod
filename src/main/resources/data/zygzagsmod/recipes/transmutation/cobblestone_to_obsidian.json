@@ -1,8 +1,8 @@
 {
   "type": "zygzagsmod:transmutation",
-  "input": {
+  "inItem": {
     "item": "minecraft:cobblestone"
   },
-  "output": "minecraft:obsidian",
-  "rate": "0.04"
+  "outItem": "minecraft:obsidian",
+  "rate": 0.04
 }

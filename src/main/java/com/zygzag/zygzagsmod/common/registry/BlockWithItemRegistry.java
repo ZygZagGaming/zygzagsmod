@@ -68,9 +68,9 @@ public class BlockWithItemRegistry {
             "nether_quartz_glass_slab",
             () -> new GlassSlabBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.QUARTZ_BLOCK).noOcclusion().isValidSpawn(BlockWithItemRegistry::never).isRedstoneConductor(BlockWithItemRegistry::never).isSuffocating(BlockWithItemRegistry::never).isViewBlocking(BlockWithItemRegistry::never))
     );
-    public static final BlockWithItemSupplier<Block, BlockItem> RED_NETHER_BRICK_PILLAR = INSTANCE.register(
+    public static final BlockWithItemSupplier<Block, BlockItem> GIRDED_RED_NETHER_BRICKS = INSTANCE.register(
             "red_nether_brick_pillar",
-            () -> new RotatedPillarBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.RED_NETHER_BRICKS))
+            () -> new RotatedPillarBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.RED_NETHER_BRICKS).strength(3.0F, 40.0F))
     );
     public DeferredRegister<Block> blockRegister = DeferredRegister.create(BuiltInRegistries.BLOCK, MODID);
     public DeferredRegister<Item> itemRegister = DeferredRegister.create(BuiltInRegistries.ITEM, MODID);

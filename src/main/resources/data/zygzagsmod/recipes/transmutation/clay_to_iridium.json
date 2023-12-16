@@ -1,8 +1,8 @@
 {
   "type": "zygzagsmod:transmutation",
-  "input": {
+  "inItem": {
     "item": "minecraft:clay_ball"
   },
-  "output": "zygzagsmod:iridium_plating",
-  "rate": "0.0005"
+  "outItem": "zygzagsmod:iridium_plating",
+  "rate": 0.0005
 }

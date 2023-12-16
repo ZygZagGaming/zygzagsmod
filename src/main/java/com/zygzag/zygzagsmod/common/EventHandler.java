@@ -17,6 +17,7 @@ import com.zygzag.zygzagsmod.common.registry.BlockRegistry;
 import com.zygzag.zygzagsmod.common.registry.EnchantmentRegistry;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvent;
@@ -57,6 +58,7 @@ import net.neoforged.neoforge.event.TickEvent;
 import net.neoforged.neoforge.event.entity.living.*;
 import net.neoforged.neoforge.event.entity.player.PlayerEvent;
 import net.neoforged.neoforge.event.level.BlockEvent;
+import net.neoforged.neoforge.event.server.ServerStartingEvent;
 
 import java.util.HashMap;
 
@@ -75,6 +77,11 @@ public class EventHandler {
 //            NOCTURNAL_MULTIPLIER = (float) (1 + Config.amethystSwordDamageBonus * Math.exp(-((time + 12000.0) % 24000.0 - 12000.0) * ((time + 12000.0) % 24000.0 - 12000.0) / 12000.0));
 //        }
 //    }
+
+    @SubscribeEvent
+    public static void serverStarting(final ServerStartingEvent event) {
+        System.out.println(BuiltInRegistries.REGISTRY.keySet());
+    }
 
     @SubscribeEvent
     public static void onTick(final TickEvent.PlayerTickEvent event) {

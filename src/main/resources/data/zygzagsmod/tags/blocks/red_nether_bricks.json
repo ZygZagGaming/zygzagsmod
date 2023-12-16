@@ -1,0 +1,11 @@
+{
+    "values": [
+        "minecraft:red_nether_bricks",
+        "minecraft:red_nether_brick_stairs",
+        "minecraft:red_nether_brick_slab",
+        "zygzagsmod:cracked_red_nether_bricks",
+        "zygzagsmod:crushed_red_nether_bricks",
+        "zygzagsmod:red_nether_brick_pillar"
+    ],
+    "override": false
+}
