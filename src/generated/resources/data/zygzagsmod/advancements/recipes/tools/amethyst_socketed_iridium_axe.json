@@ -22,14 +22,13 @@
   },
   "requirements": [
     [
-      "has_iridium_plating",
-      "has_the_recipe"
+      "has_the_recipe",
+      "has_iridium_plating"
     ]
   ],
   "rewards": {
     "recipes": [
       "zygzagsmod:amethyst_socketed_iridium_axe"
     ]
-  },
-  "sends_telemetry_event": false
+  }
 }

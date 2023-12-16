@@ -79,11 +79,6 @@ public class EventHandler {
 //    }
 
     @SubscribeEvent
-    public static void serverStarting(final ServerStartingEvent event) {
-        System.out.println(BuiltInRegistries.REGISTRY.keySet());
-    }
-
-    @SubscribeEvent
     public static void onTick(final TickEvent.PlayerTickEvent event) {
         var player = event.player;
         if (player.level().isClientSide) for (var effectInstance : player.getActiveEffects()) {

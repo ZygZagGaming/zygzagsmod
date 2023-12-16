@@ -22,14 +22,13 @@
   },
   "requirements": [
     [
-      "has_minecraft:red_nether_bricks",
-      "has_the_recipe"
+      "has_the_recipe",
+      "has_minecraft:red_nether_bricks"
     ]
   ],
   "rewards": {
     "recipes": [
       "zygzagsmod:stonecutting/chiseled_red_nether_bricks"
     ]
-  },
-  "sends_telemetry_event": false
+  }
 }

@@ -71,7 +71,7 @@ public class EntityTypeRegistry extends AkomiRegistry<EntityType<?>> {
             "sphere_area_effect_cloud",
             () -> EntityType.Builder.<SphereAreaEffectCloud>of(SphereAreaEffectCloud::new, MobCategory.MISC)
                     .fireImmune()
-                    .sized(5f, 5f)
+                    .sized(0f, 0f)
                     .clientTrackingRange(10)
                     .updateInterval(Integer.MAX_VALUE)
                     .build("sphere_area_effect_cloud")

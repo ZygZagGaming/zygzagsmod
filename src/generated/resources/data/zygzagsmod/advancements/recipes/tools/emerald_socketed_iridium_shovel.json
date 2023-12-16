@@ -22,14 +22,13 @@
   },
   "requirements": [
     [
-      "has_iridium_plating",
-      "has_the_recipe"
+      "has_the_recipe",
+      "has_iridium_plating"
     ]
   ],
   "rewards": {
     "recipes": [
       "zygzagsmod:emerald_socketed_iridium_shovel"
     ]
-  },
-  "sends_telemetry_event": false
+  }
 }

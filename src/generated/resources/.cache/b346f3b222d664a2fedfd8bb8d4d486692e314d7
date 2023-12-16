@@ -1,4 +1,4 @@
-// 1.20.1	2023-12-14T07:19:26.7452026	Item Models: zygzagsmod
+// 1.20.4	2023-12-15T20:36:14.7617904	Item Models: zygzagsmod
 15435321a16b6a9adcb19a948c2af0fa7344d370 assets/zygzagsmod/models/item/amethyst_socketed_iridium_axe.json
 15eb5bc299660d213b1379316f4264e348e7a421 assets/zygzagsmod/models/item/amethyst_socketed_iridium_chestplate.json
 da43fd45392876686e6ebd43c9df8c0d4bd150aa assets/zygzagsmod/models/item/amethyst_socketed_iridium_hoe.json
@@ -34,6 +34,7 @@ e26275cf0f2ea7ae0b55f54bb486000ed4bd5e79 assets/zygzagsmod/models/item/iridium_c
 58b8a821eb334e448739984f2e14bcb95b40651c assets/zygzagsmod/models/item/iridium_scepter.json
 311e4829500cd3165fcb36a43eaf8071c498ccef assets/zygzagsmod/models/item/iridium_shovel.json
 012f7513040cac65f8f963b47ca512edcc46a9f5 assets/zygzagsmod/models/item/iridium_sword.json
+5bca1ae2772c8447f06c6b5b4be268173d74d35f assets/zygzagsmod/models/item/magmatic_nether_bricks.json
 adf4a3621dd17b291faa46d445875b2941609ae1 assets/zygzagsmod/models/item/nether_quartz_glass.json
 943499c912fd7eeaace0858896139ef8f3f59ec1 assets/zygzagsmod/models/item/nether_quartz_glass_slab.json
 10c818c2533e05537aa500812ba441448843f7c4 assets/zygzagsmod/models/item/nether_quartz_glass_stairs.json

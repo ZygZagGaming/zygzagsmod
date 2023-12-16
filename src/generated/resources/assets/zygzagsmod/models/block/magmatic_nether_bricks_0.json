@@ -1,6 +1,0 @@
-{
-  "parent": "minecraft:block/cube_all",
-  "textures": {
-    "all": "zygzagsmod:block/magmatic_nether_brick/magmatic_nether_bricks_0"
-  }
-}

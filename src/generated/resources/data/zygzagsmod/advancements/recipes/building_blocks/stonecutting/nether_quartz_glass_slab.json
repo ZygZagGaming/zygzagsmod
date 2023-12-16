@@ -22,14 +22,13 @@
   },
   "requirements": [
     [
-      "has_zygzagsmod:nether_quartz_glass",
-      "has_the_recipe"
+      "has_the_recipe",
+      "has_zygzagsmod:nether_quartz_glass"
     ]
   ],
   "rewards": {
     "recipes": [
       "zygzagsmod:stonecutting/nether_quartz_glass_slab"
     ]
-  },
-  "sends_telemetry_event": false
+  }
 }

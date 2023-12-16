@@ -7,8 +7,10 @@ import com.zygzag.zygzagsmod.common.registry.BlockItemEntityRegistry;
 import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.Projectile;
+import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.EntityBlock;
@@ -39,6 +41,11 @@ public class MagmaticNetherBrickBlock extends Block implements EntityBlock {
     }
 
     @Override
+    public int getLightEmission(BlockState state, BlockGetter level, BlockPos pos) {
+        return super.getLightEmission(state, level, pos);
+    }
+
+    @Override
     public BlockState playerWillDestroy(Level world, BlockPos pos, BlockState state, Player player) {
         super.playerWillDestroy(world, pos, state, player);
         if (!player.isCreative()) {
@@ -51,15 +58,15 @@ public class MagmaticNetherBrickBlock extends Block implements EntityBlock {
 
     @Override
     public void attack(BlockState state, Level world, BlockPos pos, Player player) {
-        chargeOrRelease(state, world, pos);
+        chargeOrRelease(state, world, pos, 3);
     }
 
-    public void chargeOrRelease(BlockState state, Level world, BlockPos pos) {
+    public void chargeOrRelease(BlockState state, Level world, BlockPos pos, int cooldown) {
         int charges = state.getValue(CHARGES);
         int pulses = state.getValue(PULSE);
         if (pulses == 0) {
             if (charges < 3) {
-                world.setBlockAndUpdate(pos, state.setValue(CHARGES, charges + 1).setValue(PULSE, 3));
+                world.setBlockAndUpdate(pos, state.setValue(CHARGES, charges + 1).setValue(PULSE, cooldown));
             } else {
                 for (Direction dir : Direction.values())
                     if (!world.getBlockState(pos.relative(dir)).isFaceSturdy(world, pos.relative(dir), dir.getOpposite())) {
@@ -86,6 +93,13 @@ public class MagmaticNetherBrickBlock extends Block implements EntityBlock {
 
     @Override
     public void onProjectileHit(Level world, BlockState state, BlockHitResult result, Projectile projectile) {
-        chargeOrRelease(state, world, result.getBlockPos());
+        chargeOrRelease(state, world, result.getBlockPos(), 2);
+    }
+
+    @Override
+    public void stepOn(Level world, BlockPos pos, BlockState state, Entity stander) {
+        chargeOrRelease(state, world, pos, 15);
+
+        super.stepOn(world, pos, state, stander);
     }
 }
