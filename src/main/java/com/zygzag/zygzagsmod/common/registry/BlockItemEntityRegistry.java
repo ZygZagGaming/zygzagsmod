@@ -1,8 +1,10 @@
 package com.zygzag.zygzagsmod.common.registry;
 
+import com.zygzag.zygzagsmod.common.block.CacheBlock;
 import com.zygzag.zygzagsmod.common.block.MagmaticNetherBrickBlock;
 import com.zygzag.zygzagsmod.common.block.SculkJawBlock;
 import com.zygzag.zygzagsmod.common.block.SuspiciousEndSandBlock;
+import com.zygzag.zygzagsmod.common.block.entity.CacheBlockEntity;
 import com.zygzag.zygzagsmod.common.block.entity.CustomBrushableBlockEntity;
 import com.zygzag.zygzagsmod.common.block.entity.MagmaticNetherBrickBlockEntity;
 import com.zygzag.zygzagsmod.common.block.entity.SculkJawBlockEntity;
@@ -42,11 +44,17 @@ public class BlockItemEntityRegistry {
             () -> new SuspiciousEndSandBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.SAND).pushReaction(PushReaction.DESTROY), SoundEvents.BRUSH_SAND, SoundEvents.BRUSH_SAND_COMPLETED),
             CustomBrushableBlockEntity::new
     );
-    
+
     public static final BlockItemEntitySupplier<MagmaticNetherBrickBlock, BlockItem, MagmaticNetherBrickBlockEntity> MAGMATIC_NETHER_BRICKS = INSTANCE.register(
             "magmatic_nether_bricks",
             () -> new MagmaticNetherBrickBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.RED_NETHER_BRICKS).strength(0.5f, 1f)),
             MagmaticNetherBrickBlockEntity::new
+    );
+
+    public static final BlockItemEntitySupplier<CacheBlock, BlockItem, CacheBlockEntity> RED_NETHER_BRICK_CACHE = INSTANCE.register(
+            "red_nether_brick_cache",
+            () -> new CacheBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.RED_NETHER_BRICKS).strength(0.5f, 1f)),
+            CacheBlockEntity::new
     );
 
     public <B extends Block, E extends BlockEntity> BlockItemEntitySupplier<B, BlockItem, E> register(String id, Supplier<B> blockSupplier, BlockEntityType.BlockEntitySupplier<E> beSupplier) {

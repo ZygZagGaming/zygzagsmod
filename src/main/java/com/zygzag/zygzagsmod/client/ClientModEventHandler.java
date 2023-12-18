@@ -4,10 +4,7 @@ import com.zygzag.zygzagsmod.client.particle.EndSandParticle;
 import com.zygzag.zygzagsmod.client.particle.OverheatBeamParticle;
 import com.zygzag.zygzagsmod.client.particle.OverheatSphereParticle;
 import com.zygzag.zygzagsmod.client.particle.ShockwaveParticle;
-import com.zygzag.zygzagsmod.client.renderer.BlazeSentryRenderer;
-import com.zygzag.zygzagsmod.client.renderer.CustomBrushableBlockRenderer;
-import com.zygzag.zygzagsmod.client.renderer.HomingWitherSkullRenderer;
-import com.zygzag.zygzagsmod.client.renderer.IridiumGolemRenderer;
+import com.zygzag.zygzagsmod.client.renderer.*;
 import com.zygzag.zygzagsmod.common.registry.BlockItemEntityRegistry;
 import com.zygzag.zygzagsmod.common.registry.EntityTypeRegistry;
 import com.zygzag.zygzagsmod.common.registry.ParticleTypeRegistry;
@@ -35,6 +32,7 @@ public class ClientModEventHandler {
         event.registerEntityRenderer(EntityTypeRegistry.OVERHEAT_BEAM_AREA_EFFECT_CLOUD.get(), NoopRenderer::new);
         event.registerEntityRenderer(EntityTypeRegistry.SPHERE_AREA_EFFECT_CLOUD.get(), NoopRenderer::new);
         event.registerBlockEntityRenderer(BlockItemEntityRegistry.SUSPICIOUS_END_SAND.getBlockEntityType(), CustomBrushableBlockRenderer::new);
+        event.registerBlockEntityRenderer(BlockItemEntityRegistry.RED_NETHER_BRICK_CACHE.getBlockEntityType(), CacheRenderer::new);
     }
 
     @SubscribeEvent

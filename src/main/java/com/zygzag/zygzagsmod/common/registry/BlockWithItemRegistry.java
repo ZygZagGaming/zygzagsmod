@@ -1,13 +1,11 @@
 package com.zygzag.zygzagsmod.common.registry;
 
-import com.zygzag.zygzagsmod.common.block.EndSandBlock;
-import com.zygzag.zygzagsmod.common.block.EndStoneSwitchBlock;
-import com.zygzag.zygzagsmod.common.block.GlassSlabBlock;
-import com.zygzag.zygzagsmod.common.block.GlassStairBlock;
+import com.zygzag.zygzagsmod.common.block.*;
 import com.zygzag.zygzagsmod.common.registry.object.BlockWithItemSupplier;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.util.ColorRGBA;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
@@ -71,6 +69,12 @@ public class BlockWithItemRegistry {
     public static final BlockWithItemSupplier<Block, BlockItem> GIRDED_RED_NETHER_BRICKS = INSTANCE.register(
             "red_nether_brick_pillar",
             () -> new RotatedPillarBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.RED_NETHER_BRICKS).strength(3.0F, 40.0F))
+    );
+    public static final BlockWithItemSupplier<Block, BlockItem> CRUSHED_RED_NETHER_BRICKS = INSTANCE.register(
+            "crushed_red_nether_bricks",
+            () -> new CrushedRedNetherBricksBlock(
+                    BlockBehaviour.Properties.ofFullCopy(Blocks.RED_NETHER_BRICKS).strength(3.0F, 40.0F).sound(SoundType.GRAVEL)
+            )
     );
     public DeferredRegister<Block> blockRegister = DeferredRegister.create(BuiltInRegistries.BLOCK, MODID);
     public DeferredRegister<Item> itemRegister = DeferredRegister.create(BuiltInRegistries.ITEM, MODID);

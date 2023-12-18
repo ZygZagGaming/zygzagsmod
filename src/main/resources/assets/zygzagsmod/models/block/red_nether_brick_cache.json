@@ -1,0 +1,35 @@
+{
+	"credit": "Made with Blockbench",
+	"textures": {
+		"0": "block/red_nether_bricks",
+		"1": "zygzagsmod:block/red_nether_brick_cache_inside",
+		"particle": "block/red_nether_bricks"
+	},
+	"elements": [
+		{
+			"from": [2, 0, 2],
+			"to": [14, 8, 14],
+			"faces": {
+				"north": {"uv": [2, 8, 14, 16], "texture": "#0"},
+				"east": {"uv": [2, 8, 14, 16], "texture": "#0"},
+				"south": {"uv": [2, 8, 14, 16], "texture": "#0"},
+				"west": {"uv": [2, 8, 14, 16], "texture": "#0"},
+				"up": {"uv": [2, 2, 14, 14], "texture": "#1"},
+				"down": {"uv": [2, 2, 14, 14], "texture": "#0"}
+			}
+		},
+		{
+			"from": [2, 8, 2],
+			"to": [14, 12, 14],
+			"rotation": {"angle": 0, "axis": "x", "origin": [8, 8, 2]},
+			"faces": {
+				"north": {"uv": [2, 4, 14, 8], "texture": "#0"},
+				"east": {"uv": [2, 4, 14, 8], "texture": "#0"},
+				"south": {"uv": [2, 4, 14, 8], "texture": "#0"},
+				"west": {"uv": [2, 4, 14, 8], "texture": "#0"},
+				"up": {"uv": [2, 2, 14, 14], "texture": "#0"},
+				"down": {"uv": [2, 2, 14, 14], "texture": "#1"}
+			}
+		}
+	]
+}

@@ -1,0 +1,21 @@
+{
+  "variants": {
+    "": [
+      {
+        "model": "zygzagsmod:block/crushed_red_nether_bricks"
+      },
+      {
+        "model": "zygzagsmod:block/crushed_red_nether_bricks",
+        "y": 90
+      },
+      {
+        "model": "zygzagsmod:block/crushed_red_nether_bricks",
+        "y": 180
+      },
+      {
+        "model": "zygzagsmod:block/crushed_red_nether_bricks",
+        "y": 270
+      }
+    ]
+  }
+}
