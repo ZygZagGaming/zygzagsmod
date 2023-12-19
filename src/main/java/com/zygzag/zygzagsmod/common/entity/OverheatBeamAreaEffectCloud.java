@@ -1,6 +1,5 @@
 package com.zygzag.zygzagsmod.common.entity;
 
-import com.zygzag.zygzagsmod.common.registry.BlockItemEntityRegistry;
 import com.zygzag.zygzagsmod.common.registry.EntityTypeRegistry;
 import com.zygzag.zygzagsmod.common.registry.MobEffectRegistry;
 import com.zygzag.zygzagsmod.common.registry.ParticleTypeRegistry;
@@ -26,6 +25,7 @@ public class OverheatBeamAreaEffectCloud extends AbstractBeamAreaEffectCloud {
     public OverheatBeamAreaEffectCloud(EntityType<? extends OverheatBeamAreaEffectCloud> type, Level world, BlockPos origin) {
         super(type, world);
         this.origin = origin;
+        this.setPos(origin.getX() + 0.5, origin.getY() + 0.5, origin.getZ() + 0.5);
     }
     public OverheatBeamAreaEffectCloud(EntityType<? extends OverheatBeamAreaEffectCloud> type, Level world) {
         this(type, world, BlockPos.ZERO);
@@ -58,14 +58,26 @@ public class OverheatBeamAreaEffectCloud extends AbstractBeamAreaEffectCloud {
     public static void spawn(Level world, BlockPos pos, Direction direction) {
         OverheatBeamAreaEffectCloud cloud = new OverheatBeamAreaEffectCloud(world, pos);
         cloud.setDirection(direction);
-        cloud.setPos(pos.getX() + 0.5 + direction.getNormal().getX(), pos.getY() + 0.5 + direction.getNormal().getY(), pos.getZ() + 0.5 + direction.getNormal().getZ());
+        cloud.setPos(pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5);
         world.addFreshEntity(cloud);
     }
 
     @Override
     public void tick() {
         super.tick();
-        if (!level().isClientSide && !level().getBlockState(origin).is(BlockItemEntityRegistry.MAGMATIC_NETHER_BRICKS.getBlock())) kill();
+        //if (!level().isClientSide && !level().getBlockState(origin).is(BlockItemEntityRegistry.MAGMATIC_NETHER_BRICKS.getBlock())) kill();
+    }
+
+    @Override
+    public void kill() {
+        System.out.println("killed");
+        super.kill();
+    }
+
+    @Override
+    public void setPos(double p_20210_, double p_20211_, double p_20212_) {
+        System.out.println("pos set to " + p_20210_ + ", " + p_20211_ + ", " + p_20212_ + " on " + (level().isClientSide ? "client" : "server"));
+        super.setPos(p_20210_, p_20211_, p_20212_);
     }
 
     @Override

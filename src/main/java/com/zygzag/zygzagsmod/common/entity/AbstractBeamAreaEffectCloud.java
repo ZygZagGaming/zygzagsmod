@@ -59,32 +59,29 @@ public abstract class AbstractBeamAreaEffectCloud extends AreaEffectCloud {
 
     public void tick() {
         baseTick();
-        if (level().getBlockState(blockPosition()).isCollisionShapeFullBlock(level(), blockPosition())) discard();
+        if (level().isClientSide) addParticles();
         else {
-            if (level().isClientSide) addParticles();
-            else {
-                if (tickCount >= getDurationInTicks()) {
-                    discard();
-                    return;
-                }
+            if (tickCount >= getDurationInTicks()) {
+                discard();
+                return;
+            }
 
-                if (tickCount % 5 == 0) {
-                    victims.entrySet().removeIf((entry) -> tickCount >= entry.getValue());
+            if (tickCount % 5 == 0) {
+                victims.entrySet().removeIf((entry) -> tickCount >= entry.getValue());
 
-                    List<LivingEntity> entitiesInBoundingBox = level().getEntitiesOfClass(LivingEntity.class, getBoundingBox());
-                    if (!entitiesInBoundingBox.isEmpty()) {
-                        for (LivingEntity living : entitiesInBoundingBox) {
-                            if (!victims.containsKey(living) && living.isAffectedByPotions()) {
-                                victims.put(living, tickCount + reHitCooldown());
-                                afflict(living);
-                            }
+                List<LivingEntity> entitiesInBoundingBox = level().getEntitiesOfClass(LivingEntity.class, getBoundingBox());
+                if (!entitiesInBoundingBox.isEmpty()) {
+                    for (LivingEntity living : entitiesInBoundingBox) {
+                        if (!victims.containsKey(living) && living.isAffectedByPotions()) {
+                            victims.put(living, tickCount + reHitCooldown());
+                            afflict(living);
                         }
                     }
+                }
 
-                    List<ItemEntity> itemEntitiesInBoundingBox = level().getEntitiesOfClass(ItemEntity.class, getBoundingBox());
-                    if (!itemEntitiesInBoundingBox.isEmpty()) {
-                        for (ItemEntity item : itemEntitiesInBoundingBox) afflictItem(item);
-                    }
+                List<ItemEntity> itemEntitiesInBoundingBox = level().getEntitiesOfClass(ItemEntity.class, getBoundingBox());
+                if (!itemEntitiesInBoundingBox.isEmpty()) {
+                    for (ItemEntity item : itemEntitiesInBoundingBox) afflictItem(item);
                 }
             }
         }
@@ -102,12 +99,14 @@ public abstract class AbstractBeamAreaEffectCloud extends AreaEffectCloud {
     protected AABB makeBoundingBox() {
         double minX = -0.5, minY = -0.5, minZ = -0.5, maxX = 0.5, maxY = 0.5, maxZ = 0.5;
         Direction direction = getDirection();
-        if (direction == Direction.UP) maxY += getBeamHeight() - 1;
-        if (direction == Direction.DOWN) minY -= getBeamHeight() - 1;
-        if (direction == Direction.SOUTH) maxZ += getBeamHeight() - 1;
-        if (direction == Direction.NORTH) maxZ -= getBeamHeight() - 1;
-        if (direction == Direction.EAST) maxX += getBeamHeight() - 1;
-        if (direction == Direction.WEST) maxX -= getBeamHeight() - 1;
+        switch (direction) {
+            case UP -> maxY += getBeamHeight() - 1;
+            case DOWN -> minY -= getBeamHeight() - 1;
+            case SOUTH -> maxZ += getBeamHeight() - 1;
+            case NORTH -> maxZ -= getBeamHeight() - 1;
+            case EAST -> maxX += getBeamHeight() - 1;
+            case WEST -> maxX -= getBeamHeight() - 1;
+        }
         return new AABB(minX, minY, minZ, maxX, maxY, maxZ).move(position());
     }
 
