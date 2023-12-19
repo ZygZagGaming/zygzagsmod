@@ -10,6 +10,7 @@ import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.world.entity.*;
+import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.AABB;
 
@@ -79,10 +80,17 @@ public abstract class AbstractBeamAreaEffectCloud extends AreaEffectCloud {
                             }
                         }
                     }
+
+                    List<ItemEntity> itemEntitiesInBoundingBox = level().getEntitiesOfClass(ItemEntity.class, getBoundingBox());
+                    if (!itemEntitiesInBoundingBox.isEmpty()) {
+                        for (ItemEntity item : itemEntitiesInBoundingBox) afflictItem(item);
+                    }
                 }
             }
         }
     }
+
+    public void afflictItem(ItemEntity item) { }
 
     public abstract void afflict(LivingEntity living);
 

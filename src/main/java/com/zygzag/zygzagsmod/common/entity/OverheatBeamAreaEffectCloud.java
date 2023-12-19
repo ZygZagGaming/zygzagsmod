@@ -11,6 +11,7 @@ import net.minecraft.core.particles.ParticleOptions;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.level.Level;
 
 import javax.annotation.ParametersAreNonnullByDefault;
@@ -65,5 +66,10 @@ public class OverheatBeamAreaEffectCloud extends AbstractBeamAreaEffectCloud {
     public void tick() {
         super.tick();
         if (!level().isClientSide && !level().getBlockState(origin).is(BlockItemEntityRegistry.MAGMATIC_NETHER_BRICKS.getBlock())) kill();
+    }
+
+    @Override
+    public void afflictItem(ItemEntity item) {
+        item.kill();
     }
 }
