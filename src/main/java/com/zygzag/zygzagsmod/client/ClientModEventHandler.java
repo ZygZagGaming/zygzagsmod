@@ -8,6 +8,7 @@ import com.zygzag.zygzagsmod.client.renderer.*;
 import com.zygzag.zygzagsmod.common.registry.BlockItemEntityRegistry;
 import com.zygzag.zygzagsmod.common.registry.EntityTypeRegistry;
 import com.zygzag.zygzagsmod.common.registry.ParticleTypeRegistry;
+import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
 import net.minecraft.client.renderer.entity.NoopRenderer;
 import net.minecraft.client.renderer.entity.ThrownItemRenderer;
 import net.minecraft.client.renderer.entity.WitherSkeletonRenderer;
@@ -18,6 +19,7 @@ import net.neoforged.neoforge.client.event.EntityRenderersEvent;
 import net.neoforged.neoforge.client.event.RegisterParticleProvidersEvent;
 
 import static com.zygzag.zygzagsmod.common.Main.MODID;
+import static net.neoforged.neoforge.client.ClientHooks.registerLayerDefinition;
 
 @Mod.EventBusSubscriber(modid = MODID, bus = Mod.EventBusSubscriber.Bus.MOD, value = Dist.CLIENT)
 public class ClientModEventHandler {
