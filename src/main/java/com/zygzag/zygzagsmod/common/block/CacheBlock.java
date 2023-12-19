@@ -2,13 +2,13 @@ package com.zygzag.zygzagsmod.common.block;
 
 import com.mojang.serialization.MapCodec;
 import com.zygzag.zygzagsmod.common.block.entity.CacheBlockEntity;
-import com.zygzag.zygzagsmod.common.registry.BlockItemEntityRegistry;
 import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.world.Containers;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
+import net.minecraft.world.MenuProvider;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.monster.piglin.PiglinAi;
 import net.minecraft.world.entity.player.Player;
@@ -20,9 +20,6 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.entity.BlockEntity;
-import net.minecraft.world.level.block.entity.BlockEntityTicker;
-import net.minecraft.world.level.block.entity.BlockEntityType;
-import net.minecraft.world.level.block.entity.ChestBlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
@@ -42,6 +39,7 @@ import javax.annotation.ParametersAreNonnullByDefault;
 public class CacheBlock extends BaseEntityBlock implements SimpleWaterloggedBlock {
     public static final BooleanProperty WATERLOGGED = BlockStateProperties.WATERLOGGED;
     public static final DirectionProperty FACING = BlockStateProperties.HORIZONTAL_FACING;
+    public static final BooleanProperty OPEN = BlockStateProperties.OPEN;
     public static final MapCodec<CacheBlock> CODEC = simpleCodec(CacheBlock::new);
     public static final VoxelShape SHAPE = Block.box(2, 0, 2, 14, 12, 14);
 
@@ -52,7 +50,7 @@ public class CacheBlock extends BaseEntityBlock implements SimpleWaterloggedBloc
 
     public CacheBlock(Properties properties) {
         super(properties);
-        this.registerDefaultState(this.stateDefinition.any().setValue(FACING, Direction.NORTH).setValue(WATERLOGGED, false));
+        this.registerDefaultState(this.stateDefinition.any().setValue(FACING, Direction.NORTH).setValue(WATERLOGGED, false).setValue(OPEN, false));
     }
 
     @Override
@@ -125,13 +123,13 @@ public class CacheBlock extends BaseEntityBlock implements SimpleWaterloggedBloc
 
     @Override
     protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
-        builder.add(FACING, WATERLOGGED);
+        builder.add(FACING, WATERLOGGED, OPEN);
     }
 
     @Override
     public BlockState getStateForPlacement(BlockPlaceContext context) {
         FluidState fluidState = context.getLevel().getFluidState(context.getClickedPos());
-        return defaultBlockState().setValue(FACING, context.getNearestLookingDirection().getOpposite()).setValue(WATERLOGGED, fluidState.is(Fluids.WATER));
+        return defaultBlockState().setValue(FACING, context.getHorizontalDirection().getOpposite()).setValue(WATERLOGGED, fluidState.is(Fluids.WATER));
     }
 
     @Override
@@ -152,7 +150,9 @@ public class CacheBlock extends BaseEntityBlock implements SimpleWaterloggedBloc
 
     @Nullable
     @Override
-    public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level world, BlockState state, BlockEntityType<T> type) {
-        return world.isClientSide ? createTickerHelper(type, BlockItemEntityRegistry.RED_NETHER_BRICK_CACHE.getBlockEntityType(), CacheBlockEntity::lidAnimateTick) : null;
+    public MenuProvider getMenuProvider(BlockState state, Level world, BlockPos pos) {
+        BlockEntity blockEntity = world.getBlockEntity(pos);
+        for (Direction dir : Direction.values()) if (dir.getAxis() != Direction.Axis.Y && !world.getBlockState(pos.relative(dir)).isAir()) return null;
+        return blockEntity instanceof MenuProvider provider ? provider : null;
     }
 }

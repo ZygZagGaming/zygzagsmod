@@ -1,0 +1,228 @@
+{
+  "format_version": "1.8.0",
+  "animations": {
+    "animation.red_nether_brick_cache.open_left": {
+      "loop": "hold_on_last_frame",
+      "animation_length": 0.48,
+      "bones": {
+        "lid": {
+          "rotation": {
+            "0.0": {
+              "vector": [0, 0, 0]
+            },
+            "0.48": {
+              "vector": [0, 27.5, 0],
+              "easing": "easeOutQuart"
+            }
+          },
+          "position": {
+            "0.0": {
+              "vector": [0, 0, 0]
+            },
+            "0.48": {
+              "vector": [-9, 0, 3],
+              "easing": "easeOutQuart"
+            }
+          }
+        }
+      }
+    },
+    "animation.red_nether_brick_cache.close_left": {
+      "loop": "hold_on_last_frame",
+      "animation_length": 0.48,
+      "bones": {
+        "lid": {
+          "rotation": {
+            "0.0": {
+              "vector": [0, 27.5, 0]
+            },
+            "0.48": {
+              "vector": [0, 0, 0],
+              "easing": "easeOutQuart"
+            }
+          },
+          "position": {
+            "0.0": {
+              "vector": [-9, 0, 3]
+            },
+            "0.48": {
+              "vector": [0, 0, 0],
+              "easing": "easeOutQuart"
+            }
+          }
+        }
+      }
+    },
+    "animation.red_nether_brick_cache.open_right": {
+      "loop": "hold_on_last_frame",
+      "animation_length": 0.48,
+      "bones": {
+        "lid": {
+          "rotation": {
+            "0.0": {
+              "vector": [0, 0, 0]
+            },
+            "0.48": {
+              "vector": [0, -27.5, 0],
+              "easing": "easeOutQuart"
+            }
+          },
+          "position": {
+            "0.0": {
+              "vector": [0, 0, 0]
+            },
+            "0.48": {
+              "vector": [9, 0, 3],
+              "easing": "easeOutQuart"
+            }
+          }
+        }
+      }
+    },
+    "animation.red_nether_brick_cache.close_right": {
+      "loop": "hold_on_last_frame",
+      "animation_length": 0.48,
+      "bones": {
+        "lid": {
+          "rotation": {
+            "0.0": {
+              "vector": [0, -27.5, 0]
+            },
+            "0.48": {
+              "vector": [0, 0, 0],
+              "easing": "easeOutQuart"
+            }
+          },
+          "position": {
+            "0.0": {
+              "vector": [9, 0, 3]
+            },
+            "0.48": {
+              "vector": [0, 0, 0],
+              "easing": "easeOutQuart"
+            }
+          }
+        }
+      }
+    },
+    "animation.red_nether_brick_cache.open_back": {
+      "loop": "hold_on_last_frame",
+      "animation_length": 0.48,
+      "bones": {
+        "lid": {
+          "rotation": {
+            "0.0": {
+              "vector": [0, 0, 0]
+            },
+            "0.48": {
+              "vector": [0, -27.5, 0],
+              "easing": "easeOutQuart"
+            }
+          },
+          "position": {
+            "0.0": {
+              "vector": [0, 0, 0]
+            },
+            "0.48": {
+              "vector": [-3, 0, 9],
+              "easing": "easeOutQuart"
+            }
+          }
+        }
+      }
+    },
+    "animation.red_nether_brick_cache.close_back": {
+      "loop": "hold_on_last_frame",
+      "animation_length": 0.48,
+      "bones": {
+        "lid": {
+          "rotation": {
+            "0.0": {
+              "vector": [0, -27.5, 0]
+            },
+            "0.48": {
+              "vector": [0, 0, 0],
+              "easing": "easeOutQuart"
+            }
+          },
+          "position": {
+            "0.0": {
+              "vector": [-3, 0, 9]
+            },
+            "0.48": {
+              "vector": [0, 0, 0],
+              "easing": "easeOutQuart"
+            }
+          }
+        }
+      }
+    },
+    "animation.red_nether_brick_cache.open_front": {
+      "loop": "hold_on_last_frame",
+      "animation_length": 0.48,
+      "bones": {
+        "lid": {
+          "rotation": {
+            "0.0": {
+              "vector": [0, 0, 0]
+            },
+            "0.12": {
+              "vector": [0, 0, 0]
+            },
+            "0.48": {
+              "vector": [45, 0, 0],
+              "easing": "easeOutQuart"
+            }
+          },
+          "position": {
+            "0.0": {
+              "vector": [0, 0, 0]
+            },
+            "0.12": {
+              "vector": [0, 0, -6]
+            },
+            "0.48": {
+              "vector": [0, -3, -9],
+              "easing": "easeOutQuart"
+            }
+          }
+        }
+      }
+    },
+    "animation.red_nether_brick_cache.close_front": {
+      "loop": "hold_on_last_frame",
+      "animation_length": 0.48,
+      "bones": {
+        "lid": {
+          "rotation": {
+            "0.0": {
+              "vector": [45, 0, 0]
+            },
+            "0.36": {
+              "vector": [0, 0, 0],
+              "easing": "easeInQuart"
+            },
+            "0.48": {
+              "vector": [0, 0, 0],
+              "easing": "easeOutQuart"
+            }
+          },
+          "position": {
+            "0.0": {
+              "vector": [0, -3, -9]
+            },
+            "0.36": {
+              "vector": [0, 0, -6],
+              "easing": "linear"
+            },
+            "0.48": {
+              "vector": [0, 0, 0],
+              "easing": "easeOutQuart"
+            }
+          }
+        }
+      }
+    }
+  },
+  "geckolib_format_version": 2
+}
