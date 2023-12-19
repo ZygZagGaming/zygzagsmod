@@ -1,6 +1,8 @@
 package com.zygzag.zygzagsmod.common.registry;
 
 import com.zygzag.zygzagsmod.common.entity.animation.TransitionAnimation;
+import com.zygzag.zygzagsmod.common.registry.base.AkomiRegistry;
+import com.zygzag.zygzagsmod.common.registry.base.CustomAkomiRegistry;
 import net.minecraft.core.Registry;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
@@ -12,12 +14,12 @@ import java.util.function.Supplier;
 
 import static com.zygzag.zygzagsmod.common.Main.MODID;
 
-public class TransitionAnimationRegistry extends AkomiRegistry<TransitionAnimation> {
-    public static final ResourceKey<Registry<TransitionAnimation>> TRANSITION_ANIMATION_REGISTRY_KEY = ResourceKey.createRegistryKey(new ResourceLocation(MODID, "transition_animation"));
-    public static final TransitionAnimationRegistry INSTANCE = new TransitionAnimationRegistry(DeferredRegister.create(TRANSITION_ANIMATION_REGISTRY_KEY, MODID));
+public class TransitionAnimationRegistry extends CustomAkomiRegistry<TransitionAnimation> {
+    public static final TransitionAnimationRegistry INSTANCE = new TransitionAnimationRegistry("transition_animation");
+    public static final ResourceKey<? extends Registry<TransitionAnimation>> TRANSITION_ANIMATION_REGISTRY_KEY = INSTANCE.registryKey();
 
-    public TransitionAnimationRegistry(DeferredRegister<TransitionAnimation> register) {
-        super(register);
+    public TransitionAnimationRegistry(String registryPath) {
+        super(registryPath);
     }
 
     @Override

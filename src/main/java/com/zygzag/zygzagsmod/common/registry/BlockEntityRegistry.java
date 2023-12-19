@@ -1,6 +1,7 @@
 package com.zygzag.zygzagsmod.common.registry;
 
 import com.zygzag.zygzagsmod.common.block.entity.StructurePlacerBlockEntity;
+import com.zygzag.zygzagsmod.common.registry.base.AkomiRegistry;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.neoforged.neoforge.registries.DeferredRegister;

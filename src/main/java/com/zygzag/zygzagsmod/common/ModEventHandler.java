@@ -6,9 +6,7 @@ import com.zygzag.zygzagsmod.common.datagen.AkomiRecipeProvider;
 import com.zygzag.zygzagsmod.common.entity.BlazeSentry;
 import com.zygzag.zygzagsmod.common.entity.IridiumGolem;
 import com.zygzag.zygzagsmod.common.item.iridium.ISocketable;
-import com.zygzag.zygzagsmod.common.registry.AttributeRegistry;
-import com.zygzag.zygzagsmod.common.registry.EntityTypeRegistry;
-import com.zygzag.zygzagsmod.common.registry.IridiumGearRegistry;
+import com.zygzag.zygzagsmod.common.registry.*;
 import net.minecraft.data.DataProvider;
 import net.minecraft.data.recipes.RecipeProvider;
 import net.minecraft.world.entity.monster.AbstractSkeleton;
@@ -21,6 +19,7 @@ import net.neoforged.neoforge.client.model.generators.ItemModelProvider;
 import net.neoforged.neoforge.data.event.GatherDataEvent;
 import net.neoforged.neoforge.event.entity.EntityAttributeCreationEvent;
 import net.neoforged.neoforge.event.entity.EntityAttributeModificationEvent;
+import net.neoforged.neoforge.registries.NewRegistryEvent;
 
 import java.util.function.Supplier;
 
@@ -63,5 +62,12 @@ public class ModEventHandler {
                 true,
                 (DataProvider.Factory<BlockStateProvider>) (output) -> new AkomiBlockstateProvider(output, event.getExistingFileHelper())
         );
+    }
+
+    @SubscribeEvent
+    public static void registerRegistries(final NewRegistryEvent event) {
+        System.out.println("new registry");
+//        event.register(AnimationRegistry.registry());
+//        event.register(TransitionAnimationRegistry.registry());
     }
 }

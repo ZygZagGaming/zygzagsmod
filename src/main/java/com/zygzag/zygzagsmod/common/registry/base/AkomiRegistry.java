@@ -1,6 +1,7 @@
-package com.zygzag.zygzagsmod.common.registry;
+package com.zygzag.zygzagsmod.common.registry.base;
 
 
+import com.zygzag.zygzagsmod.common.registry.*;
 import net.minecraft.core.Registry;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.neoforge.registries.DeferredRegister;
@@ -34,8 +35,7 @@ public class AkomiRegistry<T> {
             TransitionAnimationRegistry.INSTANCE::registerTo,
             AttributeRegistry.INSTANCE::registerTo
     );
-    final DeferredRegister<T> register;
-    Registry<T> backingRegistry;
+    public final DeferredRegister<T> register;
 
     public AkomiRegistry(DeferredRegister<T> register) {
         this.register = register;
@@ -53,10 +53,5 @@ public class AkomiRegistry<T> {
 
     public <P extends T> Supplier<P> register(String id, Supplier<P> supplier) {
         return register.register(id, supplier);
-    }
-
-    public Registry<T> backingRegistry() {
-        if (backingRegistry == null) backingRegistry = register.makeRegistry(builder -> {});
-        return backingRegistry;
     }
 }

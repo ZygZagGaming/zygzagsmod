@@ -1,6 +1,7 @@
 package com.zygzag.zygzagsmod.common.registry;
 
 import com.zygzag.zygzagsmod.common.entity.*;
+import com.zygzag.zygzagsmod.common.registry.base.AkomiRegistry;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.MobCategory;

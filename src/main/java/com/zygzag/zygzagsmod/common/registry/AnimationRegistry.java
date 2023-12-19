@@ -1,23 +1,20 @@
 package com.zygzag.zygzagsmod.common.registry;
 
 import com.zygzag.zygzagsmod.common.entity.animation.Animation;
+import com.zygzag.zygzagsmod.common.registry.base.CustomAkomiRegistry;
 import net.minecraft.core.Registry;
 import net.minecraft.resources.ResourceKey;
-import net.minecraft.resources.ResourceLocation;
 import net.neoforged.bus.api.IEventBus;
-import net.neoforged.neoforge.registries.DeferredRegister;
 import software.bernie.geckolib.core.animation.RawAnimation;
 
 import java.util.function.Supplier;
 
-import static com.zygzag.zygzagsmod.common.Main.MODID;
+public class AnimationRegistry extends CustomAkomiRegistry<Animation> {
+    public static final AnimationRegistry INSTANCE = new AnimationRegistry("animation");
+    public static final ResourceKey<? extends Registry<Animation>> ANIMATION_REGISTRY_KEY = INSTANCE.registryKey();
 
-public class AnimationRegistry extends AkomiRegistry<Animation> {
-    public static final ResourceKey<Registry<Animation>> ANIMATION_REGISTRY_KEY = ResourceKey.createRegistryKey(new ResourceLocation(MODID, "animation"));
-    public static final AnimationRegistry INSTANCE = new AnimationRegistry(DeferredRegister.create(ANIMATION_REGISTRY_KEY, MODID));
-
-    public AnimationRegistry(DeferredRegister<Animation> register) {
-        super(register);
+    public AnimationRegistry(String registryPath) {
+        super(registryPath);
     }
 
     @Override

@@ -1,5 +1,6 @@
 package com.zygzag.zygzagsmod.common.registry;
 
+import com.zygzag.zygzagsmod.common.registry.base.AkomiRegistry;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.CreativeModeTab;
@@ -21,7 +22,7 @@ public class CreativeModeTabRegistry extends AkomiRegistry<CreativeModeTab> {
                 output.acceptAll(IridiumGearRegistry.INSTANCE.register.getEntries().stream().map((it) -> it.get().getDefaultInstance()).collect(Collectors.toList()));
                 output.acceptAll(BlockWithItemRegistry.INSTANCE.itemRegister.getEntries().stream().map((it) -> it.get().getDefaultInstance()).collect(Collectors.toList()));
                 output.acceptAll(BlockItemEntityRegistry.INSTANCE.itemRegister.getEntries().stream().map((it) -> it.get().getDefaultInstance()).collect(Collectors.toList()));
-            })
+            }) //TODO: organize the tab by item type rather than registry
             .title(Component.translatable("zygzagsmod.tab"))
             .build());
 

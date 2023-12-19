@@ -5,6 +5,7 @@ import com.mojang.serialization.Codec;
 import com.zygzag.zygzagsmod.common.loot.AutosmeltModifier;
 import com.zygzag.zygzagsmod.common.loot.ExecutionerModifier;
 import com.zygzag.zygzagsmod.common.loot.WitherPickNoDropModifier;
+import com.zygzag.zygzagsmod.common.registry.base.AkomiRegistry;
 import net.neoforged.neoforge.common.loot.IGlobalLootModifier;
 import net.neoforged.neoforge.registries.DeferredRegister;
 import net.neoforged.neoforge.registries.NeoForgeRegistries;

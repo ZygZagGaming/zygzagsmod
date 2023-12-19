@@ -1,6 +1,7 @@
 package com.zygzag.zygzagsmod.common.registry;
 
 
+import com.zygzag.zygzagsmod.common.registry.base.AkomiRegistry;
 import com.zygzag.zygzagsmod.common.structure.CairnArrangementStructure;
 import com.zygzag.zygzagsmod.common.structure.IridiumEndIslandStructure;
 import net.minecraft.core.registries.BuiltInRegistries;

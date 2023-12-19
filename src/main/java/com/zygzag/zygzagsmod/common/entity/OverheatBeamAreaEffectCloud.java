@@ -70,6 +70,6 @@ public class OverheatBeamAreaEffectCloud extends AbstractBeamAreaEffectCloud {
 
     @Override
     public void afflictItem(ItemEntity item) {
-        item.kill();
+        if (!item.fireImmune()) item.kill();
     }
 }

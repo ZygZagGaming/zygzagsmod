@@ -8,6 +8,7 @@ import com.zygzag.zygzagsmod.common.item.iridium.tool.partial.PartialIridiumAxeI
 import com.zygzag.zygzagsmod.common.item.iridium.tool.partial.PartialIridiumHoeItem;
 import com.zygzag.zygzagsmod.common.item.iridium.tool.partial.PartialIridiumPickaxeItem;
 import com.zygzag.zygzagsmod.common.item.iridium.tool.partial.PartialIridiumSwordItem;
+import com.zygzag.zygzagsmod.common.registry.base.AkomiRegistry;
 import com.zygzag.zygzagsmod.common.tier.IridiumArmorMaterial;
 import com.zygzag.zygzagsmod.common.tier.IridiumToolTier;
 import net.minecraft.core.registries.Registries;
