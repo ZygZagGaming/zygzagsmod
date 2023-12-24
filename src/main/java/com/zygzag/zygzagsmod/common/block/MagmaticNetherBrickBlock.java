@@ -1,5 +1,6 @@
 package com.zygzag.zygzagsmod.common.block;
 
+import com.zygzag.zygzagsmod.common.Config;
 import com.zygzag.zygzagsmod.common.block.entity.MagmaticNetherBrickBlockEntity;
 import com.zygzag.zygzagsmod.common.entity.OverheatBeamAreaEffectCloud;
 import com.zygzag.zygzagsmod.common.entity.SphereAreaEffectCloud;
@@ -58,7 +59,7 @@ public class MagmaticNetherBrickBlock extends Block implements EntityBlock {
 
     @Override
     public void attack(BlockState state, Level world, BlockPos pos, Player player) {
-        chargeOrRelease(state, world, pos, 3);
+        chargeOrRelease(state, world, pos, Config.magmaticNetherBrickHitCooldown);
     }
 
     public void chargeOrRelease(BlockState state, Level world, BlockPos pos, int cooldown) {
@@ -93,12 +94,12 @@ public class MagmaticNetherBrickBlock extends Block implements EntityBlock {
 
     @Override
     public void onProjectileHit(Level world, BlockState state, BlockHitResult result, Projectile projectile) {
-        chargeOrRelease(state, world, result.getBlockPos(), 2);
+        chargeOrRelease(state, world, result.getBlockPos(), Config.magmaticNetherBrickProjectileCooldown);
     }
 
     @Override
     public void stepOn(Level world, BlockPos pos, BlockState state, Entity stander) {
-        chargeOrRelease(state, world, pos, 15);
+        chargeOrRelease(state, world, pos, Config.magmaticNetherBrickStepCooldown);
 
         super.stepOn(world, pos, state, stander);
     }

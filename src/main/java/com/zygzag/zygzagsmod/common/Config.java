@@ -4,6 +4,7 @@ import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.Mod;
 import net.neoforged.fml.event.config.ModConfigEvent;
 import net.neoforged.neoforge.common.ModConfigSpec;
+import net.neoforged.neoforge.common.NeoForgeConfig;
 
 @Mod.EventBusSubscriber(modid = Main.MODID, bus = Mod.EventBusSubscriber.Bus.MOD)
 public class Config {
@@ -113,6 +114,16 @@ public class Config {
     private static final ModConfigSpec.IntValue MISC_ORE_COLOR = BUILDER
             .comment("Color for non-vanilla ores during Sight")
             .defineInRange("miscOreColor", 0x888888, 0, 0xffffff);
+
+    private static final ModConfigSpec.IntValue MAGMATIC_NETHER_BRICK_STEP_COOLDOWN = BUILDER
+            .comment("Cooldown for Magmatic Nether Bricks being stepped on")
+            .defineInRange("mnbStepCooldown", 10, 0, 100);
+    private static final ModConfigSpec.IntValue MAGMATIC_NETHER_BRICK_PROJECTILE_COOLDOWN = BUILDER
+            .comment("Cooldown for Magmatic Nether Bricks being hit with a projectile")
+            .defineInRange("mnbProjCooldown", 2, 0, 100);
+    private static final ModConfigSpec.IntValue MAGMATIC_NETHER_BRICK_HIT_COOLDOWN = BUILDER
+            .comment("Cooldown for Magmatic Nether Bricks being punched")
+            .defineInRange("mnbHitCooldown", 3, 0, 100);
     static final ModConfigSpec SPEC = BUILDER.build();
     public static int amethystPickaxeCooldown,
             emeraldAxeCooldown,
@@ -138,7 +149,10 @@ public class Config {
             emeraldScepterCooldown,
             skullScepterCooldown,
             witherSkullScepterCooldown,
-            amethystScepterCooldown;
+            amethystScepterCooldown,
+            magmaticNetherBrickStepCooldown,
+            magmaticNetherBrickProjectileCooldown,
+            magmaticNetherBrickHitCooldown;
     public static double diamondShovelDurabilityMultiplier,
             amethystAxeDamageBonus,
             amethystSwordDamageBonus,
@@ -188,5 +202,8 @@ public class Config {
         skullScepterCooldown = SKULL_SCEPTER_COOLDOWN.get();
         witherSkullScepterCooldown = WITHER_SKULL_SCEPTER_COOLDOWN.get();
         amethystScepterCooldown = AMETHYST_SCEPTER_COOLDOWN.get();
+        magmaticNetherBrickStepCooldown = MAGMATIC_NETHER_BRICK_STEP_COOLDOWN.get();
+        magmaticNetherBrickProjectileCooldown = MAGMATIC_NETHER_BRICK_PROJECTILE_COOLDOWN.get();
+        magmaticNetherBrickHitCooldown = MAGMATIC_NETHER_BRICK_HIT_COOLDOWN.get();
     }
 }
