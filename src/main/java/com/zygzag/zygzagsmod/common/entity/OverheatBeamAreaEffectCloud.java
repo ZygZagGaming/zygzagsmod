@@ -69,18 +69,6 @@ public class OverheatBeamAreaEffectCloud extends AbstractBeamAreaEffectCloud {
     }
 
     @Override
-    public void kill() {
-        System.out.println("killed");
-        super.kill();
-    }
-
-    @Override
-    public void setPos(double p_20210_, double p_20211_, double p_20212_) {
-        System.out.println("pos set to " + p_20210_ + ", " + p_20211_ + ", " + p_20212_ + " on " + (level().isClientSide ? "client" : "server"));
-        super.setPos(p_20210_, p_20211_, p_20212_);
-    }
-
-    @Override
     public void afflictItem(ItemEntity item) {
         if (!item.fireImmune()) item.kill();
     }
