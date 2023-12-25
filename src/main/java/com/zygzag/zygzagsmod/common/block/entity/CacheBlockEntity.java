@@ -173,7 +173,7 @@ public class CacheBlockEntity extends RandomizableContainerBlockEntity implement
             for (int i = 0; i < 4; i++) {
                 int rotDegrees = ROTATION_CHECK_ORDER[i];
                 Direction directionToCheck = Direction.fromYRot(facingDirection.toYRot() + rotDegrees);
-                if (level != null && !level.getBlockState(worldPosition.relative(directionToCheck)).isAir()) continue;
+                if (level != null && !level.getBlockState(worldPosition.relative(directionToCheck)).getCollisionShape(level, getBlockPos()).isEmpty()) continue;
                 triggerAnim(controller.getName(), animPool[i]);
                 break;
             }
