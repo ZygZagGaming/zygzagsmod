@@ -2,6 +2,8 @@ package com.zygzag.zygzagsmod.common.block.entity;
 
 import com.zygzag.zygzagsmod.common.block.CacheBlock;
 import com.zygzag.zygzagsmod.common.registry.BlockItemEntityRegistry;
+import com.zygzag.zygzagsmod.common.registry.SoundEventRegistry;
+import com.zygzag.zygzagsmod.common.util.GeneralUtil;
 import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -9,7 +11,6 @@ import net.minecraft.core.NonNullList;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.sounds.SoundEvent;
-import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.ContainerHelper;
 import net.minecraft.world.entity.player.Inventory;
@@ -22,6 +23,9 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.ContainerOpenersCounter;
 import net.minecraft.world.level.block.entity.RandomizableContainerBlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.phys.AABB;
+import net.minecraft.world.phys.Vec3;
+import net.minecraft.world.phys.shapes.VoxelShape;
 import software.bernie.geckolib.animatable.GeoBlockEntity;
 import software.bernie.geckolib.core.animatable.instance.AnimatableInstanceCache;
 import software.bernie.geckolib.core.animation.AnimatableManager;
@@ -53,13 +57,13 @@ public class CacheBlockEntity extends RandomizableContainerBlockEntity implement
     private final ContainerOpenersCounter openersCounter = new ContainerOpenersCounter() {
         @Override
         protected void onOpen(Level world, BlockPos pos, BlockState state) {
-            playSound(SoundEvents.BARREL_OPEN);
+            playSound(SoundEventRegistry.CACHE_OPEN.get());
             if (level != null) level.setBlockAndUpdate(getBlockPos(), state.setValue(CacheBlock.OPEN, true));
         }
 
         @Override
         protected void onClose(Level world, BlockPos pos, BlockState state) {
-            playSound(SoundEvents.BARREL_CLOSE);
+            playSound(SoundEventRegistry.CACHE_CLOSE.get());
             if (level != null) level.setBlockAndUpdate(getBlockPos(), state.setValue(CacheBlock.OPEN, false));
         }
 
@@ -131,7 +135,7 @@ public class CacheBlockEntity extends RandomizableContainerBlockEntity implement
             double x = worldPosition.getX() + 0.5;
             double y = worldPosition.getY() + 1;
             double z = worldPosition.getZ() + 0.5;
-            level.playSound(null, x, y, z, sound, SoundSource.BLOCKS, 0.5f, level.random.nextFloat() * 0.1f + 0.9f);
+            level.playSound(null, x, y, z, sound, SoundSource.BLOCKS, 0.5f, level.random.nextFloat() * 0.1f + 0.6f);
         }
     }
 
@@ -166,6 +170,7 @@ public class CacheBlockEntity extends RandomizableContainerBlockEntity implement
     @Override
     public void setBlockState(BlockState state) {
         boolean wasOpen = getBlockState().getValue(CacheBlock.OPEN);
+        Direction facing = state.getValue(CacheBlock.FACING);
         boolean isOpen = state.getValue(CacheBlock.OPEN);
         if (wasOpen != isOpen && level.isClientSide) {
             String[] animPool = isOpen ? OPEN_ANIMS : CLOSE_ANIMS;
@@ -173,7 +178,7 @@ public class CacheBlockEntity extends RandomizableContainerBlockEntity implement
             for (int i = 0; i < 4; i++) {
                 int rotDegrees = ROTATION_CHECK_ORDER[i];
                 Direction directionToCheck = Direction.fromYRot(facingDirection.toYRot() + rotDegrees);
-                if (level != null && !level.getBlockState(worldPosition.relative(directionToCheck)).getCollisionShape(level, getBlockPos()).isEmpty()) continue;
+                if (!canOpenInDirection(directionToCheck)) continue;
                 triggerAnim(controller.getName(), animPool[i]);
                 break;
             }
@@ -181,11 +186,20 @@ public class CacheBlockEntity extends RandomizableContainerBlockEntity implement
         super.setBlockState(state);
     }
 
+    public boolean canOpenInDirection(Direction direction) {
+        Direction facing = getBlockState().getValue(CacheBlock.FACING);
+        return level == null || canOpenIntoShape(level.getBlockState(worldPosition.relative(direction)).getShape(level, getBlockPos()), facing, direction, facing == direction);
+    }
+
+    public boolean canOpenIntoShape(VoxelShape collisionShape, Direction facing, Direction relativeDir, boolean isFrontOpen) {
+        return !GeneralUtil.intersects(collisionShape, GeneralUtil.rotated(new AABB(0, isFrontOpen ? 0 : 0.5, 0, 1, 0.75, 0.5), Direction.Axis.Y, -1 + (int) (facing.toYRot() - relativeDir.toYRot()) / 90, new Vec3(0.5, 0.5, 0.5)));
+    }
+
     @Override
     public boolean canOpen(Player player) {
         if (!super.canOpen(player)) return false;
         for (Direction direction : Direction.values()) {
-            if (direction.getAxis() != Direction.Axis.Y && level.getBlockState(worldPosition.relative(direction)).isAir()) return true;
+            if (direction.getAxis() != Direction.Axis.Y && canOpenInDirection(direction)) return true;
         }
         return false;
     }

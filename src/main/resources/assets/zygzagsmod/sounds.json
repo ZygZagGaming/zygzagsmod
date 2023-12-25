@@ -1,34 +1,47 @@
 {
   "end_sand_break": {
     "sounds": [
-      "zygzagsmod:endsand1",
-      "zygzagsmod:endsand2",
-      "zygzagsmod:endsand3",
-      "zygzagsmod:endsand4"
+      "zygzagsmod:block/end_sand/break1",
+      "zygzagsmod:block/end_sand/break2",
+      "zygzagsmod:block/end_sand/break3",
+      "zygzagsmod:block/end_sand/break4"
     ]
   },
   "end_sand_dissipate": {
     "sounds": [
-      "zygzagsmod:endsand1",
-      "zygzagsmod:endsand2",
-      "zygzagsmod:endsand3",
-      "zygzagsmod:endsand4"
+      "zygzagsmod:block/end_sand/break1",
+      "zygzagsmod:block/end_sand/break2",
+      "zygzagsmod:block/end_sand/break3",
+      "zygzagsmod:block/end_sand/break4"
     ],
     "subtitle": "subtitles.block.end_sand.dissipate"
   },
   "end_sand_reform": {
     "sounds": [
-      "zygzagsmod:endsandreverse1",
-      "zygzagsmod:endsandreverse2",
-      "zygzagsmod:endsandreverse3",
-      "zygzagsmod:endsandreverse4"
+      "zygzagsmod:block/end_sand/reform1",
+      "zygzagsmod:block/end_sand/reform2",
+      "zygzagsmod:block/end_sand/reform3",
+      "zygzagsmod:block/end_sand/reform4"
     ],
     "subtitle": "subtitles.block.end_sand.reform"
   },
   "sculk_jaw_close": {
     "sounds": [
-      "zygzagsmod:sculk_jaw_close"
+      "zygzagsmod:block/sculk_jaws/close"
     ],
     "subtitle": "subtitles.block.sculk_jaw.close"
+  },
+  "cache_open": {
+    "sounds": [
+      "zygzagsmod:block/cache/open1",
+      "zygzagsmod:block/cache/open2"
+    ],
+    "subtitle": "subtitles.block.cache.open"
+  },
+  "cache_close": {
+    "sounds": [
+      "zygzagsmod:block/cache/close"
+    ],
+    "subtitle": "subtitles.block.cache.close"
   }
 }

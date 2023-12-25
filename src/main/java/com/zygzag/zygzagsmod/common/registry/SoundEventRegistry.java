@@ -28,20 +28,23 @@ public class SoundEventRegistry extends AkomiRegistry<SoundEvent> {
             () -> SoundEvents.SAND_HIT,
             () -> SoundEvents.SAND_FALL
     );
-    public static final Supplier<SoundEvent> END_SAND_DISSIPATE = INSTANCE.register(
-            "end_sand_dissipate",
-            () -> SoundEvent.createVariableRangeEvent(new ResourceLocation(MODID, "end_sand_dissipate"))
-    );
-    public static final Supplier<SoundEvent> END_SAND_REFORM = INSTANCE.register(
-            "end_sand_reform",
-            () -> SoundEvent.createVariableRangeEvent(new ResourceLocation(MODID, "end_sand_reform"))
-    );
-    public static final Supplier<SoundEvent> SCULK_JAW_CLOSE = INSTANCE.register(
-            "sculk_jaw_close",
-            () -> SoundEvent.createVariableRangeEvent(new ResourceLocation(MODID, "sculk_jaw_close"))
-    );
+    public static final Supplier<SoundEvent> END_SAND_DISSIPATE = makeSimpleSoundEvent("end_sand_dissipate");
+    public static final Supplier<SoundEvent> END_SAND_REFORM = makeSimpleSoundEvent("end_sand_reform");
+    public static final Supplier<SoundEvent> SCULK_JAW_CLOSE = makeSimpleSoundEvent("sculk_jaw_close");
+    public static final Supplier<SoundEvent> CACHE_OPEN = makeSimpleSoundEvent("cache_open");
+    public static final Supplier<SoundEvent> CACHE_CLOSE = makeSimpleSoundEvent("cache_close");
 
     public SoundEventRegistry(DeferredRegister<SoundEvent> register) {
         super(register);
+    }
+
+    public static Supplier<SoundEvent> makeSimpleSoundEvent(String id) {
+        return makeSimpleSoundEvent(id, new ResourceLocation(MODID, id));
+    }
+    public static Supplier<SoundEvent> makeSimpleSoundEvent(String id, ResourceLocation soundLocation) {
+        return INSTANCE.register(
+                id,
+                () -> SoundEvent.createVariableRangeEvent(soundLocation)
+        );
     }
 }

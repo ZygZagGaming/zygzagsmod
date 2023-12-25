@@ -220,6 +220,8 @@
   "subtitles.block.end_sand.dissipate": "End Sand dissipates",
   "subtitles.block.end_sand.reform": "End Sand reforms",
   "subtitles.block.sculk_jaw.close": "Sculk Jaws close",
+  "subtitles.block.cache.open": "Cache opens",
+  "subtitles.block.cache.close": "Cache closes",
 
   "death.attack.sculk_jaw": "%1$s was chomped to death",
   "death.attack.sculk_jaw.player": "%1$s was chomped by %2$s",

@@ -5,6 +5,7 @@ import com.zygzag.zygzagsmod.common.Main;
 import com.zygzag.zygzagsmod.common.entity.animation.AbstractAnimation;
 import com.zygzag.zygzagsmod.common.entity.animation.TransitionAnimation;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
 import net.minecraft.core.particles.ParticleOptions;
 import net.minecraft.util.Mth;
 import net.minecraft.util.RandomSource;
@@ -17,6 +18,9 @@ import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.phys.AABB;
+import net.minecraft.world.phys.Vec3;
+import net.minecraft.world.phys.shapes.VoxelShape;
 import net.neoforged.neoforge.capabilities.ICapabilityProvider;
 import net.neoforged.neoforge.common.Tags;
 import org.jetbrains.annotations.Nullable;
@@ -243,5 +247,48 @@ public class GeneralUtil {
         if (original.is(Blocks.STONE_BRICK_STAIRS)) return Blocks.MOSSY_STONE_BRICK_STAIRS.withPropertiesOf(original);
 
         return original;
+    }
+
+    public static boolean rangeIntersectsOrTouches(double minA, double maxA, double minB, double maxB) {
+        return minA <= maxB && minB <= maxA;
+    }
+
+    public static boolean rangeIntersects(double minA, double maxA, double minB, double maxB) {
+        return minA < maxB && minB < maxA;
+    }
+
+    public static boolean intersects(VoxelShape a, VoxelShape b) {
+        if (!a.bounds().intersects(b.bounds())) return false;
+        final boolean[] returnValue = {false};
+        a.forAllBoxes((minAX, minAY, minAZ, maxAX, maxAY, maxAZ) -> {
+            if (!returnValue[0]) b.forAllBoxes((minBX, minBY, minBZ, maxBX, maxBY, maxBZ) -> {
+                if (!returnValue[0] && rangeIntersects(minAX, maxAX, minBX, maxBX) && rangeIntersects(minAY, maxAY, minBY, maxBY) && rangeIntersects(minAZ, maxAZ, minBZ, maxBZ)) returnValue[0] = true;
+            });
+        });
+        return returnValue[0];
+    }
+
+    public static boolean intersects(VoxelShape a, AABB b) {
+        if (!a.bounds().intersects(b)) return false;
+        final boolean[] returnValue = {false};
+        a.forAllBoxes((minAX, minAY, minAZ, maxAX, maxAY, maxAZ) -> {
+            if (!returnValue[0] && rangeIntersects(minAX, maxAX, b.minX, b.maxX) && rangeIntersects(minAY, maxAY, b.minY, b.maxY) && rangeIntersects(minAZ, maxAZ, b.minZ, b.maxZ)) returnValue[0] = true;
+        });
+        return returnValue[0];
+    }
+
+    public static AABB rotated(AABB aabb, Direction.Axis axisOfRotation, int quarterTurns) {
+        if (quarterTurns % 4 == 0) return aabb;
+        if (quarterTurns >= 4) return rotated(aabb, axisOfRotation, quarterTurns % 4);
+        if (quarterTurns < 0) return rotated(aabb, axisOfRotation, 4 - (-quarterTurns) % 4);
+        return switch (axisOfRotation) {
+            case X -> rotated(new AABB(aabb.minX, aabb.minZ, -aabb.maxY, aabb.maxX, aabb.maxZ, -aabb.minY), axisOfRotation, quarterTurns - 1);
+            case Y -> rotated(new AABB(aabb.minZ, aabb.minY, -aabb.maxX, aabb.maxZ, aabb.maxY, -aabb.minX), axisOfRotation, quarterTurns - 1);
+            case Z -> rotated(new AABB(aabb.minY, -aabb.maxX, aabb.minZ, aabb.maxY, -aabb.minX, aabb.maxZ), axisOfRotation, quarterTurns - 1);
+        };
+    }
+
+    public static AABB rotated(AABB aabb, Direction.Axis axisOfRotation, int quarterTurns, Vec3 originOfRotation) {
+        return rotated(aabb.move(originOfRotation.scale(-1)), axisOfRotation, quarterTurns % 4).move(originOfRotation);
     }
 }
