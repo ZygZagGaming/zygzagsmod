@@ -68,7 +68,7 @@ public class BlockWithItemRegistry {
             () -> new GlassSlabBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.QUARTZ_BLOCK).noOcclusion().isValidSpawn(BlockWithItemRegistry::never).isRedstoneConductor(BlockWithItemRegistry::never).isSuffocating(BlockWithItemRegistry::never).isViewBlocking(BlockWithItemRegistry::never))
     );
     public static final BlockWithItemSupplier<Block, BlockItem> GIRDED_RED_NETHER_BRICKS = INSTANCE.register(
-            "red_nether_brick_pillar",
+            "girded_red_nether_bricks",
             () -> new RotatedPillarBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.RED_NETHER_BRICKS).strength(3.0F, 40.0F).pushReaction(PushReaction.PUSH_ONLY))
     );
     public static final BlockWithItemSupplier<Block, BlockItem> CRUSHED_RED_NETHER_BRICKS = INSTANCE.register(

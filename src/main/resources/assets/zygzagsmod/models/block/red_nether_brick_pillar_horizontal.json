@@ -1,7 +1,0 @@
-{
-  "parent": "minecraft:block/cube_column_horizontal",
-  "textures": {
-    "end": "zygzagsmod:block/red_nether_brick_pillar_top",
-    "side": "zygzagsmod:block/red_nether_brick_pillar_side"
-  }
-}

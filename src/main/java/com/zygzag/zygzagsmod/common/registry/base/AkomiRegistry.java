@@ -3,8 +3,10 @@ package com.zygzag.zygzagsmod.common.registry.base;
 
 import com.zygzag.zygzagsmod.common.registry.*;
 import net.minecraft.core.Registry;
+import net.minecraft.resources.ResourceKey;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.neoforge.registries.DeferredRegister;
+import net.neoforged.neoforge.registries.RegisterEvent;
 
 import java.util.List;
 import java.util.function.Consumer;
@@ -47,9 +49,19 @@ public class AkomiRegistry<T> {
         }
     }
 
+    public ResourceKey<? extends Registry<T>> registryKey() {
+        return register.getRegistryKey();
+    }
+
     public void registerTo(IEventBus bus) {
         register.register(bus);
     }
+
+    public final void callRegisterEvent(RegisterEvent event) {
+        if (event.getRegistryKey() == registryKey()) onRegisterEvent(event);
+    }
+
+    public void onRegisterEvent(RegisterEvent event) { }
 
     public <P extends T> Supplier<P> register(String id, Supplier<P> supplier) {
         return register.register(id, supplier);

@@ -74,6 +74,8 @@ public class Main {
     public Main(IEventBus modEventBus) {
         modEventBus.addListener(this::commonSetup);
         modEventBus.addListener(this::clientSetup);
+        BuiltInRegistries.BLOCK.addAlias(new ResourceLocation(MODID, "red_nether_brick_pillar"), new ResourceLocation(MODID, "girded_red_nether_bricks"));
+        BuiltInRegistries.ITEM.addAlias(new ResourceLocation(MODID, "red_nether_brick_pillar"), new ResourceLocation(MODID, "girded_red_nether_bricks"));
 
         AkomiRegistry.register(modEventBus);
 
