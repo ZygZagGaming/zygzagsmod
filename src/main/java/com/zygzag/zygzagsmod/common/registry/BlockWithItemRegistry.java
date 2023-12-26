@@ -15,6 +15,7 @@ import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.NoteBlockInstrument;
 import net.minecraft.world.level.material.MapColor;
+import net.minecraft.world.level.material.PushReaction;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.neoforge.registries.DeferredRegister;
 
@@ -68,7 +69,7 @@ public class BlockWithItemRegistry {
     );
     public static final BlockWithItemSupplier<Block, BlockItem> GIRDED_RED_NETHER_BRICKS = INSTANCE.register(
             "red_nether_brick_pillar",
-            () -> new RotatedPillarBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.RED_NETHER_BRICKS).strength(3.0F, 40.0F))
+            () -> new RotatedPillarBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.RED_NETHER_BRICKS).strength(3.0F, 40.0F).pushReaction(PushReaction.PUSH_ONLY))
     );
     public static final BlockWithItemSupplier<Block, BlockItem> CRUSHED_RED_NETHER_BRICKS = INSTANCE.register(
             "crushed_red_nether_bricks",
