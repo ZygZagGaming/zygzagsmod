@@ -258,7 +258,7 @@ public class GeneralUtil {
     }
 
     public static boolean intersects(VoxelShape a, VoxelShape b) {
-        if (!a.bounds().intersects(b.bounds())) return false;
+        if (a.isEmpty() || b.isEmpty() || !a.bounds().intersects(b.bounds())) return false;
         final boolean[] returnValue = {false};
         a.forAllBoxes((minAX, minAY, minAZ, maxAX, maxAY, maxAZ) -> {
             if (!returnValue[0]) b.forAllBoxes((minBX, minBY, minBZ, maxBX, maxBY, maxBZ) -> {
@@ -269,7 +269,7 @@ public class GeneralUtil {
     }
 
     public static boolean intersects(VoxelShape a, AABB b) {
-        if (!a.bounds().intersects(b)) return false;
+        if (a.isEmpty() || !a.bounds().intersects(b)) return false;
         final boolean[] returnValue = {false};
         a.forAllBoxes((minAX, minAY, minAZ, maxAX, maxAY, maxAZ) -> {
             if (!returnValue[0] && rangeIntersects(minAX, maxAX, b.minX, b.maxX) && rangeIntersects(minAY, maxAY, b.minY, b.maxY) && rangeIntersects(minAZ, maxAZ, b.minZ, b.maxZ)) returnValue[0] = true;
