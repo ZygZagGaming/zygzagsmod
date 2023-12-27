@@ -1,4 +1,4 @@
-// 1.20.4	2023-12-16T22:07:46.9617345	Item Models: zygzagsmod
+// 1.20.4	2023-12-26T23:15:16.6358449	Item Models: zygzagsmod
 15435321a16b6a9adcb19a948c2af0fa7344d370 assets/zygzagsmod/models/item/amethyst_socketed_iridium_axe.json
 15eb5bc299660d213b1379316f4264e348e7a421 assets/zygzagsmod/models/item/amethyst_socketed_iridium_chestplate.json
 da43fd45392876686e6ebd43c9df8c0d4bd150aa assets/zygzagsmod/models/item/amethyst_socketed_iridium_hoe.json
@@ -24,6 +24,7 @@ bade30421091ea03effcf8c802638edbf3e22359 assets/zygzagsmod/models/item/emerald_s
 1d761c767051e54bf873d3d8e7a36751436fe2d9 assets/zygzagsmod/models/item/emerald_socketed_iridium_scepter.json
 a2bfba0f70e5b646923c91fa22be16a0ec6d811b assets/zygzagsmod/models/item/emerald_socketed_iridium_shovel.json
 9673e4d3214bd63e7d3b7bc8bd729477fa7e314a assets/zygzagsmod/models/item/emerald_socketed_iridium_sword.json
+e298f15d3d1b6e0964227abc95e6265c1a22845c assets/zygzagsmod/models/item/girded_red_nether_bricks.json
 1229fc9fffc79daff48819d6e5145dc102193c4d assets/zygzagsmod/models/item/iridium_axe.json
 7c71a76bb6d75f0824f1062308c6b162dea88360 assets/zygzagsmod/models/item/iridium_boots.json
 e26275cf0f2ea7ae0b55f54bb486000ed4bd5e79 assets/zygzagsmod/models/item/iridium_chestplate.json
@@ -64,7 +65,6 @@ c9156f06e9cdf2d670505032d02e20ce146273ff assets/zygzagsmod/models/item/partial_i
 58ccd7d92d17bf87a6f355530fb2bd83a87471f1 assets/zygzagsmod/models/item/partial_iridium_pickaxe_1.json
 a878bbf74ade40fb95189c35a1c3dc9e23684a72 assets/zygzagsmod/models/item/partial_iridium_pickaxe_2.json
 b2b5535bea82793234bb8262455fefb72b41cfbc assets/zygzagsmod/models/item/partial_iridium_sword_1.json
-91504e18376d2878588f59b3c3dab984e804a9cc assets/zygzagsmod/models/item/red_nether_brick_pillar.json
 15435321a16b6a9adcb19a948c2af0fa7344d370 assets/zygzagsmod/models/item/skull_socketed_iridium_axe.json
 15eb5bc299660d213b1379316f4264e348e7a421 assets/zygzagsmod/models/item/skull_socketed_iridium_chestplate.json
 da43fd45392876686e6ebd43c9df8c0d4bd150aa assets/zygzagsmod/models/item/skull_socketed_iridium_hoe.json
