@@ -26,6 +26,6 @@
     }
   },
   "start_pool": "zygzagsmod:blaze_hive/starts",
-  "step": "surface_structures",
+  "step": "strongholds",
   "use_expansion_hack": false
 }

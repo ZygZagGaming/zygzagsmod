@@ -15,7 +15,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "zygzagsmod:stonecutting/red_nether_brick_pillar"
+        "recipe": "zygzagsmod:stonecutting/girded_red_nether_bricks"
       },
       "trigger": "minecraft:recipe_unlocked"
     }
@@ -28,7 +28,7 @@
   ],
   "rewards": {
     "recipes": [
-      "zygzagsmod:stonecutting/red_nether_brick_pillar"
+      "zygzagsmod:stonecutting/girded_red_nether_bricks"
     ]
   }
 }
