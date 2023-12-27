@@ -35,7 +35,8 @@ public class AkomiRegistry<T> {
             StructurePieceTypeRegistry.INSTANCE::registerTo,
             AnimationRegistry.INSTANCE::registerTo,
             TransitionAnimationRegistry.INSTANCE::registerTo,
-            AttributeRegistry.INSTANCE::registerTo
+            AttributeRegistry.INSTANCE::registerTo,
+            AttachmentTypeRegistry.INSTANCE::registerTo
     );
     public final DeferredRegister<T> register;
 

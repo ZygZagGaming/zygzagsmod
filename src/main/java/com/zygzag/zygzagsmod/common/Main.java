@@ -49,11 +49,12 @@ public class Main {
     public static final Logger LOGGER = LogUtils.getLogger();
     public static final TagKey<Block> NEEDS_IRIDIUM_TOOL_TAG = BlockTags.create(new ResourceLocation("zygzagsmod:needs_iridium_tool"));
     public static final TagKey<Block> VEGETATION_TAG = BlockTags.create(new ResourceLocation("zygzagsmod:vegetation"));
-    public static final TagKey<EntityType<?>> VILLAGER_HATED = TagKey.create(Registries.ENTITY_TYPE, new ResourceLocation("zygzagsmod:villager_hated"));
+    //public static final TagKey<EntityType<?>> VILLAGER_HATED = TagKey.create(Registries.ENTITY_TYPE, new ResourceLocation("zygzagsmod:villager_hated"));
     public static final TagKey<Block> VEINMINEABLE = TagKey.create(Registries.BLOCK, new ResourceLocation("zygzagsmod:veinmineable"));
-    public static final TagKey<Block> NETHER_QUARTZ_GLASS = TagKey.create(Registries.BLOCK, new ResourceLocation("zygzagsmod:nether_quartz_glass"));
+    //public static final TagKey<Block> NETHER_QUARTZ_GLASS = TagKey.create(Registries.BLOCK, new ResourceLocation("zygzagsmod:nether_quartz_glass"));
     public static final TagKey<Block> SCULK_VEIN_LIKE = TagKey.create(BuiltInRegistries.BLOCK.key(), new ResourceLocation("zygzagsmod:sculk_vein_like"));
     public static final TagKey<Block> REPLACEABLE_BY_CAIRN = TagKey.create(BuiltInRegistries.BLOCK.key(), new ResourceLocation("zygzagsmod:replaceable_by_cairn"));
+    public static final TagKey<Block> WORLD_CONTAINERS = TagKey.create(BuiltInRegistries.BLOCK.key(), new ResourceLocation("zygzagsmod:world_containers"));
     public static final TagKey<EntityType<?>> BOSS_TAG = TagKey.create(Registries.ENTITY_TYPE, new ResourceLocation("zygzagsmod:bosses"));
     public static final TagKey<EntityType<?>> SCULK_JAW_IMMUNE = TagKey.create(Registries.ENTITY_TYPE, new ResourceLocation("zygzagsmod:sculk_jaw_immune"));
 

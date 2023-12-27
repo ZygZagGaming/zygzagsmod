@@ -1,7 +1,6 @@
 package com.zygzag.zygzagsmod.common;
 
 import com.zygzag.zygzagsmod.common.block.entity.CustomBrushableBlockEntity;
-import com.zygzag.zygzagsmod.common.effect.SightEffect;
 import com.zygzag.zygzagsmod.common.enchant.CustomEnchantment;
 import com.zygzag.zygzagsmod.common.enchant.SpringsEnchantment;
 import com.zygzag.zygzagsmod.common.entity.HomingWitherSkull;
@@ -12,12 +11,15 @@ import com.zygzag.zygzagsmod.common.item.iridium.armor.IridiumChestplateItem;
 import com.zygzag.zygzagsmod.common.item.iridium.tool.IridiumAxeItem;
 import com.zygzag.zygzagsmod.common.item.iridium.tool.IridiumHoeItem;
 import com.zygzag.zygzagsmod.common.item.iridium.tool.IridiumSwordItem;
+import com.zygzag.zygzagsmod.common.registry.AttachmentTypeRegistry;
 import com.zygzag.zygzagsmod.common.registry.AttributeRegistry;
 import com.zygzag.zygzagsmod.common.registry.BlockRegistry;
 import com.zygzag.zygzagsmod.common.registry.EnchantmentRegistry;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
-import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.core.Vec3i;
+import net.minecraft.core.particles.ParticleOptions;
+import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvent;
@@ -26,17 +28,23 @@ import net.minecraft.sounds.SoundSource;
 import net.minecraft.stats.Stats;
 import net.minecraft.world.Difficulty;
 import net.minecraft.world.InteractionHand;
+import net.minecraft.world.SimpleContainer;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.ai.attributes.AttributeInstance;
+import net.minecraft.world.entity.ai.village.poi.PoiManager;
+import net.minecraft.world.entity.ai.village.poi.PoiTypes;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.BrushItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
+import net.minecraft.world.item.crafting.RecipeHolder;
+import net.minecraft.world.item.crafting.RecipeType;
+import net.minecraft.world.item.crafting.SmeltingRecipe;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.item.enchantment.Enchantments;
 import net.minecraft.world.level.Level;
@@ -47,6 +55,7 @@ import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BrushableBlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
+import net.minecraft.world.level.material.Fluids;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.HitResult;
@@ -55,12 +64,14 @@ import net.neoforged.fml.common.Mod;
 import net.neoforged.neoforge.common.Tags;
 import net.neoforged.neoforge.event.ItemAttributeModifierEvent;
 import net.neoforged.neoforge.event.TickEvent;
+import net.neoforged.neoforge.event.entity.item.ItemExpireEvent;
 import net.neoforged.neoforge.event.entity.living.*;
 import net.neoforged.neoforge.event.entity.player.PlayerEvent;
 import net.neoforged.neoforge.event.level.BlockEvent;
-import net.neoforged.neoforge.event.server.ServerStartingEvent;
 
 import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
 
 import static com.zygzag.zygzagsmod.common.Main.MODID;
 import static com.zygzag.zygzagsmod.common.util.GeneralUtil.isExposedToSunlight;
@@ -79,13 +90,68 @@ public class EventHandler {
 //    }
 
     @SubscribeEvent
-    public static void onTick(final TickEvent.PlayerTickEvent event) {
-        var player = event.player;
-        if (player.level().isClientSide) for (var effectInstance : player.getActiveEffects()) {
-            if (effectInstance == null) return;
-            var effect = effectInstance.getEffect();
-            if (effect instanceof SightEffect sightEffect)
-                Main.CURRENT_PLAYER_CACHE.update(sightEffect, player, effectInstance.getAmplifier());
+    public static void onTick(final TickEvent.LevelTickEvent event) {
+        if (event.phase == TickEvent.Phase.START && event.level instanceof ServerLevel world) {
+            List<ServerPlayer> players = world.players();
+            HashSet<BlockPos> allCauldrons = new HashSet<>();
+            for (ServerPlayer player : players) {
+                world.getPoiManager()
+                        .findAllWithType(
+                                (it) -> it.is(PoiTypes.LEATHERWORKER),
+                                (cauldron) -> world.getBlockState(cauldron).is(Blocks.CAULDRON),
+                                player.blockPosition(),
+                                50,
+                                PoiManager.Occupancy.ANY
+                        ).forEach((it) -> allCauldrons.add(it.getSecond()));
+            }
+            for (BlockPos cauldron : allCauldrons) if (isCauldronImmersed(cauldron, world)) {
+                List<ItemEntity> itemEntitiesInsideCauldron = world.getEntitiesOfClass(ItemEntity.class, new AABB(cauldron));
+                int totalItems = 0;
+                for (ItemEntity item : itemEntitiesInsideCauldron) totalItems += item.getItem().getCount();
+                double smeltingSpeed = Math.min(0.01 / totalItems, 0.004921875 / totalItems + 0.000078125); // percentage of the smelting that gets done every tick
+                for (ItemEntity item : itemEntitiesInsideCauldron) {
+                    double progress = item.getData(AttachmentTypeRegistry.ITEM_ENTITY_BULK_SMELTING_ATTACHMENT);
+                    progress += smeltingSpeed;
+                    if (progress < 1) {
+                        item.setData(AttachmentTypeRegistry.ITEM_ENTITY_BULK_SMELTING_ATTACHMENT, progress);
+                        continue;
+                    }
+                    if (progress > 2) continue; // failed smelts will stop incrementing
+
+                    SimpleContainer container = new SimpleContainer(item.getItem());
+                    List<RecipeHolder<SmeltingRecipe>> list = world.getRecipeManager().getRecipesFor(RecipeType.SMELTING, container, world);
+                    if (list.isEmpty()) continue;
+                    SmeltingRecipe recipe = list.get(0).value();
+                    ItemStack output = recipe.assemble(container, world.registryAccess());
+                    item.setItem(output.copyWithCount(output.getCount() * item.getItem().getCount()));
+                    item.setData(AttachmentTypeRegistry.ITEM_ENTITY_BULK_SMELTING_ATTACHMENT, 0.0);
+
+                    // TODO: particles
+                }
+            }
+        }
+    }
+
+    public static boolean isCauldronImmersed(BlockPos cauldron, Level world) {
+        Vec3i[] relativePositions = {
+                new Vec3i(1, 0, 0),
+                new Vec3i(0, 0, 1),
+                new Vec3i(-1, 0, 0),
+                new Vec3i(0, 0, -1)
+        };
+        for (Vec3i relative : relativePositions) if (!world.getFluidState(cauldron.offset(relative)).is(Fluids.LAVA)) return false;
+        return true;
+    }
+
+    @SubscribeEvent
+    public static void itemWouldDespawn(final ItemExpireEvent event) {
+        ItemEntity item = event.getEntity();
+        Level world = item.level();
+        BlockPos blockPos = item.blockPosition();
+        BlockState stateAtPos = world.getBlockState(blockPos);
+        if (stateAtPos.is(Main.WORLD_CONTAINERS) && item.age < 20 * 60 * 20 /* dies after 20 mins */) {
+            event.setExtraLife(0);
+            event.setCanceled(true);
         }
     }
 
