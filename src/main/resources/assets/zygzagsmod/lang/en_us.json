@@ -75,6 +75,8 @@
   "block.zygzagsmod.magmatic_nether_bricks": "Magmatic Nether Bricks",
   "block.zygzagsmod.crushed_red_nether_bricks": "Crushed Red Nether Bricks",
   "block.zygzagsmod.red_nether_brick_cache": "Red Nether Brick Cache",
+  "block.zygzagsmod.nether_brick_button": "Nether Brick Button",
+  "block.zygzagsmod.red_nether_brick_button": "Red Nether Brick Button",
 
   "item.zygzagsmod.iridium_helmet_blueprint": "Iridium Helmet Blueprint",
   "item.zygzagsmod.iridium_chestplate_blueprint": "Iridium Chestplate Blueprint",

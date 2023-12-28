@@ -26,6 +26,6 @@
     }
   },
   "start_pool": "zygzagsmod:blaze_hive/starts",
-  "step": "strongholds",
+  "step": "top_layer_modification",
   "use_expansion_hack": false
 }

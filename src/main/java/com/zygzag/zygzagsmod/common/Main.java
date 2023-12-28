@@ -11,6 +11,7 @@ import net.minecraft.core.Registry;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.sounds.SoundEvents;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.entity.EntityType;
@@ -21,7 +22,9 @@ import net.minecraft.world.item.SwordItem;
 import net.minecraft.world.item.enchantment.EnchantmentCategory;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.state.properties.BlockSetType;
 import net.minecraft.world.level.levelgen.structure.Structure;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.fml.ModLoadingContext;
@@ -65,6 +68,43 @@ public class Main {
     public static final UUID CURSE_OF_GLASS_ENCHANTMENT_HEALTH_MODIFIER_UUID = UUID.fromString("82d7ee30-93bc-448b-b16f-77097f9625ec");
     public static final UUID CURSE_OF_GLASS_ENCHANTMENT_DAMAGE_MODIFIER_UUID = UUID.fromString("4df8ccef-9fee-432a-b3a7-f0178c6f6bfe");
     public static PlayerSightCache CURRENT_PLAYER_CACHE = null;
+
+    public static final BlockSetType NETHER_BRICK_BLOCK_SET_TYPE = BlockSetType.register(
+            new BlockSetType(
+                    "nether_bricks",
+                    true,
+                    true,
+                    false,
+                    BlockSetType.PressurePlateSensitivity.MOBS,
+                    SoundType.STONE,
+                    SoundEvents.IRON_DOOR_CLOSE,
+                    SoundEvents.IRON_DOOR_OPEN,
+                    SoundEvents.IRON_TRAPDOOR_CLOSE,
+                    SoundEvents.IRON_TRAPDOOR_OPEN,
+                    SoundEvents.STONE_PRESSURE_PLATE_CLICK_OFF,
+                    SoundEvents.STONE_PRESSURE_PLATE_CLICK_ON,
+                    SoundEvents.STONE_BUTTON_CLICK_OFF,
+                    SoundEvents.STONE_BUTTON_CLICK_ON
+            )
+    );
+    public static final BlockSetType RED_NETHER_BRICK_BLOCK_SET_TYPE = BlockSetType.register(
+            new BlockSetType(
+                    "red_nether_bricks",
+                    true,
+                    true,
+                    false,
+                    BlockSetType.PressurePlateSensitivity.MOBS,
+                    SoundType.STONE,
+                    SoundEvents.IRON_DOOR_CLOSE,
+                    SoundEvents.IRON_DOOR_OPEN,
+                    SoundEvents.IRON_TRAPDOOR_CLOSE,
+                    SoundEvents.IRON_TRAPDOOR_OPEN,
+                    SoundEvents.STONE_PRESSURE_PLATE_CLICK_OFF,
+                    SoundEvents.STONE_PRESSURE_PLATE_CLICK_ON,
+                    SoundEvents.STONE_BUTTON_CLICK_OFF,
+                    SoundEvents.STONE_BUTTON_CLICK_ON
+            )
+    );
 
     public static final Supplier<Map<BlockState, Integer>> EXTRANEOUS_SCULK_GROWTHS = () -> Map.of(
             Blocks.SCULK_SENSOR.defaultBlockState(), 10,

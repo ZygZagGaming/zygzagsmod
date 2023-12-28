@@ -1,11 +1,11 @@
 package com.zygzag.zygzagsmod.common.registry;
 
+import com.zygzag.zygzagsmod.common.Main;
 import com.zygzag.zygzagsmod.common.block.*;
 import com.zygzag.zygzagsmod.common.registry.object.BlockWithItemSupplier;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.util.ColorRGBA;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
@@ -76,6 +76,14 @@ public class BlockWithItemRegistry {
             () -> new CrushedRedNetherBricksBlock(
                     BlockBehaviour.Properties.ofFullCopy(Blocks.RED_NETHER_BRICKS).strength(3.0F, 40.0F).sound(SoundType.GRAVEL)
             )
+    );
+    public static final BlockWithItemSupplier<Block, BlockItem> NETHER_BRICK_BUTTON = INSTANCE.register(
+            "nether_brick_button",
+            () -> new TogglableButtonBlock(Main.NETHER_BRICK_BLOCK_SET_TYPE, 5 * 60 * 20, BlockBehaviour.Properties.ofFullCopy(Blocks.NETHER_BRICKS))
+    );
+    public static final BlockWithItemSupplier<Block, BlockItem> RED_NETHER_BRICK_BUTTON = INSTANCE.register(
+            "red_nether_brick_button",
+            () -> new TogglableButtonBlock(Main.RED_NETHER_BRICK_BLOCK_SET_TYPE, 2 * 60 * 20, BlockBehaviour.Properties.ofFullCopy(Blocks.RED_NETHER_BRICKS))
     );
     public DeferredRegister<Block> blockRegister = DeferredRegister.create(BuiltInRegistries.BLOCK, MODID);
     public DeferredRegister<Item> itemRegister = DeferredRegister.create(BuiltInRegistries.ITEM, MODID);
