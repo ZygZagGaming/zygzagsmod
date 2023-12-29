@@ -31,6 +31,7 @@ import javax.annotation.ParametersAreNonnullByDefault;
 public class MagmaticNetherBrickBlock extends Block implements EntityBlock {
     public static final IntegerProperty PULSE = IntegerProperty.create("pulse", 0, 103);
     public static final IntegerProperty CHARGES = IntegerProperty.create("charges", 0, 4);
+    public static final int[] LIGHT = { 3, 6, 9, 12, 15 };
 
     public MagmaticNetherBrickBlock(Properties properties) {
         super(properties);
@@ -43,7 +44,7 @@ public class MagmaticNetherBrickBlock extends Block implements EntityBlock {
 
     @Override
     public int getLightEmission(BlockState state, BlockGetter level, BlockPos pos) {
-        return super.getLightEmission(state, level, pos);
+        return LIGHT[state.getValue(CHARGES)];
     }
 
     @Override
