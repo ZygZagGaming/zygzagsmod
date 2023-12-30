@@ -47,7 +47,7 @@ public class EntityTypeRegistry extends AkomiRegistry<EntityType<?>> {
             "blaze_sentry",
             () -> EntityType.Builder.<BlazeSentry>of(BlazeSentry::new, MobCategory.MONSTER)
                     .fireImmune()
-                    .sized(1f, 0.8f)
+                    .sized(1f, 2.8f)
                     .build("blaze_sentry")
     );
     public static final Supplier<EntityType<OverheatBeamAreaEffectCloud>> OVERHEAT_BEAM_AREA_EFFECT_CLOUD = INSTANCE.register(

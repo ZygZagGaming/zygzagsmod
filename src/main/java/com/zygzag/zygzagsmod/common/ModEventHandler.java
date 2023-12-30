@@ -63,11 +63,4 @@ public class ModEventHandler {
                 (DataProvider.Factory<BlockStateProvider>) (output) -> new AkomiBlockstateProvider(output, event.getExistingFileHelper())
         );
     }
-
-    @SubscribeEvent
-    public static void registerRegistries(final NewRegistryEvent event) {
-        System.out.println("new registry");
-//        event.register(AnimationRegistry.registry());
-//        event.register(TransitionAnimationRegistry.registry());
-    }
 }

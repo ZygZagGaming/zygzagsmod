@@ -168,6 +168,14 @@ public class Animator<T extends LivingEntity & AnimatedEntity<T>> {
         lastNonTransitionAnimation = state.lastNonTransitionAnimation;
     }
 
+    public boolean isTransitioning() {
+        return transitionAnimation != null;
+    }
+
+    public float progressThroughAnimation() {
+        return (float) ticksRemainingInAnimation / (transitionAnimation == null ? animation : transitionAnimation).lengthInTicks();
+    }
+
     public record State(
             Animation animation,
             @Nullable TransitionAnimation transitionAnimation,

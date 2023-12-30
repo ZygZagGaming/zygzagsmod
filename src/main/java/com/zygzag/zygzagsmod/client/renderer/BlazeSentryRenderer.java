@@ -4,6 +4,7 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.zygzag.zygzagsmod.client.gecko.geomodel.BlazeSentryGeoModel;
 import com.zygzag.zygzagsmod.common.entity.BlazeSentry;
+import com.zygzag.zygzagsmod.common.util.EntityRotation;
 import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
@@ -13,9 +14,6 @@ import software.bernie.geckolib.renderer.GeoEntityRenderer;
 
 import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
-
-import static com.zygzag.zygzagsmod.common.util.GeneralUtil.angleLerp;
-import static com.zygzag.zygzagsmod.common.util.GeneralUtil.degreesToRadians;
 
 @ParametersAreNonnullByDefault
 @MethodsReturnNonnullByDefault
@@ -29,13 +27,14 @@ public class BlazeSentryRenderer extends GeoEntityRenderer<BlazeSentry> {
     }
 
     @Override
-    public void preRender(PoseStack poseStack, BlazeSentry animatable, BakedGeoModel model, @Nullable MultiBufferSource bufferSource, @Nullable VertexConsumer buffer, boolean isReRender, float partialTick, int packedLight, int packedOverlay, float red, float green, float blue, float alpha) {
-        super.preRender(poseStack, animatable, model, bufferSource, buffer, isReRender, partialTick, packedLight, packedOverlay, red, green, blue, alpha);
+    public void preRender(PoseStack poseStack, BlazeSentry sentry, BakedGeoModel model, @Nullable MultiBufferSource bufferSource, @Nullable VertexConsumer buffer, boolean isReRender, float partialTick, int packedLight, int packedOverlay, float red, float green, float blue, float alpha) {
+        super.preRender(poseStack, sentry, model, bufferSource, buffer, isReRender, partialTick, packedLight, packedOverlay, red, green, blue, alpha);
+        EntityRotation rotation = sentry.rotation;
         model.getBone("rods").ifPresent((rods) -> {
-            rods.updateRotation(degreesToRadians(90 + angleLerp(animatable.oldBodyXRot, animatable.bodyXRot, partialTick)), degreesToRadians(angleLerp(animatable.oldBodyYRot, animatable.bodyYRot, partialTick)), 0);
+            rods.updateRotation(rotation.getBodyXRot(partialTick), rotation.getBodyYRot(partialTick), 0);
         });
-        model.getBone("bb_main").ifPresent((bbMain) -> {
-            bbMain.updateRotation(degreesToRadians(90 + angleLerp(animatable.oldHeadXRot, animatable.headXRot, partialTick)), degreesToRadians(angleLerp(animatable.oldHeadYRot, animatable.headYRot, partialTick)), 0);
+        model.getBone("head2").ifPresent((head) -> {
+            head.updateRotation(rotation.getHeadXRot(partialTick), rotation.getHeadYRot(partialTick), 0);
         });
     }
 

@@ -7,14 +7,16 @@ import com.zygzag.zygzagsmod.common.registry.AnimationRegistry;
 import com.zygzag.zygzagsmod.common.registry.EntityDataSerializerRegistry;
 import com.zygzag.zygzagsmod.common.registry.EntityTypeRegistry;
 import com.zygzag.zygzagsmod.common.registry.ItemRegistry;
+import com.zygzag.zygzagsmod.common.util.LockedEntityAnchor;
+import com.zygzag.zygzagsmod.common.util.LockedEntityRotation;
+import com.zygzag.zygzagsmod.common.util.SimplEntityRotation;
 import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
-import net.minecraft.util.Mth;
-import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.Pose;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.goal.target.HurtByTargetGoal;
@@ -22,7 +24,6 @@ import net.minecraft.world.entity.monster.Monster;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.pathfinder.BlockPathTypes;
-import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.Nullable;
 import software.bernie.geckolib.core.animatable.GeoAnimatable;
 import software.bernie.geckolib.core.animatable.instance.AnimatableInstanceCache;
@@ -35,18 +36,21 @@ import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
-import static com.zygzag.zygzagsmod.common.util.GeneralUtil.mod;
-import static com.zygzag.zygzagsmod.common.util.GeneralUtil.radiansToDegrees;
-
 @ParametersAreNonnullByDefault
 @MethodsReturnNonnullByDefault
 public class BlazeSentry extends Monster implements GeoAnimatable, AnimatedEntity<BlazeSentry> {
+    public static final LockedEntityRotation.AnglesFromAnchors DEFAULT_ROTATIONS = (difference) -> {
+        double horizDifference = difference.horizontalDistance();
+        float yRot = (float) Math.atan2(difference.x(), difference.z());
+        float xRot = (float) Math.atan2(difference.y(), horizDifference);
+        return new float[]{xRot, (float) ((xRot + 0.5 * Math.PI) % (2 * Math.PI)), yRot, yRot};
+    };
     protected static final EntityDataAccessor<Animator.State> DATA_ANIMATOR_STATE = SynchedEntityData.defineId(BlazeSentry.class, EntityDataSerializerRegistry.ANIMATOR_STATE.get());
     protected static final EntityDataAccessor<Optional<UUID>> DATA_TARGET = SynchedEntityData.defineId(BlazeSentry.class, EntityDataSerializers.OPTIONAL_UUID);
+    protected static final EntityDataAccessor<SimplEntityRotation> DATA_ROTATION = SynchedEntityData.defineId(BlazeSentry.class, EntityDataSerializerRegistry.ENTITY_ROTATION.get());
     private final AnimatableInstanceCache instanceCache = GeckoLibUtil.createInstanceCache(this);
     private final Animator<BlazeSentry> animator = new Animator<>(this);
-    public float headXRot = 0, headYRot = 0, oldHeadXRot = 0, oldHeadYRot = 0;
-    public float bodyXRot = 0, bodyYRot = 0, oldBodyXRot = 0, oldBodyYRot = 0;
+    public SimplEntityRotation rotation = new SimplEntityRotation();
     @Nullable
     private LivingEntity cachedTarget;
 
@@ -57,6 +61,11 @@ public class BlazeSentry extends Monster implements GeoAnimatable, AnimatedEntit
         setPathfindingMalus(BlockPathTypes.DANGER_FIRE, 0);
         setPathfindingMalus(BlockPathTypes.DAMAGE_FIRE, 0);
         xpReward = 10;
+    }
+
+    @Override
+    public float getEyeHeight(Pose pose) {
+        return 2.2f;
     }
 
     public BlazeSentry(Level world) {
@@ -80,6 +89,7 @@ public class BlazeSentry extends Monster implements GeoAnimatable, AnimatedEntit
                 AnimationRegistry.BlazeSentry.IDLE_BASE.get()
         ));
         entityData.define(DATA_TARGET, Optional.empty());
+        entityData.define(DATA_ROTATION, new SimplEntityRotation());
     }
 
     @Nullable
@@ -93,9 +103,14 @@ public class BlazeSentry extends Monster implements GeoAnimatable, AnimatedEntit
 
     @Override
     public void setTarget(@Nullable LivingEntity entity) {
-        if (entity == null) entityData.set(DATA_TARGET, Optional.empty());
-        else {
-            entityData.set(DATA_TARGET, Optional.of(entity.getUUID()));
+        super.setTarget(entity);
+        if (!level().isClientSide) {
+            if (entity == null) entityData.set(DATA_TARGET, Optional.empty());
+            else entityData.set(DATA_TARGET, Optional.of(entity.getUUID()));
+            if (!(rotation instanceof LockedEntityRotation)) rotation = new LockedEntityRotation(
+                    new LockedEntityAnchor(this),
+                    new LockedEntityAnchor(getTarget())
+            );
         }
     }
 
@@ -146,43 +161,27 @@ public class BlazeSentry extends Monster implements GeoAnimatable, AnimatedEntit
 
     @Override
     public void tick() {
+//        if (level().isClientSide) rotation = entityData.get(DATA_ROTATION);
+//        else {
+            if (getTarget() == null) {
+                if (rotation instanceof LockedEntityRotation) rotation = new SimplEntityRotation();
+            } else {
+                if (!(rotation instanceof LockedEntityRotation)) rotation = new LockedEntityRotation(
+                        LockedEntityAnchor.eyes(this),
+                        LockedEntityAnchor.eyes(getTarget()),
+                        DEFAULT_ROTATIONS
+                );
+            }
+            //entityData.set(DATA_ROTATION, rotation);
+        //}
+        rotation.tick();
+
         setRot(0, 0);
         setYHeadRot(0);
         setYBodyRot(0);
         setNoGravity(true);
         super.tick();
         animator.tick();
-        oldHeadXRot = headXRot;
-        oldHeadYRot = headYRot;
-        oldBodyXRot = bodyXRot;
-        oldBodyYRot = bodyYRot;
-        if (getTarget() != null) aimAt(getTarget());
-        else {
-            headXRot = -90;
-            bodyXRot = 90;
-        }
-    }
-
-    public void aimAt(Entity entity) {
-        Vec3 center = getBoundingBox().getCenter();
-        double xDifference = entity.getX() - center.x();
-        double zDifference = entity.getZ() - center.z();
-        double yDifference;
-        if (entity instanceof LivingEntity livingentity) {
-            yDifference = livingentity.getEyeY() - center.y();
-        } else {
-            yDifference = (entity.getBoundingBox().minY + entity.getBoundingBox().maxY) / 2 - center.y();
-        }
-
-        double horizDifference = Math.sqrt(xDifference * xDifference + zDifference * zDifference);
-        float yRot = -90 - (float) (radiansToDegrees(Mth.atan2(zDifference, xDifference)));
-        float xRot = -(float) (radiansToDegrees(Mth.atan2(yDifference, horizDifference)));
-        float hXRot = 270 - xRot;
-        float hYRot = 180 + yRot;
-        bodyXRot = mod(xRot + 90, 360) - 90;
-        bodyYRot = mod(yRot, 360);
-        headXRot = mod(hXRot + 90, 360) - 90;
-        headYRot = mod(hYRot, 360);
     }
 
     @Override

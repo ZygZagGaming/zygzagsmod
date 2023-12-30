@@ -169,8 +169,8 @@ public class GeneralUtil {
 
     public static double shortAngleDist(double a0, double a1) {
         double max = Math.PI * 2;
-        double da = (a1 - a0) % max;
-        return (2 * da) % max - da;
+        double da = mod(a1 - a0, max);
+        return mod(2 * da, max) - da;
     }
 
     public static double angleLerp(double a0, double a1, double t) {
@@ -179,22 +179,50 @@ public class GeneralUtil {
 
     public static float shortAngleDist(float a0, float a1) {
         float max = (float) Math.PI * 2;
-        float da = (a1 - a0) % max;
-        return 2 * da % max - da;
+        float da = mod(a1 - a0, max);
+        return mod(2 * da, max) - da;
     }
 
     public static float angleLerp(float a0, float a1, float t) {
         return a0 + shortAngleDist(a0, a1) * t;
     }
 
+    public static double shortAngleDistDeg(double a0, double a1) {
+        double max = 360.0;
+        double da = mod(a1 - a0, max);
+        return mod(2 * da, max) - da;
+    }
+
+    public static double angleLerpDeg(double a0, double a1, double t) {
+        return a0 + shortAngleDistDeg(a0, a1) * t;
+    }
+
+    public static float shortAngleDistDeg(float a0, float a1) {
+        float max = 360f;
+        float da = mod(a1 - a0, max);
+        return mod(2 * da, max) - da;
+    }
+
+    public static float angleLerpDeg(float a0, float a1, float t) {
+        return a0 + shortAngleDistDeg(a0, a1) * t;
+    }
+
     public static double mod(double a, double b) {
-        if (a < 0) return b + (a % b);
+        if (a < 0) return b - ((-a) % b);
         return a % b;
     }
 
     public static float mod(float a, float b) {
         if (a < 0) return b - ((-a) % b);
         return a % b;
+    }
+
+    public static double lerp(double a, double b, double t) {
+        return a * (1 - t) + b * t;
+    }
+
+    public static float lerp(float a, float b, float t) {
+        return a * (1 - t) + b * t;
     }
 
     public static int fireResistance(LivingEntity entity) {
