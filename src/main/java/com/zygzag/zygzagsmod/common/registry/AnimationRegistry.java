@@ -41,6 +41,7 @@ public class AnimationRegistry extends CustomAkomiRegistry<Animation> {
     public static class BlazeSentry {
         public static final Supplier<Animation> IDLE_BASE = INSTANCE.register("blaze_sentry_idle_base", () -> new Animation(RawAnimation.begin().thenPlay("animation.blaze_sentry.idle_rotation"), 60));
         public static final Supplier<Animation> SHOOT_BASE = INSTANCE.register("blaze_sentry_shoot_base", () -> new Animation(RawAnimation.begin().thenPlay("animation.blaze_sentry.shooting_loop"), 60));
+        public static final Supplier<Animation> AGRO_BASE = INSTANCE.register("blaze_sentry_agro_base", () -> new Animation(RawAnimation.begin().thenPlay("animation.blaze_sentry.agro_rotation"), 60));
 
         public static void init() {
         }

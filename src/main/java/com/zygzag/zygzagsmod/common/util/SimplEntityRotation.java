@@ -4,6 +4,7 @@ import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 
 import static com.zygzag.zygzagsmod.common.util.GeneralUtil.*;
+import static java.lang.Math.cos;
 
 @SuppressWarnings("unused")
 public class SimplEntityRotation implements EntityRotation {
@@ -20,10 +21,11 @@ public class SimplEntityRotation implements EntityRotation {
             ).apply(instance, SimplEntityRotation::new)
     );
     // IMPORTANT: THIS IS IN RADIANS!!
-    protected float bodyXRot, oldBodyXRot, newBodyXRot;
-    protected float bodyYRot, oldBodyYRot, newBodyYRot;
-    protected float headXRot, oldHeadXRot, newHeadXRot;
-    protected float headYRot, oldHeadYRot, newHeadYRot;
+    public float bodyXRot, oldBodyXRot, newBodyXRot;
+    public float bodyYRot, oldBodyYRot, newBodyYRot;
+    public float headXRot, oldHeadXRot, newHeadXRot;
+    public float headYRot, oldHeadYRot, newHeadYRot;
+    public float[] maxRotationPerTick = {(float) (2 * Math.PI), (float) (2 * Math.PI)};
 
     public SimplEntityRotation() { }
 
@@ -40,10 +42,14 @@ public class SimplEntityRotation implements EntityRotation {
 
     @Override
     public void tick() {
-        oldBodyXRot = bodyXRot; bodyXRot = newBodyXRot;
-        oldBodyYRot = bodyYRot; bodyYRot = newBodyYRot;
-        oldHeadXRot = headXRot; headXRot = newHeadXRot;
-        oldHeadYRot = headYRot; headYRot = newHeadYRot;
+        oldHeadXRot = headXRot;
+        oldBodyXRot = bodyXRot;
+        oldHeadYRot = headYRot;
+        oldBodyYRot = bodyYRot;
+        float[] newHeadRot = moveAngleAmountTowards(headXRot, headYRot, newHeadXRot, newHeadYRot, maxRotationPerTick[0]);
+        float[] newBodyRot = moveAngleAmountTowards(bodyXRot, bodyYRot, newBodyXRot, newBodyYRot, maxRotationPerTick[1]);
+        headXRot = newHeadRot[0]; headYRot = newHeadRot[1];
+        bodyXRot = newBodyRot[0]; bodyYRot = newBodyRot[1];
     }
 
     @Override

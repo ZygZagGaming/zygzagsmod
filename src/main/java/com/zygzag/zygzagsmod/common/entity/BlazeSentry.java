@@ -3,14 +3,12 @@ package com.zygzag.zygzagsmod.common.entity;
 import com.zygzag.zygzagsmod.common.entity.animation.AnimatedEntity;
 import com.zygzag.zygzagsmod.common.entity.animation.Animation;
 import com.zygzag.zygzagsmod.common.entity.animation.Animator;
-import com.zygzag.zygzagsmod.common.registry.AnimationRegistry;
-import com.zygzag.zygzagsmod.common.registry.EntityDataSerializerRegistry;
-import com.zygzag.zygzagsmod.common.registry.EntityTypeRegistry;
-import com.zygzag.zygzagsmod.common.registry.ItemRegistry;
+import com.zygzag.zygzagsmod.common.registry.*;
 import com.zygzag.zygzagsmod.common.util.LockedEntityAnchor;
 import com.zygzag.zygzagsmod.common.util.LockedEntityRotation;
 import com.zygzag.zygzagsmod.common.util.SimplEntityRotation;
 import net.minecraft.MethodsReturnNonnullByDefault;
+import net.minecraft.client.Minecraft;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
@@ -39,18 +37,22 @@ import java.util.UUID;
 @ParametersAreNonnullByDefault
 @MethodsReturnNonnullByDefault
 public class BlazeSentry extends Monster implements GeoAnimatable, AnimatedEntity<BlazeSentry> {
-    public static final LockedEntityRotation.AnglesFromAnchors DEFAULT_ROTATIONS = (difference) -> {
-        double horizDifference = difference.horizontalDistance();
-        float yRot = (float) Math.atan2(difference.x(), difference.z());
-        float xRot = (float) Math.atan2(difference.y(), horizDifference);
-        return new float[]{xRot, (float) ((xRot + 0.5 * Math.PI) % (2 * Math.PI)), yRot, yRot};
-    };
     protected static final EntityDataAccessor<Animator.State> DATA_ANIMATOR_STATE = SynchedEntityData.defineId(BlazeSentry.class, EntityDataSerializerRegistry.ANIMATOR_STATE.get());
     protected static final EntityDataAccessor<Optional<UUID>> DATA_TARGET = SynchedEntityData.defineId(BlazeSentry.class, EntityDataSerializers.OPTIONAL_UUID);
     protected static final EntityDataAccessor<SimplEntityRotation> DATA_ROTATION = SynchedEntityData.defineId(BlazeSentry.class, EntityDataSerializerRegistry.ENTITY_ROTATION.get());
     private final AnimatableInstanceCache instanceCache = GeckoLibUtil.createInstanceCache(this);
     private final Animator<BlazeSentry> animator = new Animator<>(this);
+    public final LockedEntityRotation.RotationsFromDifference defaultRotations = (difference) -> {
+        double horizDifference = difference.horizontalDistance();
+        float yRot = (float) Math.atan2(difference.x(), difference.z());
+        float xRot = (float) Math.atan2(difference.y(), horizDifference);
+        return new float[]{xRot, xRot, yRot, yRot};
+    };
+    public static float[] maxRotationPerTick = {(float) (2 * Math.PI), (float) (0.0166666667 * Math.PI)};
     public SimplEntityRotation rotation = new SimplEntityRotation();
+    {
+        rotation.maxRotationPerTick = maxRotationPerTick;
+    }
     @Nullable
     private LivingEntity cachedTarget;
 
@@ -105,12 +107,23 @@ public class BlazeSentry extends Monster implements GeoAnimatable, AnimatedEntit
     public void setTarget(@Nullable LivingEntity entity) {
         super.setTarget(entity);
         if (!level().isClientSide) {
-            if (entity == null) entityData.set(DATA_TARGET, Optional.empty());
-            else entityData.set(DATA_TARGET, Optional.of(entity.getUUID()));
-            if (!(rotation instanceof LockedEntityRotation)) rotation = new LockedEntityRotation(
-                    new LockedEntityAnchor(this),
-                    new LockedEntityAnchor(getTarget())
-            );
+            if (entity == null) {
+                entityData.set(DATA_TARGET, Optional.empty());
+                if (rotation instanceof LockedEntityRotation) {
+                    rotation = new SimplEntityRotation();
+                    rotation.maxRotationPerTick = maxRotationPerTick;
+                }
+            } else {
+                entityData.set(DATA_TARGET, Optional.of(entity.getUUID()));
+                if (!(rotation instanceof LockedEntityRotation)) {
+                    rotation = new LockedEntityRotation(
+                            LockedEntityAnchor.eyes(this),
+                            LockedEntityAnchor.eyes(getTarget()),
+                            defaultRotations
+                    );
+                    rotation.maxRotationPerTick = maxRotationPerTick;
+                }
+            }
         }
     }
 
@@ -146,7 +159,7 @@ public class BlazeSentry extends Monster implements GeoAnimatable, AnimatedEntit
     @Override
     public @Nullable Animation getAnimationChange() {
         if (getTarget() == null) return AnimationRegistry.BlazeSentry.IDLE_BASE.get();
-        else return AnimationRegistry.BlazeSentry.SHOOT_BASE.get();
+        else return AnimationRegistry.BlazeSentry.AGRO_BASE.get();
     }
 
     @Override
@@ -161,19 +174,41 @@ public class BlazeSentry extends Monster implements GeoAnimatable, AnimatedEntit
 
     @Override
     public void tick() {
-//        if (level().isClientSide) rotation = entityData.get(DATA_ROTATION);
-//        else {
+        if (level().isClientSide) {
             if (getTarget() == null) {
-                if (rotation instanceof LockedEntityRotation) rotation = new SimplEntityRotation();
+                if (rotation instanceof LockedEntityRotation) {
+                    var newRotation = new SimplEntityRotation();
+                    newRotation.bodyXRot = rotation.bodyXRot;
+                    newRotation.bodyYRot = rotation.bodyYRot;
+                    newRotation.headXRot = rotation.headXRot;
+                    newRotation.headYRot = rotation.headYRot;
+                    newRotation.oldBodyXRot = rotation.oldBodyXRot;
+                    newRotation.oldBodyYRot = rotation.oldBodyYRot;
+                    newRotation.oldHeadXRot = rotation.oldHeadXRot;
+                    newRotation.oldHeadYRot = rotation.oldHeadYRot;
+                    rotation = newRotation;
+                    rotation.maxRotationPerTick = maxRotationPerTick;
+                }
             } else {
-                if (!(rotation instanceof LockedEntityRotation)) rotation = new LockedEntityRotation(
-                        LockedEntityAnchor.eyes(this),
-                        LockedEntityAnchor.eyes(getTarget()),
-                        DEFAULT_ROTATIONS
-                );
+                if (!(rotation instanceof LockedEntityRotation)) {
+                    var newRotation = new LockedEntityRotation(
+                            LockedEntityAnchor.eyes(this),
+                            LockedEntityAnchor.eyes(getTarget()),
+                            defaultRotations
+                    );
+                    newRotation.bodyXRot = rotation.bodyXRot;
+                    newRotation.bodyYRot = rotation.bodyYRot;
+                    newRotation.headXRot = rotation.headXRot;
+                    newRotation.headYRot = rotation.headYRot;
+                    newRotation.oldBodyXRot = rotation.oldBodyXRot;
+                    newRotation.oldBodyYRot = rotation.oldBodyYRot;
+                    newRotation.oldHeadXRot = rotation.oldHeadXRot;
+                    newRotation.oldHeadYRot = rotation.oldHeadYRot;
+                    rotation = newRotation;
+                    rotation.maxRotationPerTick = maxRotationPerTick;
+                }
             }
-            //entityData.set(DATA_ROTATION, rotation);
-        //}
+        }
         rotation.tick();
 
         setRot(0, 0);

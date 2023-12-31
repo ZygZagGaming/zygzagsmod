@@ -49,6 +49,8 @@ public class TransitionAnimationRegistry extends CustomAkomiRegistry<TransitionA
     public static class BlazeSentry {
         public static final Supplier<TransitionAnimation> IDLE_BASE_TO_SHOOT_BASE = INSTANCE.register("blaze_sentry_idle_base_to_shoot_base", () -> new TransitionAnimation(AnimationRegistry.BlazeSentry.IDLE_BASE.get(), AnimationRegistry.BlazeSentry.SHOOT_BASE.get(), RawAnimation.begin().thenPlay("animation.blaze_sentry.start_shooting"), 60, (ticks) -> 1f));
         public static final Supplier<TransitionAnimation> SHOOT_BASE_TO_IDLE_BASE = INSTANCE.register("blaze_sentry_shoot_base_to_idle_base", () -> new TransitionAnimation(AnimationRegistry.BlazeSentry.SHOOT_BASE.get(), AnimationRegistry.BlazeSentry.IDLE_BASE.get(), RawAnimation.begin().thenPlay("animation.blaze_sentry.stop_shooting"), 60, (ticks) -> 1f));
+        public static final Supplier<TransitionAnimation> IDLE_BASE_TO_AGRO_BASE = INSTANCE.register("blaze_sentry_idle_base_to_agro_base", () -> new TransitionAnimation(AnimationRegistry.BlazeSentry.IDLE_BASE.get(), AnimationRegistry.BlazeSentry.AGRO_BASE.get(), RawAnimation.begin().thenPlay("animation.blaze_sentry.idle_to_agro"), 60, (ticks) -> 1f));
+        public static final Supplier<TransitionAnimation> AGRO_BASE_TO_IDLE_BASE = INSTANCE.register("blaze_sentry_agro_base_to_idle_base", () -> new TransitionAnimation(AnimationRegistry.BlazeSentry.AGRO_BASE.get(), AnimationRegistry.BlazeSentry.IDLE_BASE.get(), RawAnimation.begin().thenPlay("animation.blaze_sentry.agro_to_idle"), 60, (ticks) -> 1f));
 
         public static void init() {
         }

@@ -18,7 +18,8 @@
 				{
 					"name": "rods",
 					"parent": "body",
-					"pivot": [0, 40, 0]
+					"pivot": [0, 40, 0],
+					"rotation": [-90, 0, 0]
 				},
 				{
 					"name": "rods1",

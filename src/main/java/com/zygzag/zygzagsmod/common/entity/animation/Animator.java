@@ -169,7 +169,7 @@ public class Animator<T extends LivingEntity & AnimatedEntity<T>> {
     }
 
     public boolean isTransitioning() {
-        return transitionAnimation != null;
+        return getTransitionAnimation() != null;
     }
 
     public float progressThroughAnimation() {

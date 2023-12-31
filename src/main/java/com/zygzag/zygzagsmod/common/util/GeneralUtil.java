@@ -31,6 +31,8 @@ import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Consumer;
 import java.util.function.Function;
 
+import static java.lang.Math.*;
+
 public class GeneralUtil {
     public static int getColor(BlockState state) {
         if (state.is(Tags.Blocks.ORES_COPPER)) return Config.copperOreColor;
@@ -208,13 +210,19 @@ public class GeneralUtil {
     }
 
     public static double mod(double a, double b) {
-        if (a < 0) return b - ((-a) % b);
-        return a % b;
+        return (a % b + b) % b;
     }
 
     public static float mod(float a, float b) {
-        if (a < 0) return b - ((-a) % b);
-        return a % b;
+        return (a % b + b) % b;
+    }
+
+    public static float formatAngle(float theta) {
+        return mod(theta, (float) (2 * Math.PI));
+    }
+
+    public static float formatAngleCentered(float theta) {
+        return mod(theta + (float) Math.PI, (float) (2 * Math.PI)) - (float) Math.PI;
     }
 
     public static double lerp(double a, double b, double t) {
@@ -318,5 +326,178 @@ public class GeneralUtil {
 
     public static AABB rotated(AABB aabb, Direction.Axis axisOfRotation, int quarterTurns, Vec3 originOfRotation) {
         return rotated(aabb.move(originOfRotation.scale(-1)), axisOfRotation, quarterTurns % 4).move(originOfRotation);
+    }
+
+    public static double angleDistance(double a, double b) {
+        return Math.PI - Math.abs(Math.abs(mod(a, 2 * Math.PI) - mod(b, 2 * Math.PI)) - Math.PI);
+    }
+
+    public static float angleDistance(float a, float b) {
+        return (float) Math.PI - Math.abs(Math.abs(mod(a, (float) (2 * Math.PI)) - mod(b, (float) (2 * Math.PI))) - (float) Math.PI);
+    }
+
+    public static double moveAngleAmountTowards(double a, double b, double c) {
+        return angleLerp(a, b, Math.min(1, c / angleDistance(a, b)));
+    }
+
+    public static float moveAngleAmountTowards(float a, float b, float c) {
+        return angleLerp(a, b, Math.min(1, c / angleDistance(a, b)));
+    }
+
+    public static double[] lerpSpherical(double phi0, double theta0, double phi1, double theta1, double t) {
+        // Convert spherical to rectangular on unit sphere
+        double x0 = cos(theta0) * cos(phi0), y0 = sin(theta0) * cos(phi0), z0 = sin(phi0);
+        double x1 = cos(theta1) * cos(phi1), y1 = sin(theta1) * cos(phi1), z1 = sin(phi1);
+
+        // Take the cross product to get a normal vector to the geodesic
+        double x2 = y0 * z1 - z0 * y1, y2 = x0 * z1 - z0 * x1, z2 = x0 * y1 - y0 * x1;
+
+        // Normalize
+        double factor = 1 / magnitude(x2, y2, z2);
+        x2 *= factor; y2 *= factor; z2 *= factor;
+
+        // Take the cross product and normalize again to get an orthonormal basis
+        double x3 = y0 * z2 - z0 * y2, y3 = x0 * z2 - z0 * x2, z3 = x0 * y2 - y0 * x2;
+        factor = 1 / magnitude(x3, y3,z3);
+        x3 *= factor; y3 *= factor; z3 *= factor;
+
+        // The geodesic can now be parametrized as r(t) = (x0, y0, z0)cos(t) + (x3, y3, z3)sin(t), r(0) = (x0, y0, z0)
+        // To find the value of t for which r(t) = (x1, y1, z1), we take the dot product of (x1, y1, z1) with (x0, y0, z0) and (x3, y3, z3)
+        double dot01 = x0 * x1 + y0 * y1 + z0 * z1;
+        double dot13 = x1 * x3 + y1 * y3 + z1 * z3;
+
+        // Now, the atan2 of dot01 and dot03 is the value of t for which r(t) = (x1, y1, z1)
+        double t1 = atan2(dot13, dot01);
+
+        // We transform the input value of t so that it can be used in the aforementioned function
+        double finalT = angleLerp(0, t1, t);
+
+        // We use that value of T to find a rectangular representation of the sought-after vector
+        double cos = cos(finalT), sin = sin(finalT), x4 = x0 * cos + x3 * sin, y4 = y0 * cos + y3 * sin, z4 = z0 * cos + z3 * sin;
+
+        // Finally, we reduce the rectangular form to spherical
+        double outPhi = acos(z4);
+        double outTheta = atan2(y4, x4);
+        return new double[]{outPhi, outTheta};
+    }
+
+    public static double magnitude(double x, double y, double z) {
+        return sqrt(x * x + y * y + z * z);
+    }
+
+    public static double angleDifferenceSpherical(double phi1, double theta1, double phi2, double theta2) {
+        return acos(cos(theta1 - theta2) * cos(phi1) * cos(phi2) + sin(phi1) * sin(phi2));
+    }
+
+    public static double[] moveAngleAmountTowards(double phi1, double theta1, double phi2, double theta2, double c) {
+        return lerpSpherical(phi1, theta1, phi2, theta2, Math.min(1, c / angleDifferenceSpherical(phi1, theta1, phi2, theta2)));
+    }
+
+    public static float[] lerpSpherical(float phi0, float theta0, float phi1, float theta1, float t) {
+        // Convert spherical to rectangular on unit sphere
+        float[] v0 = sphericalToRectangular(1, phi0, theta0);
+        float[] v1 = sphericalToRectangular(1, phi1, theta1);
+
+        // Take the cross product to get a normal vector to the geodesic
+        float[] v2 = cross(v0, v1);
+
+        // Normalize
+        v2 = normalized(v2);
+
+        // Take the cross product and normalize again to get an orthonormal basis v0, v2, v3
+        float[] v3 = normalized(cross(v0, v2));
+
+        // The geodesic can now be parametrized as r(t) = v0cos(t) + v3sin(t), r(0) = v0
+        // To find the value of t for which r(t) = v1, we take the dot product of v1 with v0 and v3
+        float dot01 = dot(v0, v1);
+        float dot13 = dot(v1, v3);
+
+        // Now, the atan2 of dot01 and dot03 is the value of t for which r(t) = v1
+        float t1 = (float) atan2(dot13, dot01);
+
+        // We transform the input value of t so that it can be used in the aforementioned function
+        float finalT = angleLerp(0, t1, t);
+
+        // We use that value of T to find a rectangular representation of the sought-after vector
+        float[] v4 = add(scale((float) cos(finalT), v0), scale((float) sin(finalT), v3));
+
+        // Finally, we reduce the rectangular form to spherical
+        float[] out = rectangularToSpherical(v4);
+        return new float[]{out[1], out[2]};
+    }
+
+    public static float[] sphericalToRectangular(float[] rpt) {
+        float rho = rpt[0], phi = rpt[1], theta = rpt[2];
+        return new float[]{(float) (rho * cos(theta) * cos(phi)), (float) (rho * sin(theta) * cos(phi)), (float) (rho * sin(phi))};
+    }
+
+    public static float[] rectangularToSpherical(float[] xyz) {
+        float x = xyz[0], y = xyz[1], z = xyz[2], rho = magnitude(xyz);
+        return new float[]{rho, (float) asin(z / rho), (float) atan2(y, x)};
+    }
+
+    public static float[] sphericalToRectangular(float rho, float phi, float theta) {
+        return new float[]{(float) (rho * cos(theta) * cos(phi)), (float) (rho * sin(theta) * cos(phi)), (float) (rho * sin(phi))};
+    }
+
+    public static float[] rectangularToSpherical(float x, float y, float z) {
+        float rho = magnitude(x, y, z);
+        return new float[]{rho, (float) asin(z / rho), (float) atan2(y, x)};
+    }
+
+    public static float magnitude(float x, float y, float z) {
+        return (float) sqrt(x * x + y * y + z * z);
+    }
+
+    public static float angleDifferenceSpherical(float phi1, float theta1, float phi2, float theta2) {
+        return (float) acos(cos(theta1 - theta2) * cos(phi1) * cos(phi2) + sin(phi1) * sin(phi2));
+    }
+
+    public static float[] moveAngleAmountTowards(float phi1, float theta1, float phi2, float theta2, float c) {
+        float diff = angleDifferenceSpherical(phi1, theta1, phi2, theta2);
+        return diff <= 1e-4 ? new float[]{phi1, theta1} : lerpSpherical(phi1, theta1, phi2, theta2, Math.min(1, c / diff));
+    }
+
+    public static float magnitude(float[] values) {
+        float total = 0;
+        for (float component : values) total += component * component;
+        return (float) sqrt(total);
+    }
+
+    public static float[] scale(float scalar, float[] values) {
+        float[] fin = new float[values.length];
+        for (int i = 0; i < values.length; i++) fin[i] = scalar * values[i];
+        return fin;
+    }
+
+    public static float[] add(float[] a, float[] b) {
+        float[] c = new float[min(a.length, b.length)];
+        for (int i = 0; i < c.length; i++) c[i] = a[i] + b[i];
+        return c;
+    }
+
+    public static float dot(float[] a, float[] b) {
+        float total = 0;
+        for (int i = 0; i < min(a.length, b.length); i++) total += a[i] * b[i];
+        return total;
+    }
+
+    public static float[] cross(float[] a, float[] b) {
+        return new float[]{a[1] * b[2] - a[2] * b[1], a[2] * b[0] - a[0] * b[2], a[0] * b[1] - a[1] * b[0]};
+    }
+
+    public static float[] normalized(float[] values) {
+        return scale(1 / magnitude(values), values);
+    }
+
+    public static void main(String[] args) { // testing
+        float pi = (float) Math.PI;
+        float phi1 = -pi * 0.25f, theta1 = 0, phi2 = pi * 0.25f, theta2 = pi * 0.5f;
+        float[] result1 = lerpSpherical(phi1, theta1, phi2, theta2, 0);
+        float[] result2 = lerpSpherical(phi1, theta1, phi2, theta2, 1);
+        float[] result3 = lerpSpherical(phi1, theta1, phi2, theta2, 0.5f);
+        System.out.println("The slerp between (1, " + phi1 + ", " + theta1 + ") and (1, " + phi2 + ", " + theta2 + ") with t=0 is (1, " + result1[0] + ", " + result1[1] + ")");
+        System.out.println("The slerp between (1, " + phi1 + ", " + theta1 + ") and (1, " + phi2 + ", " + theta2 + ") with t=1 is (1, " + result2[0] + ", " + result2[1] + ")");
+        System.out.println("The slerp between (1, " + phi1 + ", " + theta1 + ") and (1, " + phi2 + ", " + theta2 + ") with t=0.5 is (1, " + result3[0] + ", " + result3[1] + ")");
     }
 }

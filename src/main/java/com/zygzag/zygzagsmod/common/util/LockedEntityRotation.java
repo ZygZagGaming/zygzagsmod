@@ -2,8 +2,10 @@ package com.zygzag.zygzagsmod.common.util;
 
 import net.minecraft.world.phys.Vec3;
 
+import static com.zygzag.zygzagsmod.common.util.GeneralUtil.moveAngleAmountTowards;
+
 public class LockedEntityRotation extends SimplEntityRotation {
-    public static final AnglesFromAnchors DEFAULT_ROTATIONS = (difference) -> {
+    public static final RotationsFromDifference DEFAULT_ROTATIONS = (difference) -> {
         double horizDifference = difference.horizontalDistance();
         float yRot = (float) Math.atan2(difference.x(), difference.z());
         float xRot = (float) Math.atan2(difference.y(), horizDifference);
@@ -11,8 +13,8 @@ public class LockedEntityRotation extends SimplEntityRotation {
     };
 
     public PositionAnchor origin, target;
-    public AnglesFromAnchors transform;
-    public LockedEntityRotation(PositionAnchor origin, PositionAnchor target, AnglesFromAnchors transform) {
+    public RotationsFromDifference transform;
+    public LockedEntityRotation(PositionAnchor origin, PositionAnchor target, RotationsFromDifference transform) {
         this.origin = origin;
         this.target = target;
         this.transform = transform;
@@ -21,7 +23,7 @@ public class LockedEntityRotation extends SimplEntityRotation {
         this(origin, target, DEFAULT_ROTATIONS);
     }
 
-    public LockedEntityRotation(PositionAnchor target, AnglesFromAnchors transform) {
+    public LockedEntityRotation(PositionAnchor target, RotationsFromDifference transform) {
         this(PositionAnchor.ZERO, target, transform);
     }
 
@@ -36,15 +38,15 @@ public class LockedEntityRotation extends SimplEntityRotation {
 
         float[] rotations = transform.rotationsFromDifference(target.get().subtract(origin.get()));
 
-        setHeadXRot(rotations[0]);
-        setBodyXRot(rotations[1]);
-        setHeadYRot(rotations[2]);
-        setBodyYRot(rotations[3]);
+        newHeadXRot = rotations[0];
+        newBodyXRot = rotations[1];
+        newHeadYRot = rotations[2];
+        newBodyYRot = rotations[3];
 
         super.tick();
     }
 
-    public interface AnglesFromAnchors {
+    public interface RotationsFromDifference {
         float[] rotationsFromDifference(Vec3 difference);
     }
 }
