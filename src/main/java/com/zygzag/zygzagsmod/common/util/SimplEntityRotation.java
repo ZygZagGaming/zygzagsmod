@@ -40,6 +40,28 @@ public class SimplEntityRotation implements EntityRotation {
         this.oldHeadYRot = oldHeadYRot;
     }
 
+    public SimplEntityRotation(SimplEntityRotation past, boolean resetRotations) {
+        bodyXRot = past.bodyXRot;
+        bodyYRot = past.bodyYRot;
+        oldBodyXRot = past.oldBodyXRot;
+        oldBodyYRot = past.oldBodyYRot;
+        headXRot = past.headXRot;
+        headYRot = past.headYRot;
+        oldHeadXRot = past.oldHeadXRot;
+        oldHeadYRot = past.oldHeadYRot;
+        maxRotationPerTick = past.maxRotationPerTick;
+        if (!resetRotations) {
+            newBodyXRot = past.newBodyXRot;
+            newBodyYRot = past.newBodyYRot;
+            newHeadXRot = past.newHeadXRot;
+            newHeadYRot = past.newHeadYRot;
+        }
+    }
+
+    public SimplEntityRotation(SimplEntityRotation past) {
+        this(past, true);
+    }
+
     @Override
     public void tick() {
         oldHeadXRot = headXRot;

@@ -3,6 +3,7 @@ package com.zygzag.zygzagsmod.common.entity.animation;
 import com.zygzag.zygzagsmod.common.Main;
 import com.zygzag.zygzagsmod.common.util.GeneralUtil;
 import net.minecraft.MethodsReturnNonnullByDefault;
+import net.minecraft.client.Minecraft;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.LivingEntity;
@@ -40,7 +41,7 @@ public class Animator<T extends LivingEntity & AnimatedEntity<T>> {
         return parent.level();
     }
 
-    public Animation getAnimation() {
+    public @Nullable Animation getAnimation() {
         return animation;
     }
 
@@ -79,6 +80,7 @@ public class Animator<T extends LivingEntity & AnimatedEntity<T>> {
 
             // Check if transition should be played
             if (currentAnimation != null && !currentAnimation.is(lastNonTransitionAnimation)) {
+                System.out.println("animation change between " + lastNonTransitionAnimation + " and " + currentAnimation);
                 TransitionAnimation transitionAnim = GeneralUtil.getTransitionAnimation(lastNonTransitionAnimation, currentAnimation);
                 if (transitionAnim != null) queueAnimation(transitionAnim);
                 lastNonTransitionAnimation = currentAnimation;
@@ -86,6 +88,7 @@ public class Animator<T extends LivingEntity & AnimatedEntity<T>> {
 
             // Choose Animation to play if the current one should be over
             if (getTicksRemainingInAnimation() <= 0 || lastAnimation == null || lastAnimation.canBeSkipped()) {
+                if (lastAnimation instanceof TransitionAnimation) setTransitionAnimation(null);
                 AbstractAnimation animToChangeTo;
                 if (queuedAnims.isEmpty()) {
                     //Does not continue with another Idle animation until the animation is complete
@@ -120,7 +123,6 @@ public class Animator<T extends LivingEntity & AnimatedEntity<T>> {
     }
 
     public void queueAnimation(AbstractAnimation anim) {
-        //System.out.println("queueing animation " + anim);
         queuedAnims.add(anim);
     }
 

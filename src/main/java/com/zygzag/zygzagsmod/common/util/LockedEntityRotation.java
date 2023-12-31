@@ -19,6 +19,12 @@ public class LockedEntityRotation extends SimplEntityRotation {
         this.target = target;
         this.transform = transform;
     }
+    public LockedEntityRotation(PositionAnchor origin, PositionAnchor target, RotationsFromDifference transform, SimplEntityRotation past) {
+        super(past);
+        this.origin = origin;
+        this.target = target;
+        this.transform = transform;
+    }
     public LockedEntityRotation(PositionAnchor origin, PositionAnchor target) {
         this(origin, target, DEFAULT_ROTATIONS);
     }
