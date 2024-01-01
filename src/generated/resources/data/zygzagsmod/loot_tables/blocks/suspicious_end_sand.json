@@ -1,0 +1,21 @@
+{
+  "type": "minecraft:block",
+  "pools": [
+    {
+      "bonus_rolls": 0.0,
+      "conditions": [
+        {
+          "condition": "minecraft:survives_explosion"
+        }
+      ],
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "name": "zygzagsmod:iridium_end_sand"
+        }
+      ],
+      "rolls": 1.0
+    }
+  ],
+  "random_sequence": "zygzagsmod:blocks/suspicious_end_sand"
+}

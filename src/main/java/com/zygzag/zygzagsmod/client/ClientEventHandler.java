@@ -9,6 +9,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.LevelRenderer;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.core.BlockPos;
+import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.phys.shapes.Shapes;
@@ -17,11 +18,10 @@ import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.Mod;
 import net.neoforged.neoforge.client.event.RenderLevelStageEvent;
+import net.neoforged.neoforge.event.entity.living.MobEffectEvent;
 
 import java.awt.*;
 import java.util.Map;
-
-import static com.zygzag.zygzagsmod.common.util.GeneralUtil.ifCapability;
 
 @Mod.EventBusSubscriber(modid = Main.MODID, value = Dist.CLIENT)
 @SuppressWarnings("unused")
@@ -70,5 +70,47 @@ public class ClientEventHandler {
             stack.popPose();
         }
 
+    }
+
+    @SubscribeEvent
+    public static void effectRemove(final MobEffectEvent.Remove event) {
+        var world = event.getEntity().level();
+        var player = Minecraft.getInstance().player;
+        if (world.isClientSide && player != null && event.getEntity().is(player)) {
+            var activeEffects = player.getActiveEffectsMap();
+            var map = Main.CURRENT_PLAYER_CACHE.blockStateColorMap();
+            for (MobEffect e : activeEffects.keySet()) if (e instanceof SightEffect effect) {
+                var inst = activeEffects.get(effect);
+                Main.CURRENT_PLAYER_CACHE.update(effect, player, inst.getAmplifier());
+            }
+        }
+    }
+
+    @SubscribeEvent
+    public static void effectAdded(final MobEffectEvent.Added event) {
+        var world = event.getEntity().level();
+        var player = Minecraft.getInstance().player;
+        if (world.isClientSide && player != null && event.getEntity().is(player)) {
+            var activeEffects = player.getActiveEffectsMap();
+            var map = Main.CURRENT_PLAYER_CACHE.blockStateColorMap();
+            for (MobEffect e : activeEffects.keySet()) if (e instanceof SightEffect effect) {
+                var inst = activeEffects.get(effect);
+                Main.CURRENT_PLAYER_CACHE.update(effect, player, inst.getAmplifier());
+            }
+        }
+    }
+
+    @SubscribeEvent
+    public static void effectExpired(final MobEffectEvent.Expired event) {
+        var world = event.getEntity().level();
+        var player = Minecraft.getInstance().player;
+        if (world.isClientSide && player != null && event.getEntity().is(player)) {
+            var activeEffects = player.getActiveEffectsMap();
+            var map = Main.CURRENT_PLAYER_CACHE.blockStateColorMap();
+            for (MobEffect e : activeEffects.keySet()) if (e instanceof SightEffect effect) {
+                var inst = activeEffects.get(effect);
+                Main.CURRENT_PLAYER_CACHE.update(effect, player, inst.getAmplifier());
+            }
+        }
     }
 }

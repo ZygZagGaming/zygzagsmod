@@ -1,6 +1,7 @@
 package com.zygzag.zygzagsmod.common.datagen;
 
 import com.zygzag.zygzagsmod.common.item.iridium.Socket;
+import com.zygzag.zygzagsmod.common.registry.BlockItemEntityRegistry;
 import com.zygzag.zygzagsmod.common.registry.BlockWithItemRegistry;
 import com.zygzag.zygzagsmod.common.registry.IridiumGearRegistry;
 import com.zygzag.zygzagsmod.common.registry.ItemRegistry;
@@ -64,7 +65,14 @@ public class AkomiRecipeProvider extends RecipeProvider {
         makeSimpleStonecuttingRecipe(BlockWithItemRegistry.NETHER_QUARTZ_GLASS.getItem(), BlockWithItemRegistry.NETHER_QUARTZ_GLASS_SLAB.getItem(), RecipeCategory.BUILDING_BLOCKS, "stonecutting", 2, output);
 
         SimpleCookingRecipeBuilder.smelting(Ingredient.of(Items.QUARTZ_BLOCK), RecipeCategory.BUILDING_BLOCKS, BlockWithItemRegistry.NETHER_QUARTZ_GLASS_SLAB.getItem(), 0.35f, 200).unlockedBy("has_quartz_block", has(Items.QUARTZ_BLOCK)).save(output);
+
+        ShapelessRecipeBuilder.shapeless(RecipeCategory.REDSTONE, BlockWithItemRegistry.RED_NETHER_BRICK_BUTTON.getItem()).unlockedBy("has_red_nether_bricks", has(Items.RED_NETHER_BRICKS)).requires(Items.RED_NETHER_BRICKS).save(output, new ResourceLocation(MODID, "red_nether_brick_button"));
+        ShapelessRecipeBuilder.shapeless(RecipeCategory.REDSTONE, BlockWithItemRegistry.NETHER_BRICK_BUTTON.getItem()).unlockedBy("has_nether_bricks", has(Items.NETHER_BRICK)).requires(Items.NETHER_BRICK).save(output, new ResourceLocation(MODID, "nether_brick_button"));
+
+        ShapedRecipeBuilder.shaped(RecipeCategory.COMBAT, BlockItemEntityRegistry.MAGMATIC_NETHER_BRICKS.getItem()).unlockedBy("has_magmatic_nether_bricks", has(BlockItemEntityRegistry.MAGMATIC_NETHER_BRICKS.getItem())).pattern("MRM").pattern("RBR").pattern("MRM").define('M', Items.MAGMA_CREAM).define('R', Items.RED_NETHER_BRICKS).define('B', Items.BLAZE_ROD).save(output, new ResourceLocation(MODID, "magmatic_nether_bricks"));
+        ShapedRecipeBuilder.shaped(RecipeCategory.TOOLS, BlockItemEntityRegistry.RED_NETHER_BRICK_CACHE.getItem()).unlockedBy("has_red_nether_bricks", has(Items.RED_NETHER_BRICKS)).pattern("RRR").pattern("R R").pattern("RRR").define('R', Items.RED_NETHER_BRICKS).define(' ', Items.AIR).save(output, new ResourceLocation(MODID, "red_nether_brick_cache"));
     }
+
     private void makeSimpleStonecuttingRecipe(Item start, Item result, RecipeCategory category, String path, RecipeOutput output) {
         makeSimpleStonecuttingRecipe(start, result, category, path, 1, output);
     }

@@ -1,0 +1,23 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "key": {
+    "B": {
+      "item": "minecraft:blaze_rod"
+    },
+    "M": {
+      "item": "minecraft:magma_cream"
+    },
+    "R": {
+      "item": "minecraft:red_nether_bricks"
+    }
+  },
+  "pattern": [
+    "MRM",
+    "RBR",
+    "MRM"
+  ],
+  "result": {
+    "item": "zygzagsmod:magmatic_nether_bricks"
+  }
+}

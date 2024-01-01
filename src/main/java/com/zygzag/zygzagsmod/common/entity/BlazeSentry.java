@@ -19,7 +19,9 @@ import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.goal.Goal;
 import net.minecraft.world.entity.ai.goal.target.HurtByTargetGoal;
+import net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal;
 import net.minecraft.world.entity.monster.Monster;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.SmallFireball;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
@@ -220,7 +222,9 @@ public class BlazeSentry extends Monster implements GeoAnimatable, AnimatedEntit
     @Override
     protected void registerGoals() {
         targetSelector.addGoal(2, new HurtByTargetGoal(this));
+        targetSelector.addGoal(3, new NearestAttackableTargetGoal<>(this, Player.class, 0, true, false, (entity) -> entity instanceof Player player && !player.isCreative() && !player.isSpectator()));
         goalSelector.addGoal(2, new FireGoal());
+        goalSelector.addGoal(2, new FireBigGoal());
     }
 
     @Override
@@ -236,9 +240,10 @@ public class BlazeSentry extends Monster implements GeoAnimatable, AnimatedEntit
 
     public class FireGoal extends Goal {
         public static final EnumSet<Goal.Flag> flags = EnumSet.of(Flag.LOOK, Flag.TARGET);
-        public static final int windup = 40, ticksBetweenFireballs = 3, maxFireballs = 50, windDown = 40;
+        public static final int windup = 60, ticksBetweenFireballs = 3, maxFireballs = 50, windDown = 60;
         public static final double power = 1.5;
         int ticks = 0;
+        double chanceToUse = 0.66;
 
         @Override
         public EnumSet<Flag> getFlags() {
@@ -247,7 +252,7 @@ public class BlazeSentry extends Monster implements GeoAnimatable, AnimatedEntit
 
         @Override
         public boolean canUse() {
-            return windDownTicks <= 0 && !animator.isTransitioning() && animator.getAnimation() == AnimationRegistry.BlazeSentry.AGRO_BASE.get();
+            return windDownTicks <= 0 && !animator.isTransitioning() && animator.getAnimation() == AnimationRegistry.BlazeSentry.AGRO_BASE.get() && level().getRandom().nextDouble() < chanceToUse;
         }
 
         @Override
@@ -287,6 +292,63 @@ public class BlazeSentry extends Monster implements GeoAnimatable, AnimatedEntit
         @Override
         public boolean canContinueToUse() {
             return (ticks - windup) / ticksBetweenFireballs < maxFireballs && getTarget() != null;
+        }
+    }
+
+    public class FireBigGoal extends Goal {
+        public static final EnumSet<Goal.Flag> flags = EnumSet.of(Flag.LOOK, Flag.TARGET);
+        public static final int windup = 20, windDown = 100;
+        public static final double power = 2;
+        int ticks = 0;
+
+        @Override
+        public EnumSet<Flag> getFlags() {
+            return flags;
+        }
+
+        @Override
+        public boolean canUse() {
+            return windDownTicks <= 0 && !animator.isTransitioning() && animator.getAnimation() == AnimationRegistry.BlazeSentry.AGRO_BASE.get();
+        }
+
+        @Override
+        public boolean requiresUpdateEveryTick() {
+            return true;
+        }
+
+        @Override
+        public void start() {
+            //System.out.println("started");
+            animator.queueAnimation(TransitionAnimationRegistry.BlazeSentry.AGRO_BASE_TO_SHOOT_BASE.get());
+            animator.queueAnimation(AnimationRegistry.BlazeSentry.SHOOT_BIG_BASE.get());
+            animator.queueAnimation(TransitionAnimationRegistry.BlazeSentry.SHOOT_BASE_TO_AGRO_BASE.get());
+            ticks = 0;
+        }
+
+        @Override
+        public void tick() {
+            ticks++;
+            if (ticks == windup) {
+                LivingEntity target = getTarget();
+                assert target != null;
+                Vec3 angle = new Vec3(sin(rotation.bodyYRot) * cos(rotation.bodyXRot), sin(rotation.bodyXRot), cos(rotation.bodyYRot) * cos(rotation.bodyXRot));
+                SmallFireball fireball = new SmallFireball(level(), BlazeSentry.this, angle.x, angle.y, angle.z);
+                fireball.xPower *= power; fireball.yPower *= power; fireball.zPower *= power;
+                fireball.setDeltaMovement(angle.scale(power));
+                fireball.moveTo(getEyePosition().add(angle.scale(0.25)));
+                level().addFreshEntity(fireball);
+            }
+        }
+
+        @Override
+        public void stop() {
+            windDownTicks = windDown;
+            animator.setAnimation(getTarget() == null ? AnimationRegistry.BlazeSentry.IDLE_BASE.get() : AnimationRegistry.BlazeSentry.AGRO_BASE.get());
+        }
+
+        @Override
+        public boolean canContinueToUse() {
+            return ticks < windup;
         }
     }
 }

@@ -2,12 +2,16 @@ package com.zygzag.zygzagsmod.common;
 
 import com.zygzag.zygzagsmod.common.datagen.AkomiBlockstateProvider;
 import com.zygzag.zygzagsmod.common.datagen.AkomiItemModelProvider;
+import com.zygzag.zygzagsmod.common.datagen.AkomiLootTableProvider;
 import com.zygzag.zygzagsmod.common.datagen.AkomiRecipeProvider;
 import com.zygzag.zygzagsmod.common.entity.BlazeSentry;
 import com.zygzag.zygzagsmod.common.entity.IridiumGolem;
 import com.zygzag.zygzagsmod.common.item.iridium.ISocketable;
-import com.zygzag.zygzagsmod.common.registry.*;
+import com.zygzag.zygzagsmod.common.registry.AttributeRegistry;
+import com.zygzag.zygzagsmod.common.registry.EntityTypeRegistry;
+import com.zygzag.zygzagsmod.common.registry.IridiumGearRegistry;
 import net.minecraft.data.DataProvider;
+import net.minecraft.data.loot.LootTableProvider;
 import net.minecraft.data.recipes.RecipeProvider;
 import net.minecraft.world.entity.monster.AbstractSkeleton;
 import net.minecraft.world.item.Item;
@@ -19,7 +23,6 @@ import net.neoforged.neoforge.client.model.generators.ItemModelProvider;
 import net.neoforged.neoforge.data.event.GatherDataEvent;
 import net.neoforged.neoforge.event.entity.EntityAttributeCreationEvent;
 import net.neoforged.neoforge.event.entity.EntityAttributeModificationEvent;
-import net.neoforged.neoforge.registries.NewRegistryEvent;
 
 import java.util.function.Supplier;
 
@@ -51,16 +54,20 @@ public class ModEventHandler {
     @SubscribeEvent
     public static void gatherData(final GatherDataEvent event) {
         event.getGenerator().addProvider(
-                true,
+                event.includeClient(),
                 (DataProvider.Factory<ItemModelProvider>) (output) -> new AkomiItemModelProvider(output, event.getExistingFileHelper())
         );
         event.getGenerator().addProvider(
-                true,
+                event.includeClient(),
                 (DataProvider.Factory<RecipeProvider>) (output) -> new AkomiRecipeProvider(output, event.getLookupProvider())
         );
         event.getGenerator().addProvider(
-                true,
+                event.includeClient(),
                 (DataProvider.Factory<BlockStateProvider>) (output) -> new AkomiBlockstateProvider(output, event.getExistingFileHelper())
+        );
+        event.getGenerator().addProvider(
+                event.includeServer(),
+                (DataProvider.Factory<LootTableProvider>) AkomiLootTableProvider::new
         );
     }
 }

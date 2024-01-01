@@ -18,6 +18,7 @@ public class PlayerSightCache {
     }
 
     public void update(SightEffect sightEffect, Player player, int amplifier) {
+        System.out.println("men");
         var world = player.level();
         var sightRange = sightEffect.range(amplifier);
         var playerBlockPos = player.blockPosition();

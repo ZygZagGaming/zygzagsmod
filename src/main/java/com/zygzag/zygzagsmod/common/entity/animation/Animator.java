@@ -80,7 +80,7 @@ public class Animator<T extends LivingEntity & AnimatedEntity<T>> {
 
             // Check if transition should be played
             if (currentAnimation != null && !currentAnimation.is(lastNonTransitionAnimation)) {
-                System.out.println("animation change between " + lastNonTransitionAnimation + " and " + currentAnimation);
+                //System.out.println("animation change between " + lastNonTransitionAnimation + " and " + currentAnimation);
                 TransitionAnimation transitionAnim = GeneralUtil.getTransitionAnimation(lastNonTransitionAnimation, currentAnimation);
                 if (transitionAnim != null) queueAnimation(transitionAnim);
                 lastNonTransitionAnimation = currentAnimation;
