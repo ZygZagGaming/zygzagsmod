@@ -16,14 +16,15 @@ import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.SubscribeEvent;
-import net.neoforged.fml.common.Mod;
 import net.neoforged.neoforge.client.event.RenderLevelStageEvent;
 import net.neoforged.neoforge.event.entity.living.MobEffectEvent;
 
 import java.awt.*;
 import java.util.Map;
 
-@Mod.EventBusSubscriber(modid = Main.MODID, value = Dist.CLIENT)
+import static net.neoforged.fml.common.Mod.EventBusSubscriber;
+
+@EventBusSubscriber(modid = Main.MODID, value = Dist.CLIENT)
 @SuppressWarnings("unused")
 public class ClientEventHandler {
 
