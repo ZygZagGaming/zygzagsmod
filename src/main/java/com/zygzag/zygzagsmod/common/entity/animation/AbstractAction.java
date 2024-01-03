@@ -3,18 +3,18 @@ package com.zygzag.zygzagsmod.common.entity.animation;
 import net.minecraft.resources.ResourceLocation;
 import software.bernie.geckolib.core.animation.RawAnimation;
 
-public abstract class AbstractAnimation {
+public abstract class AbstractAction {
     private final RawAnimation raw;
     private final int lengthInTicks;
     private final boolean canBeSkipped;
 
-    public AbstractAnimation(RawAnimation raw, int lengthInTicks, boolean canBeSkipped) {
+    public AbstractAction(RawAnimation raw, int lengthInTicks, boolean canBeSkipped) {
         this.raw = raw;
         this.lengthInTicks = lengthInTicks;
         this.canBeSkipped = canBeSkipped;
     }
 
-    public AbstractAnimation(RawAnimation raw, int lengthInTicks) {
+    public AbstractAction(RawAnimation raw, int lengthInTicks) {
         this(raw, lengthInTicks, true);
     }
 
@@ -30,7 +30,7 @@ public abstract class AbstractAnimation {
         return canBeSkipped;
     }
 
-    public boolean is(AbstractAnimation other) {
+    public boolean is(AbstractAction other) {
         return this == other;
     }
 

@@ -33,8 +33,8 @@ public class AkomiRegistry<T> {
             EntityDataSerializerRegistry.INSTANCE::registerTo,
             StructureTypeRegistry.INSTANCE::registerTo,
             StructurePieceTypeRegistry.INSTANCE::registerTo,
-            AnimationRegistry.INSTANCE::registerTo,
-            TransitionAnimationRegistry.INSTANCE::registerTo,
+            ActionRegistry.INSTANCE::registerTo,
+            TransitionActionRegistry.INSTANCE::registerTo,
             AttributeRegistry.INSTANCE::registerTo,
             AttachmentTypeRegistry.INSTANCE::registerTo
     );

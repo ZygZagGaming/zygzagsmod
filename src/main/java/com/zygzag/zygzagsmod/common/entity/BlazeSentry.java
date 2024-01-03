@@ -1,14 +1,16 @@
 package com.zygzag.zygzagsmod.common.entity;
 
-import com.zygzag.zygzagsmod.common.entity.animation.AnimatedEntity;
-import com.zygzag.zygzagsmod.common.entity.animation.Animation;
-import com.zygzag.zygzagsmod.common.entity.animation.Animator;
-import com.zygzag.zygzagsmod.common.registry.*;
+import com.zygzag.zygzagsmod.common.entity.animation.ActingEntity;
+import com.zygzag.zygzagsmod.common.entity.animation.Action;
+import com.zygzag.zygzagsmod.common.entity.animation.Actor;
+import com.zygzag.zygzagsmod.common.registry.ActionRegistry;
+import com.zygzag.zygzagsmod.common.registry.EntityDataSerializerRegistry;
+import com.zygzag.zygzagsmod.common.registry.EntityTypeRegistry;
+import com.zygzag.zygzagsmod.common.registry.ItemRegistry;
 import com.zygzag.zygzagsmod.common.util.LockedEntityAnchor;
 import com.zygzag.zygzagsmod.common.util.LockedEntityRotation;
 import com.zygzag.zygzagsmod.common.util.SimplEntityRotation;
 import net.minecraft.MethodsReturnNonnullByDefault;
-import net.minecraft.client.Minecraft;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
@@ -41,12 +43,12 @@ import static java.lang.Math.sin;
 
 @ParametersAreNonnullByDefault
 @MethodsReturnNonnullByDefault
-public class BlazeSentry extends Monster implements GeoAnimatable, AnimatedEntity<BlazeSentry> {
-    protected static final EntityDataAccessor<Animator.State> DATA_ANIMATOR_STATE = SynchedEntityData.defineId(BlazeSentry.class, EntityDataSerializerRegistry.ANIMATOR_STATE.get());
+public class BlazeSentry extends Monster implements GeoAnimatable, ActingEntity<BlazeSentry> {
+    protected static final EntityDataAccessor<Actor.State> DATA_ANIMATOR_STATE = SynchedEntityData.defineId(BlazeSentry.class, EntityDataSerializerRegistry.ACTOR_STATE.get());
     protected static final EntityDataAccessor<Optional<UUID>> DATA_TARGET = SynchedEntityData.defineId(BlazeSentry.class, EntityDataSerializers.OPTIONAL_UUID);
     //protected static final EntityDataAccessor<SimplEntityRotation> DATA_ROTATION = SynchedEntityData.defineId(BlazeSentry.class, EntityDataSerializerRegistry.ENTITY_ROTATION.get());
     private final AnimatableInstanceCache instanceCache = GeckoLibUtil.createInstanceCache(this);
-    private final Animator<BlazeSentry> animator = new Animator<>(this);
+    private final Actor<BlazeSentry> actor = new Actor<>(this, ActionRegistry.BlazeSentry.IDLE_BASE.get());
     public final LockedEntityRotation.RotationsFromDifference defaultRotations = (difference) -> {
         double horizDifference = difference.horizontalDistance();
         float yRot = (float) Math.atan2(difference.x(), difference.z());
@@ -88,14 +90,13 @@ public class BlazeSentry extends Monster implements GeoAnimatable, AnimatedEntit
     @Override
     protected void defineSynchedData() {
         super.defineSynchedData();
-        entityData.define(DATA_ANIMATOR_STATE, new Animator.State(
-                AnimationRegistry.BlazeSentry.IDLE_BASE.get(),
+        entityData.define(DATA_ANIMATOR_STATE, new Actor.State(
+                ActionRegistry.BlazeSentry.IDLE_BASE.get(),
+                ActionRegistry.BlazeSentry.IDLE_BASE.get(),
                 null,
                 99999999,
                 60,
-                new LinkedList<>(),
-                AnimationRegistry.BlazeSentry.IDLE_BASE.get(),
-                AnimationRegistry.BlazeSentry.IDLE_BASE.get()
+                new LinkedList<>()
         ));
         entityData.define(DATA_TARGET, Optional.empty());
         //entityData.define(DATA_ROTATION, new SimplEntityRotation());
@@ -117,15 +118,15 @@ public class BlazeSentry extends Monster implements GeoAnimatable, AnimatedEntit
         super.setTarget(entity);
         if (!level().isClientSide) {
             if (entity == null) {
-                animator.setAnimation(AnimationRegistry.BlazeSentry.IDLE_BASE.get());
+                actor.setNextAction(ActionRegistry.BlazeSentry.IDLE_BASE.get());
                 entityData.set(DATA_TARGET, Optional.empty());
                 if (rotation instanceof LockedEntityRotation) {
                     rotation = new SimplEntityRotation(rotation);
                     rotation.newBodyXRot = -0.5f * (float) Math.PI;
                 }
             } else {
-                windDownTicks = 20;
-                animator.setAnimation(AnimationRegistry.BlazeSentry.AGRO_BASE.get());
+                windDownTicks = 100;
+                actor.setNextAction(ActionRegistry.BlazeSentry.AGRO_BASE.get());
                 entityData.set(DATA_TARGET, Optional.of(entity.getUUID()));
                 if (!(rotation instanceof LockedEntityRotation)) {
                     rotation = new LockedEntityRotation(
@@ -145,7 +146,7 @@ public class BlazeSentry extends Monster implements GeoAnimatable, AnimatedEntit
 
     @Override
     public void registerControllers(AnimatableManager.ControllerRegistrar controllerRegistrar) {
-        animator.register(controllerRegistrar);
+        actor.register(controllerRegistrar);
     }
 
     @Override
@@ -164,23 +165,23 @@ public class BlazeSentry extends Monster implements GeoAnimatable, AnimatedEntit
     }
 
     @Override
-    public Animator<BlazeSentry> getAnimator() {
-        return animator;
+    public Actor<BlazeSentry> getActor() {
+        return actor;
     }
 
     @Override
-    public @Nullable Animation getAnimationChange() {
-        if (getTarget() == null) return AnimationRegistry.BlazeSentry.IDLE_BASE.get();
+    public @Nullable Action getActionChange() {
+        if (getTarget() == null) return ActionRegistry.BlazeSentry.IDLE_BASE.get();
         else return null;
     }
 
     @Override
-    public List<Animation> idleAnimations() {
+    public List<Action> idleActions() {
         return List.of();
     }
 
     @Override
-    public EntityDataAccessor<Animator.State> animatorStateAccessor() {
+    public EntityDataAccessor<Actor.State> actionStateAccessor() {
         return DATA_ANIMATOR_STATE;
     }
 
@@ -211,11 +212,11 @@ public class BlazeSentry extends Monster implements GeoAnimatable, AnimatedEntit
         setYBodyRot(0);
         setNoGravity(true);
         super.tick();
-        animator.tick();
+        actor.tick();
     }
 
     @Override
-    public boolean doesIdleAnimations() {
+    public boolean doesIdleActions() {
         return false;
     }
 
@@ -240,7 +241,7 @@ public class BlazeSentry extends Monster implements GeoAnimatable, AnimatedEntit
 
     public class FireGoal extends Goal {
         public static final EnumSet<Goal.Flag> flags = EnumSet.of(Flag.LOOK, Flag.TARGET);
-        public static final int windup = 60, ticksBetweenFireballs = 3, maxFireballs = 50, windDown = 60;
+        public static final int windup = 60, ticksBetweenFireballs = 3, maxFireballs = 50, windDown = 60 + 80;
         public static final double power = 1.5;
         int ticks = 0;
         double chanceToUse = 0.66;
@@ -252,7 +253,7 @@ public class BlazeSentry extends Monster implements GeoAnimatable, AnimatedEntit
 
         @Override
         public boolean canUse() {
-            return windDownTicks <= 0 && !animator.isTransitioning() && animator.getAnimation() == AnimationRegistry.BlazeSentry.AGRO_BASE.get() && level().getRandom().nextDouble() < chanceToUse;
+            return windDownTicks <= 0 && !actor.isTransitioning() && actor.getNextAction() == ActionRegistry.BlazeSentry.AGRO_BASE.get() && level().getRandom().nextDouble() < chanceToUse;
         }
 
         @Override
@@ -263,7 +264,7 @@ public class BlazeSentry extends Monster implements GeoAnimatable, AnimatedEntit
         @Override
         public void start() {
             //System.out.println("started");
-            animator.setAnimation(AnimationRegistry.BlazeSentry.SHOOT_BASE.get());
+            actor.setNextAction(ActionRegistry.BlazeSentry.SHOOT_BASE.get());
             ticks = 0;
         }
 
@@ -286,7 +287,7 @@ public class BlazeSentry extends Monster implements GeoAnimatable, AnimatedEntit
         @Override
         public void stop() {
             windDownTicks = windDown;
-            animator.setAnimation(getTarget() == null ? AnimationRegistry.BlazeSentry.IDLE_BASE.get() : AnimationRegistry.BlazeSentry.AGRO_BASE.get());
+            actor.setNextAction(getTarget() == null ? ActionRegistry.BlazeSentry.IDLE_BASE.get() : ActionRegistry.BlazeSentry.AGRO_BASE.get());
         }
 
         @Override
@@ -297,8 +298,8 @@ public class BlazeSentry extends Monster implements GeoAnimatable, AnimatedEntit
 
     public class FireBigGoal extends Goal {
         public static final EnumSet<Goal.Flag> flags = EnumSet.of(Flag.LOOK, Flag.TARGET);
-        public static final int windup = 20, windDown = 100;
-        public static final double power = 2;
+        public static final int windup = 60 + 10, windDown = 160 - windup + 80;
+        public static final double power = 4;
         int ticks = 0;
 
         @Override
@@ -308,7 +309,7 @@ public class BlazeSentry extends Monster implements GeoAnimatable, AnimatedEntit
 
         @Override
         public boolean canUse() {
-            return windDownTicks <= 0 && !animator.isTransitioning() && animator.getAnimation() == AnimationRegistry.BlazeSentry.AGRO_BASE.get();
+            return windDownTicks <= 0 && !actor.isTransitioning() && actor.getCurrentAction() == ActionRegistry.BlazeSentry.AGRO_BASE.get();
         }
 
         @Override
@@ -319,9 +320,7 @@ public class BlazeSentry extends Monster implements GeoAnimatable, AnimatedEntit
         @Override
         public void start() {
             //System.out.println("started");
-            animator.queueAnimation(TransitionAnimationRegistry.BlazeSentry.AGRO_BASE_TO_SHOOT_BASE.get());
-            animator.queueAnimation(AnimationRegistry.BlazeSentry.SHOOT_BIG_BASE.get());
-            animator.queueAnimation(TransitionAnimationRegistry.BlazeSentry.SHOOT_BASE_TO_AGRO_BASE.get());
+            actor.setNextAction(ActionRegistry.BlazeSentry.SHOOT_BIG_BASE.get());
             ticks = 0;
         }
 
@@ -330,7 +329,7 @@ public class BlazeSentry extends Monster implements GeoAnimatable, AnimatedEntit
             ticks++;
             if (ticks == windup) {
                 LivingEntity target = getTarget();
-                assert target != null;
+                assert target != null; //TODO: null check
                 Vec3 angle = new Vec3(sin(rotation.bodyYRot) * cos(rotation.bodyXRot), sin(rotation.bodyXRot), cos(rotation.bodyYRot) * cos(rotation.bodyXRot));
                 SmallFireball fireball = new SmallFireball(level(), BlazeSentry.this, angle.x, angle.y, angle.z);
                 fireball.xPower *= power; fireball.yPower *= power; fireball.zPower *= power;
@@ -343,7 +342,7 @@ public class BlazeSentry extends Monster implements GeoAnimatable, AnimatedEntit
         @Override
         public void stop() {
             windDownTicks = windDown;
-            animator.setAnimation(getTarget() == null ? AnimationRegistry.BlazeSentry.IDLE_BASE.get() : AnimationRegistry.BlazeSentry.AGRO_BASE.get());
+            actor.setNextAction(getTarget() == null ? ActionRegistry.BlazeSentry.IDLE_BASE.get() : ActionRegistry.BlazeSentry.AGRO_BASE.get());
         }
 
         @Override
