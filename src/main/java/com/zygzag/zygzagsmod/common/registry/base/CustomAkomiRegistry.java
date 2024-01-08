@@ -1,6 +1,5 @@
 package com.zygzag.zygzagsmod.common.registry.base;
 
-import com.zygzag.zygzagsmod.common.entity.animation.Animation;
 import net.minecraft.core.Registry;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;

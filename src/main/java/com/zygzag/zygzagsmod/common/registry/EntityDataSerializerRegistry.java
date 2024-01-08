@@ -1,11 +1,9 @@
 package com.zygzag.zygzagsmod.common.registry;
 
 import com.mojang.serialization.Codec;
-import com.mojang.serialization.JsonOps;
 import com.zygzag.zygzagsmod.common.entity.IridiumGolem;
-import com.zygzag.zygzagsmod.common.entity.animation.Animator;
+import com.zygzag.zygzagsmod.common.entity.animation.Actor;
 import com.zygzag.zygzagsmod.common.registry.base.AkomiRegistry;
-import com.zygzag.zygzagsmod.common.util.EntityRotation;
 import com.zygzag.zygzagsmod.common.util.SimplEntityRotation;
 import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.nbt.NbtOps;
@@ -25,11 +23,11 @@ import static com.zygzag.zygzagsmod.common.Main.MODID;
 public class EntityDataSerializerRegistry extends AkomiRegistry<EntityDataSerializer<?>> {
     public static final EntityDataSerializerRegistry INSTANCE = new EntityDataSerializerRegistry(DeferredRegister.create(NeoForgeRegistries.ENTITY_DATA_SERIALIZERS, MODID));
 
-    public static final Supplier<EntityDataSerializer<Animator.State>> ANIMATOR_STATE = INSTANCE.register(
-            "animator_state",
+    public static final Supplier<EntityDataSerializer<Actor.State>> ACTOR_STATE = INSTANCE.register(
+            "actor_state",
             () -> EntityDataSerializer.simple(
                     (buf, state) -> state.toNetwork(buf),
-                    Animator.State::fromNetwork
+                    Actor.State::fromNetwork
             )
     );
     public static final Supplier<EntityDataSerializer<IridiumGolem.MindState>> IRIDIUM_GOLEM_MIND_STATE = INSTANCE.register(

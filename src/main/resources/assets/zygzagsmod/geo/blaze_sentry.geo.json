@@ -13,7 +13,7 @@
 			"bones": [
 				{
 					"name": "body",
-					"pivot": [0, 0, 0]
+					"pivot": [0, 40, 0]
 				},
 				{
 					"name": "rods",
@@ -24,7 +24,7 @@
 				{
 					"name": "rods1",
 					"parent": "rods",
-					"pivot": [0, 10, 0]
+					"pivot": [0, 25, 0]
 				},
 				{
 					"name": "rodA",
@@ -101,7 +101,7 @@
 				{
 					"name": "rods2",
 					"parent": "rods",
-					"pivot": [0, 24, 0]
+					"pivot": [0, 8, 0]
 				},
 				{
 					"name": "rod9",
@@ -138,7 +138,7 @@
 				{
 					"name": "head",
 					"parent": "body",
-					"pivot": [0, 31, 0]
+					"pivot": [0, 40, 0]
 				},
 				{
 					"name": "head2",
@@ -153,7 +153,7 @@
 				{
 					"name": "Eye_Bones",
 					"parent": "head2",
-					"pivot": [0, 0, 0]
+					"pivot": [0, 40, 0]
 				},
 				{
 					"name": "eye1",

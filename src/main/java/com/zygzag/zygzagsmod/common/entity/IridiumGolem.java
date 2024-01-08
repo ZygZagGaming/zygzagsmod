@@ -1,9 +1,9 @@
 package com.zygzag.zygzagsmod.common.entity;
 
-import com.zygzag.zygzagsmod.common.entity.animation.AnimatedEntity;
-import com.zygzag.zygzagsmod.common.entity.animation.Animation;
-import com.zygzag.zygzagsmod.common.entity.animation.Animator;
-import com.zygzag.zygzagsmod.common.registry.AnimationRegistry;
+import com.zygzag.zygzagsmod.common.entity.animation.ActingEntity;
+import com.zygzag.zygzagsmod.common.entity.animation.Action;
+import com.zygzag.zygzagsmod.common.entity.animation.Actor;
+import com.zygzag.zygzagsmod.common.registry.ActionRegistry;
 import com.zygzag.zygzagsmod.common.registry.EntityDataSerializerRegistry;
 import com.zygzag.zygzagsmod.common.registry.ItemRegistry;
 import net.minecraft.MethodsReturnNonnullByDefault;
@@ -43,21 +43,21 @@ import java.util.function.Supplier;
 
 @ParametersAreNonnullByDefault
 @MethodsReturnNonnullByDefault
-public class IridiumGolem extends AbstractGolem implements NeutralMob, AnimatedEntity<IridiumGolem> {
+public class IridiumGolem extends AbstractGolem implements NeutralMob, ActingEntity<IridiumGolem> {
     public static final List<Function<IridiumGolem, StandingAttackGoal>> standstillAttacks = List.of(
             (golem) -> golem.new StandingAttackGoal(RawAnimation.begin().thenPlay("animation.iridium_golem.attack2"))
     );
-    protected static final Supplier<List<Animation>> IDLE_ANIMATIONS = () -> List.of(
-            AnimationRegistry.IridiumGolem.IDLE_1.get(),
-            AnimationRegistry.IridiumGolem.IDLE_2.get(),
-            AnimationRegistry.IridiumGolem.IDLE_3.get()
+    protected static final Supplier<List<Action>> IDLE_ANIMATIONS = () -> List.of(
+            ActionRegistry.IridiumGolem.IDLE_1.get(),
+            ActionRegistry.IridiumGolem.IDLE_2.get(),
+            ActionRegistry.IridiumGolem.IDLE_3.get()
     );
     protected static final EntityDataAccessor<MindState> DATA_MIND_STATE = SynchedEntityData.defineId(IridiumGolem.class, EntityDataSerializerRegistry.IRIDIUM_GOLEM_MIND_STATE.get());
     protected static final EntityDataAccessor<Integer> DATA_TICKS_REMAINING_IN_ANIMATION = SynchedEntityData.defineId(IridiumGolem.class, EntityDataSerializers.INT);
-    protected static final EntityDataAccessor<Animator.State> DATA_ANIMATOR_STATE = SynchedEntityData.defineId(IridiumGolem.class, EntityDataSerializerRegistry.ANIMATOR_STATE.get());
+    protected static final EntityDataAccessor<Actor.State> DATA_ANIMATOR_STATE = SynchedEntityData.defineId(IridiumGolem.class, EntityDataSerializerRegistry.ACTOR_STATE.get());
     private static final EntityDataAccessor<Integer> DATA_REMAINING_ANGER_TIME = SynchedEntityData.defineId(IridiumGolem.class, EntityDataSerializers.INT);
     private static final UniformInt PERSISTENT_ANGER_TIME = TimeUtil.rangeOfSeconds(10 * 60, 20 * 60);
-    private final Animator<IridiumGolem> animator = new Animator<>(this);
+    private final Actor<IridiumGolem> actor = new Actor<>(this, ActionRegistry.IridiumGolem.IDLE_BASE.get());
 
     private final AnimatableInstanceCache instanceCache = GeckoLibUtil.createInstanceCache(this);
     @Nullable
@@ -85,37 +85,36 @@ public class IridiumGolem extends AbstractGolem implements NeutralMob, AnimatedE
         entityData.define(DATA_REMAINING_ANGER_TIME, 0);
         entityData.define(DATA_MIND_STATE, MindState.IDLE);
         entityData.define(DATA_TICKS_REMAINING_IN_ANIMATION, 0);
-        entityData.define(DATA_ANIMATOR_STATE, new Animator.State(
-                AnimationRegistry.IridiumGolem.IDLE_BASE.get(),
+        entityData.define(DATA_ANIMATOR_STATE, new Actor.State(
+                ActionRegistry.IridiumGolem.IDLE_BASE.get(),
+                ActionRegistry.IridiumGolem.IDLE_BASE.get(),
                 null,
                 5 * 20,
                 160,
-                new LinkedList<>(),
-                AnimationRegistry.IridiumGolem.IDLE_BASE.get(),
-                AnimationRegistry.IridiumGolem.IDLE_BASE.get()
+                new LinkedList<>()
         ));
     }
 
     @Override
-    public @Nullable Animation getAnimationChange() {
-        Animation anim = getNavigation().getPath() == null ?
+    public @Nullable Action getActionChange() {
+        Action anim = getNavigation().getPath() == null ?
                 getMindState().nonMovingAnim : getMindState().movingAnim;
         //System.out.println(anim);
         return anim;
     }
 
     @Override
-    public Animator<IridiumGolem> getAnimator() {
-        return animator;
+    public Actor<IridiumGolem> getActor() {
+        return actor;
     }
 
     @Override
-    public List<Animation> idleAnimations() {
+    public List<Action> idleActions() {
         return IDLE_ANIMATIONS.get();
     }
 
     @Override
-    public EntityDataAccessor<Animator.State> animatorStateAccessor() {
+    public EntityDataAccessor<Actor.State> actionStateAccessor() {
         return DATA_ANIMATOR_STATE;
     }
 
@@ -133,7 +132,7 @@ public class IridiumGolem extends AbstractGolem implements NeutralMob, AnimatedE
 
     @Override
     public boolean isIdle() {
-        return animator.getAnimation() == AnimationRegistry.IridiumGolem.IDLE_BASE.get();
+        return actor.getNextAction() == ActionRegistry.IridiumGolem.IDLE_BASE.get();
     }
 
     @Override
@@ -201,12 +200,12 @@ public class IridiumGolem extends AbstractGolem implements NeutralMob, AnimatedE
     public void tick() {
         setOldPosAndRot();
         super.tick();
-        animator.tick();
+        actor.tick();
     }
 
     @Override
     public void registerControllers(AnimatableManager.ControllerRegistrar controllerRegistrar) {
-        animator.register(controllerRegistrar);
+        actor.register(controllerRegistrar);
     }
 
     @Override
@@ -225,7 +224,7 @@ public class IridiumGolem extends AbstractGolem implements NeutralMob, AnimatedE
     }
 
     @Override
-    public boolean doesIdleAnimations() {
+    public boolean doesIdleActions() {
         return true;
     }
 
@@ -236,14 +235,14 @@ public class IridiumGolem extends AbstractGolem implements NeutralMob, AnimatedE
     }
 
     public enum MindState {
-        IDLE(AnimationRegistry.IridiumGolem.IDLE_BASE.get(), AnimationRegistry.IridiumGolem.WALK_BASE.get()),
-        AGRO(AnimationRegistry.IridiumGolem.AGRO_BASE.get(), AnimationRegistry.IridiumGolem.RUN_BASE.get()),
-        ATTACK_2(AnimationRegistry.IridiumGolem.ATTACK_SMASH.get(), null);
+        IDLE(ActionRegistry.IridiumGolem.IDLE_BASE.get(), ActionRegistry.IridiumGolem.WALK_BASE.get()),
+        AGRO(ActionRegistry.IridiumGolem.AGRO_BASE.get(), ActionRegistry.IridiumGolem.RUN_BASE.get()),
+        ATTACK_2(ActionRegistry.IridiumGolem.ATTACK_SMASH.get(), null);
 
-        public final @Nullable Animation nonMovingAnim;
-        public final @Nullable Animation movingAnim;
+        public final @Nullable Action nonMovingAnim;
+        public final @Nullable Action movingAnim;
 
-        MindState(@Nullable Animation nonMovingAnim, @Nullable Animation movingAnim) {
+        MindState(@Nullable Action nonMovingAnim, @Nullable Action movingAnim) {
             this.nonMovingAnim = nonMovingAnim;
             this.movingAnim = movingAnim;
         }
@@ -422,7 +421,7 @@ public class IridiumGolem extends AbstractGolem implements NeutralMob, AnimatedE
             LivingEntity target = getTarget();
             if (target != null) {
                 if (ticksUntilNextAttack == attackDuration + endLag) {
-                    if (animator.getTransitionAnimation() == null && animator.getAnimation().is(AnimationRegistry.IridiumGolem.AGRO_BASE) && target.getBoundingBox().intersects(getAttackHitbox()))
+                    if (actor.getTransientAction() == null && actor.getNextAction().is(ActionRegistry.IridiumGolem.AGRO_BASE) && target.getBoundingBox().intersects(getAttackHitbox()))
                         ticksUntilNextAttack--; // start attack
                 } else {
                     if (ticksUntilNextAttack == endLag) doAttack();

@@ -2,8 +2,8 @@ package com.zygzag.zygzagsmod.common;
 
 import com.mojang.logging.LogUtils;
 import com.zygzag.zygzagsmod.common.capability.PlayerSightCache;
-import com.zygzag.zygzagsmod.common.entity.animation.Animation;
-import com.zygzag.zygzagsmod.common.entity.animation.TransitionAnimation;
+import com.zygzag.zygzagsmod.common.entity.animation.Action;
+import com.zygzag.zygzagsmod.common.entity.animation.TransitionAction;
 import com.zygzag.zygzagsmod.common.item.iridium.ISocketable;
 import com.zygzag.zygzagsmod.common.registry.*;
 import com.zygzag.zygzagsmod.common.registry.base.AkomiRegistry;
@@ -131,12 +131,12 @@ public class Main {
         ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, Config.SPEC);
     }
 
-    public static Registry<Animation> animationRegistry() {
-        return AnimationRegistry.registry();
+    public static Registry<Action> actionRegistry() {
+        return ActionRegistry.registry();
     }
 
-    public static Registry<TransitionAnimation> transitionAnimationRegistry() {
-        return TransitionAnimationRegistry.registry();
+    public static Registry<TransitionAction> transitionActionRegistry() {
+        return TransitionActionRegistry.registry();
     }
 
     private void commonSetup(final FMLCommonSetupEvent event) { }

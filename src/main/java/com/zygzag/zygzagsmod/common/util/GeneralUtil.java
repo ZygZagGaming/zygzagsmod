@@ -2,8 +2,8 @@ package com.zygzag.zygzagsmod.common.util;
 
 import com.zygzag.zygzagsmod.common.Config;
 import com.zygzag.zygzagsmod.common.Main;
-import com.zygzag.zygzagsmod.common.entity.animation.AbstractAnimation;
-import com.zygzag.zygzagsmod.common.entity.animation.TransitionAnimation;
+import com.zygzag.zygzagsmod.common.entity.animation.Action;
+import com.zygzag.zygzagsmod.common.entity.animation.TransitionAction;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.particles.ParticleOptions;
@@ -132,8 +132,8 @@ public class GeneralUtil {
         return elements[rng.nextInt(elements.length)];
     }
 
-    public static @Nullable TransitionAnimation getTransitionAnimation(AbstractAnimation from, AbstractAnimation to) {
-        return Main.transitionAnimationRegistry().stream().filter((it) -> it.from().is(from) && it.to().is(to)).findFirst().orElse(null);
+    public static @Nullable TransitionAction getTransitionAnimation(Action from, Action to) {
+        return Main.transitionActionRegistry().stream().filter((it) -> it.from().is(from) && it.to().is(to)).findFirst().orElse(null);
     }
 
     public static String stringCS(Level level) {
