@@ -70,7 +70,7 @@ public class AkomiRecipeProvider extends RecipeProvider {
         ShapelessRecipeBuilder.shapeless(RecipeCategory.REDSTONE, BlockWithItemRegistry.NETHER_BRICK_BUTTON.getItem()).unlockedBy("has_nether_bricks", has(Items.NETHER_BRICK)).requires(Items.NETHER_BRICK).save(output, new ResourceLocation(MODID, "nether_brick_button"));
 
         ShapedRecipeBuilder.shaped(RecipeCategory.COMBAT, BlockItemEntityRegistry.MAGMATIC_NETHER_BRICKS.getItem()).unlockedBy("has_magmatic_nether_bricks", has(BlockItemEntityRegistry.MAGMATIC_NETHER_BRICKS.getItem())).pattern("MRM").pattern("RBR").pattern("MRM").define('M', Items.MAGMA_CREAM).define('R', Items.RED_NETHER_BRICKS).define('B', Items.BLAZE_ROD).save(output, new ResourceLocation(MODID, "magmatic_nether_bricks"));
-        ShapedRecipeBuilder.shaped(RecipeCategory.TOOLS, BlockItemEntityRegistry.RED_NETHER_BRICK_CACHE.getItem()).unlockedBy("has_red_nether_bricks", has(Items.RED_NETHER_BRICKS)).pattern("RRR").pattern("R R").pattern("RRR").define('R', Items.RED_NETHER_BRICKS).define(' ', Items.AIR).save(output, new ResourceLocation(MODID, "red_nether_brick_cache"));
+        ShapedRecipeBuilder.shaped(RecipeCategory.TOOLS, BlockItemEntityRegistry.RED_NETHER_BRICK_CACHE.getItem(), 2).unlockedBy("has_red_nether_bricks", has(Items.RED_NETHER_BRICKS)).pattern("RRR").pattern("R R").pattern("RRR").define('R', Items.RED_NETHER_BRICKS).save(output, new ResourceLocation(MODID, "red_nether_brick_cache"));
     }
 
     private void makeSimpleStonecuttingRecipe(Item start, Item result, RecipeCategory category, String path, RecipeOutput output) {

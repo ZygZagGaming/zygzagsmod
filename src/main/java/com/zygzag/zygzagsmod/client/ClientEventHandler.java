@@ -9,7 +9,6 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.LevelRenderer;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.core.BlockPos;
-import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.phys.shapes.Shapes;
@@ -74,42 +73,13 @@ public class ClientEventHandler {
     }
 
     @SubscribeEvent
-    public static void effectRemove(final MobEffectEvent.Remove event) {
-        var world = event.getEntity().level();
-        var player = Minecraft.getInstance().player;
-        if (world.isClientSide && player != null && event.getEntity().is(player)) {
-            var activeEffects = player.getActiveEffectsMap();
-            var map = Main.CURRENT_PLAYER_CACHE.blockStateColorMap();
-            for (MobEffect e : activeEffects.keySet()) if (e instanceof SightEffect effect) {
-                var inst = activeEffects.get(effect);
-                Main.CURRENT_PLAYER_CACHE.update(effect, player, inst.getAmplifier());
-            }
-        }
-    }
-
-    @SubscribeEvent
     public static void effectAdded(final MobEffectEvent.Added event) {
         var world = event.getEntity().level();
         var player = Minecraft.getInstance().player;
         if (world.isClientSide && player != null && event.getEntity().is(player)) {
-            var activeEffects = player.getActiveEffectsMap();
-            var map = Main.CURRENT_PLAYER_CACHE.blockStateColorMap();
-            for (MobEffect e : activeEffects.keySet()) if (e instanceof SightEffect effect) {
-                var inst = activeEffects.get(effect);
-                Main.CURRENT_PLAYER_CACHE.update(effect, player, inst.getAmplifier());
-            }
-        }
-    }
-
-    @SubscribeEvent
-    public static void effectExpired(final MobEffectEvent.Expired event) {
-        var world = event.getEntity().level();
-        var player = Minecraft.getInstance().player;
-        if (world.isClientSide && player != null && event.getEntity().is(player)) {
-            var activeEffects = player.getActiveEffectsMap();
-            var map = Main.CURRENT_PLAYER_CACHE.blockStateColorMap();
-            for (MobEffect e : activeEffects.keySet()) if (e instanceof SightEffect effect) {
-                var inst = activeEffects.get(effect);
+            var inst = event.getEffectInstance();
+            if (inst.getEffect() instanceof SightEffect effect) {
+                var map = Main.CURRENT_PLAYER_CACHE.blockStateColorMap();
                 Main.CURRENT_PLAYER_CACHE.update(effect, player, inst.getAmplifier());
             }
         }

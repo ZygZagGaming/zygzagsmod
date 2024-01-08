@@ -476,6 +476,12 @@ public class GeneralUtil {
         return c;
     }
 
+    public static float[] subtract(float[] a, float[] b) {
+        float[] c = new float[min(a.length, b.length)];
+        for (int i = 0; i < c.length; i++) c[i] = a[i] - b[i];
+        return c;
+    }
+
     public static float dot(float[] a, float[] b) {
         float total = 0;
         for (int i = 0; i < min(a.length, b.length); i++) total += a[i] * b[i];
@@ -500,4 +506,54 @@ public class GeneralUtil {
         System.out.println("The slerp between (1, " + phi1 + ", " + theta1 + ") and (1, " + phi2 + ", " + theta2 + ") with t=1 is (1, " + result2[0] + ", " + result2[1] + ")");
         System.out.println("The slerp between (1, " + phi1 + ", " + theta1 + ") and (1, " + phi2 + ", " + theta2 + ") with t=0.5 is (1, " + result3[0] + ", " + result3[1] + ")");
     }
+
+//    public static float[][] rotationMatrix(Direction.Axis axis, float theta) {
+//        float cos = (float) cos(theta), sin = (float) sin(theta);
+//        return switch (axis) {
+//            case X -> new float[][]{{1, 0, 0}, {0, cos, -sin}, {0, sin, cos}};
+//            case Y -> new float[][]{{cos, 0, sin}, {0, 1, 0}, {-sin, 0, cos}};
+//            case Z -> new float[][]{{cos, -sin, 0}, {sin, cos, 0}, {0, 0, 1}};
+//        };
+//    }
+//
+//    public static boolean pointInCuboid(
+//            float[] center,
+//            float[] scale,
+//            float[] rotations,
+//            float[] point
+//    ) {
+//        float x = point[0] - center[0], y = point[1] - center[1], z = point[2] - center[2];
+//        float r = (float) sqrt(x * x + z * z);
+//        float theta = (float) atan2(z, x) - rotations[1];
+//        x = r * (float) cos(theta);
+//        z = r * (float) sin(theta);
+//        r = (float) sqrt(y * y + z * z);
+//        theta = (float) atan2(z, y) - rotations[0];
+//        y = r * (float) cos(theta);
+//        z = r * (float) sin(theta);
+//        return abs(x) < scale[0] * 0.5f && abs(y) < scale[1] * 0.5f && abs(z) < scale[2] * 0.5f;
+//    }
+//
+//    public static boolean collideCuboids(
+//            float[] center1,
+//            float[] scale1,
+//            float[] rotations1,
+//            float[] center2,
+//            float[] scale2,
+//            float[] rotations2
+//    ) {
+//        // bounding radii
+//        float r1 = magnitude(scale1) * 0.5f, r2 = magnitude(scale2) * 0.5f;
+//        if (magnitude(subtract(center1, center2)) > r1 + r2) return false;
+//        // if either center is contained in the other
+//        if (pointInCuboid(center1, scale1, rotations1, center2) || pointInCuboid(center2, scale2, rotations2, center1)) return true;
+//        float[][] planeNormals = {
+//                {1, 0, 0},
+//                {0, 1, 0},
+//                {0, 0, 1}
+//        };
+//        for (float[] normal : planeNormals) {
+//
+//        }
+//    }
 }
