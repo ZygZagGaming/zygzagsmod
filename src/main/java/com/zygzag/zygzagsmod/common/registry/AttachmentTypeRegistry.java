@@ -15,7 +15,7 @@ public class AttachmentTypeRegistry extends AkomiRegistry<AttachmentType<?>> {
 
     public static final Supplier<AttachmentType<Double>> ITEM_ENTITY_BULK_SMELTING_ATTACHMENT = INSTANCE.register(
             "item_entity_bulk_smelting",
-            () -> AttachmentType.builder(() -> 0.1).serialize(Codec.DOUBLE).build()
+            () -> AttachmentType.builder(() -> 0.0).serialize(Codec.DOUBLE).build()
     );
 
     public AttachmentTypeRegistry(DeferredRegister<AttachmentType<?>> register) {

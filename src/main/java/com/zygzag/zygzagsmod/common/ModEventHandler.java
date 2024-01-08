@@ -13,6 +13,7 @@ import com.zygzag.zygzagsmod.common.registry.IridiumGearRegistry;
 import net.minecraft.data.DataProvider;
 import net.minecraft.data.loot.LootTableProvider;
 import net.minecraft.data.recipes.RecipeProvider;
+import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.monster.AbstractSkeleton;
 import net.minecraft.world.item.Item;
 import net.neoforged.bus.api.SubscribeEvent;
@@ -41,6 +42,9 @@ public class ModEventHandler {
     public static void modifyAttributes(final EntityAttributeModificationEvent event) {
         for (var type : event.getTypes()) {
             event.add(type, AttributeRegistry.JUMP_POWER.get(), 1);
+            if (type == EntityType.PLAYER) {
+                event.add(type, AttributeRegistry.CRIT_DAMAGE.get(), 1.5);
+            }
         }
     }
 

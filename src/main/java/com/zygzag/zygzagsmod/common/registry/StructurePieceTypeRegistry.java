@@ -25,6 +25,6 @@ public class StructurePieceTypeRegistry extends AkomiRegistry<StructurePieceType
 
     public static final Supplier<StructurePieceType> CAIRN_ARRANGEMENT = INSTANCE.register(
             "cairn_arrangement",
-            () -> (StructurePieceType.ContextlessType) CairnArrangementStructure.CairnArrangementStructurePiece::new
+            () -> CairnArrangementStructure.CairnArrangementStructurePiece::new
     );
 }

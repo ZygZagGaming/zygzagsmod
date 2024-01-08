@@ -4,6 +4,7 @@
   "zygzagsmod.cooldown": "Cooldown",
   "zygzagsmod.seconds": "seconds",
   "zygzagsmod.tab": "ZygZag's Mod",
+  "zygzagsmod.iridium_tools_and_armor": "ZygZag's Mod: Iridium Tools & Armor",
   "block.zygzagsmod.end_sand": "End Sand",
   "block.zygzagsmod.end_stone_switch": "End Stone Switch",
   "block.zygzagsmod.iridium_end_sand": "Iridium-Speckled End Sand",
@@ -269,6 +270,9 @@
   "enchantment.zygzagsmod.springs": "Springs",
   "enchantment.zygzagsmod.curse_of_glass": "Curse of Glass",
   "enchantment.zygzagsmod.hallowed": "Hallowed",
+  "enchantment.zygzagsmod.critical": "Critical",
+  "enchantment.zygzagsmod.curse_of_the_valkyrie": "Curse of the Valkyrie",
 
-  "attribute.name.generic.jump_power": "Jump Power"
+  "attribute.name.generic.jump_power": "Jump Power",
+  "attribute.name.generic.crit_damage": "Crit Damage"
 }

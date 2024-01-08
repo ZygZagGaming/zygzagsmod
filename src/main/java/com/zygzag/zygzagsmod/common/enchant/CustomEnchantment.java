@@ -42,18 +42,26 @@ public abstract class CustomEnchantment extends Enchantment {
         }
     }
 
+    private Multimap<Attribute, AttributeModifier> attributeMapCache = null;
     public final Multimap<Attribute, AttributeModifier> attributes(EquipmentSlot slot, int level) {
-        Multimap<Attribute, AttributeModifier> attributeMap = Multimaps.newListMultimap(new HashMap<>(), ArrayList::new);
-        setupAttributes(attributeMap, slot, level);
-        return attributeMap;
+        if (attributeMapCache == null) {
+            Multimap<Attribute, AttributeModifier> attributeMap = Multimaps.newListMultimap(new HashMap<>(), ArrayList::new);
+            setupAttributes(attributeMap, slot, level);
+            attributeMapCache = attributeMap;
+        }
+        return attributeMapCache;
     }
 
     public void setupAttributes(Multimap<Attribute, AttributeModifier> attributeMap, EquipmentSlot slot, int level) { }
 
+    private List<MobEffectInstance> effectsCache = null;
     public final List<MobEffectInstance> attackEffects() {
-        List<MobEffectInstance> effects = new LinkedList<>();
-        setupAttackEffects(effects);
-        return effects;
+        if (effectsCache == null) {
+            List<MobEffectInstance> effects = new LinkedList<>();
+            setupAttackEffects(effects);
+            effectsCache = effects;
+        }
+        return effectsCache;
     }
 
     public void setupAttackEffects(List<MobEffectInstance> effects) { }

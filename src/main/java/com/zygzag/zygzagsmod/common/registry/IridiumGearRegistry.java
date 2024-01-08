@@ -79,6 +79,15 @@ public class IridiumGearRegistry extends AkomiRegistry<Item> {
             SOCKETED_CHESTPLATES,
             SOCKETED_SCEPTERS
     ).flatMap(Collection::stream).collect(Collectors.toList());
+    public static Map<SocketedGearType, Map<Socket, Supplier<Item>>> ALL_SOCKETABLES = Map.of(
+            SocketedGearType.SWORD, SWORDS,
+            SocketedGearType.PICKAXE, PICKAXES,
+            SocketedGearType.AXE, AXES,
+            SocketedGearType.SHOVEL, SHOVELS,
+            SocketedGearType.HOE, HOES,
+            SocketedGearType.SCEPTER, SCEPTERS,
+            SocketedGearType.CHESTPLATE, CHESTPLATES
+    );
     public static final Map<Integer, Supplier<Item>> PARTIAL_SWORDS = makeAllPartialsForGearType(PartialGearType.SWORD);
     public static final Map<Integer, Supplier<Item>> PARTIAL_PICKAXES = makeAllPartialsForGearType(PartialGearType.PICKAXE);
     public static final Map<Integer, Supplier<Item>> PARTIAL_AXES = makeAllPartialsForGearType(PartialGearType.AXE);

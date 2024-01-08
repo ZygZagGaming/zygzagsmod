@@ -102,7 +102,7 @@ public class CairnArrangementStructure extends Structure {
             this.type = type;
         }
 
-        public CairnArrangementStructurePiece(CompoundTag tag) {
+        public CairnArrangementStructurePiece(StructurePieceSerializationContext context, CompoundTag tag) {
             super(StructurePieceTypeRegistry.CAIRN_ARRANGEMENT.get(), tag);
             var t = tag.get("cairn_type");
             if (t != null) this.type = CairnType.valueOf(t.getAsString().toUpperCase());
@@ -285,7 +285,7 @@ public class CairnArrangementStructure extends Structure {
 //                        structurePos.getY(),
 //                        (int) Math.round((structurePos.getZ() - origin.getZ()) * scale + origin.getZ())
 //                );
-//                int height = 2; //TODO: implement different heights
+//                int height = 2;
 //                wallOnlyCairnPillar(structure, cairnPos, rng, world, height);
 //            }
 //        }

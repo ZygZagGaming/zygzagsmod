@@ -18,8 +18,6 @@ import com.zygzag.zygzagsmod.common.registry.EnchantmentRegistry;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.Vec3i;
-import net.minecraft.core.particles.ParticleOptions;
-import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvent;
@@ -66,6 +64,7 @@ import net.neoforged.neoforge.event.ItemAttributeModifierEvent;
 import net.neoforged.neoforge.event.TickEvent;
 import net.neoforged.neoforge.event.entity.item.ItemExpireEvent;
 import net.neoforged.neoforge.event.entity.living.*;
+import net.neoforged.neoforge.event.entity.player.CriticalHitEvent;
 import net.neoforged.neoforge.event.entity.player.PlayerEvent;
 import net.neoforged.neoforge.event.level.BlockEvent;
 
@@ -484,5 +483,11 @@ public class EventHandler {
     @SubscribeEvent
     public static void fall(final LivingFallEvent event) {
         event.setDistance((float) (event.getDistance() - 7.14f * event.getEntity().getAttributeValue(AttributeRegistry.JUMP_POWER.get())) + 3);
+    }
+
+    @SubscribeEvent
+    public static void crit(final CriticalHitEvent event) {
+        AttributeInstance inst = event.getEntity().getAttribute(AttributeRegistry.CRIT_DAMAGE.get());
+        if (event.isVanillaCritical() && inst != null) event.setDamageModifier((float) inst.getValue());
     }
 }

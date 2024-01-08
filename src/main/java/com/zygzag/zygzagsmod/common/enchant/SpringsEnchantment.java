@@ -21,7 +21,7 @@ public class SpringsEnchantment extends CustomEnchantment {
 
     @Override
     public int getMaxCost(int level) {
-        return 5 + 5 * level;
+        return 15 + 5 * level;
     }
 
     @Override

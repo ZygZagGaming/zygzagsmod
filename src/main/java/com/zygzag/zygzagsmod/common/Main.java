@@ -47,6 +47,7 @@ public class Main {
     public static final EnchantmentCategory COOLDOWN_CATEGORY = EnchantmentCategory.create("cooldown", (item) -> item instanceof ISocketable socketable && socketable.hasCooldown());
     public static final EnchantmentCategory BRUSH_CATEGORY = EnchantmentCategory.create("brush", (item) -> item instanceof BrushItem);
     public static final EnchantmentCategory SWORD_OR_AXE = EnchantmentCategory.create("sword_or_axe", (item) -> item instanceof SwordItem || item instanceof AxeItem);
+    public static final EnchantmentCategory AXE = EnchantmentCategory.create("axe", (item) -> item instanceof AxeItem);
     public static final String MODID = "zygzagsmod";
     @SuppressWarnings("unused")
     public static final Logger LOGGER = LogUtils.getLogger();
@@ -67,6 +68,9 @@ public class Main {
     public static final UUID STEADY_ENCHANTMENT_MODIFIER_UUID = UUID.fromString("4c0789ca-3380-416b-8d3e-723b24d272c2");
     public static final UUID CURSE_OF_GLASS_ENCHANTMENT_HEALTH_MODIFIER_UUID = UUID.fromString("82d7ee30-93bc-448b-b16f-77097f9625ec");
     public static final UUID CURSE_OF_GLASS_ENCHANTMENT_DAMAGE_MODIFIER_UUID = UUID.fromString("4df8ccef-9fee-432a-b3a7-f0178c6f6bfe");
+    public static final UUID CRITICAL_ENCHANTMENT_CRIT_DAMAGE_MODIFIER_UUID = UUID.fromString("218fd817-a62a-4911-b1a0-7d5789d6f923");
+    public static final UUID COTV_ENCHANTMENT_CRIT_DAMAGE_MODIFIER_UUID = UUID.fromString("f7ec1ea1-ab1a-4679-9a22-d6ea95f0e1b2");
+    public static final UUID COTV_ENCHANTMENT_ATTACK_SPEED_MODIFIER_UUID = UUID.fromString("997231b1-3775-43f8-a4e9-5c35307fc50e");
     public static PlayerSightCache CURRENT_PLAYER_CACHE = null;
 
     public static final BlockSetType NETHER_BRICK_BLOCK_SET_TYPE = BlockSetType.register(
