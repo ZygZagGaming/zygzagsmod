@@ -11,11 +11,9 @@ import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.item.enchantment.EnchantmentCategory;
+import oshi.util.tuples.Pair;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.List;
+import java.util.*;
 
 public abstract class CustomEnchantment extends Enchantment {
     protected CustomEnchantment(Rarity rarity, EnchantmentCategory category, EquipmentSlot[] slots) {
@@ -42,14 +40,15 @@ public abstract class CustomEnchantment extends Enchantment {
         }
     }
 
-    private Multimap<Attribute, AttributeModifier> attributeMapCache = null;
+    private final Map<Pair<EquipmentSlot, Integer>, Multimap<Attribute, AttributeModifier>> attributeMapCache = new HashMap<>();
     public final Multimap<Attribute, AttributeModifier> attributes(EquipmentSlot slot, int level) {
-        if (attributeMapCache == null) {
+        var index = new Pair<>(slot, level);
+        if (!attributeMapCache.containsKey(index)) {
             Multimap<Attribute, AttributeModifier> attributeMap = Multimaps.newListMultimap(new HashMap<>(), ArrayList::new);
             setupAttributes(attributeMap, slot, level);
-            attributeMapCache = attributeMap;
+            attributeMapCache.put(index, attributeMap);
         }
-        return attributeMapCache;
+        return attributeMapCache.get(index);
     }
 
     public void setupAttributes(Multimap<Attribute, AttributeModifier> attributeMap, EquipmentSlot slot, int level) { }

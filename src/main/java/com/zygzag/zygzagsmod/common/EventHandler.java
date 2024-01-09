@@ -15,6 +15,7 @@ import com.zygzag.zygzagsmod.common.registry.AttachmentTypeRegistry;
 import com.zygzag.zygzagsmod.common.registry.AttributeRegistry;
 import com.zygzag.zygzagsmod.common.registry.BlockRegistry;
 import com.zygzag.zygzagsmod.common.registry.EnchantmentRegistry;
+import com.zygzag.zygzagsmod.common.util.GeneralUtil;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.Vec3i;
@@ -71,6 +72,7 @@ import net.neoforged.neoforge.event.level.BlockEvent;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import static com.zygzag.zygzagsmod.common.Main.MODID;
 import static com.zygzag.zygzagsmod.common.util.GeneralUtil.isExposedToSunlight;
@@ -469,14 +471,9 @@ public class EventHandler {
         LivingEntity entity = event.getEntity();
         AttributeInstance instance = entity.getAttribute(AttributeRegistry.JUMP_POWER.get());
         if (instance != null) {
+            var delta = entity.getDeltaMovement();
+            entity.setDeltaMovement(delta.x, entity.getAttributeValue(AttributeRegistry.JUMP_POWER.get()), delta.z);
             instance.setBaseValue(0.42F * entity.getBlockJumpFactor() + entity.getJumpBoostPower());
-            var delta = entity.getDeltaMovement();
-            entity.setDeltaMovement(delta.x, instance.getValue(), delta.z);
-        }
-        if (entity.level().isClientSide) { // TODO: fix this wacky bullshit
-            var delta = entity.getDeltaMovement();
-            var level = entity.getItemBySlot(EquipmentSlot.LEGS).getAllEnchantments().get(EnchantmentRegistry.SPRINGS_ENCHANTMENT.get());
-            if (level != null && level != 0) entity.setDeltaMovement(delta.x, (0.42F * entity.getBlockJumpFactor() + entity.getJumpBoostPower()) * (SpringsEnchantment.JUMP_HEIGHT_MULTIPLIERS[level - 1] + 1), delta.z);
         }
     }
 

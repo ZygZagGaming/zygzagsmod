@@ -16,6 +16,6 @@ public class AttributeRegistry extends AkomiRegistry<Attribute> {
         super(register);
     }
 
-    public static final Supplier<Attribute> JUMP_POWER = INSTANCE.register("generic.jump_power", () -> new RangedAttribute("attribute.name.generic.jump_power", 1.0, 0.0, 1000000.0));
+    public static final Supplier<Attribute> JUMP_POWER = INSTANCE.register("generic.jump_power", () -> new RangedAttribute("attribute.name.generic.jump_power", 1.0, 0.0, 1000000.0).setSyncable(true));
     public static final Supplier<Attribute> CRIT_DAMAGE = INSTANCE.register("generic.crit_damage", () -> new RangedAttribute("attribute.name.generic.crit_damage", 1.5, 1.0, 1000000.0));
 }

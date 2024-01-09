@@ -41,7 +41,7 @@ public class ModEventHandler {
     @SubscribeEvent
     public static void modifyAttributes(final EntityAttributeModificationEvent event) {
         for (var type : event.getTypes()) {
-            event.add(type, AttributeRegistry.JUMP_POWER.get(), 1);
+            event.add(type, AttributeRegistry.JUMP_POWER.get(), 0.42);
             if (type == EntityType.PLAYER) {
                 event.add(type, AttributeRegistry.CRIT_DAMAGE.get(), 1.5);
             }
