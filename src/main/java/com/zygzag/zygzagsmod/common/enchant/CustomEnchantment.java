@@ -2,6 +2,7 @@ package com.zygzag.zygzagsmod.common.enchant;
 
 import com.google.common.collect.Multimap;
 import com.google.common.collect.Multimaps;
+import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.network.chat.Style;
@@ -13,8 +14,11 @@ import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.item.enchantment.EnchantmentCategory;
 import oshi.util.tuples.Pair;
 
+import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.*;
 
+@ParametersAreNonnullByDefault
+@MethodsReturnNonnullByDefault
 public abstract class CustomEnchantment extends Enchantment {
     protected CustomEnchantment(Rarity rarity, EnchantmentCategory category, EquipmentSlot[] slots) {
         super(rarity, category, slots);
@@ -22,22 +26,13 @@ public abstract class CustomEnchantment extends Enchantment {
 
     @Override
     public Component getFullname(int level) {
-        MutableComponent mutablecomponent = Component.translatable(getDescriptionId());
-        mutablecomponent.withStyle(Style.EMPTY.withColor(getColor(level)));
-
-        if (level != 1 || this.getMaxLevel() != 1) {
-            mutablecomponent.append(" ").append(Component.translatable("enchantment.level." + level));
-        }
-
-        return mutablecomponent;
+        MutableComponent component = Component.translatable(getDescriptionId()).withStyle(Style.EMPTY.withColor(getColor(level)));
+        if (level != 1 || this.getMaxLevel() != 1) component.append(" ").append(Component.translatable("enchantment.level." + level));
+        return component;
     }
 
     public int getColor(int level) {
-        if (this.isCurse()) {
-            return 0xff5555;
-        } else {
-            return 0xaaaaaa;
-        }
+        return isCurse() ? 0xff5555 : 0xaaaaaa;
     }
 
     private final Map<Pair<EquipmentSlot, Integer>, Multimap<Attribute, AttributeModifier>> attributeMapCache = new HashMap<>();

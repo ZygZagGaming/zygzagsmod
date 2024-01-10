@@ -11,7 +11,7 @@ import net.minecraft.world.item.enchantment.EnchantmentCategory;
 
 public class CurseOfTheValkyrieEnchantment extends CustomEnchantment {
     public static final float[] CRITICAL_BOOSTS = { 0.2f, 0.6f };
-    public static final float[] ATTACK_SPEED_NERFS = { -0.1f, -0.4f };
+    public static final float[] ATTACK_SPEED_NERFS = { -0.25f, -0.45f };
     public CurseOfTheValkyrieEnchantment(Rarity rarity) {
         super(rarity, Main.AXE, new EquipmentSlot[]{EquipmentSlot.MAINHAND});
     }
