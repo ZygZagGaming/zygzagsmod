@@ -33,6 +33,7 @@ import java.util.function.Function;
 
 import static java.lang.Math.*;
 
+@SuppressWarnings("unused")
 public class GeneralUtil {
     public static int getColor(BlockState state) {
         if (state.is(Tags.Blocks.ORES_COPPER)) return Config.copperOreColor;

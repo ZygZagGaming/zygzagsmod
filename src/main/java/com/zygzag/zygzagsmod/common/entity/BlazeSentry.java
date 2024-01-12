@@ -365,7 +365,7 @@ public class BlazeSentry extends Monster implements GeoAnimatable, ActingEntity<
 
         @Override
         public boolean canUse() {
-            return windDownTicks <= 0 && !actor.isTransitioning() && actor.getCurrentAction() == ActionRegistry.BlazeSentry.AGRO_BASE.get();
+            return windDownTicks <= 0 && !actor.isTransitioning() && actor.getCurrentAction() == ActionRegistry.BlazeSentry.AGRO_BASE.get() && getTarget() != null && getTarget().getBoundingBox().getCenter().add(getTarget().getDeltaMovement()).distanceToSqr(getEyePosition()) <= range * range * 1.1;
         }
 
         @Override

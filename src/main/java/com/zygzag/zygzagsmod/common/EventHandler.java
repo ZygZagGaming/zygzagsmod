@@ -14,6 +14,7 @@ import com.zygzag.zygzagsmod.common.registry.AttachmentTypeRegistry;
 import com.zygzag.zygzagsmod.common.registry.AttributeRegistry;
 import com.zygzag.zygzagsmod.common.registry.BlockRegistry;
 import com.zygzag.zygzagsmod.common.registry.EnchantmentRegistry;
+import com.zygzag.zygzagsmod.common.util.GeneralUtil;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.Vec3i;
@@ -504,10 +505,11 @@ public class EventHandler {
                     new AttributeModifier(
                             Main.SPRINT_SPEED_ATTRIBUTE_MOVEMENT_SPEED_MODIFIER_UUID,
                             "Sprint speed movement modifier",
-                            player.getAttributeValue(AttributeRegistry.SPRINT_SPEED.get()),
+                            player.getAttributeValue(AttributeRegistry.SPRINT_SPEED.get()) - 1,
                             AttributeModifier.Operation.MULTIPLY_TOTAL
                     )
             );
+            //System.out.println("modifiers " + player.getAttribute(Attributes.MOVEMENT_SPEED).getModifiers() + " on " + GeneralUtil.stringCS(player.level()));
             if (!player.isPassenger() && !player.isSwimming() && !player.isEyeInFluidType(Fluids.WATER.getFluidType()) && !player.isInWater() && !player.onClimbable() && player.onGround()) {
                 int cmTraveled = Math.round((float) Math.sqrt(dx * dx + dz * dz) * 100);
                 float vanillaExhaustion = (float) cmTraveled * 0.001f; // 0.1 per meter
