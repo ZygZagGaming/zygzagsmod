@@ -187,6 +187,10 @@ public class BlazeSentry extends Monster implements GeoAnimatable, ActingEntity<
 
     @Override
     public void tick() {
+        {
+            var target = getTarget();
+            if (target != null && !target.isAlive()) setTarget(null);
+        }
         if (windDownTicks > 0) windDownTicks--;
         if (level().isClientSide) {
             if (getTarget() == null) {
