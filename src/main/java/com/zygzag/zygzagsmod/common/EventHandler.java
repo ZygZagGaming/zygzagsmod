@@ -2,7 +2,6 @@ package com.zygzag.zygzagsmod.common;
 
 import com.zygzag.zygzagsmod.common.block.entity.CustomBrushableBlockEntity;
 import com.zygzag.zygzagsmod.common.enchant.CustomEnchantment;
-import com.zygzag.zygzagsmod.common.enchant.SpringsEnchantment;
 import com.zygzag.zygzagsmod.common.entity.HomingWitherSkull;
 import com.zygzag.zygzagsmod.common.item.iridium.IEffectAttackWeapon;
 import com.zygzag.zygzagsmod.common.item.iridium.ISocketable;
@@ -15,7 +14,6 @@ import com.zygzag.zygzagsmod.common.registry.AttachmentTypeRegistry;
 import com.zygzag.zygzagsmod.common.registry.AttributeRegistry;
 import com.zygzag.zygzagsmod.common.registry.BlockRegistry;
 import com.zygzag.zygzagsmod.common.registry.EnchantmentRegistry;
-import com.zygzag.zygzagsmod.common.util.GeneralUtil;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.Vec3i;
@@ -33,6 +31,8 @@ import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.ai.attributes.AttributeInstance;
+import net.minecraft.world.entity.ai.attributes.AttributeModifier;
+import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.village.poi.PoiManager;
 import net.minecraft.world.entity.ai.village.poi.PoiTypes;
 import net.minecraft.world.entity.item.ItemEntity;
@@ -60,6 +60,7 @@ import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.HitResult;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.Mod;
+import net.neoforged.neoforge.client.event.MovementInputUpdateEvent;
 import net.neoforged.neoforge.common.Tags;
 import net.neoforged.neoforge.event.ItemAttributeModifierEvent;
 import net.neoforged.neoforge.event.TickEvent;
@@ -72,7 +73,6 @@ import net.neoforged.neoforge.event.level.BlockEvent;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 import static com.zygzag.zygzagsmod.common.Main.MODID;
 import static com.zygzag.zygzagsmod.common.util.GeneralUtil.isExposedToSunlight;
@@ -475,6 +475,10 @@ public class EventHandler {
             entity.setDeltaMovement(delta.x, entity.getAttributeValue(AttributeRegistry.JUMP_POWER.get()), delta.z);
             instance.setBaseValue(0.42F * entity.getBlockJumpFactor() + entity.getJumpBoostPower());
         }
+
+        if (entity instanceof Player player && player.isSprinting()) {
+            player.causeFoodExhaustion(0.2f * ((float) player.getAttributeValue(AttributeRegistry.SPRINT_JUMP_HUNGER_CONSUMPTION.get()) - 1));
+        }
     }
 
     @SubscribeEvent
@@ -486,5 +490,30 @@ public class EventHandler {
     public static void crit(final CriticalHitEvent event) {
         AttributeInstance inst = event.getEntity().getAttribute(AttributeRegistry.CRIT_DAMAGE.get());
         if (event.isVanillaCritical() && inst != null) event.setDamageModifier((float) inst.getValue());
+    }
+
+    @SubscribeEvent
+    public static void sprinting(final MovementInputUpdateEvent event) {
+        Player player = event.getEntity();
+        double dx = player.getX() - player.xOld, dy = player.getY() - player.yOld, dz = player.getZ() - player.zOld;
+        AttributeInstance attributeInstance = player.getAttribute(Attributes.MOVEMENT_SPEED);
+        if (attributeInstance == null) return;
+        attributeInstance.removeModifier(Main.SPRINT_SPEED_ATTRIBUTE_MOVEMENT_SPEED_MODIFIER_UUID);
+        if (player.isSprinting()) {
+            attributeInstance.addTransientModifier(
+                    new AttributeModifier(
+                            Main.SPRINT_SPEED_ATTRIBUTE_MOVEMENT_SPEED_MODIFIER_UUID,
+                            "Sprint speed movement modifier",
+                            player.getAttributeValue(AttributeRegistry.SPRINT_SPEED.get()),
+                            AttributeModifier.Operation.MULTIPLY_TOTAL
+                    )
+            );
+            if (!player.isPassenger() && !player.isSwimming() && !player.isEyeInFluidType(Fluids.WATER.getFluidType()) && !player.isInWater() && !player.onClimbable() && player.onGround()) {
+                int cmTraveled = Math.round((float) Math.sqrt(dx * dx + dz * dz) * 100);
+                float vanillaExhaustion = (float) cmTraveled * 0.001f; // 0.1 per meter
+                float newExhaustion = (float) (vanillaExhaustion * player.getAttributeValue(AttributeRegistry.SPRINT_HUNGER_CONSUMPTION.get()));
+                player.causeFoodExhaustion(newExhaustion - vanillaExhaustion);
+            }
+        }
     }
 }

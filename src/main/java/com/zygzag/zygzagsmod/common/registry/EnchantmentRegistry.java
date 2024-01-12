@@ -20,6 +20,7 @@ public class EnchantmentRegistry extends AkomiRegistry<Enchantment> {
     //public static final Supplier<Enchantment> HALLOWED_ENCHANTMENT = INSTANCE.register("hallowed", () -> new HallowedEnchantment(Enchantment.Rarity.UNCOMMON));
     public static final Supplier<Enchantment> CRITICAL_ENCHANTMENT = INSTANCE.register("critical", () -> new CriticalEnchantment(Enchantment.Rarity.RARE));
     public static final Supplier<Enchantment> COTV_ENCHANTMENT = INSTANCE.register("curse_of_the_valkyrie", () -> new CurseOfTheValkyrieEnchantment(Enchantment.Rarity.RARE));
+    public static final Supplier<Enchantment> SPRINT_ENCHANTMENT = INSTANCE.register("sprint", () -> new SprintEnchantment(Enchantment.Rarity.UNCOMMON));
     public EnchantmentRegistry(DeferredRegister<Enchantment> register) {
         super(register);
     }

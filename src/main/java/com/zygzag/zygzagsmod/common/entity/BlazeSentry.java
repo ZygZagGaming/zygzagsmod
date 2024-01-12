@@ -3,10 +3,7 @@ package com.zygzag.zygzagsmod.common.entity;
 import com.zygzag.zygzagsmod.common.entity.animation.ActingEntity;
 import com.zygzag.zygzagsmod.common.entity.animation.Action;
 import com.zygzag.zygzagsmod.common.entity.animation.Actor;
-import com.zygzag.zygzagsmod.common.registry.ActionRegistry;
-import com.zygzag.zygzagsmod.common.registry.EntityDataSerializerRegistry;
-import com.zygzag.zygzagsmod.common.registry.EntityTypeRegistry;
-import com.zygzag.zygzagsmod.common.registry.ItemRegistry;
+import com.zygzag.zygzagsmod.common.registry.*;
 import com.zygzag.zygzagsmod.common.util.LockedEntityAnchor;
 import com.zygzag.zygzagsmod.common.util.LockedEntityRotation;
 import com.zygzag.zygzagsmod.common.util.SimplEntityRotation;
@@ -14,6 +11,8 @@ import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
+import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Pose;
@@ -22,6 +21,7 @@ import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.goal.Goal;
 import net.minecraft.world.entity.ai.goal.target.HurtByTargetGoal;
 import net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal;
+import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.monster.Monster;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.SmallFireball;
@@ -226,6 +226,7 @@ public class BlazeSentry extends Monster implements GeoAnimatable, ActingEntity<
         targetSelector.addGoal(3, new NearestAttackableTargetGoal<>(this, Player.class, 0, true, false, (entity) -> entity instanceof Player player && !player.isCreative() && !player.isSpectator()));
         goalSelector.addGoal(2, new FireGoal());
         goalSelector.addGoal(2, new FireBigGoal());
+        goalSelector.addGoal(1, new FlamethrowGoal());
     }
 
     @Override
@@ -348,6 +349,63 @@ public class BlazeSentry extends Monster implements GeoAnimatable, ActingEntity<
         @Override
         public boolean canContinueToUse() {
             return ticks < windup;
+        }
+    }
+
+    public class FlamethrowGoal extends Goal {
+        public static final EnumSet<Goal.Flag> flags = EnumSet.of(Flag.LOOK, Flag.TARGET);
+        public static final int windup = 30, maxDuration = 100, windDown = 20;
+        public static final double range = 3, radiusSqr = 0.2;
+        int ticks = 0;
+
+        @Override
+        public EnumSet<Flag> getFlags() {
+            return flags;
+        }
+
+        @Override
+        public boolean canUse() {
+            return windDownTicks <= 0 && !actor.isTransitioning() && actor.getCurrentAction() == ActionRegistry.BlazeSentry.AGRO_BASE.get();
+        }
+
+        @Override
+        public boolean requiresUpdateEveryTick() {
+            return true;
+        }
+
+        @Override
+        public void start() {
+            actor.setNextAction(ActionRegistry.BlazeSentry.SHOOT_BASE.get());
+            ticks = 0;
+        }
+
+        @Override
+        public void tick() {
+            ticks++;
+            if (ticks > windup) {
+                Vec3 angle = new Vec3(sin(rotation.bodyYRot) * cos(rotation.bodyXRot), sin(rotation.bodyXRot), cos(rotation.bodyYRot) * cos(rotation.bodyXRot));
+                List<Entity> entities = level().getEntities(BlazeSentry.this, getBoundingBox().inflate(range + radiusSqr));
+                for (Entity entity : entities) {
+                    Vec3 toTarget = entity.getBoundingBox().getCenter().subtract(getEyePosition());
+                    double cylDistance = angle.dot(toTarget);
+                    double radialDistanceSqr = toTarget.subtract(angle.scale(cylDistance)).lengthSqr();
+                    if (radialDistanceSqr < radiusSqr) {
+                        if (entity instanceof LivingEntity living) living.addEffect(new MobEffectInstance(MobEffectRegistry.OVERHEAT_EFFECT.get(), 20), BlazeSentry.this);
+                        else if (entity instanceof ItemEntity) entity.kill();
+                    }
+                }
+            }
+        }
+
+        @Override
+        public void stop() {
+            windDownTicks = windDown;
+            actor.setNextAction(getTarget() == null ? ActionRegistry.BlazeSentry.IDLE_BASE.get() : ActionRegistry.BlazeSentry.AGRO_BASE.get());
+        }
+
+        @Override
+        public boolean canContinueToUse() {
+            return ticks < windup + maxDuration;
         }
     }
 }

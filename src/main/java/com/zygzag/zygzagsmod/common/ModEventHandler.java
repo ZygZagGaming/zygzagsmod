@@ -44,6 +44,9 @@ public class ModEventHandler {
             event.add(type, AttributeRegistry.JUMP_POWER.get(), 0.42);
             if (type == EntityType.PLAYER) {
                 event.add(type, AttributeRegistry.CRIT_DAMAGE.get(), 1.5);
+                event.add(type, AttributeRegistry.SPRINT_SPEED.get(), 1.0);
+                event.add(type, AttributeRegistry.SPRINT_HUNGER_CONSUMPTION.get(), 1.0);
+                event.add(type, AttributeRegistry.SPRINT_JUMP_HUNGER_CONSUMPTION.get(), 1.0);
             }
         }
     }
