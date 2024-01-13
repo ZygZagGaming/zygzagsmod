@@ -1,10 +1,14 @@
 package com.zygzag.zygzagsmod.common.util;
 
+import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.phys.Vec3;
 
+import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.function.Function;
 
+@ParametersAreNonnullByDefault
+@MethodsReturnNonnullByDefault
 public class LockedEntityAnchor extends SimplPositionAnchor {
     public Entity target;
     public Function<Entity, Vec3> positionGetter;
