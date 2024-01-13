@@ -1,0 +1,14 @@
+{
+  "elements": [
+    {
+      "element": {
+        "element_type": "minecraft:single_pool_element",
+        "location": "zygzagsmod:blaze_hive/exterior/exterior_1/exterior_1_1",
+        "processors": "zygzagsmod:blaze_hive_degradation",
+        "projection": "rigid"
+      },
+      "weight": 1
+    }
+  ],
+  "fallback": "minecraft:empty"
+}
