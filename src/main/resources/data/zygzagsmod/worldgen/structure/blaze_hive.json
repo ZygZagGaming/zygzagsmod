@@ -1,7 +1,7 @@
 {
   "type": "minecraft:jigsaw",
   "biomes": "#zygzagsmod:has_structure/blaze_hive",
-  "max_distance_from_center": 128,
+  "max_distance_from_center": 150,
   "size": 20,
   "spawn_overrides": {
     "monster": {
