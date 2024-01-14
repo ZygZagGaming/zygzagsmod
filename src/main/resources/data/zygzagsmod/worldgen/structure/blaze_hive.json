@@ -19,10 +19,10 @@
   "start_height": {
     "type": "biased_to_bottom",
     "min_inclusive": {
-      "above_bottom": 45
+      "absolute": 45
     },
     "max_inclusive": {
-      "below_top": 156
+      "absolute": 60
     }
   },
   "start_pool": "zygzagsmod:blaze_hive/starts",
