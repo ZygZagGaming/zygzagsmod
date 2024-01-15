@@ -17,12 +17,9 @@
     }
   },
   "start_height": {
-    "type": "biased_to_bottom",
-    "min_inclusive": {
-      "absolute": 45
-    },
-    "max_inclusive": {
-      "absolute": 60
+    "type": "constant",
+    "value": {
+      "absolute": 30
     }
   },
   "start_pool": "zygzagsmod:blaze_hive/starts",

@@ -26,6 +26,24 @@
         "projection": "rigid"
       },
       "weight": 1
+    },
+    {
+      "element": {
+        "element_type": "minecraft:single_pool_element",
+        "location": "zygzagsmod:blaze_hive/rooms/1x1/1x1_2/1x1_2_4",
+        "processors": "zygzagsmod:blaze_hive_degradation",
+        "projection": "rigid"
+      },
+      "weight": 1
+    },
+    {
+      "element": {
+        "element_type": "minecraft:single_pool_element",
+        "location": "zygzagsmod:blaze_hive/rooms/1x1/1x1_2/1x1_2_5",
+        "processors": "zygzagsmod:blaze_hive_degradation",
+        "projection": "rigid"
+      },
+      "weight": 1
     }
   ],
   "fallback": "minecraft:empty"

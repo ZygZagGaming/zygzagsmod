@@ -72,6 +72,7 @@ public class BlazeSentry extends Monster implements GeoAnimatable, ActingEntity<
         setPathfindingMalus(BlockPathTypes.DANGER_FIRE, 0);
         setPathfindingMalus(BlockPathTypes.DAMAGE_FIRE, 0);
         xpReward = 10;
+        setPersistenceRequired();
     }
 
     @Override
