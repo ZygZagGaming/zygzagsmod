@@ -1,0 +1,10 @@
+{
+  "type": "zygzagsmod:upgrade",
+  "template": {
+    "item": "minecraft:wheat_seeds"
+  },
+  "addition": {
+    "item": "minecraft:amethyst_shard"
+  },
+  "upgrade": "zygzagsmod:damage"
+}

@@ -278,5 +278,8 @@
   "attribute.name.generic.crit_damage": "Crit Damage",
   "attribute.name.generic.sprint_speed": "Sprint Speed",
   "attribute.name.generic.sprint_hunger_consumption": "Sprint Hunger Consumption",
-  "attribute.name.generic.sprint_jump_hunger_consumption": "Sprint Jump Hunger Consumption"
+  "attribute.name.generic.sprint_jump_hunger_consumption": "Sprint Jump Hunger Consumption",
+
+  "item.augmented": "Augmented:",
+  "zygzagsmod.item.augmentation.damage": "Damage x%s"
 }

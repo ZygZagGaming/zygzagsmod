@@ -19,10 +19,16 @@ public class MagmaticNetherBrickBlockEntity extends BlockEntity {
         int charges = state.getValue(CHARGES);
         if (pulse >= 20) {
             int nextCharges = 4;
-            if (pulse <= 80) nextCharges--;
-            if (pulse <= 60) nextCharges--;
-            if (pulse <= 40) nextCharges--;
-            if (pulse == 20) nextCharges--;
+            if (pulse <= 80) {
+                nextCharges--;
+                if (pulse <= 60) {
+                    nextCharges--;
+                    if (pulse <= 40) {
+                        nextCharges--;
+                        if (pulse == 20) nextCharges--;
+                    }
+                }
+            }
             world.setBlockAndUpdate(pos, state.setValue(CHARGES, nextCharges).setValue(PULSE, pulse - 1));
         } else if (pulse > 0) {
             world.setBlockAndUpdate(pos, state.setValue(PULSE, pulse - 1));

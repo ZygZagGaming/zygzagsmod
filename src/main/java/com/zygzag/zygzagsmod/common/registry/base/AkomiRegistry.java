@@ -36,7 +36,8 @@ public class AkomiRegistry<T> {
             ActionRegistry.INSTANCE::registerTo,
             TransitionActionRegistry.INSTANCE::registerTo,
             AttributeRegistry.INSTANCE::registerTo,
-            AttachmentTypeRegistry.INSTANCE::registerTo
+            AttachmentTypeRegistry.INSTANCE::registerTo,
+            ItemUpgradeRegistry.INSTANCE::registerTo
     );
     public final DeferredRegister<T> register;
 

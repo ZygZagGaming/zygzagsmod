@@ -1,6 +1,7 @@
 package com.zygzag.zygzagsmod.common.registry;
 
 import com.zygzag.zygzagsmod.common.recipe.TransmutationRecipe;
+import com.zygzag.zygzagsmod.common.recipe.UpgradeRecipe;
 import com.zygzag.zygzagsmod.common.registry.base.AkomiRegistry;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.world.item.crafting.RecipeSerializer;
@@ -17,6 +18,7 @@ public class RecipeSerializerRegistry extends AkomiRegistry<RecipeSerializer<?>>
     //public static final Supplier<RecipeSerializer<EmpowermentRecipe>> EMPOWERMENT_SERIALIZER = INSTANCE.register("empowerment", EmpowermentRecipe.EmpowermentSerializer::new);
     //public static final Supplier<SimpleRecipeSerializer<SocketRemoveRecipe>> SOCKET_REMOVE_CRAFTING = INSTANCE.register("crafting_special_socket_remove", () -> new SimpleRecipeSerializer<>(SocketRemoveRecipe::new));
     //public static final Supplier<SimpleRecipeSerializer<EnderBookCopyRecipe>> ENDER_BOOK_COPY_CRAFTING = INSTANCE.register("crafting_special_ender_book_copy", () -> new SimpleRecipeSerializer<>(EnderBookCopyRecipe::new));
+    public static final Supplier<RecipeSerializer<UpgradeRecipe>> UPGRADE_SERIALIZER = INSTANCE.register("upgrade", UpgradeRecipe.Serializer::new);
 
     private RecipeSerializerRegistry(DeferredRegister<RecipeSerializer<?>> register) {
         super(register);

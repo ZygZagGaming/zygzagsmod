@@ -1,6 +1,7 @@
 package com.zygzag.zygzagsmod.common;
 
 import com.zygzag.zygzagsmod.common.block.entity.CustomBrushableBlockEntity;
+import com.zygzag.zygzagsmod.common.capability.ItemUpgradeAttachment;
 import com.zygzag.zygzagsmod.common.enchant.CustomEnchantment;
 import com.zygzag.zygzagsmod.common.entity.HomingWitherSkull;
 import com.zygzag.zygzagsmod.common.item.iridium.IEffectAttackWeapon;
@@ -14,9 +15,12 @@ import com.zygzag.zygzagsmod.common.registry.AttachmentTypeRegistry;
 import com.zygzag.zygzagsmod.common.registry.AttributeRegistry;
 import com.zygzag.zygzagsmod.common.registry.BlockRegistry;
 import com.zygzag.zygzagsmod.common.registry.EnchantmentRegistry;
+import com.zygzag.zygzagsmod.common.upgrade.ItemUpgrade;
+import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.Vec3i;
+import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvent;
@@ -67,6 +71,7 @@ import net.neoforged.neoforge.event.TickEvent;
 import net.neoforged.neoforge.event.entity.item.ItemExpireEvent;
 import net.neoforged.neoforge.event.entity.living.*;
 import net.neoforged.neoforge.event.entity.player.CriticalHitEvent;
+import net.neoforged.neoforge.event.entity.player.ItemTooltipEvent;
 import net.neoforged.neoforge.event.entity.player.PlayerEvent;
 import net.neoforged.neoforge.event.level.BlockEvent;
 
@@ -458,6 +463,14 @@ public class EventHandler {
             var attributeMap = socketable.attributes(event.getSlotType());
             for (var attributeModifierEntry : attributeMap.entries()) event.addModifier(attributeModifierEntry.getKey(), attributeModifierEntry.getValue());
         }
+
+        if (stack.hasData(AttachmentTypeRegistry.ITEM_UPGRADE_ATTACHMENT.get())) {
+            ItemUpgradeAttachment upgrades = stack.getData(AttachmentTypeRegistry.ITEM_UPGRADE_ATTACHMENT.get());
+            for (var upgrade : upgrades.getData().keySet()) if (upgrades.timesApplied(upgrade) != 0) {
+                var attributeMap = upgrade.attributes(event.getSlotType(), upgrades.timesApplied(upgrade));
+                for (var attributeModifierEntry : attributeMap.entries()) event.addModifier(attributeModifierEntry.getKey(), attributeModifierEntry.getValue());
+            }
+        }
     }
 
     @SubscribeEvent
@@ -504,7 +517,7 @@ public class EventHandler {
                     new AttributeModifier(
                             Main.SPRINT_SPEED_ATTRIBUTE_MOVEMENT_SPEED_MODIFIER_UUID,
                             "Sprint speed movement modifier",
-                            player.getAttributeValue(AttributeRegistry.SPRINT_SPEED.get()),
+                            player.getAttributeValue(AttributeRegistry.SPRINT_SPEED.get()) - 1,
                             AttributeModifier.Operation.MULTIPLY_TOTAL
                     )
             );
@@ -513,6 +526,29 @@ public class EventHandler {
                 float vanillaExhaustion = (float) cmTraveled * 0.001f; // 0.1 per meter
                 float newExhaustion = (float) (vanillaExhaustion * player.getAttributeValue(AttributeRegistry.SPRINT_HUNGER_CONSUMPTION.get()));
                 player.causeFoodExhaustion(newExhaustion - vanillaExhaustion);
+            }
+        }
+    }
+
+    @SubscribeEvent
+    public static void tooltip(final ItemTooltipEvent event) {
+        Player player = event.getEntity();
+        ItemStack stack = event.getItemStack();
+        List<Component> lines = event.getToolTip();
+        if (stack.hasData(AttachmentTypeRegistry.ITEM_UPGRADE_ATTACHMENT.get())) {
+            ItemUpgradeAttachment upgrades = stack.getData(AttachmentTypeRegistry.ITEM_UPGRADE_ATTACHMENT.get());
+            boolean isAugmented = false;
+            for (ItemUpgrade upgrade : upgrades.getData().keySet()) {
+                int timesApplied = upgrades.timesApplied(upgrade);
+                if (timesApplied != 0) {
+                    if (!isAugmented) {
+                        isAugmented = true;
+                        lines.add(Component.empty());
+                        lines.add(Component.translatable("item.augmented").withStyle(ChatFormatting.GRAY));
+                    }
+                    var id = upgrade.getId();
+                    lines.add(Component.translatable(id.getNamespace() + ".item.augmentation." + id.getPath(), timesApplied).withStyle(upgrade.getFormatting()));
+                }
             }
         }
     }
