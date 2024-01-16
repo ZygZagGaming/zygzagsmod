@@ -282,5 +282,6 @@
   "attribute.name.generic.sprint_jump_hunger_consumption": "Sprint Jump Hunger Consumption",
 
   "item.augmented": "Augmented:",
-  "zygzagsmod.item.augmentation.damage": "Damage x%s"
+  "augment.zygzagsmod.damage": "Damage",
+  "augment.zygzagsmod.armor": "Armor"
 }

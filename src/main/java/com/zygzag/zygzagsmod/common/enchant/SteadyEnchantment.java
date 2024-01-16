@@ -1,7 +1,7 @@
 package com.zygzag.zygzagsmod.common.enchant;
 
 import com.google.common.collect.Multimap;
-import com.zygzag.zygzagsmod.common.Main;
+import com.zygzag.zygzagsmod.common.UUIDs;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
@@ -33,7 +33,7 @@ public class SteadyEnchantment extends CustomEnchantment {
     public void setupAttributes(Multimap<Attribute, AttributeModifier> attributeMap, EquipmentSlot slot, int level) {
         if (slot == EquipmentSlot.FEET) {
             var kbRes = level == 1 ? 0.05 : level == 2 ? 0.1 : 0.2;
-            attributeMap.put(Attributes.KNOCKBACK_RESISTANCE, new AttributeModifier(Main.STEADY_ENCHANTMENT_MODIFIER_UUID, "Steady enchantment modifier", kbRes, AttributeModifier.Operation.ADDITION));
+            attributeMap.put(Attributes.KNOCKBACK_RESISTANCE, new AttributeModifier(UUIDs.STEADY_ENCHANTMENT_MODIFIER_UUID, "Steady enchantment modifier", kbRes, AttributeModifier.Operation.ADDITION));
         }
     }
 }

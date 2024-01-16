@@ -1,7 +1,7 @@
 package com.zygzag.zygzagsmod.common.enchant;
 
 import com.google.common.collect.Multimap;
-import com.zygzag.zygzagsmod.common.Main;
+import com.zygzag.zygzagsmod.common.UUIDs;
 import com.zygzag.zygzagsmod.common.registry.AttributeRegistry;
 import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.world.entity.EquipmentSlot;
@@ -42,7 +42,7 @@ public class SprintEnchantment extends CustomEnchantment {
             attributeMap.put(
                     AttributeRegistry.SPRINT_SPEED.get(),
                     new AttributeModifier(
-                            Main.SPRINT_ENCHANTMENT_SPRINT_SPEED_MODIFIER_UUID,
+                            UUIDs.SPRINT_ENCHANTMENT_SPRINT_SPEED_MODIFIER_UUID,
                             "Sprint enchantment modifier",
                             SPRINT_SPEED_MULTIPLIERS[level - 1],
                             AttributeModifier.Operation.MULTIPLY_BASE
@@ -51,7 +51,7 @@ public class SprintEnchantment extends CustomEnchantment {
             attributeMap.put(
                     AttributeRegistry.SPRINT_HUNGER_CONSUMPTION.get(),
                     new AttributeModifier(
-                            Main.SPRINT_ENCHANTMENT_SPRINT_HUNGER_CONSUMPTION_MODIFIER_UUID,
+                            UUIDs.SPRINT_ENCHANTMENT_SPRINT_HUNGER_CONSUMPTION_MODIFIER_UUID,
                             "Sprint enchantment modifier",
                             SPRINT_HUNGER_CONSUMPTION_MULTIPLIERS[level - 1],
                             AttributeModifier.Operation.MULTIPLY_BASE
@@ -60,7 +60,7 @@ public class SprintEnchantment extends CustomEnchantment {
             attributeMap.put(
                     AttributeRegistry.SPRINT_JUMP_HUNGER_CONSUMPTION.get(),
                     new AttributeModifier(
-                            Main.SPRINT_ENCHANTMENT_SPRINT_JUMP_HUNGER_CONSUMPTION_MODIFIER_UUID,
+                            UUIDs.SPRINT_ENCHANTMENT_SPRINT_JUMP_HUNGER_CONSUMPTION_MODIFIER_UUID,
                             "Sprint enchantment modifier",
                             SPRINT_JUMP_HUNGER_CONSUMPTION_MULTIPLIERS[level - 1],
                             AttributeModifier.Operation.MULTIPLY_BASE

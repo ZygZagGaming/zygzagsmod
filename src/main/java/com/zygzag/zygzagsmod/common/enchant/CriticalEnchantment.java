@@ -1,7 +1,7 @@
 package com.zygzag.zygzagsmod.common.enchant;
 
 import com.google.common.collect.Multimap;
-import com.zygzag.zygzagsmod.common.Main;
+import com.zygzag.zygzagsmod.common.UUIDs;
 import com.zygzag.zygzagsmod.common.registry.AttributeRegistry;
 import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.world.entity.EquipmentSlot;
@@ -41,7 +41,7 @@ public class CriticalEnchantment extends CustomEnchantment {
         if (slot == EquipmentSlot.MAINHAND) attributeMap.put(
             AttributeRegistry.CRIT_DAMAGE.get(),
             new AttributeModifier(
-                    Main.CRITICAL_ENCHANTMENT_CRIT_DAMAGE_MODIFIER_UUID,
+                    UUIDs.CRITICAL_ENCHANTMENT_CRIT_DAMAGE_MODIFIER_UUID,
                     "Critical enchantment modifier",
                     CRITICAL_BOOSTS[level - 1],
                     AttributeModifier.Operation.ADDITION

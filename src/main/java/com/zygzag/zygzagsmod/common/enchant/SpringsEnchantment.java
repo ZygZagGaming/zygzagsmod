@@ -1,7 +1,7 @@
 package com.zygzag.zygzagsmod.common.enchant;
 
 import com.google.common.collect.Multimap;
-import com.zygzag.zygzagsmod.common.Main;
+import com.zygzag.zygzagsmod.common.UUIDs;
 import com.zygzag.zygzagsmod.common.registry.AttributeRegistry;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.ai.attributes.Attribute;
@@ -32,7 +32,7 @@ public class SpringsEnchantment extends CustomEnchantment {
     @Override
     public void setupAttributes(Multimap<Attribute, AttributeModifier> attributeMap, EquipmentSlot slot, int level) {
         if (slot == EquipmentSlot.LEGS) {
-            attributeMap.put(AttributeRegistry.JUMP_POWER.get(), new AttributeModifier(Main.SPRINGS_ENCHANTMENT_MODIFIER_UUID, "Springs enchantment modifier", JUMP_HEIGHT_MULTIPLIERS[level - 1], AttributeModifier.Operation.MULTIPLY_BASE));
+            attributeMap.put(AttributeRegistry.JUMP_POWER.get(), new AttributeModifier(UUIDs.SPRINGS_ENCHANTMENT_MODIFIER_UUID, "Springs enchantment modifier", JUMP_HEIGHT_MULTIPLIERS[level - 1], AttributeModifier.Operation.MULTIPLY_BASE));
         }
     }
 }

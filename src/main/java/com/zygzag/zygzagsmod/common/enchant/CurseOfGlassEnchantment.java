@@ -1,7 +1,7 @@
 package com.zygzag.zygzagsmod.common.enchant;
 
 import com.google.common.collect.Multimap;
-import com.zygzag.zygzagsmod.common.Main;
+import com.zygzag.zygzagsmod.common.UUIDs;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
@@ -26,8 +26,8 @@ public class CurseOfGlassEnchantment extends CustomEnchantment {
     @Override
     public void setupAttributes(Multimap<Attribute, AttributeModifier> attributeMap, EquipmentSlot slot, int level) {
         if (slot == EquipmentSlot.CHEST) {
-            attributeMap.put(Attributes.MAX_HEALTH, new AttributeModifier(Main.CURSE_OF_GLASS_ENCHANTMENT_HEALTH_MODIFIER_UUID, "Curse of Glass enchantment modifier", -8, AttributeModifier.Operation.ADDITION));
-            attributeMap.put(Attributes.ATTACK_DAMAGE, new AttributeModifier(Main.CURSE_OF_GLASS_ENCHANTMENT_DAMAGE_MODIFIER_UUID, "Curse of Glass enchantment modifier", 2, AttributeModifier.Operation.MULTIPLY_TOTAL));
+            attributeMap.put(Attributes.MAX_HEALTH, new AttributeModifier(UUIDs.CURSE_OF_GLASS_ENCHANTMENT_HEALTH_MODIFIER_UUID, "Curse of Glass enchantment modifier", -8, AttributeModifier.Operation.ADDITION));
+            attributeMap.put(Attributes.ATTACK_DAMAGE, new AttributeModifier(UUIDs.CURSE_OF_GLASS_ENCHANTMENT_DAMAGE_MODIFIER_UUID, "Curse of Glass enchantment modifier", 2, AttributeModifier.Operation.MULTIPLY_TOTAL));
         }
     }
 

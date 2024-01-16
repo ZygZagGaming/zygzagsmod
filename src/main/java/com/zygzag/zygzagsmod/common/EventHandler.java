@@ -467,7 +467,7 @@ public class EventHandler {
         if (stack.hasData(AttachmentTypeRegistry.ITEM_UPGRADE_ATTACHMENT.get())) {
             ItemUpgradeAttachment upgrades = stack.getData(AttachmentTypeRegistry.ITEM_UPGRADE_ATTACHMENT.get());
             for (var upgrade : upgrades.getData().keySet()) if (upgrades.timesApplied(upgrade) != 0) {
-                var attributeMap = upgrade.attributes(event.getSlotType(), upgrades.timesApplied(upgrade));
+                var attributeMap = upgrade.attributes(event.getSlotType(), upgrades.timesApplied(upgrade), stack);
                 for (var attributeModifierEntry : attributeMap.entries()) event.addModifier(attributeModifierEntry.getKey(), attributeModifierEntry.getValue());
             }
         }
@@ -511,11 +511,11 @@ public class EventHandler {
         double dx = player.getX() - player.xOld, dy = player.getY() - player.yOld, dz = player.getZ() - player.zOld;
         AttributeInstance attributeInstance = player.getAttribute(Attributes.MOVEMENT_SPEED);
         if (attributeInstance == null) return;
-        attributeInstance.removeModifier(Main.SPRINT_SPEED_ATTRIBUTE_MOVEMENT_SPEED_MODIFIER_UUID);
+        attributeInstance.removeModifier(UUIDs.SPRINT_SPEED_ATTRIBUTE_MOVEMENT_SPEED_MODIFIER_UUID);
         if (player.isSprinting()) {
             attributeInstance.addTransientModifier(
                     new AttributeModifier(
-                            Main.SPRINT_SPEED_ATTRIBUTE_MOVEMENT_SPEED_MODIFIER_UUID,
+                            UUIDs.SPRINT_SPEED_ATTRIBUTE_MOVEMENT_SPEED_MODIFIER_UUID,
                             "Sprint speed movement modifier",
                             player.getAttributeValue(AttributeRegistry.SPRINT_SPEED.get()) - 1,
                             AttributeModifier.Operation.MULTIPLY_TOTAL
@@ -547,10 +547,15 @@ public class EventHandler {
                         lines.add(Component.empty());
                         lines.add(Component.translatable("item.augmented").withStyle(ChatFormatting.GRAY));
                     }
-                    var id = upgrade.getId();
-                    lines.add(Component.translatable(id.getNamespace() + ".item.augmentation." + id.getPath(), timesApplied).withStyle(upgrade.getFormatting()));
+                    var line = upgrade.additionalTooltipLine(timesApplied);
+                    if (line != null) lines.add(line);
                 }
             }
         }
+    }
+
+    @SubscribeEvent
+    public static void craftingRecipe(final PlayerEvent.ItemCraftedEvent event) {
+
     }
 }

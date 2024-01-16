@@ -1,0 +1,10 @@
+{
+  "type": "zygzagsmod:upgrade",
+  "template": {
+    "item": "minecraft:wheat_seeds"
+  },
+  "addition": {
+    "item": "minecraft:copper_ingot"
+  },
+  "upgrade": "zygzagsmod:armor"
+}

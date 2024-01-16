@@ -11,6 +11,7 @@ import net.minecraft.util.Mth;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.item.enchantment.Enchantments;
@@ -515,6 +516,12 @@ public class GeneralUtil {
         System.out.println("The slerp between (1, " + phi1 + ", " + theta1 + ") and (1, " + phi2 + ", " + theta2 + ") with t=0 is (1, " + result1[0] + ", " + result1[1] + ")");
         System.out.println("The slerp between (1, " + phi1 + ", " + theta1 + ") and (1, " + phi2 + ", " + theta2 + ") with t=1 is (1, " + result2[0] + ", " + result2[1] + ")");
         System.out.println("The slerp between (1, " + phi1 + ", " + theta1 + ") and (1, " + phi2 + ", " + theta2 + ") with t=0.5 is (1, " + result3[0] + ", " + result3[1] + ")");
+    }
+
+    public static String tooltipToString(AttributeModifier modifier) {
+        AttributeModifier.Operation operation = modifier.getOperation();
+        if (operation == AttributeModifier.Operation.ADDITION) return "+%.2f".formatted(modifier.getAmount());
+        else return "+" + ((int) Math.round(modifier.getAmount() * 100)) + "%";
     }
 
 //    public static float[][] rotationMatrix(Direction.Axis axis, float theta) {

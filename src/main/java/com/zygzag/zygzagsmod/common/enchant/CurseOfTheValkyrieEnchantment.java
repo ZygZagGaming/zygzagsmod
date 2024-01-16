@@ -2,12 +2,12 @@ package com.zygzag.zygzagsmod.common.enchant;
 
 import com.google.common.collect.Multimap;
 import com.zygzag.zygzagsmod.common.Main;
+import com.zygzag.zygzagsmod.common.UUIDs;
 import com.zygzag.zygzagsmod.common.registry.AttributeRegistry;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
-import net.minecraft.world.item.enchantment.EnchantmentCategory;
 
 public class CurseOfTheValkyrieEnchantment extends CustomEnchantment {
     public static final float[] CRITICAL_BOOSTS = { 0.2f, 0.6f };
@@ -42,7 +42,7 @@ public class CurseOfTheValkyrieEnchantment extends CustomEnchantment {
             attributeMap.put(
                     AttributeRegistry.CRIT_DAMAGE.get(),
                     new AttributeModifier(
-                            Main.COTV_ENCHANTMENT_CRIT_DAMAGE_MODIFIER_UUID,
+                            UUIDs.COTV_ENCHANTMENT_CRIT_DAMAGE_MODIFIER_UUID,
                             "CotV enchantment modifier",
                             CRITICAL_BOOSTS[level - 1],
                             AttributeModifier.Operation.MULTIPLY_BASE
@@ -51,7 +51,7 @@ public class CurseOfTheValkyrieEnchantment extends CustomEnchantment {
             attributeMap.put(
                     Attributes.ATTACK_SPEED,
                     new AttributeModifier(
-                            Main.COTV_ENCHANTMENT_ATTACK_SPEED_MODIFIER_UUID,
+                            UUIDs.COTV_ENCHANTMENT_ATTACK_SPEED_MODIFIER_UUID,
                             "CotV enchantment modifier",
                             ATTACK_SPEED_NERFS[level - 1],
                             AttributeModifier.Operation.MULTIPLY_BASE
