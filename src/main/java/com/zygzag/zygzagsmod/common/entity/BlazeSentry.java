@@ -4,6 +4,7 @@ import com.zygzag.zygzagsmod.common.entity.animation.ActingEntity;
 import com.zygzag.zygzagsmod.common.entity.animation.Action;
 import com.zygzag.zygzagsmod.common.entity.animation.Actor;
 import com.zygzag.zygzagsmod.common.registry.*;
+import com.zygzag.zygzagsmod.common.util.GeneralUtil;
 import com.zygzag.zygzagsmod.common.util.LockedEntityAnchor;
 import com.zygzag.zygzagsmod.common.util.LockedEntityRotation;
 import com.zygzag.zygzagsmod.common.util.SimplEntityRotation;
@@ -12,15 +13,13 @@ import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.world.effect.MobEffectInstance;
-import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.EntityType;
-import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.Pose;
+import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.goal.Goal;
 import net.minecraft.world.entity.ai.goal.target.HurtByTargetGoal;
 import net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal;
+import net.minecraft.world.entity.animal.AbstractGolem;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.monster.Monster;
 import net.minecraft.world.entity.player.Player;
@@ -37,6 +36,7 @@ import software.bernie.geckolib.util.GeckoLibUtil;
 
 import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.*;
+import java.util.function.Predicate;
 
 import static java.lang.Math.cos;
 import static java.lang.Math.sin;
@@ -72,6 +72,7 @@ public class BlazeSentry extends Monster implements GeoAnimatable, ActingEntity<
         setPathfindingMalus(BlockPathTypes.DANGER_FIRE, 0);
         setPathfindingMalus(BlockPathTypes.DAMAGE_FIRE, 0);
         xpReward = 10;
+        setPersistenceRequired();
     }
 
     @Override
@@ -131,7 +132,7 @@ public class BlazeSentry extends Monster implements GeoAnimatable, ActingEntity<
                 if (!(rotation instanceof LockedEntityRotation)) {
                     rotation = new LockedEntityRotation(
                             LockedEntityAnchor.eyes(this),
-                            LockedEntityAnchor.eyes(getTarget()),
+                            LockedEntityAnchor.eyes(entity),
                             defaultRotations,
                             rotation
                     );
@@ -187,9 +188,11 @@ public class BlazeSentry extends Monster implements GeoAnimatable, ActingEntity<
 
     @Override
     public void tick() {
+        var target = getTarget();
+        if (target != null && !target.isAlive()) setTarget(null);
         if (windDownTicks > 0) windDownTicks--;
         if (level().isClientSide) {
-            if (getTarget() == null) {
+            if (target == null || !target.isAlive() || (rotation instanceof LockedEntityRotation rot && rot.target instanceof LockedEntityAnchor anchor && !anchor.target.isAlive())) { // TODO: ... make this better code
                 if (rotation instanceof LockedEntityRotation) {
                     rotation = new SimplEntityRotation(rotation);
                     rotation.newBodyXRot = -0.5f * (float) Math.PI;
@@ -198,7 +201,7 @@ public class BlazeSentry extends Monster implements GeoAnimatable, ActingEntity<
                 if (!(rotation instanceof LockedEntityRotation)) {
                     rotation = new LockedEntityRotation(
                             LockedEntityAnchor.eyes(this),
-                            LockedEntityAnchor.eyes(getTarget()),
+                            LockedEntityAnchor.eyes(target),
                             defaultRotations,
                             rotation
                     );
@@ -222,8 +225,8 @@ public class BlazeSentry extends Monster implements GeoAnimatable, ActingEntity<
 
     @Override
     protected void registerGoals() {
-        targetSelector.addGoal(2, new HurtByTargetGoal(this));
-        targetSelector.addGoal(3, new NearestAttackableTargetGoal<>(this, Player.class, 0, true, false, (entity) -> entity instanceof Player player && !player.isCreative() && !player.isSpectator()));
+        targetSelector.addGoal(2, new OsuNATGoal<>(this, LivingEntity.class, 0, true, false, (entity) -> (entity instanceof Player player && !player.isCreative() && !player.isSpectator()) || entity instanceof AbstractGolem));
+        targetSelector.addGoal(3, new HurtByTargetGoal(this));
         goalSelector.addGoal(2, new FireGoal());
         goalSelector.addGoal(2, new FireBigGoal());
         goalSelector.addGoal(1, new FlamethrowGoal());
@@ -365,7 +368,7 @@ public class BlazeSentry extends Monster implements GeoAnimatable, ActingEntity<
 
         @Override
         public boolean canUse() {
-            return windDownTicks <= 0 && !actor.isTransitioning() && actor.getCurrentAction() == ActionRegistry.BlazeSentry.AGRO_BASE.get();
+            return windDownTicks <= 0 && !actor.isTransitioning() && actor.getCurrentAction() == ActionRegistry.BlazeSentry.AGRO_BASE.get() && getTarget() != null && getTarget().getBoundingBox().getCenter().add(getTarget().getDeltaMovement()).distanceToSqr(getEyePosition()) <= range * range * 1.1;
         }
 
         @Override
@@ -406,6 +409,33 @@ public class BlazeSentry extends Monster implements GeoAnimatable, ActingEntity<
         @Override
         public boolean canContinueToUse() {
             return ticks < windup + maxDuration;
+        }
+    }
+
+    class OsuNATGoal<T extends LivingEntity> extends NearestAttackableTargetGoal<T> {
+        private final @Nullable Predicate<LivingEntity> predicate;
+        public OsuNATGoal(Mob parent, Class<T> targetType, int interval, boolean mustSee, boolean mustReach, @Nullable Predicate<LivingEntity> predicate) {
+            super(parent, targetType, interval, mustSee, mustReach, predicate);
+            this.predicate = predicate;
+        }
+
+        @Override
+        protected void findTarget() {
+            mob.level()
+                    .getEntitiesOfClass(
+                            targetType,
+                            getTargetSearchArea(getFollowDistance()),
+                            (it) -> it != null && it.isAlive() && (predicate == null || predicate.test(it))
+                    ).stream()
+                    .max((a, b) -> rating(a) - rating(b))
+                    .ifPresentOrElse(t -> this.target = t, () -> this.target = null); // whew
+        }
+
+        private int rating(LivingEntity potentialTarget) {
+            Vec3 thisCenter = getBoundingBox().getCenter(), otherCenter = potentialTarget.getBoundingBox().getCenter();
+            Vec3 difference = thisCenter.subtract(otherCenter);
+            double[] rotationWanted = GeneralUtil.rectangularToSpherical(difference.x, difference.y, difference.z);
+            return (int) (thisCenter.distanceTo(otherCenter) + GeneralUtil.angleDifferenceSpherical(Math.PI * 0.5 - rotation.bodyXRot, rotation.bodyYRot, rotationWanted[1], rotationWanted[2]) * 2);
         }
     }
 }

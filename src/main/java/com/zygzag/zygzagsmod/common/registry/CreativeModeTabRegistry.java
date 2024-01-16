@@ -61,6 +61,9 @@ public class CreativeModeTabRegistry extends AkomiRegistry<CreativeModeTab> {
             BlockItemEntityRegistry.RED_NETHER_BRICK_CACHE.item(),
             BlockWithItemRegistry.NETHER_BRICK_BUTTON.item(),
             BlockWithItemRegistry.RED_NETHER_BRICK_BUTTON.item(),
+            BlockWithItemRegistry.NETHER_QUARTZ_GLASS.item(),
+            BlockWithItemRegistry.NETHER_QUARTZ_GLASS_SLAB.item(),
+            BlockWithItemRegistry.NETHER_QUARTZ_GLASS_STAIRS.item(),
 
             // Misc
             BlockItemEntityRegistry.SCULK_JAW.item(),

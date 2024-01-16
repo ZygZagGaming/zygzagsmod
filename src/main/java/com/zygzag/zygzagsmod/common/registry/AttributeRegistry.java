@@ -19,7 +19,7 @@ public class AttributeRegistry extends AkomiRegistry<Attribute> {
     public static final Supplier<Attribute> JUMP_POWER = INSTANCE.register("generic.jump_power", () -> new RangedAttribute("attribute.name.generic.jump_power", 1.0, 0.0, 1000000.0).setSyncable(true));
     public static final Supplier<Attribute> CRIT_DAMAGE = INSTANCE.register("generic.crit_damage", () -> new RangedAttribute("attribute.name.generic.crit_damage", 1.5, 1.0, 1000000.0));
 
-    public static final Supplier<Attribute> SPRINT_SPEED = INSTANCE.register("generic.sprint_speed", () -> new RangedAttribute("attribute.name.generic.sprint_speed", 1.0, 0.0, 1000000.0));
+    public static final Supplier<Attribute> SPRINT_SPEED = INSTANCE.register("generic.sprint_speed", () -> new RangedAttribute("attribute.name.generic.sprint_speed", 1.0, 0.0, 1000000.0).setSyncable(true));
     public static final Supplier<Attribute> SPRINT_HUNGER_CONSUMPTION = INSTANCE.register("generic.sprint_hunger_consumption", () -> new RangedAttribute("attribute.name.generic.sprint_hunger_consumption", 1.0, 0.0, 1000000.0));
     public static final Supplier<Attribute> SPRINT_JUMP_HUNGER_CONSUMPTION = INSTANCE.register("generic.sprint_jump_hunger_consumption", () -> new RangedAttribute("attribute.name.generic.sprint_jump_hunger_consumption", 1.0, 0.0, 1000000.0));
 }

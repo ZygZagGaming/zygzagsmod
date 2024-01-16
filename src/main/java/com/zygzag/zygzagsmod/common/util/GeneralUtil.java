@@ -33,6 +33,7 @@ import java.util.function.Function;
 
 import static java.lang.Math.*;
 
+@SuppressWarnings("unused")
 public class GeneralUtil {
     public static int getColor(BlockState state) {
         if (state.is(Tags.Blocks.ORES_COPPER)) return Config.copperOreColor;
@@ -440,9 +441,18 @@ public class GeneralUtil {
         return new float[]{(float) (rho * cos(theta) * cos(phi)), (float) (rho * sin(theta) * cos(phi)), (float) (rho * sin(phi))};
     }
 
+    public static double[] sphericalToRectangular(double rho, double phi, double theta) {
+        return new double[]{rho * cos(theta) * cos(phi), rho * sin(theta) * cos(phi), rho * sin(phi)};
+    }
+
     public static float[] rectangularToSpherical(float x, float y, float z) {
         float rho = magnitude(x, y, z);
         return new float[]{rho, (float) asin(z / rho), (float) atan2(y, x)};
+    }
+
+    public static double[] rectangularToSpherical(double x, double y, double z) {
+        double rho = magnitude(x, y, z);
+        return new double[]{rho, asin(z / rho), atan2(y, x)};
     }
 
     public static float magnitude(float x, float y, float z) {

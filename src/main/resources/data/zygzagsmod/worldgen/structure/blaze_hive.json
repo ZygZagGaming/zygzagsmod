@@ -1,7 +1,7 @@
 {
   "type": "minecraft:jigsaw",
   "biomes": "#zygzagsmod:has_structure/blaze_hive",
-  "max_distance_from_center": 128,
+  "max_distance_from_center": 150,
   "size": 20,
   "spawn_overrides": {
     "monster": {
@@ -17,12 +17,9 @@
     }
   },
   "start_height": {
-    "type": "biased_to_bottom",
-    "min_inclusive": {
-      "above_bottom": 45
-    },
-    "max_inclusive": {
-      "below_top": 156
+    "type": "constant",
+    "value": {
+      "absolute": 30
     }
   },
   "start_pool": "zygzagsmod:blaze_hive/starts",

@@ -521,6 +521,7 @@ public class EventHandler {
                             AttributeModifier.Operation.MULTIPLY_TOTAL
                     )
             );
+            //System.out.println("modifiers " + player.getAttribute(Attributes.MOVEMENT_SPEED).getModifiers() + " on " + GeneralUtil.stringCS(player.level()));
             if (!player.isPassenger() && !player.isSwimming() && !player.isEyeInFluidType(Fluids.WATER.getFluidType()) && !player.isInWater() && !player.onClimbable() && player.onGround()) {
                 int cmTraveled = Math.round((float) Math.sqrt(dx * dx + dz * dz) * 100);
                 float vanillaExhaustion = (float) cmTraveled * 0.001f; // 0.1 per meter

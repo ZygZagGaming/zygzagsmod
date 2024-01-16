@@ -17,6 +17,15 @@
         "projection": "rigid"
       },
       "weight": 1
+    },
+    {
+      "element": {
+        "element_type": "minecraft:single_pool_element",
+        "location": "zygzagsmod:blaze_hive/rooms/3x3/3x3_1/3x3_1_3",
+        "processors": "zygzagsmod:blaze_hive_degradation",
+        "projection": "rigid"
+      },
+      "weight": 1
     }
   ],
   "fallback": "minecraft:empty"
