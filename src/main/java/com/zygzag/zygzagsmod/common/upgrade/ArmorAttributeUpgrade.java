@@ -52,6 +52,11 @@ public class ArmorAttributeUpgrade implements ItemUpgrade {
     @Override
     public Component additionalTooltipLine(int timesApplied) {
         var id = getId();
-        return Component.translatable("augment.%s.%s".formatted(id.getNamespace(), id.getPath())).append(" x%s > %s ".formatted(timesApplied, tooltipToString(modifier(timesApplied)))).append(Component.translatable(attribute.getDescriptionId()));
+        return Component.translatable("augment.%s.%s".formatted(id.getNamespace(), id.getPath()))
+                .append(" x%s ".formatted(timesApplied))
+                .withStyle(formattings)
+                .append(Component.literal("> ").withStyle(ChatFormatting.GRAY))
+                .append(Component.literal("%s ".formatted(tooltipToString(modifier(timesApplied)))).withStyle(ChatFormatting.BLUE))
+                .append(Component.translatable(attribute.getDescriptionId()).withStyle(ChatFormatting.BLUE));
     }
 }

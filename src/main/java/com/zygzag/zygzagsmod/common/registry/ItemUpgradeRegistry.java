@@ -21,7 +21,6 @@ import static com.zygzag.zygzagsmod.common.Main.MODID;
 public class ItemUpgradeRegistry extends CustomAkomiRegistry<ItemUpgrade> {
     public static final ItemUpgradeRegistry INSTANCE = new ItemUpgradeRegistry(DeferredRegister.create(new ResourceLocation(MODID, "item_upgrade"), MODID));
     public static final Registry<ItemUpgrade> BACKING_REGISTRY = INSTANCE.backingRegistry();
-    public static final Predicate<EquipmentSlot> ARMOR_PREDICATE = (it) -> it != EquipmentSlot.MAINHAND && it != EquipmentSlot.OFFHAND;
 
     public static final Supplier<ItemUpgrade> DAMAGE = INSTANCE.register(
             "damage",
