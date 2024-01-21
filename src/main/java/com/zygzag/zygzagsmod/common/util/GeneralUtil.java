@@ -437,6 +437,20 @@ public class GeneralUtil {
         return new float[]{rho, (float) asin(z / rho), (float) atan2(y, x)};
     }
 
+    public static float[] rectangularToSphericalAngles(float[] xyz) {
+        float x = xyz[0], y = xyz[1], z = xyz[2], rho = magnitude(xyz);
+        return new float[]{(float) asin(z / rho), (float) atan2(y, x)};
+    }
+
+    public static float[] rectangularToXYRot(float[] xyz) {
+        float x = xyz[0], y = xyz[1], z = xyz[2], rho = magnitude(xyz);
+        return new float[]{(float) asin(y / rho), (float) atan2(z, x)};
+    }
+    public static float[] rectangularToXYRot(Vec3 xyz) {
+        float x = (float) xyz.x, y = (float) xyz.y, z = (float) xyz.z, rho = (float) xyz.length();
+        return new float[]{(float) asin(y / rho), (float) atan2(z, x)};
+    }
+
     public static float[] sphericalToRectangular(float rho, float phi, float theta) {
         return new float[]{(float) (rho * cos(theta) * cos(phi)), (float) (rho * sin(theta) * cos(phi)), (float) (rho * sin(phi))};
     }

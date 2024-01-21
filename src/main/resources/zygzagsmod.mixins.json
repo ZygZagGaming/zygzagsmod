@@ -6,8 +6,7 @@
   "mixins": [
     "SculkBlockMixin",
     "SculkVeinBlockMixin",
-    "BrushItemMixin",
-    "JigsawStructureMixin"
+    "BrushItemMixin"
   ],
   "client": [
   ],

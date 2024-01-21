@@ -4,10 +4,7 @@ import com.zygzag.zygzagsmod.common.entity.animation.ActingEntity;
 import com.zygzag.zygzagsmod.common.entity.animation.Action;
 import com.zygzag.zygzagsmod.common.entity.animation.Actor;
 import com.zygzag.zygzagsmod.common.registry.*;
-import com.zygzag.zygzagsmod.common.util.GeneralUtil;
-import com.zygzag.zygzagsmod.common.util.LockedEntityAnchor;
-import com.zygzag.zygzagsmod.common.util.LockedEntityRotation;
-import com.zygzag.zygzagsmod.common.util.SimplEntityRotation;
+import com.zygzag.zygzagsmod.common.util.*;
 import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
@@ -49,18 +46,11 @@ public class BlazeSentry extends Monster implements GeoAnimatable, ActingEntity<
     //protected static final EntityDataAccessor<SimplEntityRotation> DATA_ROTATION = SynchedEntityData.defineId(BlazeSentry.class, EntityDataSerializerRegistry.ENTITY_ROTATION.get());
     private final AnimatableInstanceCache instanceCache = GeckoLibUtil.createInstanceCache(this);
     private final Actor<BlazeSentry> actor = new Actor<>(this, ActionRegistry.BlazeSentry.IDLE_BASE.get());
-    public final LockedEntityRotation.RotationsFromDifference defaultRotations = (difference) -> {
-        double horizDifference = difference.horizontalDistance();
-        float yRot = (float) Math.atan2(difference.x(), difference.z());
-        float xRot = (float) Math.atan2(difference.y(), horizDifference);
-        return new float[]{xRot, xRot, yRot, yRot};
-    };
     public static float[] maxRotationPerTick = {(float) (0.125 * Math.PI), (float) (0.0166666667 * Math.PI)};
-    public SimplEntityRotation rotation = new SimplEntityRotation();
-    {
-        rotation.maxRotationPerTick = maxRotationPerTick;
-        rotation.newBodyXRot = rotation.bodyXRot = rotation.oldBodyXRot = -0.5f * (float) Math.PI;
-    }
+    public RotationArray rotations = new RotationArray(new Rotation[]{
+            new LimitedRotation(0, 0, 0, 0, maxRotationPerTick[0]),
+            new LimitedRotation(-0.5f * (float) Math.PI, 0, -0.5f * (float) Math.PI, 0, maxRotationPerTick[1]),
+    });
     int windDownTicks = 0;
     @Nullable
     private LivingEntity cachedTarget;
@@ -121,24 +111,23 @@ public class BlazeSentry extends Monster implements GeoAnimatable, ActingEntity<
             if (entity == null) {
                 actor.setNextAction(ActionRegistry.BlazeSentry.IDLE_BASE.get());
                 entityData.set(DATA_TARGET, Optional.empty());
-                if (rotation instanceof LockedEntityRotation) {
-                    rotation = new SimplEntityRotation(rotation);
-                    rotation.newBodyXRot = -0.5f * (float) Math.PI;
-                }
+                resetRotation();
             } else {
                 windDownTicks = 100;
                 actor.setNextAction(ActionRegistry.BlazeSentry.AGRO_BASE.get());
                 entityData.set(DATA_TARGET, Optional.of(entity.getUUID()));
-                if (!(rotation instanceof LockedEntityRotation)) {
-                    rotation = new LockedEntityRotation(
-                            LockedEntityAnchor.eyes(this),
-                            LockedEntityAnchor.eyes(entity),
-                            defaultRotations,
-                            rotation
-                    );
-                }
+                lookAt(entity);
             }
         }
+    }
+
+    public void resetRotation() {
+        rotations.get(1).setYRot(-0.5f * (float) Math.PI); // move body back to down position
+    }
+
+    public void lookAt(LivingEntity target) {
+        rotations.get(0).set(GeneralUtil.rectangularToXYRot(target.getEyePosition().subtract(getEyePosition()))); // look towards target
+        rotations.get(1).set(GeneralUtil.rectangularToXYRot(target.getEyePosition().subtract(getEyePosition()))); // rotate body towards target
     }
 
     public boolean isSensitiveToWater() {
@@ -192,23 +181,24 @@ public class BlazeSentry extends Monster implements GeoAnimatable, ActingEntity<
         if (target != null && !target.isAlive()) setTarget(null);
         if (windDownTicks > 0) windDownTicks--;
         if (level().isClientSide) {
-            if (target == null || !target.isAlive() || (rotation instanceof LockedEntityRotation rot && rot.target instanceof LockedEntityAnchor anchor && !anchor.target.isAlive())) { // TODO: ... make this better code
-                if (rotation instanceof LockedEntityRotation) {
-                    rotation = new SimplEntityRotation(rotation);
-                    rotation.newBodyXRot = -0.5f * (float) Math.PI;
-                }
+            if (target == null || !target.isAlive()) {
+                resetRotation();
             } else {
-                if (!(rotation instanceof LockedEntityRotation)) {
-                    rotation = new LockedEntityRotation(
-                            LockedEntityAnchor.eyes(this),
-                            LockedEntityAnchor.eyes(target),
-                            defaultRotations,
-                            rotation
-                    );
+                lookAt(target);
+            }
+
+            if (actor.getTopLevelAction() == ActionRegistry.BlazeSentry.FLAMETHROW_BASE.get()) {
+                Vec3 delta = rotations.get(1).directionVector();
+                for (int particles = 0; particles < 24; ++particles) {
+                    double x = getX() + random.nextGaussian() * 0.2;
+                    double y = getY() + random.nextGaussian() * 0.2;
+                    double z = getZ() + random.nextGaussian() * 0.2;
+
+                    level().addAlwaysVisibleParticle(ParticleTypeRegistry.OVERHEAT_BEAM_PARTICLES.get(), x, y, z, delta.x(), delta.y(), delta.z());
                 }
             }
         }
-        rotation.tick();
+        rotations.tick();
 
         setRot(0, 0);
         setYHeadRot(0);
@@ -279,7 +269,7 @@ public class BlazeSentry extends Monster implements GeoAnimatable, ActingEntity<
             if (ticks > windup && (ticks - windup) % ticksBetweenFireballs == 0) {
                 LivingEntity target = getTarget();
                 assert target != null;
-                Vec3 angle = new Vec3(sin(rotation.bodyYRot) * cos(rotation.bodyXRot), sin(rotation.bodyXRot), cos(rotation.bodyYRot) * cos(rotation.bodyXRot));
+                Vec3 angle = rotations.get(1).directionVector();
                 SmallFireball fireball = new SmallFireball(level(), BlazeSentry.this, angle.x, angle.y, angle.z);
                 fireball.xPower *= power; fireball.yPower *= power; fireball.zPower *= power;
                 fireball.setDeltaMovement(angle.scale(power));
@@ -334,7 +324,7 @@ public class BlazeSentry extends Monster implements GeoAnimatable, ActingEntity<
             if (ticks == windup) {
                 LivingEntity target = getTarget();
                 assert target != null; //TODO: null check
-                Vec3 angle = new Vec3(sin(rotation.bodyYRot) * cos(rotation.bodyXRot), sin(rotation.bodyXRot), cos(rotation.bodyYRot) * cos(rotation.bodyXRot));
+                Vec3 angle = new Vec3(sin(rotations.get(1).getYRot()) * cos(rotations.get(1).getXRot()), sin(rotations.get(1).getXRot()), cos(rotations.get(1).getYRot()) * cos(rotations.get(1).getXRot()));
                 SmallFireball fireball = new SmallFireball(level(), BlazeSentry.this, angle.x, angle.y, angle.z);
                 fireball.xPower *= power; fireball.yPower *= power; fireball.zPower *= power;
                 fireball.setDeltaMovement(angle.scale(power));
@@ -386,7 +376,7 @@ public class BlazeSentry extends Monster implements GeoAnimatable, ActingEntity<
         public void tick() {
             ticks++;
             if (ticks > windup) {
-                Vec3 angle = new Vec3(sin(rotation.bodyYRot) * cos(rotation.bodyXRot), sin(rotation.bodyXRot), cos(rotation.bodyYRot) * cos(rotation.bodyXRot));
+                Vec3 angle = new Vec3(sin(rotations.get(1).getYRot()) * cos(rotations.get(1).getXRot()), sin(rotations.get(1).getXRot()), cos(rotations.get(1).getYRot()) * cos(rotations.get(1).getXRot()));
                 List<Entity> entities = level().getEntities(BlazeSentry.this, getBoundingBox().inflate(range + radiusSqr));
                 for (Entity entity : entities) {
                     Vec3 toTarget = entity.getBoundingBox().getCenter().subtract(getEyePosition());
@@ -435,7 +425,7 @@ public class BlazeSentry extends Monster implements GeoAnimatable, ActingEntity<
             Vec3 thisCenter = getBoundingBox().getCenter(), otherCenter = potentialTarget.getBoundingBox().getCenter();
             Vec3 difference = thisCenter.subtract(otherCenter);
             double[] rotationWanted = GeneralUtil.rectangularToSpherical(difference.x, difference.y, difference.z);
-            return (int) (thisCenter.distanceTo(otherCenter) + GeneralUtil.angleDifferenceSpherical(Math.PI * 0.5 - rotation.bodyXRot, rotation.bodyYRot, rotationWanted[1], rotationWanted[2]) * 2);
+            return (int) (thisCenter.distanceTo(otherCenter) + GeneralUtil.angleDifferenceSpherical(Math.PI * 0.5 - rotations.get(1).getXRot(), rotations.get(1).getYRot(), rotationWanted[1], rotationWanted[2]) * 2);
         }
     }
 }
