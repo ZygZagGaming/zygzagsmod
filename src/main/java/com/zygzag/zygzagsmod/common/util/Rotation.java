@@ -1,15 +1,38 @@
 package com.zygzag.zygzagsmod.common.util;
 
+import com.mojang.datafixers.util.Either;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.DataResult;
 import net.minecraft.world.phys.Vec3;
 
-import static com.zygzag.zygzagsmod.common.util.GeneralUtil.degreesToRadians;
-import static com.zygzag.zygzagsmod.common.util.GeneralUtil.radiansToDegrees;
+import static com.zygzag.zygzagsmod.common.util.GeneralUtil.*;
 import static java.lang.Math.cos;
 import static java.lang.Math.sin;
 
 public interface Rotation {
+    Codec<Rotation> CODEC = Codec.either(
+            Codec.either(
+                    LimitedRotation.CODEC,
+                    LerpedRotation.CODEC
+            ),
+            SimpleRotation.CODEC
+    ).flatXmap(
+            (it) -> it
+                    .left()
+                    .flatMap((left) -> left
+                            .left()
+                            .map((ll) -> DataResult.success((Rotation) ll))
+                            .or(() -> left.right().map(DataResult::success))
+                    ).orElse(it
+                            .right()
+                            .map((r) -> DataResult.success((Rotation) r))
+                            .orElse(DataResult.error(() -> "wtf bruh"))
+                    ),
+            (it) -> it instanceof LimitedRotation cast ? DataResult.success(Either.left(Either.left(cast))) :
+                    it instanceof LerpedRotation cast ? DataResult.success(Either.left(Either.right(cast))) :
+                    it instanceof SimpleRotation cast ? DataResult.success(Either.right(cast)) :
+                    DataResult.error(() -> "wtf")
+    );
     Codec<Rotation> LOSSY_CODEC = SimpleRotation.CODEC.flatComapMap(
             (it) -> it,
             (it) -> it instanceof SimpleRotation cast ? DataResult.success(cast) : DataResult.error(() -> "Unrecognized rotation type")
@@ -35,8 +58,7 @@ public interface Rotation {
         return new float[]{getXRot(), getYRot()};
     }
     default void set(float[] values) {
-        setXRot(values[0]);
-        setYRot(values[1]);
+        set(values[0], values[1]);
     }
     default void set(float xRot, float yRot) {
         setXRot(xRot);
@@ -66,7 +88,17 @@ public interface Rotation {
     default float getYRotDegrees() {
         return radiansToDegrees(getYRot());
     }
+    default float[] direction() {
+        return new float[]{(float) (sin(getYRot()) * cos(getXRot())), (float) sin(getXRot()), (float) (cos(getYRot()) * cos(getXRot()))};
+    }
     default Vec3 directionVector() {
         return new Vec3(sin(getYRot()) * cos(getXRot()), sin(getXRot()), cos(getYRot()) * cos(getXRot()));
     }
+
+    default float angleDifference(Rotation other) {
+        return (float) Math.acos(dot(direction(), other.direction()));
+    }
+
+    default void setOldXRot(float value) { }
+    default void setOldYRot(float value) { }
 }

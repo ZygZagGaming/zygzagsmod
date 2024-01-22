@@ -5,12 +5,12 @@ import com.mojang.serialization.codecs.RecordCodecBuilder;
 
 @SuppressWarnings("unused")
 public class SimpleRotation implements Rotation {
-    public static Codec<SimpleRotation> CODEC = RecordCodecBuilder.create(instance ->
-            instance.group(
-                    Codec.FLOAT.fieldOf("xRot").forGetter((it) -> it.xRot),
-                    Codec.FLOAT.fieldOf("yRot").forGetter((it) -> it.yRot)
-            ).apply(instance, SimpleRotation::new)
-    );
+//    public static Codec<SimpleRotation> CODEC = RecordCodecBuilder.create(instance ->
+//            instance.group(
+//                    Codec.FLOAT.fieldOf("xRot").forGetter((it) -> it.xRot),
+//                    Codec.FLOAT.fieldOf("yRot").forGetter((it) -> it.yRot)
+//            ).apply(instance, SimpleRotation::new)
+//    );
     // IMPORTANT: THIS IS IN RADIANS!!
     public float xRot, yRot;
 
@@ -28,6 +28,10 @@ public class SimpleRotation implements Rotation {
 
     public SimpleRotation(SimpleRotation past) {
         this(past, true);
+    }
+
+    public SimpleRotation(float[] values) {
+        this(values[0], values[1]);
     }
 
     @Override
@@ -48,5 +52,8 @@ public class SimpleRotation implements Rotation {
     @Override
     public float getYRot() {
         return yRot;
+    }
+    public String toString() {
+        return "(x-rot %.4f, y-rot %.4f)".formatted(getXRot(), getYRot());
     }
 }

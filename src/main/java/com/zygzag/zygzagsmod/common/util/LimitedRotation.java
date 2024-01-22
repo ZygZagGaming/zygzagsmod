@@ -3,6 +3,8 @@ package com.zygzag.zygzagsmod.common.util;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 
+import java.util.Arrays;
+
 public class LimitedRotation extends LerpedRotation {
     public static Codec<LimitedRotation> CODEC = RecordCodecBuilder.create(instance ->
             instance.group(
@@ -35,12 +37,28 @@ public class LimitedRotation extends LerpedRotation {
     }
 
     @Override
+    public void set(float xRot, float yRot) {
+        if (!xSetThisTick) {
+            xSetThisTick = true;
+            oldXRot = this.xRot;
+        }
+        if (!ySetThisTick) {
+            ySetThisTick = true;
+            oldYRot = this.yRot;
+        }
+        this.xRot = xRot; this.yRot = yRot;
+        float[] newRot = GeneralUtil.moveAngleAmountTowards(getOldRotation(), this, maxRotationPerTick);
+        this.xRot = newRot[0]; this.yRot = newRot[1];
+    }
+
+    @Override
     public void setXRot(float value) {
         if (!xSetThisTick) {
             xSetThisTick = true;
             oldXRot = xRot;
         }
-        float[] newRot = GeneralUtil.moveAngleAmountTowards(oldXRot, oldYRot, value, yRot, maxRotationPerTick);
+        xRot = value;
+        float[] newRot = GeneralUtil.moveAngleAmountTowards(getOldRotation(), this, maxRotationPerTick);
         xRot = newRot[0]; yRot = newRot[1];
     }
 
@@ -50,7 +68,8 @@ public class LimitedRotation extends LerpedRotation {
             ySetThisTick = true;
             oldYRot = yRot;
         }
-        float[] newRot = GeneralUtil.moveAngleAmountTowards(oldXRot, oldYRot, xRot, value, maxRotationPerTick);
+        yRot = value;
+        float[] newRot = GeneralUtil.moveAngleAmountTowards(getOldRotation(), this, maxRotationPerTick);
         xRot = newRot[0]; yRot = newRot[1];
     }
 }

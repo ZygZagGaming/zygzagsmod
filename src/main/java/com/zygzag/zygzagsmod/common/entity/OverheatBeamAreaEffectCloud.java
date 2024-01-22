@@ -21,7 +21,7 @@ public class OverheatBeamAreaEffectCloud extends AbstractBeamAreaEffectCloud {
     private final int duration = 5 * 20;
     private final float height = 7.5f;
     private final BlockPos origin;
-    private final MobEffectInstance overheatInstance = new MobEffectInstance(MobEffectRegistry.OVERHEAT_EFFECT.get(), 22, 0, true, false, false);
+    public static final MobEffectInstance OVERHEAT_INSTANCE = new MobEffectInstance(MobEffectRegistry.OVERHEAT_EFFECT.get(), 22, 0, true, false, false);
     public OverheatBeamAreaEffectCloud(EntityType<? extends OverheatBeamAreaEffectCloud> type, Level world, BlockPos origin) {
         super(type, world);
         this.origin = origin;
@@ -42,7 +42,7 @@ public class OverheatBeamAreaEffectCloud extends AbstractBeamAreaEffectCloud {
 
     @Override
     public void afflict(LivingEntity living) {
-        living.addEffect(new MobEffectInstance(overheatInstance), this);
+        living.addEffect(new MobEffectInstance(OVERHEAT_INSTANCE), this);
     }
 
     @Override

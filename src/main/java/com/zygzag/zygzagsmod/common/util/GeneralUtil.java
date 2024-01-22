@@ -442,13 +442,10 @@ public class GeneralUtil {
         return new float[]{(float) asin(z / rho), (float) atan2(y, x)};
     }
 
-    public static float[] rectangularToXYRot(float[] xyz) {
-        float x = xyz[0], y = xyz[1], z = xyz[2], rho = magnitude(xyz);
-        return new float[]{(float) asin(y / rho), (float) atan2(z, x)};
-    }
     public static float[] rectangularToXYRot(Vec3 xyz) {
-        float x = (float) xyz.x, y = (float) xyz.y, z = (float) xyz.z, rho = (float) xyz.length();
-        return new float[]{(float) asin(y / rho), (float) atan2(z, x)};
+        float x = (float) xyz.x, y = (float) xyz.y, z = (float) xyz.z, r = (float) Math.sqrt(x * x + z * z);
+        if (Math.abs(atan2(y, r)) > Math.PI * 0.5) System.out.println("PROBLEM: xRot " + atan2(y, r) + " is not in in [-pi/2,pi/2] for input " + xyz);
+        return new float[]{(float) atan2(y, r), (float) atan2(x, z)};
     }
 
     public static float[] sphericalToRectangular(float rho, float phi, float theta) {
@@ -480,6 +477,11 @@ public class GeneralUtil {
     public static float[] moveAngleAmountTowards(float phi1, float theta1, float phi2, float theta2, float c) {
         float diff = angleDifferenceSpherical(phi1, theta1, phi2, theta2);
         return diff <= 1e-4 ? new float[]{phi1, theta1} : lerpSpherical(phi1, theta1, phi2, theta2, Math.min(1, c / diff));
+    }
+
+    public static float[] moveAngleAmountTowards(Rotation rot0, Rotation rot1, float c) {
+        float diff = rot0.angleDifference(rot1);
+        return diff <= 1e-4 ? new float[]{rot0.getXRot(), rot0.getYRot()} : lerpRotations(rot0, rot1, Math.min(1, c / diff));
     }
 
     public static float magnitude(float[] values) {
@@ -522,13 +524,43 @@ public class GeneralUtil {
 
     public static void main(String[] args) { // testing
         float pi = (float) Math.PI;
-        float phi1 = -pi * 0.25f, theta1 = 0, phi2 = pi * 0.25f, theta2 = pi * 0.5f;
-        float[] result1 = lerpSpherical(phi1, theta1, phi2, theta2, 0);
-        float[] result2 = lerpSpherical(phi1, theta1, phi2, theta2, 1);
-        float[] result3 = lerpSpherical(phi1, theta1, phi2, theta2, 0.5f);
-        System.out.println("The slerp between (1, " + phi1 + ", " + theta1 + ") and (1, " + phi2 + ", " + theta2 + ") with t=0 is (1, " + result1[0] + ", " + result1[1] + ")");
-        System.out.println("The slerp between (1, " + phi1 + ", " + theta1 + ") and (1, " + phi2 + ", " + theta2 + ") with t=1 is (1, " + result2[0] + ", " + result2[1] + ")");
-        System.out.println("The slerp between (1, " + phi1 + ", " + theta1 + ") and (1, " + phi2 + ", " + theta2 + ") with t=0.5 is (1, " + result3[0] + ", " + result3[1] + ")");
+        int numCases = 250;
+        for (int whichCase = 0; whichCase < numCases; whichCase++) {
+            float xRot1, yRot1, xRot2, yRot2;
+            Rotation rot1, rot2;
+            { // random rotations 1
+                xRot1 = pi * (float) Math.random() - 0.5f * pi;
+                yRot1 = 2 * pi * (float) Math.random() - pi;
+                rot1 = new SimpleRotation(xRot1, yRot1);
+            }
+            { // random rotations 2
+                xRot2 = pi * (float) Math.random() - 0.5f * pi;
+                yRot2 = 2 * pi * (float) Math.random() - pi;
+                rot2 = new SimpleRotation(xRot2, yRot2);
+            }
+            { // testing conversion
+                float[] xyRot = rectangularToXYRot(rot1.directionVector());
+                float diff = (xRot1 - xyRot[0]) * (xRot1 - xyRot[0]) + (yRot1 - xyRot[1]) * (yRot1 - xyRot[1]);
+                if (diff > 1e-3) System.out.printf("Problem: xy-rot (%.2f, %.2f) converted to and from rectangular yields different xy-rot (%.2f, %.2f)%n", xRot1, yRot1, xyRot[0], xyRot[1]);
+            }
+            { // testing moving rot
+                float angleDifference = (float) Math.acos(rot1.directionVector().dot(rot2.directionVector()));
+                // 4 cases, 0, 1/2 difference, exactly difference, 3/2 difference
+                float[] cases = { 0, 0.5f, 1, 1.5f };
+                for (float multiplier : cases) {
+                    float angleDifferenceToMove = angleDifference * multiplier;
+                    Rotation result = new SimpleRotation(moveAngleAmountTowards(rot1, rot2, angleDifferenceToMove));
+                    float actualDifference = result.angleDifference(rot1);
+                    float remainingDifference = result.angleDifference(rot2);
+                    if (distinct(min(angleDifferenceToMove, angleDifference), actualDifference, 1e-3f)) System.out.printf("Problem: %s moved %.4f to %s is %s, %.4f away from original%n", rot1, angleDifferenceToMove, rot2, result, actualDifference);
+                    if (distinct(max(angleDifference - angleDifferenceToMove, 0), remainingDifference, 1e-3f)) System.out.printf("Problem: %s moved %.4f to %s is %s, %.4f away from destination%n", rot1, angleDifferenceToMove, rot2, result, remainingDifference);
+                }
+            }
+        }
+    }
+
+    public static boolean distinct(float f1, float f2, float error) {
+        return abs(f1 - f2) > error;
     }
 
 //    public static float[][] rotationMatrix(Direction.Axis axis, float theta) {
@@ -580,4 +612,40 @@ public class GeneralUtil {
 //
 //        }
 //    }
+
+    public static float[] lerpRotations(Rotation rot0, Rotation rot1, float t) {
+        // Convert spherical to rectangular on unit sphere
+        float[] v0 = rot0.direction();
+        float[] v1 = rot1.direction();
+
+        double angle = Math.acos(dot(v0, v1));
+        if (Math.abs(angle) < 1e-2) return new float[]{rot0.getXRot(), rot0.getYRot()}; // if they're really close we dont have to do anything
+
+        // Take the cross product to get a normal vector to the geodesic
+        float[] v2 = cross(v0, v1);
+        //System.out.println(Arrays.toString(v0) + " cross " + Arrays.toString(v1) + " = " + Arrays.toString(v2));
+
+        // Normalize
+        v2 = normalized(v2);
+
+        // Take the cross product and normalize again to get an orthonormal basis v0, v2, v3
+        float[] v3 = normalized(cross(v0, v2));
+
+        // The geodesic can now be parametrized as r(t) = v0cos(t) + v3sin(t), r(0) = v0
+        // To find the value of t for which r(t) = v1, we take the dot product of v1 with v0 and v3
+        float dot01 = dot(v0, v1);
+        float dot13 = dot(v1, v3);
+
+        // Now, the atan2 of dot01 and dot03 is the value of t for which r(t) = v1
+        float t1 = (float) atan2(dot13, dot01);
+
+        // We transform the input value of t so that it can be used in the aforementioned function
+        float finalT = angleLerp(0, t1, t);
+
+        // We use that value of T to find a rectangular representation of the sought-after vector
+        float[] v4 = add(scale((float) cos(finalT), v0), scale((float) sin(finalT), v3));
+
+        // Finally, we reduce the rectangular form to spherical
+        return rectangularToXYRot(new Vec3(v4[0], v4[1], v4[2]));
+    }
 }

@@ -16,8 +16,7 @@ public class LerpedRotation extends SimpleRotation {
             ).apply(instance, LerpedRotation::new)
     );
     // IMPORTANT: THIS IS IN RADIANS!!
-    public float oldXRot;
-    public float oldYRot;
+    public float oldXRot, oldYRot;
     public boolean xSetThisTick, ySetThisTick;
 
     public LerpedRotation() { }
@@ -54,7 +53,7 @@ public class LerpedRotation extends SimpleRotation {
 
     @Override
     public float getXRot(float partialTick) {
-        return angleLerp(oldXRot, xRot, partialTick);
+        return lerpRotations(getOldRotation(), this, partialTick)[0];
     }
 
     @Override
@@ -68,6 +67,17 @@ public class LerpedRotation extends SimpleRotation {
 
     @Override
     public float getYRot(float partialTick) {
-        return angleLerp(oldYRot, yRot, partialTick);
+        return lerpRotations(getOldRotation(), this, partialTick)[1];
+    }
+
+    public Rotation getOldRotation() {
+        return new SimpleRotation(oldXRot, oldYRot);
+    }
+
+    public void setOldXRot(float value) {
+        this.oldXRot = value;
+    }
+    public void setOldYRot(float value) {
+        this.oldYRot = value;
     }
 }

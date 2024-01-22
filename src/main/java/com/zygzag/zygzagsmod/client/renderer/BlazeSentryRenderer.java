@@ -32,10 +32,12 @@ public class BlazeSentryRenderer extends GeoEntityRenderer<BlazeSentry> {
         super.preRender(poseStack, sentry, model, bufferSource, buffer, isReRender, partialTick, packedLight, packedOverlay, red, green, blue, alpha);
         RotationArray rotations = sentry.rotations;
         Rotation head = rotations.get(0), body = rotations.get(1);
-        model.getBone("rods").ifPresent((rods) -> {
-            rods.updateRotation(body.getXRot(partialTick) + 0.5f * (float) Math.PI, body.getYRot(partialTick), 0);
+        model.getBone("rod_wrapper").ifPresent((rods) -> {
+            //System.out.println("rod rot is " + body.getXRot(partialTick) + ", " + body.getYRot(partialTick));
+            rods.updateRotation(body.getXRot(partialTick), body.getYRot(partialTick), 0);
         });
         model.getBone("head2").ifPresent((headBone) -> {
+            //System.out.println("head rot is " + head.getXRot(partialTick) + ", " + head.getYRot(partialTick));
             headBone.updateRotation(head.getXRot(partialTick), head.getYRot(partialTick), 0);
         });
     }

@@ -16,8 +16,13 @@
 					"pivot": [0, 40, 0]
 				},
 				{
-					"name": "rods",
+					"name": "rod_wrapper",
 					"parent": "body",
+					"pivot": [0, 40, 0]
+				},
+				{
+					"name": "rods",
+					"parent": "rod_wrapper",
 					"pivot": [0, 40, 0],
 					"rotation": [-90, 0, 0]
 				},
