@@ -2,6 +2,7 @@ package com.zygzag.zygzagsmod.common;
 
 import com.zygzag.zygzagsmod.common.block.entity.CustomBrushableBlockEntity;
 import com.zygzag.zygzagsmod.common.enchant.CustomEnchantment;
+import com.zygzag.zygzagsmod.common.entity.BlazeSentry;
 import com.zygzag.zygzagsmod.common.entity.HomingWitherSkull;
 import com.zygzag.zygzagsmod.common.item.iridium.IEffectAttackWeapon;
 import com.zygzag.zygzagsmod.common.item.iridium.ISocketable;
@@ -60,12 +61,14 @@ import net.minecraft.world.level.material.Fluids;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.HitResult;
+import net.neoforged.bus.api.Event;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.Mod;
 import net.neoforged.neoforge.client.event.MovementInputUpdateEvent;
 import net.neoforged.neoforge.common.Tags;
 import net.neoforged.neoforge.event.ItemAttributeModifierEvent;
 import net.neoforged.neoforge.event.TickEvent;
+import net.neoforged.neoforge.event.entity.EntityMobGriefingEvent;
 import net.neoforged.neoforge.event.entity.item.ItemExpireEvent;
 import net.neoforged.neoforge.event.entity.living.*;
 import net.neoforged.neoforge.event.entity.player.CriticalHitEvent;
@@ -520,5 +523,10 @@ public class EventHandler {
                 player.causeFoodExhaustion(newExhaustion - vanillaExhaustion);
             }
         }
+    }
+
+    @SubscribeEvent
+    public static void mobGrief(final EntityMobGriefingEvent event) {
+        if (event.getEntity() instanceof BlazeSentry) event.setResult(Event.Result.DENY);
     }
 }

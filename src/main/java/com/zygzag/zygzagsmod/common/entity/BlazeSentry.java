@@ -22,6 +22,7 @@ import net.minecraft.world.entity.animal.AbstractGolem;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.monster.Monster;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.entity.projectile.LargeFireball;
 import net.minecraft.world.entity.projectile.SmallFireball;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
@@ -45,7 +46,7 @@ public class BlazeSentry extends Monster implements GeoAnimatable, ActingEntity<
     //protected static final EntityDataAccessor<SimplEntityRotation> DATA_ROTATION = SynchedEntityData.defineId(BlazeSentry.class, EntityDataSerializerRegistry.ENTITY_ROTATION.get());
     private final AnimatableInstanceCache instanceCache = GeckoLibUtil.createInstanceCache(this);
     private final Actor<BlazeSentry> actor = new Actor<>(this, ActionRegistry.BlazeSentry.IDLE_BASE.get());
-    public static float[] maxRotationPerTick = {(float) (0.125 * Math.PI), (float) (0.0166666667 * Math.PI)};
+    public static float[] maxRotationPerTick = {(float) (0.0625 * Math.PI), (float) (0.0166666667 * Math.PI)};
     public RotationArray rotations = new RotationArray(new Rotation[]{
             new LimitedRotation(0, 0, 0, 0, maxRotationPerTick[0]),
             new LimitedRotation(-0.5f * (float) Math.PI, 0, -0.5f * (float) Math.PI, 0, maxRotationPerTick[1]),
@@ -292,7 +293,7 @@ public class BlazeSentry extends Monster implements GeoAnimatable, ActingEntity<
 
     public class FireBigGoal extends Goal {
         public static final EnumSet<Goal.Flag> flags = EnumSet.of(Flag.LOOK, Flag.TARGET);
-        public static final int windup = 30, windDown = 53 - windup;
+        public static final int windup = 15, windDown = 53 - windup;
         public static final double power = 4;
         int ticks = 0;
 
@@ -325,7 +326,7 @@ public class BlazeSentry extends Monster implements GeoAnimatable, ActingEntity<
                 LivingEntity target = getTarget();
                 assert target != null; //TODO: null check
                 Vec3 angle = rotations.get(1).directionVector();
-                SmallFireball fireball = new SmallFireball(level(), BlazeSentry.this, angle.x, angle.y, angle.z);
+                LargeFireball fireball = new LargeFireball(level(), BlazeSentry.this, angle.x, angle.y, angle.z, 1);
                 fireball.xPower *= power; fireball.yPower *= power; fireball.zPower *= power;
                 fireball.setDeltaMovement(angle.scale(power));
                 fireball.moveTo(getEyePosition().add(angle.scale(0.25)));
@@ -443,7 +444,7 @@ public class BlazeSentry extends Monster implements GeoAnimatable, ActingEntity<
 
         @Override
         public boolean canUse() {
-            return getRandom().nextFloat() < 0.02F && getTarget() == null;
+            return getRandom().nextFloat() < 0.02F && getTarget() == null && windDownTicks <= 0;
         }
 
         @Override
