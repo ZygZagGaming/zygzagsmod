@@ -18,6 +18,13 @@ public class TransitionAction extends AbstractAction {
         this.speedModifierSupplier = speedModifierSupplier;
     }
 
+    public TransitionAction(AbstractAction from, AbstractAction to, RawAnimation raw, int lengthInTicks, Function<Integer, Float> speedModifierSupplier, boolean canBeSkipped) {
+        super(raw, lengthInTicks, canBeSkipped);
+        this.from = from;
+        this.to = to;
+        this.speedModifierSupplier = speedModifierSupplier;
+    }
+
     public float speedModifier(int ticksUntilAnimEnds) {
         return speedModifierSupplier.apply(ticksUntilAnimEnds);
     }

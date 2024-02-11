@@ -619,7 +619,7 @@ public class GeneralUtil {
         float[] v1 = rot1.direction();
 
         double angle = Math.acos(dot(v0, v1));
-        if (Math.abs(angle) < 1e-2) return new float[]{rot0.getXRot(), rot0.getYRot()}; // if they're really close we dont have to do anything
+        if (Math.abs(angle) < 1e-2 || Double.isNaN(angle)) return new float[]{rot0.getXRot(), rot0.getYRot()}; // if they're really close we dont have to do anything
 
         // Take the cross product to get a normal vector to the geodesic
         float[] v2 = cross(v0, v1);
@@ -646,6 +646,8 @@ public class GeneralUtil {
         float[] v4 = add(scale((float) cos(finalT), v0), scale((float) sin(finalT), v3));
 
         // Finally, we reduce the rectangular form to spherical
-        return rectangularToXYRot(new Vec3(v4[0], v4[1], v4[2]));
+        var k = rectangularToXYRot(new Vec3(v4[0], v4[1], v4[2]));
+        if (Float.isNaN(k[0]) || Float.isNaN(k[1])) throw new RuntimeException("Lerping between rotations (%f, %f, %f) and (%f, %f, %f) with t=%.4f yields problematic rot [%.4f, %.4f]".formatted(v0[0], v0[1], v0[2], v1[0], v1[1], v1[2], t, k[0], k[1]));
+        return k;
     }
 }

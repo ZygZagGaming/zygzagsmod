@@ -7,7 +7,6 @@ import com.zygzag.zygzagsmod.common.networking.packet.ClientboundBlazeSentryRota
 import com.zygzag.zygzagsmod.common.registry.*;
 import com.zygzag.zygzagsmod.common.util.*;
 import net.minecraft.MethodsReturnNonnullByDefault;
-import net.minecraft.network.protocol.common.ClientboundDisconnectPacket;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
@@ -70,9 +69,9 @@ public class BlazeSentry extends Monster implements GeoAnimatable, ActingEntity<
         return 2.2f;
     }
 
-    public BlazeSentry(Level world) {
+    /*public BlazeSentry(Level world) {
         this(EntityTypeRegistry.BLAZE_SENTRY.get(), world);
-    }
+    }*/
 
     public static AttributeSupplier.Builder createAttributes() {
         return Monster.createMonsterAttributes().add(Attributes.ATTACK_DAMAGE, 6.0D).add(Attributes.MOVEMENT_SPEED, 0.23).add(Attributes.FOLLOW_RANGE, 48.0D).add(Attributes.KNOCKBACK_RESISTANCE, 1.0D);
@@ -107,17 +106,9 @@ public class BlazeSentry extends Monster implements GeoAnimatable, ActingEntity<
         LivingEntity currentTarget = getTarget();
         if ((entity == null && currentTarget == null) || (entity != null && currentTarget != null && entity.is(currentTarget))) return;
         super.setTarget(entity);
-        if (!level().isClientSide) {
-            if (entity == null) {
-                actor.setNextAction(ActionRegistry.BlazeSentry.IDLE_BASE.get());
-                entityData.set(DATA_TARGET, Optional.empty());
-                resetBodyRotation();
-            } else {
-                windDownTicks = 100;
-                actor.setNextAction(ActionRegistry.BlazeSentry.AGRO_BASE.get());
-                entityData.set(DATA_TARGET, Optional.of(entity.getUUID()));
-                lookAt(entity);
-            }
+        if (!level().isClientSide()) {
+            entityData.set(DATA_TARGET, Optional.ofNullable(entity).map(Entity::getUUID));
+            windDownTicks = 100;
         }
     }
 
@@ -186,15 +177,17 @@ public class BlazeSentry extends Monster implements GeoAnimatable, ActingEntity<
     @Override
     public void tick() {
         var target = getTarget();
-        if (target != null && !target.isAlive()) setTarget(null);
+        //if (target != null && !target.isAlive()) setTarget(null);
         if (windDownTicks > 0) windDownTicks--;
-        if (target == null || !target.isAlive()) {
+        if (target == null/* || !target.isAlive()*/) {
             resetBodyRotation();
+            actor.setNextAction(ActionRegistry.BlazeSentry.IDLE_BASE.get());
         } else {
             lookAt(target);
+            if (actor.getCurrentAction().is(ActionRegistry.BlazeSentry.IDLE_BASE)) actor.setNextAction(ActionRegistry.BlazeSentry.AGRO_BASE.get());
         }
 
-        if (level().isClientSide && actor.getTopLevelAction() == ActionRegistry.BlazeSentry.FLAMETHROW_BASE.get()) {
+        if (level().isClientSide && actor.getTopLevelAction().is(ActionRegistry.BlazeSentry.FLAMETHROW_BASE.get())) {
             Vec3 delta = rotations.get(1).directionVector();
             for (int particles = 0; particles < 24; ++particles) {
                 double x = getX() + random.nextGaussian() * 0.2;
@@ -221,7 +214,7 @@ public class BlazeSentry extends Monster implements GeoAnimatable, ActingEntity<
 
     @Override
     protected void registerGoals() {
-        targetSelector.addGoal(2, new OsuNATGoal<>(this, LivingEntity.class, 0, true, false, (entity) -> (entity instanceof Player player && !player.isCreative() && !player.isSpectator()) || entity instanceof AbstractGolem));
+        targetSelector.addGoal(2, new OsuNATGoal<>(this, LivingEntity.class, 1, true, false, (entity) -> (entity instanceof Player player && !player.isCreative() && !player.isSpectator()) || entity instanceof AbstractGolem));
         targetSelector.addGoal(3, new HurtByTargetGoal(this));
         goalSelector.addGoal(1, new FlamethrowGoal());
         goalSelector.addGoal(2, new FireGoal());
@@ -254,7 +247,7 @@ public class BlazeSentry extends Monster implements GeoAnimatable, ActingEntity<
 
         @Override
         public boolean canUse() {
-            return windDownTicks <= 0 && !actor.isTransitioning() && actor.getNextAction() == ActionRegistry.BlazeSentry.AGRO_BASE.get() && level().getRandom().nextDouble() < chanceToUse;
+            return windDownTicks <= 0 && !actor.isTransitioning() && actor.getNextAction().is(ActionRegistry.BlazeSentry.AGRO_BASE) && level().getRandom().nextDouble() < chanceToUse;
         }
 
         @Override
@@ -299,7 +292,7 @@ public class BlazeSentry extends Monster implements GeoAnimatable, ActingEntity<
 
     public class FireBigGoal extends Goal {
         public static final EnumSet<Goal.Flag> flags = EnumSet.of(Flag.LOOK, Flag.TARGET);
-        public static final int windup = 60 + 10, windDown = 160 - windup + 80;
+        public static final int windup = 30, windDown = 53 - windup;
         public static final double power = 4;
         int ticks = 0;
 
@@ -310,7 +303,7 @@ public class BlazeSentry extends Monster implements GeoAnimatable, ActingEntity<
 
         @Override
         public boolean canUse() {
-            return windDownTicks <= 0 && !actor.isTransitioning() && actor.getCurrentAction() == ActionRegistry.BlazeSentry.AGRO_BASE.get();
+            return windDownTicks <= 0 && !actor.isTransitioning() && actor.getCurrentAction().is(ActionRegistry.BlazeSentry.AGRO_BASE);
         }
 
         @Override
@@ -354,8 +347,8 @@ public class BlazeSentry extends Monster implements GeoAnimatable, ActingEntity<
 
     public class FlamethrowGoal extends Goal {
         public static final EnumSet<Goal.Flag> flags = EnumSet.of(Flag.LOOK, Flag.TARGET);
-        public static final int windup = 60, maxDuration = 30 * 12, windDown = 40;
-        public static final double range = 4, radiusSqr = 0.2;
+        public static final int windup = 70, maxDuration = 30 * 12 - windup, windDown = 40;
+        public static final double range = 7, radiusSqr = 0.5;
         int ticks = 0;
 
         @Override
@@ -365,7 +358,7 @@ public class BlazeSentry extends Monster implements GeoAnimatable, ActingEntity<
 
         @Override
         public boolean canUse() {
-            return windDownTicks <= 0 && !actor.isTransitioning() && actor.getCurrentAction() == ActionRegistry.BlazeSentry.AGRO_BASE.get() && getTarget() != null && getTarget().getBoundingBox().getCenter().add(getTarget().getDeltaMovement()).distanceToSqr(getEyePosition()) <= range * range * 1.1;
+             return windDownTicks <= 0 && !actor.isTransitioning() && actor.getCurrentAction().is(ActionRegistry.BlazeSentry.AGRO_BASE) && getTarget() != null && getTarget().getBoundingBox().getCenter().add(getTarget().getDeltaMovement()).distanceToSqr(getEyePosition()) <= range * range;
         }
 
         @Override
@@ -384,13 +377,15 @@ public class BlazeSentry extends Monster implements GeoAnimatable, ActingEntity<
             ticks++;
             if (ticks > windup) {
                 Vec3 angle = rotations.get(1).directionVector();
-                List<Entity> entities = level().getEntities(BlazeSentry.this, getBoundingBox().inflate(range + radiusSqr));
+                List<Entity> entities = level().getEntities(BlazeSentry.this, getBoundingBox().inflate(range + radiusSqr + 12));
                 for (Entity entity : entities) {
-                    Vec3 toTarget = entity.getBoundingBox().getCenter().subtract(getEyePosition());
+                    Vec3 targetCenter = entity.getBoundingBox().getCenter();
+                    Vec3 toTarget = targetCenter.subtract(getEyePosition());
                     double cylDistance = angle.dot(toTarget);
                     double radialDistanceSqr = toTarget.subtract(angle.scale(cylDistance)).lengthSqr();
-                    if (radialDistanceSqr < radiusSqr) {
-                        if (entity instanceof LivingEntity living) living.addEffect(new MobEffectInstance(OverheatBeamAreaEffectCloud.OVERHEAT_INSTANCE), BlazeSentry.this);
+                    //System.out.printf("radial dist: %.4f, cyl dist: %.4f, this pos: (%.4f, %.4f, %.4f), other pos: (%.4f, %.4f, %.4f)%n", sqrt(radialDistanceSqr), cylDistance, getX(), getEyeY(), getZ(), targetCenter.x, targetCenter.y, targetCenter.z);
+                    if (radialDistanceSqr < radiusSqr && cylDistance < range && cylDistance > 0) {
+                        if (entity instanceof LivingEntity living && !living.hasEffect(MobEffectRegistry.OVERHEAT_EFFECT.get())) living.addEffect(new MobEffectInstance(OverheatBeamAreaEffectCloud.OVERHEAT_INSTANCE), BlazeSentry.this);
                         else if (entity instanceof ItemEntity) entity.kill();
                     }
                 }
@@ -405,7 +400,7 @@ public class BlazeSentry extends Monster implements GeoAnimatable, ActingEntity<
 
         @Override
         public boolean canContinueToUse() {
-            return ticks < windup + maxDuration;
+            return ticks < windup + maxDuration && getTarget() != null && getTarget().getBoundingBox().getCenter().distanceToSqr(getEyePosition()) <= range * range * 1.1;
         }
     }
 
@@ -424,15 +419,16 @@ public class BlazeSentry extends Monster implements GeoAnimatable, ActingEntity<
                             getTargetSearchArea(getFollowDistance()),
                             (it) -> it != null && it.isAlive() && (predicate == null || predicate.test(it))
                     ).stream()
-                    .max((a, b) -> rating(a) - rating(b))
+                    .min((a, b) -> rating(a) - rating(b))
                     .ifPresentOrElse(t -> this.target = t, () -> this.target = null); // whew
+            //if (target != null) System.out.printf("target found: %s%n", target);
         }
 
         private int rating(LivingEntity potentialTarget) {
             Vec3 thisCenter = getBoundingBox().getCenter(), otherCenter = potentialTarget.getBoundingBox().getCenter();
             Vec3 difference = thisCenter.subtract(otherCenter);
-            double[] rotationWanted = GeneralUtil.rectangularToSpherical(difference.x, difference.y, difference.z);
-            return (int) (thisCenter.distanceTo(otherCenter) + GeneralUtil.angleDifferenceSpherical(Math.PI * 0.5 - rotations.get(1).getXRot(), rotations.get(1).getYRot(), rotationWanted[1], rotationWanted[2]) * 2);
+            float[] rotationWanted = GeneralUtil.rectangularToXYRot(difference);
+            return (int) (thisCenter.distanceTo(otherCenter) + GeneralUtil.angleDifferenceSpherical(Math.PI * 0.5 - rotations.get(1).getXRot(), rotations.get(1).getYRot(), rotationWanted[0], rotationWanted[1]) * 200);
         }
     }
 

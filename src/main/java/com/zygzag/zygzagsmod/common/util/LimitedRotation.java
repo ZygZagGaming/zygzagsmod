@@ -48,7 +48,15 @@ public class LimitedRotation extends LerpedRotation {
         }
         this.xRot = xRot; this.yRot = yRot;
         float[] newRot = GeneralUtil.moveAngleAmountTowards(getOldRotation(), this, maxRotationPerTick);
-        this.xRot = newRot[0]; this.yRot = newRot[1];
+        if ((Float.isNaN(newRot[0]) || Float.isNaN(newRot[1]))) {
+            if (!(Float.isNaN(oldXRot) || Float.isNaN(oldYRot)))
+                new Exception("Bruh; problematic rot (%.4f, %.4f), being set to (%.4f, %.4f) from (%.4f, %.4f)".formatted(newRot[0], newRot[1], xRot, yRot, oldXRot, oldYRot)).printStackTrace();
+            else if (Float.isNaN(oldXRot)) this.oldXRot = xRot;
+            else this.oldYRot = yRot;
+        } else {
+            this.xRot = newRot[0];
+            this.yRot = newRot[1];
+        }
     }
 
     @Override

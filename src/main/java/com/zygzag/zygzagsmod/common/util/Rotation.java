@@ -5,6 +5,8 @@ import com.mojang.serialization.Codec;
 import com.mojang.serialization.DataResult;
 import net.minecraft.world.phys.Vec3;
 
+import java.util.Arrays;
+
 import static com.zygzag.zygzagsmod.common.util.GeneralUtil.*;
 import static java.lang.Math.cos;
 import static java.lang.Math.sin;
@@ -59,6 +61,7 @@ public interface Rotation {
     }
     default void set(float[] values) {
         set(values[0], values[1]);
+        if (Float.isNaN(values[0]) || Float.isNaN(values[1])) throw new IllegalArgumentException("NAN rotation values " + Arrays.toString(values));
     }
     default void set(float xRot, float yRot) {
         setXRot(xRot);
