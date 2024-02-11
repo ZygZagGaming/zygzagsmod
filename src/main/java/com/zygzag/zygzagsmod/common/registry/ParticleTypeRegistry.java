@@ -29,6 +29,10 @@ public class ParticleTypeRegistry extends AkomiRegistry<ParticleType<?>> {
             "overheat_beam",
             () -> new SimpleParticleType(false)
     );
+    public static Supplier<SimpleParticleType> FLAMETHROW_PARTICLES = INSTANCE.register(
+            "flamethrow",
+            () -> new SimpleParticleType(false)
+    );
     public static Supplier<SimpleParticleType> OVERHEAT_SPHERE_PARTICLES = INSTANCE.register(
             "overheat_sphere",
             () -> new SimpleParticleType(false)

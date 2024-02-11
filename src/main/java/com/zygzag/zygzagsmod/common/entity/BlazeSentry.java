@@ -190,12 +190,12 @@ public class BlazeSentry extends Monster implements GeoAnimatable, ActingEntity<
 
         if (level().isClientSide && actor.getTopLevelAction().is(ActionRegistry.BlazeSentry.FLAMETHROW_BASE.get())) {
             Vec3 delta = rotations.get(1).directionVector();
-            for (int particles = 0; particles < 24; ++particles) {
+            for (int particles = 0; particles < 6; ++particles) {
                 double x = getX() + random.nextGaussian() * 0.2;
                 double y = getEyeY() + random.nextGaussian() * 0.2;
                 double z = getZ() + random.nextGaussian() * 0.2;
 
-                level().addAlwaysVisibleParticle(ParticleTypeRegistry.OVERHEAT_BEAM_PARTICLES.get(), x, y, z, delta.x(), delta.y(), delta.z());
+                level().addAlwaysVisibleParticle(ParticleTypeRegistry.FLAMETHROW_PARTICLES.get(), x, y, z, delta.x(), delta.y(), delta.z());
             }
         }
         rotations.tick();
@@ -239,7 +239,7 @@ public class BlazeSentry extends Monster implements GeoAnimatable, ActingEntity<
         public static final int windup = 60, ticksBetweenFireballs = 3, maxFireballs = 50, windDown = 60 + 80;
         public static final double power = 1.5;
         int ticks = 0;
-        double chanceToUse = 0/*.66*/;
+        double chanceToUse = 0.66;
 
         @Override
         public EnumSet<Flag> getFlags() {
