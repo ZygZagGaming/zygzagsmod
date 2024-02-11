@@ -1,6 +1,7 @@
 {
   "values": [
-    "zygzagsmod:golem"
+    "zygzagsmod:golem",
+    "zygzagsmod:hively"
   ],
   "override": false
 }
