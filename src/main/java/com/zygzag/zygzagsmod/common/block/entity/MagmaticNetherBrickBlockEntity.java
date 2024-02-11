@@ -30,4 +30,6 @@ public class MagmaticNetherBrickBlockEntity extends BlockEntity {
             world.setBlockAndUpdate(pos, state.setValue(CHARGES, 0));
         }
     }
+
+
 }

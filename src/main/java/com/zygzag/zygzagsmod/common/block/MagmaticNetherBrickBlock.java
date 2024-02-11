@@ -8,6 +8,8 @@ import com.zygzag.zygzagsmod.common.registry.BlockItemEntityRegistry;
 import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.Projectile;
@@ -103,5 +105,10 @@ public class MagmaticNetherBrickBlock extends Block implements EntityBlock {
         chargeOrRelease(state, world, pos, Config.magmaticNetherBrickStepCooldown);
 
         super.stepOn(world, pos, state, stander);
+    }
+
+    @Override
+    public void animateTick(BlockState state, Level world, BlockPos pos, RandomSource rng) {
+        if (!world.getBlockState(pos.below()).isFaceSturdy(world, pos.below(), Direction.UP)) world.addParticle(ParticleTypes.DRIPPING_LAVA, pos.getX() + 0.5 + (0.4 * rng.nextDouble() - 0.2), pos.getY() - 0.05, pos.getZ() + 0.5 + (0.4 * rng.nextDouble() - 0.2), 0.0, 0.0, 0.0);
     }
 }
