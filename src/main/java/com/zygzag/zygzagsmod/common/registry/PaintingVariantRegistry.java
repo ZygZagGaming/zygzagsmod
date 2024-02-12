@@ -20,6 +20,10 @@ public class PaintingVariantRegistry extends AkomiRegistry<PaintingVariant> {
             "hively",
             () -> new PaintingVariant(16, 32)
     );
+    public static final Supplier<PaintingVariant> MURAL = INSTANCE.register(
+            "mural",
+            () -> new PaintingVariant(32, 16)
+    );
 
     public PaintingVariantRegistry(DeferredRegister<PaintingVariant> register) {
         super(register);
