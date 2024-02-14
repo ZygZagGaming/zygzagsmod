@@ -1,8 +1,5 @@
 package com.zygzag.zygzagsmod.common.util;
 
-import com.mojang.serialization.Codec;
-import com.mojang.serialization.codecs.RecordCodecBuilder;
-
 @SuppressWarnings("unused")
 public class SimpleRotation implements Rotation {
 //    public static Codec<SimpleRotation> CODEC = RecordCodecBuilder.create(instance ->

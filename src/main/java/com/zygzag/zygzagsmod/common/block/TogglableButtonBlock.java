@@ -1,9 +1,7 @@
 package com.zygzag.zygzagsmod.common.block;
 
-import com.zygzag.zygzagsmod.common.block.entity.SculkJawBlockEntity;
 import com.zygzag.zygzagsmod.common.block.entity.TogglableButtonBlockEntity;
 import com.zygzag.zygzagsmod.common.registry.BlockEntityRegistry;
-import com.zygzag.zygzagsmod.common.registry.BlockItemEntityRegistry;
 import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;

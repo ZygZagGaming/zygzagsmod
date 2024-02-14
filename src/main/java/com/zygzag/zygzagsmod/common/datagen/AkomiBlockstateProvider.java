@@ -1,13 +1,10 @@
 package com.zygzag.zygzagsmod.common.datagen;
 
-import com.zygzag.zygzagsmod.common.registry.BlockItemEntityRegistry;
 import net.minecraft.data.PackOutput;
-import net.minecraft.resources.ResourceLocation;
 import net.neoforged.neoforge.client.model.generators.BlockStateProvider;
 import net.neoforged.neoforge.common.data.ExistingFileHelper;
 
 import static com.zygzag.zygzagsmod.common.Main.MODID;
-import static com.zygzag.zygzagsmod.common.block.MagmaticNetherBrickBlock.PULSE;
 
 public class AkomiBlockstateProvider extends BlockStateProvider {
     public AkomiBlockstateProvider(PackOutput output, ExistingFileHelper exFileHelper) {

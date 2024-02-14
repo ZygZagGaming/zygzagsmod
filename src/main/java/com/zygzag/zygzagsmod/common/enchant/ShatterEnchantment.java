@@ -7,7 +7,6 @@ import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
-import net.minecraft.world.item.enchantment.EnchantmentCategory;
 
 import javax.annotation.ParametersAreNonnullByDefault;
 
@@ -26,11 +25,6 @@ public class ShatterEnchantment extends CustomEnchantment {
     @Override
     public int getMaxCost(int level) {
         return 30;
-    }
-
-    @Override
-    public int getMaxLevel() {
-        return 1;
     }
 
     @Override

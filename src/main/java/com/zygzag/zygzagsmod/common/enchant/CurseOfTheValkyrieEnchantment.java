@@ -7,7 +7,6 @@ import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
-import net.minecraft.world.item.enchantment.EnchantmentCategory;
 
 public class CurseOfTheValkyrieEnchantment extends CustomEnchantment {
     public static final float[] CRITICAL_BOOSTS = { 0.2f, 0.6f };

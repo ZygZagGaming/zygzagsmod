@@ -1,10 +1,14 @@
 package com.zygzag.zygzagsmod.common.registry;
 
-import com.zygzag.zygzagsmod.common.Main;
-import com.zygzag.zygzagsmod.common.block.*;
-import com.zygzag.zygzagsmod.common.block.entity.*;
+import com.zygzag.zygzagsmod.common.block.CacheBlock;
+import com.zygzag.zygzagsmod.common.block.MagmaticNetherBrickBlock;
+import com.zygzag.zygzagsmod.common.block.SculkJawBlock;
+import com.zygzag.zygzagsmod.common.block.SuspiciousEndSandBlock;
+import com.zygzag.zygzagsmod.common.block.entity.CacheBlockEntity;
+import com.zygzag.zygzagsmod.common.block.entity.CustomBrushableBlockEntity;
+import com.zygzag.zygzagsmod.common.block.entity.MagmaticNetherBrickBlockEntity;
+import com.zygzag.zygzagsmod.common.block.entity.SculkJawBlockEntity;
 import com.zygzag.zygzagsmod.common.registry.object.BlockItemEntitySupplier;
-import com.zygzag.zygzagsmod.common.registry.object.BlockWithItemSupplier;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvents;
