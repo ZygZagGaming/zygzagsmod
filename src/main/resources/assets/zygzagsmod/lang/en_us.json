@@ -278,10 +278,12 @@
   "enchantment.zygzagsmod.critical": "Critical",
   "enchantment.zygzagsmod.curse_of_the_valkyrie": "Curse of the Valkyrie",
   "enchantment.zygzagsmod.sprint": "Sprint",
+  "enchantment.zygzagsmod.shatter": "Shatter",
 
   "attribute.name.generic.jump_power": "Jump Power",
   "attribute.name.generic.crit_damage": "Crit Damage",
   "attribute.name.generic.sprint_speed": "Sprint Speed",
   "attribute.name.generic.sprint_hunger_consumption": "Sprint Hunger Consumption",
-  "attribute.name.generic.sprint_jump_hunger_consumption": "Sprint Jump Hunger Consumption"
+  "attribute.name.generic.sprint_jump_hunger_consumption": "Sprint Jump Hunger Consumption",
+  "attribute.name.generic.armor_durability_reduction": "Armor Durability Reduction"
 }

@@ -26,6 +26,7 @@ import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.stats.Stats;
+import net.minecraft.tags.DamageTypeTags;
 import net.minecraft.world.Difficulty;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.SimpleContainer;
@@ -40,10 +41,7 @@ import net.minecraft.world.entity.ai.village.poi.PoiManager;
 import net.minecraft.world.entity.ai.village.poi.PoiTypes;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.BrushItem;
-import net.minecraft.world.item.Item;
-import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.Items;
+import net.minecraft.world.item.*;
 import net.minecraft.world.item.crafting.RecipeHolder;
 import net.minecraft.world.item.crafting.RecipeType;
 import net.minecraft.world.item.crafting.SmeltingRecipe;
@@ -261,6 +259,25 @@ public class EventHandler {
                 if (chestItem instanceof IridiumChestplateItem chestplate && chestplate.getSocket() == Socket.SKULL) {
                     float heal = (float) Math.log(amt) / 4;
                     if (heal >= 0) living.heal(heal);
+                }
+
+                if (attacker instanceof Player attackerPlayer && entity instanceof Player attacked) {
+                    var amount = evt.getAmount() / 4 * (attackerPlayer.getAttributeValue(AttributeRegistry.ARMOR_DURABILITY_REDUCTION.get()) - 1);
+                    if (amount > 0) {
+                        if (amount < 1) amount = 1;
+
+                        for (int i = 0; i < 4; i++) {
+                            ItemStack stack = attacked.getInventory().armor.get(i);
+                            if ((!source.is(DamageTypeTags.IS_FIRE) || !stack.getItem().isFireResistant()) && stack.getItem() instanceof ArmorItem) {
+                                int finalI = i;
+                                stack.hurtAndBreak(
+                                        (int) amount,
+                                        attacked,
+                                        it -> it.broadcastBreakEvent(EquipmentSlot.byTypeAndIndex(EquipmentSlot.Type.ARMOR, finalI))
+                                );
+                            }
+                        }
+                    }
                 }
             } else if (attacker instanceof HomingWitherSkull hws) {
                 int i = 0;

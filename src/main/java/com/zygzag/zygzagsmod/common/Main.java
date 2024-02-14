@@ -75,6 +75,7 @@ public class Main {
     public static final UUID SPRINT_ENCHANTMENT_SPRINT_SPEED_MODIFIER_UUID = UUID.fromString("92cfc16e-65b4-4c09-90d3-1e226562fe1c");
     public static final UUID SPRINT_ENCHANTMENT_SPRINT_HUNGER_CONSUMPTION_MODIFIER_UUID = UUID.fromString("33e11794-56e2-4e54-b83b-af12df29549c");
     public static final UUID SPRINT_ENCHANTMENT_SPRINT_JUMP_HUNGER_CONSUMPTION_MODIFIER_UUID = UUID.fromString("9f93b995-da40-4674-be20-58ef794e2827");
+    public static final UUID SHATTER_ENCHANTMENT_ARMOR_DURABILITY_REDUCTION_MODIFIER_UUID = UUID.fromString("dcfd17cb-8a70-48e1-a2e8-f23ffe3cab4a");
     public static PlayerSightCache CURRENT_PLAYER_CACHE = null;
 
     public static final BlockSetType NETHER_BRICK_BLOCK_SET_TYPE = BlockSetType.register(
