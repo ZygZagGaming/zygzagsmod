@@ -11,7 +11,6 @@ import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
@@ -386,7 +385,7 @@ public class BlazeSentry extends Monster implements GeoAnimatable, ActingEntity<
                     double radialDistanceSqr = toTarget.subtract(angle.scale(cylDistance)).lengthSqr();
                     //System.out.printf("radial dist: %.4f, cyl dist: %.4f, this pos: (%.4f, %.4f, %.4f), other pos: (%.4f, %.4f, %.4f)%n", sqrt(radialDistanceSqr), cylDistance, getX(), getEyeY(), getZ(), targetCenter.x, targetCenter.y, targetCenter.z);
                     if (radialDistanceSqr < radiusSqr && cylDistance < range && cylDistance > 0) {
-                        if (entity instanceof LivingEntity living && !living.hasEffect(MobEffectRegistry.OVERHEAT_EFFECT.get())) living.addEffect(new MobEffectInstance(OverheatBeamAreaEffectCloud.OVERHEAT_INSTANCE), BlazeSentry.this);
+                        if (entity instanceof LivingEntity living) living.setData(AttachmentTypeRegistry.LIVING_ENTITY_OVERHEAT_ATTACHMENT, living.getData(AttachmentTypeRegistry.LIVING_ENTITY_OVERHEAT_ATTACHMENT) + 1);
                         else if (entity instanceof ItemEntity) entity.kill();
                     }
                 }

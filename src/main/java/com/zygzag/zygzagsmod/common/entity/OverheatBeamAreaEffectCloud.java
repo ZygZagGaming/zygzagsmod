@@ -1,19 +1,19 @@
 package com.zygzag.zygzagsmod.common.entity;
 
+import com.zygzag.zygzagsmod.common.registry.AttachmentTypeRegistry;
 import com.zygzag.zygzagsmod.common.registry.EntityTypeRegistry;
-import com.zygzag.zygzagsmod.common.registry.MobEffectRegistry;
 import com.zygzag.zygzagsmod.common.registry.ParticleTypeRegistry;
 import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.particles.ParticleOptions;
-import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.level.Level;
 
 import javax.annotation.ParametersAreNonnullByDefault;
+import java.util.List;
 
 @ParametersAreNonnullByDefault
 @MethodsReturnNonnullByDefault
@@ -21,7 +21,6 @@ public class OverheatBeamAreaEffectCloud extends AbstractBeamAreaEffectCloud {
     private final int duration = 5 * 20;
     private final float height = 7.5f;
     private final BlockPos origin;
-    public static final MobEffectInstance OVERHEAT_INSTANCE = new MobEffectInstance(MobEffectRegistry.OVERHEAT_EFFECT.get(), 22, 0, true, false, false);
     public OverheatBeamAreaEffectCloud(EntityType<? extends OverheatBeamAreaEffectCloud> type, Level world, BlockPos origin) {
         super(type, world);
         this.origin = origin;
@@ -42,7 +41,8 @@ public class OverheatBeamAreaEffectCloud extends AbstractBeamAreaEffectCloud {
 
     @Override
     public void afflict(LivingEntity living) {
-        living.addEffect(new MobEffectInstance(OVERHEAT_INSTANCE), this);
+        System.out.println(living);
+        living.setData(AttachmentTypeRegistry.LIVING_ENTITY_OVERHEAT_ATTACHMENT, living.getData(AttachmentTypeRegistry.LIVING_ENTITY_OVERHEAT_ATTACHMENT) + 1);
     }
 
     @Override
@@ -64,8 +64,24 @@ public class OverheatBeamAreaEffectCloud extends AbstractBeamAreaEffectCloud {
 
     @Override
     public void tick() {
-        super.tick();
-        //if (!level().isClientSide && !level().getBlockState(origin).is(BlockItemEntityRegistry.MAGMATIC_NETHER_BRICKS.getBlock())) kill();
+        baseTick();
+        if (level().isClientSide) addParticles();
+        else {
+            if (tickCount >= getDurationInTicks()) {
+                discard();
+                return;
+            }
+
+            List<LivingEntity> entitiesInBoundingBox = level().getEntitiesOfClass(LivingEntity.class, getBoundingBox());
+            if (!entitiesInBoundingBox.isEmpty()) for (LivingEntity living : entitiesInBoundingBox) if (living.isAffectedByPotions()) {
+                afflict(living);
+            }
+
+            List<ItemEntity> itemEntitiesInBoundingBox = level().getEntitiesOfClass(ItemEntity.class, getBoundingBox());
+            if (!itemEntitiesInBoundingBox.isEmpty()) {
+                for (ItemEntity item : itemEntitiesInBoundingBox) afflictItem(item);
+            }
+        }
     }
 
     @Override

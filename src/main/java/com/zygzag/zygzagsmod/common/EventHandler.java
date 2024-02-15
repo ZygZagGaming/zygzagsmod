@@ -11,15 +11,18 @@ import com.zygzag.zygzagsmod.common.item.iridium.armor.IridiumChestplateItem;
 import com.zygzag.zygzagsmod.common.item.iridium.tool.IridiumAxeItem;
 import com.zygzag.zygzagsmod.common.item.iridium.tool.IridiumHoeItem;
 import com.zygzag.zygzagsmod.common.item.iridium.tool.IridiumSwordItem;
-import com.zygzag.zygzagsmod.common.networking.handler.ClientboundBlazeSentryRotationPacketHandler;
-import com.zygzag.zygzagsmod.common.networking.packet.ClientboundBlazeSentryRotationPacket;
 import com.zygzag.zygzagsmod.common.registry.AttachmentTypeRegistry;
 import com.zygzag.zygzagsmod.common.registry.AttributeRegistry;
 import com.zygzag.zygzagsmod.common.registry.BlockRegistry;
 import com.zygzag.zygzagsmod.common.registry.EnchantmentRegistry;
+import com.zygzag.zygzagsmod.common.util.GeneralUtil;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.core.RegistryAccess;
 import net.minecraft.core.Vec3i;
+import net.minecraft.core.registries.Registries;
+import net.minecraft.resources.ResourceKey;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvent;
@@ -30,6 +33,7 @@ import net.minecraft.world.Difficulty;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.SimpleContainer;
 import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.damagesource.DamageType;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.*;
@@ -74,8 +78,6 @@ import net.neoforged.neoforge.event.entity.living.*;
 import net.neoforged.neoforge.event.entity.player.CriticalHitEvent;
 import net.neoforged.neoforge.event.entity.player.PlayerEvent;
 import net.neoforged.neoforge.event.level.BlockEvent;
-import net.neoforged.neoforge.network.event.RegisterPayloadHandlerEvent;
-import net.neoforged.neoforge.network.registration.IPayloadRegistrar;
 
 import java.util.HashMap;
 import java.util.HashSet;
@@ -529,4 +531,26 @@ public class EventHandler {
     public static void mobGrief(final EntityMobGriefingEvent event) {
         if (event.getEntity() instanceof BlazeSentry) event.setResult(Event.Result.DENY);
     }
+
+    @SubscribeEvent
+    public static void livingEntityTick(final LivingEvent.LivingTickEvent event) {
+        LivingEntity entity = event.getEntity();
+        int overheat = entity.getData(AttachmentTypeRegistry.LIVING_ENTITY_OVERHEAT_ATTACHMENT);
+        if (overheat >= 5) {
+            overheat -= 5;
+
+            entity.setRemainingFireTicks(3 * 20);
+            int fireResistance = GeneralUtil.fireResistance(entity);
+            float maxDmg = 3;
+            float dmg = maxDmg - maxDmg * GeneralUtil.clamp(fireResistance / 10f, 0, 1);
+            if (dmg > 0 && (!(entity instanceof Player player) || (!player.isCreative() && !player.isSpectator())) && !entity.getType().fireImmune()) entity.hurt(overheatDamage(entity.level().registryAccess()), dmg);
+        }
+        entity.setData(AttachmentTypeRegistry.LIVING_ENTITY_OVERHEAT_ATTACHMENT, overheat);
+    }
+
+    public static DamageSource overheatDamage(RegistryAccess registryAccess) {
+        return new DamageSource(registryAccess.registryOrThrow(Registries.DAMAGE_TYPE).getHolderOrThrow(OVERHEAT_DAMAGE_TYPE));
+    }
+
+    public static final ResourceKey<DamageType> OVERHEAT_DAMAGE_TYPE = ResourceKey.create(Registries.DAMAGE_TYPE, new ResourceLocation(MODID, "overheat"));
 }

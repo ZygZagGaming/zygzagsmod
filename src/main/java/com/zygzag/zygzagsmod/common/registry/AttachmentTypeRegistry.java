@@ -18,6 +18,11 @@ public class AttachmentTypeRegistry extends AkomiRegistry<AttachmentType<?>> {
             () -> AttachmentType.builder(() -> 0.0).serialize(Codec.DOUBLE).build()
     );
 
+    public static final Supplier<AttachmentType<Integer>> LIVING_ENTITY_OVERHEAT_ATTACHMENT = INSTANCE.register(
+            "living_entity_overheat",
+            () -> AttachmentType.builder(() -> 0).serialize(Codec.INT).build()
+    );
+
     public AttachmentTypeRegistry(DeferredRegister<AttachmentType<?>> register) {
         super(register);
     }
