@@ -18,22 +18,33 @@ import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraft.world.item.crafting.SmithingRecipe;
 import net.minecraft.world.level.Level;
 
+import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
+import java.util.Optional;
 
 @ParametersAreNonnullByDefault
 @MethodsReturnNonnullByDefault
 public class UpgradeRecipe implements SmithingRecipe {
     private final Ingredient template, addition;
+    private final @Nullable Ingredient possibleBase;
     private final ItemUpgrade upgrade;
     public UpgradeRecipe(Ingredient template, Ingredient addition, ItemUpgrade upgrade) {
         this.template = template;
         this.addition = addition;
         this.upgrade = upgrade;
+        this.possibleBase = null;
+    }
+    public UpgradeRecipe(Ingredient template, Ingredient addition, ItemUpgrade upgrade, @Nullable Ingredient possibleBase) {
+        this.template = template;
+        this.addition = addition;
+        this.upgrade = upgrade;
+        this.possibleBase = possibleBase;
     }
 
     public Ingredient getTemplate() { return template; }
     public Ingredient getAddition() { return addition; }
     public ItemUpgrade getUpgrade() { return upgrade; }
+    public boolean testBase(ItemStack item) { return possibleBase == null || possibleBase.test(item); }
 
     @Override
     public boolean isTemplateIngredient(ItemStack stack) {
@@ -42,7 +53,7 @@ public class UpgradeRecipe implements SmithingRecipe {
 
     @Override
     public boolean isBaseIngredient(ItemStack stack) {
-        return true;
+        return testBase(stack);
     }
 
     @Override
@@ -77,8 +88,9 @@ public class UpgradeRecipe implements SmithingRecipe {
                 instance.group(
                         Ingredient.CODEC_NONEMPTY.fieldOf("template").forGetter(UpgradeRecipe::getTemplate),
                         Ingredient.CODEC_NONEMPTY.fieldOf("addition").forGetter(UpgradeRecipe::getAddition),
-                        ItemUpgrade.CODEC.fieldOf("upgrade").forGetter(UpgradeRecipe::getUpgrade)
-                ).apply(instance, UpgradeRecipe::new)
+                        ItemUpgrade.CODEC.fieldOf("upgrade").forGetter(UpgradeRecipe::getUpgrade),
+                        Ingredient.CODEC_NONEMPTY.optionalFieldOf("possible_base").forGetter((it) -> Optional.ofNullable(it.possibleBase))
+                ).apply(instance, (a, b, c, d) -> new UpgradeRecipe(a, b, c, d.orElse(null)))
         );
 
         @Override
@@ -94,7 +106,8 @@ public class UpgradeRecipe implements SmithingRecipe {
             if (!ItemUpgradeRegistry.BACKING_REGISTRY.containsKey(upgradeLoc)) throw new IllegalArgumentException(upgradeLoc + " is not an existing item upgrade");
             ItemUpgrade upgrade = ItemUpgradeRegistry.BACKING_REGISTRY.get(upgradeLoc);
             assert upgrade != null;
-            return new UpgradeRecipe(template, addition, upgrade);
+            Ingredient possibleBase = buf.readBoolean() ? Ingredient.fromNetwork(buf) : null;
+            return new UpgradeRecipe(template, addition, upgrade, possibleBase);
         }
 
         @Override
@@ -104,6 +117,10 @@ public class UpgradeRecipe implements SmithingRecipe {
             ResourceLocation location = ItemUpgradeRegistry.BACKING_REGISTRY.getKey(recipe.getUpgrade());
             if (location == null) throw new IllegalArgumentException("Why tf is there an unregistered upgrade instance?? Get that shit outta here");
             buf.writeResourceLocation(location);
+            Ingredient k = recipe.possibleBase;
+            boolean flag = k != null;
+            buf.writeBoolean(flag);
+            if (flag) k.toNetwork(buf);
         }
     }
 }

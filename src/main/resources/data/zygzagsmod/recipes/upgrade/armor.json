@@ -6,5 +6,8 @@
   "addition": {
     "item": "minecraft:copper_ingot"
   },
+  "possible_base": {
+    "tag": "forge:armors"
+  },
   "upgrade": "zygzagsmod:armor"
 }
