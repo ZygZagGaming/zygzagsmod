@@ -110,9 +110,9 @@ dependencies {
     // Example mod dependency with JEI - using fg.deobf() ensures the dependency is remapped to your development mappings
     // The JEI API is declared for compile time use, while the full JEI artifact is used at runtime
     compileOnly "mezz.jei:jei-${jei_mc_version}-common-api:${jei_version}"
-    compileOnly "mezz.jei:jei-${jei_mc_version}-forge-api:${jei_version}"
-    //runtimeOnly "mezz.jei:jei-${jei_mc_version}-forge:${jei_version}"
-    implementation 'software.bernie.geckolib:geckolib-neoforge-1.20.4:4.3.1'
+    compileOnly "mezz.jei:jei-${jei_mc_version}-neoforge-api:${jei_version}"
+    runtimeOnly "mezz.jei:jei-${jei_mc_version}-forge:${jei_version}"
+    implementation 'software.bernie.geckolib:geckolib-neoforge-1.20.4:4.4.1'
 
     //implementation fg.deobf("com.github.glitchfiend:TerraBlender-forge:${minecraft_version}-${terrablender_version}")
 

@@ -8,7 +8,6 @@ import net.minecraft.core.registries.Registries;
 import net.neoforged.neoforge.registries.DeferredRegister;
 
 import javax.annotation.ParametersAreNonnullByDefault;
-
 import java.util.function.Supplier;
 
 import static com.zygzag.zygzagsmod.common.Main.MODID;
@@ -27,6 +26,10 @@ public class ParticleTypeRegistry extends AkomiRegistry<ParticleType<?>> {
     );
     public static Supplier<SimpleParticleType> OVERHEAT_BEAM_PARTICLES = INSTANCE.register(
             "overheat_beam",
+            () -> new SimpleParticleType(false)
+    );
+    public static Supplier<SimpleParticleType> FLAMETHROW_PARTICLES = INSTANCE.register(
+            "flamethrow",
             () -> new SimpleParticleType(false)
     );
     public static Supplier<SimpleParticleType> OVERHEAT_SPHERE_PARTICLES = INSTANCE.register(

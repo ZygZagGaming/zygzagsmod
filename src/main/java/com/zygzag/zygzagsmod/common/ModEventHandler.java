@@ -7,6 +7,8 @@ import com.zygzag.zygzagsmod.common.datagen.AkomiRecipeProvider;
 import com.zygzag.zygzagsmod.common.entity.BlazeSentry;
 import com.zygzag.zygzagsmod.common.entity.IridiumGolem;
 import com.zygzag.zygzagsmod.common.item.iridium.ISocketable;
+import com.zygzag.zygzagsmod.common.networking.handler.ClientboundBlazeSentryRotationPacketHandler;
+import com.zygzag.zygzagsmod.common.networking.packet.ClientboundBlazeSentryRotationPacket;
 import com.zygzag.zygzagsmod.common.registry.AttributeRegistry;
 import com.zygzag.zygzagsmod.common.registry.EntityTypeRegistry;
 import com.zygzag.zygzagsmod.common.registry.IridiumGearRegistry;
@@ -24,6 +26,8 @@ import net.neoforged.neoforge.client.model.generators.ItemModelProvider;
 import net.neoforged.neoforge.data.event.GatherDataEvent;
 import net.neoforged.neoforge.event.entity.EntityAttributeCreationEvent;
 import net.neoforged.neoforge.event.entity.EntityAttributeModificationEvent;
+import net.neoforged.neoforge.network.event.RegisterPayloadHandlerEvent;
+import net.neoforged.neoforge.network.registration.IPayloadRegistrar;
 
 import java.util.function.Supplier;
 
@@ -47,6 +51,7 @@ public class ModEventHandler {
                 event.add(type, AttributeRegistry.SPRINT_SPEED.get(), 1.0);
                 event.add(type, AttributeRegistry.SPRINT_HUNGER_CONSUMPTION.get(), 1.0);
                 event.add(type, AttributeRegistry.SPRINT_JUMP_HUNGER_CONSUMPTION.get(), 1.0);
+                event.add(type, AttributeRegistry.ARMOR_DURABILITY_REDUCTION.get(), 1.0);
             }
         }
     }
@@ -75,6 +80,14 @@ public class ModEventHandler {
         event.getGenerator().addProvider(
                 event.includeServer(),
                 (DataProvider.Factory<LootTableProvider>) AkomiLootTableProvider::new
+        );
+    }
+
+    @SubscribeEvent
+    public static void registerPayloadHandlers(final RegisterPayloadHandlerEvent event) {
+        final IPayloadRegistrar registrar = event.registrar(MODID);
+        registrar.play(ClientboundBlazeSentryRotationPacket.ID, ClientboundBlazeSentryRotationPacket::new, handler -> handler
+                .client(ClientboundBlazeSentryRotationPacketHandler.getInstance()::handleData)
         );
     }
 }

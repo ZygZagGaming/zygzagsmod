@@ -41,6 +41,7 @@ public class ActionRegistry extends CustomAkomiRegistry<Action> {
         public static final Supplier<Action> SHOOT_BASE = INSTANCE.register("blaze_sentry_shoot_base", () -> new Action(RawAnimation.begin().thenPlay("animation.blaze_sentry.shooting_loop"), 60, false));
         public static final Supplier<Action> AGRO_BASE = INSTANCE.register("blaze_sentry_agro_base", () -> new Action(RawAnimation.begin().thenPlay("animation.blaze_sentry.agro_loop_2"), 40, false));
         public static final Supplier<Action> SHOOT_BIG_BASE = INSTANCE.register("blaze_sentry_shoot_big_base", () -> new Action(RawAnimation.begin().thenPlay("animation.blaze_sentry.shoot_big_fireball"), 53, false));
+        public static final Supplier<Action> FLAMETHROW_BASE = INSTANCE.register("blaze_sentry_flamethrow_base", () -> new Action(RawAnimation.begin().thenPlay("animation.blaze_sentry.flamethrow"), 30, false));
 
         public static void init() {
         }

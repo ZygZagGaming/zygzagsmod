@@ -72,45 +72,45 @@ public class Actor<T extends LivingEntity & ActingEntity<T>> {
 
     public void tick() {
         if (parent.isIdle() && timeUntilIdleAction >= 0) timeUntilIdleAction--;
-        if (!level().isClientSide()) {
+        boolean k = false;
+
+        if (level().isClientSide()) {
+            setState(parent.getEntityData().get(parent.actionStateAccessor()));
+        } else {
             AbstractAction topLevelAction = getTopLevelAction();
             if (!nextAction.is(currentAction)) { // Action has been changed, queue transition
                 TransitionAction transitionAction = GeneralUtil.getTransitionAnimation(currentAction, nextAction);
                 if (transitionAction != null) {
+                    if (k) System.out.println("Action " + currentAction + " changed to " + nextAction + "; queueing transition action");
                     queuedActions.removeIf((it) -> it instanceof TransitionAction);
                     queueAction(transitionAction);
-                }
+                } else if (k) System.out.println("Action " + currentAction + " changed to " + nextAction);
             }
 
             // We should not be doing anything else action-related until the current action is over or can be skipped
             if (getTicksRemainingInAction() <= 0 || topLevelAction.canBeSkipped()) {
                 currentAction = nextAction;
-                //System.out.println("top level action " + topLevelAction + " should be over");
+                if (k) System.out.println("Top level action " + topLevelAction + " should be over");
                 // If the animation which just finished is transient, clear it
                 if (topLevelAction.is(transientAction)) {
-                    //System.out.println("it was the currently set transient action, clearing");
+                    if (k) System.out.println("It was the currently set transient action, clearing");
                     transientAction = null;
                 }
 
                 // Check if there are any more queued transient actions
                 if (!queuedActions.isEmpty()) {
                     AbstractAction transientAction = queuedActions.poll();
-                    //System.out.println("queued action " + transientAction + "; playing transiently");
+                    if (k) System.out.println("Queued action " + transientAction + "; playing transiently");
                     setTransientAction(transientAction);
-                    setTicksRemainingInAction(transientAction.lengthInTicks());
+                    setTicksRemainingInAction(transientAction.lengthInTicks() - 1);
                 } else {
-                    //System.out.println("no queued action; playing current action " + currentAction);
-                    setTicksRemainingInAction(currentAction.lengthInTicks());
+                    if (k) System.out.println("No queued action; playing current action " + currentAction);
+                    setTicksRemainingInAction(currentAction.lengthInTicks() - 1);
                 }
 
             } else if (getTicksRemainingInAction() > 0)
                 setTicksRemainingInAction(getTicksRemainingInAction() - 1);
-            //System.out.println("Current action: " + currentAction + ", transient action: " + transientAction + ", next action: " + nextAction + ", queued: " + queuedActions);
-        }
-
-        if (level().isClientSide()) {
-            setState(parent.getEntityData().get(parent.actionStateAccessor()));
-        } else {
+            if (k) System.out.println("FINAL STATE: Current action: " + currentAction + ", transient action: " + transientAction + ", next action: " + nextAction + ", queued: " + queuedActions);
             parent.getEntityData().set(parent.actionStateAccessor(), getState());
         }
     }

@@ -3,6 +3,7 @@ package com.zygzag.zygzagsmod.common;
 import com.zygzag.zygzagsmod.common.block.entity.CustomBrushableBlockEntity;
 import com.zygzag.zygzagsmod.common.capability.ItemUpgradeAttachment;
 import com.zygzag.zygzagsmod.common.enchant.CustomEnchantment;
+import com.zygzag.zygzagsmod.common.entity.BlazeSentry;
 import com.zygzag.zygzagsmod.common.entity.HomingWitherSkull;
 import com.zygzag.zygzagsmod.common.item.iridium.IEffectAttackWeapon;
 import com.zygzag.zygzagsmod.common.item.iridium.ISocketable;
@@ -16,21 +17,28 @@ import com.zygzag.zygzagsmod.common.registry.AttributeRegistry;
 import com.zygzag.zygzagsmod.common.registry.BlockRegistry;
 import com.zygzag.zygzagsmod.common.registry.EnchantmentRegistry;
 import com.zygzag.zygzagsmod.common.upgrade.ItemUpgrade;
+import com.zygzag.zygzagsmod.common.util.GeneralUtil;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.core.RegistryAccess;
 import net.minecraft.core.Vec3i;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
+import net.minecraft.resources.ResourceKey;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.stats.Stats;
+import net.minecraft.tags.DamageTypeTags;
 import net.minecraft.world.Difficulty;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.SimpleContainer;
 import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.damagesource.DamageType;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.*;
@@ -41,10 +49,7 @@ import net.minecraft.world.entity.ai.village.poi.PoiManager;
 import net.minecraft.world.entity.ai.village.poi.PoiTypes;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.BrushItem;
-import net.minecraft.world.item.Item;
-import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.Items;
+import net.minecraft.world.item.*;
 import net.minecraft.world.item.crafting.RecipeHolder;
 import net.minecraft.world.item.crafting.RecipeType;
 import net.minecraft.world.item.crafting.SmeltingRecipe;
@@ -62,12 +67,14 @@ import net.minecraft.world.level.material.Fluids;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.HitResult;
+import net.neoforged.bus.api.Event;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.Mod;
 import net.neoforged.neoforge.client.event.MovementInputUpdateEvent;
 import net.neoforged.neoforge.common.Tags;
 import net.neoforged.neoforge.event.ItemAttributeModifierEvent;
 import net.neoforged.neoforge.event.TickEvent;
+import net.neoforged.neoforge.event.entity.EntityMobGriefingEvent;
 import net.neoforged.neoforge.event.entity.item.ItemExpireEvent;
 import net.neoforged.neoforge.event.entity.living.*;
 import net.neoforged.neoforge.event.entity.player.CriticalHitEvent;
@@ -259,6 +266,25 @@ public class EventHandler {
                 if (chestItem instanceof IridiumChestplateItem chestplate && chestplate.getSocket() == Socket.SKULL) {
                     float heal = (float) Math.log(amt) / 4;
                     if (heal >= 0) living.heal(heal);
+                }
+
+                if (attacker instanceof Player attackerPlayer && entity instanceof Player attacked) {
+                    var amount = evt.getAmount() / 4 * (attackerPlayer.getAttributeValue(AttributeRegistry.ARMOR_DURABILITY_REDUCTION.get()) - 1);
+                    if (amount > 0) {
+                        if (amount < 1) amount = 1;
+
+                        for (int i = 0; i < 4; i++) {
+                            ItemStack stack = attacked.getInventory().armor.get(i);
+                            if ((!source.is(DamageTypeTags.IS_FIRE) || !stack.getItem().isFireResistant()) && stack.getItem() instanceof ArmorItem) {
+                                int finalI = i;
+                                stack.hurtAndBreak(
+                                        (int) amount,
+                                        attacked,
+                                        it -> it.broadcastBreakEvent(EquipmentSlot.byTypeAndIndex(EquipmentSlot.Type.ARMOR, finalI))
+                                );
+                            }
+                        }
+                    }
                 }
             } else if (attacker instanceof HomingWitherSkull hws) {
                 int i = 0;
@@ -558,4 +584,31 @@ public class EventHandler {
     public static void craftingRecipe(final PlayerEvent.ItemCraftedEvent event) {
 
     }
+
+
+    public static void mobGrief(final EntityMobGriefingEvent event) {
+        if (event.getEntity() instanceof BlazeSentry) event.setResult(Event.Result.DENY);
+    }
+
+    @SubscribeEvent
+    public static void livingEntityTick(final LivingEvent.LivingTickEvent event) {
+        LivingEntity entity = event.getEntity();
+        int overheat = entity.getData(AttachmentTypeRegistry.LIVING_ENTITY_OVERHEAT_ATTACHMENT);
+        if (overheat >= 5) {
+            overheat -= 5;
+
+            entity.setRemainingFireTicks(3 * 20);
+            int fireResistance = GeneralUtil.fireResistance(entity);
+            float maxDmg = 3;
+            float dmg = maxDmg - maxDmg * GeneralUtil.clamp(fireResistance / 10f, 0, 1);
+            if (dmg > 0 && (!(entity instanceof Player player) || (!player.isCreative() && !player.isSpectator())) && !entity.getType().fireImmune()) entity.hurt(overheatDamage(entity.level().registryAccess()), dmg);
+        }
+        entity.setData(AttachmentTypeRegistry.LIVING_ENTITY_OVERHEAT_ATTACHMENT, overheat);
+    }
+
+    public static DamageSource overheatDamage(RegistryAccess registryAccess) {
+        return new DamageSource(registryAccess.registryOrThrow(Registries.DAMAGE_TYPE).getHolderOrThrow(OVERHEAT_DAMAGE_TYPE));
+    }
+
+    public static final ResourceKey<DamageType> OVERHEAT_DAMAGE_TYPE = ResourceKey.create(Registries.DAMAGE_TYPE, new ResourceLocation(MODID, "overheat"));
 }

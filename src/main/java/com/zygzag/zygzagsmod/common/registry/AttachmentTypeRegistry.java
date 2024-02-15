@@ -1,8 +1,6 @@
 package com.zygzag.zygzagsmod.common.registry;
 
 import com.mojang.serialization.Codec;
-import com.mojang.serialization.MapCodec;
-import com.mojang.serialization.codecs.RecordCodecBuilder;
 import com.zygzag.zygzagsmod.common.capability.ItemUpgradeAttachment;
 import com.zygzag.zygzagsmod.common.registry.base.AkomiRegistry;
 import net.neoforged.neoforge.attachment.AttachmentType;
@@ -23,7 +21,12 @@ public class AttachmentTypeRegistry extends AkomiRegistry<AttachmentType<?>> {
 
     public static final Supplier<AttachmentType<ItemUpgradeAttachment>> ITEM_UPGRADE_ATTACHMENT = INSTANCE.register(
             "item_upgrade",
-            () -> AttachmentType.builder(ItemUpgradeAttachment::new).serialize(ItemUpgradeAttachment.CODEC).build()
+            () -> AttachmentType.builder(() -> new ItemUpgradeAttachment()).serialize(ItemUpgradeAttachment.CODEC).build()
+    );
+
+    public static final Supplier<AttachmentType<Integer>> LIVING_ENTITY_OVERHEAT_ATTACHMENT = INSTANCE.register(
+            "living_entity_overheat",
+            () -> AttachmentType.builder(() -> 0).serialize(Codec.INT).build()
     );
 
     public AttachmentTypeRegistry(DeferredRegister<AttachmentType<?>> register) {

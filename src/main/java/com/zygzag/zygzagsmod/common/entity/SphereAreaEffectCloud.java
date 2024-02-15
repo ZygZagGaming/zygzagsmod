@@ -1,11 +1,10 @@
 package com.zygzag.zygzagsmod.common.entity;
 
 import com.google.common.collect.Maps;
+import com.zygzag.zygzagsmod.common.registry.AttachmentTypeRegistry;
 import com.zygzag.zygzagsmod.common.registry.EntityTypeRegistry;
-import com.zygzag.zygzagsmod.common.registry.MobEffectRegistry;
 import com.zygzag.zygzagsmod.common.registry.ParticleTypeRegistry;
 import net.minecraft.MethodsReturnNonnullByDefault;
-import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.*;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.AABB;
@@ -19,7 +18,6 @@ import java.util.Map;
 public class SphereAreaEffectCloud extends AreaEffectCloud {
     private final int duration = 5 * 20;
     private final float radius = 5.5f;
-    private final MobEffectInstance overheatInstance = new MobEffectInstance(MobEffectRegistry.OVERHEAT_EFFECT.get(), 22, 0, true, false, false);
     private final Map<Entity, Integer> victims = Maps.newHashMap();
 
     public SphereAreaEffectCloud(EntityType<? extends SphereAreaEffectCloud> type, Level world) {
@@ -60,7 +58,7 @@ public class SphereAreaEffectCloud extends AreaEffectCloud {
                     for (LivingEntity living : entitiesInBoundingBox) {
                         if (!victims.containsKey(living) && living.isAffectedByPotions() && living.getBoundingBox().getCenter().distanceToSqr(getBoundingBox().getCenter()) <= radius * radius * 1.5) {
                             victims.put(living, tickCount + 20);
-                            living.addEffect(new MobEffectInstance(overheatInstance), this);
+                            living.setData(AttachmentTypeRegistry.LIVING_ENTITY_OVERHEAT_ATTACHMENT, living.getData(AttachmentTypeRegistry.LIVING_ENTITY_OVERHEAT_ATTACHMENT) + 1);
                         }
                     }
                 }
