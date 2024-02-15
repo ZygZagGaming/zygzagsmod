@@ -3,8 +3,6 @@ package com.zygzag.zygzagsmod.common.util;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 
-import java.util.Arrays;
-
 public class LimitedRotation extends LerpedRotation {
     public static Codec<LimitedRotation> CODEC = RecordCodecBuilder.create(instance ->
             instance.group(

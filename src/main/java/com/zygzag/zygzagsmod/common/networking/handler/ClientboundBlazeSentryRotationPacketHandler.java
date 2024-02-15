@@ -3,7 +3,6 @@ package com.zygzag.zygzagsmod.common.networking.handler;
 import com.zygzag.zygzagsmod.common.entity.BlazeSentry;
 import com.zygzag.zygzagsmod.common.networking.packet.ClientboundBlazeSentryRotationPacket;
 import net.minecraft.network.chat.Component;
-import net.minecraft.world.entity.Entity;
 import net.neoforged.neoforge.network.handling.PlayPayloadContext;
 
 import static com.zygzag.zygzagsmod.common.Main.MODID;

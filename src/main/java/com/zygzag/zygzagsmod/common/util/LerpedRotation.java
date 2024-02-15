@@ -3,7 +3,7 @@ package com.zygzag.zygzagsmod.common.util;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 
-import static com.zygzag.zygzagsmod.common.util.GeneralUtil.*;
+import static com.zygzag.zygzagsmod.common.util.GeneralUtil.lerpRotations;
 
 @SuppressWarnings("unused")
 public class LerpedRotation extends SimpleRotation {

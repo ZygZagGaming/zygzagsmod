@@ -14,7 +14,6 @@ import net.minecraft.world.level.levelgen.structure.structures.JigsawStructure;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.function.Function;
 
 public class AkomiJigsawStructure extends JigsawStructure {
     public static Codec<AkomiJigsawStructure> CODEC = ExtraCodecs.validate(

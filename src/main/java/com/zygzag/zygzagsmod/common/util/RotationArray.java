@@ -1,9 +1,7 @@
 package com.zygzag.zygzagsmod.common.util;
 
 import com.mojang.serialization.Codec;
-import com.mojang.serialization.codecs.RecordCodecBuilder;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public record RotationArray(Rotation[] backing) {

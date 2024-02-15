@@ -1,8 +1,6 @@
 package com.zygzag.zygzagsmod.common.networking.packet;
 
 import com.zygzag.zygzagsmod.common.util.LerpedRotation;
-import com.zygzag.zygzagsmod.common.util.Rotation;
-import com.zygzag.zygzagsmod.common.util.SimpleRotation;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
 import net.minecraft.resources.ResourceLocation;

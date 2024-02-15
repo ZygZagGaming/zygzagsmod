@@ -8,7 +8,6 @@ import net.minecraft.core.registries.Registries;
 import net.neoforged.neoforge.registries.DeferredRegister;
 
 import javax.annotation.ParametersAreNonnullByDefault;
-
 import java.util.function.Supplier;
 
 import static com.zygzag.zygzagsmod.common.Main.MODID;
