@@ -1,0 +1,15 @@
+{
+  "placement": {
+    "type": "minecraft:random_spread",
+    "salt": 58979874,
+    "separation": 24,
+    "spacing": 36,
+    "spread_type": "triangular"
+  },
+  "structures": [
+    {
+      "structure": "zygzagsmod:big_dungeon",
+      "weight": 1
+    }
+  ]
+}
