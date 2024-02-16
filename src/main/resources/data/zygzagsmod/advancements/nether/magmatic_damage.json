@@ -1,0 +1,41 @@
+{
+  "parent": "zygzagsmod:nether/find_hive",
+  "criteria": {
+    "magmatic_damage": {
+      "conditions": {
+        "damage": {
+          "type": {
+            "tags": [
+              {
+                "id": "zygzagsmod:magmatic",
+                "expected": true
+              }
+            ]
+          }
+        }
+      },
+      "trigger": "minecraft:entity_hurt_player"
+    }
+  },
+  "display": {
+    "announce_to_chat": true,
+    "description": {
+      "translate": "advancements.nether.magmatic_damage.description"
+    },
+    "frame": "task",
+    "hidden": false,
+    "icon": {
+      "item": "zygzagsmod:magmatic_nether_bricks"
+    },
+    "show_toast": true,
+    "title": {
+      "translate": "advancements.nether.magmatic_damage.title"
+    }
+  },
+  "requirements": [
+    [
+      "magmatic_damage"
+    ]
+  ],
+  "sends_telemetry_event": true
+}

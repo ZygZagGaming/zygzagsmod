@@ -266,6 +266,11 @@
   "advancements.iridium.potion_seller.title": "My Potions are Too Strong",
   "advancements.iridium.potion_seller.description": "Obtain a Skull-Socketed Iridium Scepter enchanted with Cooldown IV",
 
+  "advancements.nether.find_hive.title": "Heart of the Flame",
+  "advancements.nether.find_hive.description": "Enter the Blaze Hive",
+  "advancements.nether.magmatic_damage.title": "Watch Your Step",
+  "advancements.nether.magmatic_damage.description": "Take damage from a block of Magmatic Nether Bricks",
+
   "item.zygzagsmod.iridium_golem_spawn_egg": "Iridium Golem Spawn Egg",
   "item.zygzagsmod.blaze_sentry_spawn_egg": "Blaze Sentry Spawn Egg",
 
