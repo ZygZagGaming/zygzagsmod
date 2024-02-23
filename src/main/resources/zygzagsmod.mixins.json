@@ -1,6 +1,6 @@
 {
   "required": true,
-  "package": "com.zygzag.zygzagsmod.mixin",
+  "package": "io.github.zygzaggaming.zygzagsmod.mixin",
   "compatibilityLevel": "JAVA_8",
   "refmap": "zygzagsmod.refmap.json",
   "mixins": [

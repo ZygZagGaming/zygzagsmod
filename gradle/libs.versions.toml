@@ -1,0 +1,13 @@
+[versions]
+neo = "latest.release"
+jei = "latest.release"
+geckolib = "latest.release"
+hearty-api = "0.2.13"
+
+[libraries]
+neo = { group = "net.neoforged", name = "neoforge", version.ref = "neo"}
+jei-commonApi = { group = "mezz.jei", name = "jei-1.20.4-common-api", version.ref = "jei" }
+jei-neoApi = { group = "mezz.jei", name = "jei-1.20.4-neoforge-api", version.ref = "jei" }
+jei-neo = { group = "mezz.jei", name = "jei-1.20.4-neoforge", version.ref = "jei" }
+geckolib = { group = "software.bernie.geckolib", name = "geckolib-neoforge-1.20.4", version.ref = "geckolib" }
+hearty-api = { group = "io.github.zygzaggaming.hearty", name = "hearty-1.20.4-api", version.ref = "hearty-api" }
