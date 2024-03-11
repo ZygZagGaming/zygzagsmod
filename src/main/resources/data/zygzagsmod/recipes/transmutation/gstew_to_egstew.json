@@ -4,5 +4,6 @@
     "item": "zygzagsmod:golden_stew"
   },
   "outItem": "zygzagsmod:enchanted_golden_stew",
-  "rate": 0.0125
+  "rate": 0.0125,
+  "required": false
 }
