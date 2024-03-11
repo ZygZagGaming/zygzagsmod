@@ -60,7 +60,6 @@ dependencies {
 
     jarJar(group: 'io.github.zygzaggaming.hearty', name: 'hearty-1.20.4-api', version: '[0.2.18,0.3)')
 
-    boolean includeHeartyAtRuntime = true
     compileOnly libs.hearty.api
     if (includeHeartyAtRuntime) {
         runtimeOnly files("libs/hearty-1.20.4-neoforge-0.2.0.jar")
@@ -90,6 +89,7 @@ runs {
 
     client {
         systemProperty "forge.enabledGameTestNamespaces", project.mod_id
+        programArguments.addAll "--username", "Dev"
     }
 
     server {
