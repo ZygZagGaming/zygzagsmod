@@ -3,6 +3,7 @@ package io.github.zygzaggaming.zygzagsmod.common.entity;
 import io.github.zygzaggaming.zygzagsmod.common.registry.AttachmentTypeRegistry;
 import io.github.zygzaggaming.zygzagsmod.common.registry.EntityTypeRegistry;
 import io.github.zygzaggaming.zygzagsmod.common.registry.ParticleTypeRegistry;
+import io.github.zygzaggaming.zygzagsmod.common.util.ModUtil;
 import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -41,8 +42,7 @@ public class OverheatBeamAreaEffectCloud extends AbstractBeamAreaEffectCloud {
 
     @Override
     public void afflict(LivingEntity living) {
-        System.out.println(living);
-        living.setData(AttachmentTypeRegistry.LIVING_ENTITY_OVERHEAT_ATTACHMENT, living.getData(AttachmentTypeRegistry.LIVING_ENTITY_OVERHEAT_ATTACHMENT) + 1);
+        ModUtil.incrementEntityOverheat(living, 1);
     }
 
     @Override

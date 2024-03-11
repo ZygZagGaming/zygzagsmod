@@ -4,6 +4,7 @@ import com.google.common.collect.Maps;
 import io.github.zygzaggaming.zygzagsmod.common.registry.AttachmentTypeRegistry;
 import io.github.zygzaggaming.zygzagsmod.common.registry.EntityTypeRegistry;
 import io.github.zygzaggaming.zygzagsmod.common.registry.ParticleTypeRegistry;
+import io.github.zygzaggaming.zygzagsmod.common.util.ModUtil;
 import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.world.entity.*;
 import net.minecraft.world.level.Level;
@@ -58,7 +59,7 @@ public class SphereAreaEffectCloud extends AreaEffectCloud {
                     for (LivingEntity living : entitiesInBoundingBox) {
                         if (!victims.containsKey(living) && living.isAffectedByPotions() && living.getBoundingBox().getCenter().distanceToSqr(getBoundingBox().getCenter()) <= radius * radius * 1.5) {
                             victims.put(living, tickCount + 20);
-                            living.setData(AttachmentTypeRegistry.LIVING_ENTITY_OVERHEAT_ATTACHMENT, living.getData(AttachmentTypeRegistry.LIVING_ENTITY_OVERHEAT_ATTACHMENT) + 1);
+                            ModUtil.incrementEntityOverheat(living, 1);
                         }
                     }
                 }

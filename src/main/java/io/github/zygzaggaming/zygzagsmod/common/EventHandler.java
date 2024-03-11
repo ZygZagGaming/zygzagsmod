@@ -16,6 +16,7 @@ import io.github.zygzaggaming.zygzagsmod.common.registry.AttributeRegistry;
 import io.github.zygzaggaming.zygzagsmod.common.registry.BlockRegistry;
 import io.github.zygzaggaming.zygzagsmod.common.registry.EnchantmentRegistry;
 import io.github.zygzaggaming.zygzagsmod.common.util.GeneralUtil;
+import io.github.zygzaggaming.zygzagsmod.common.util.ModUtil;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.RegistryAccess;
@@ -550,7 +551,7 @@ public class EventHandler {
     public static void livingEntityTick(final LivingEvent.LivingTickEvent event) {
         LivingEntity entity = event.getEntity();
         int overheat = entity.getData(AttachmentTypeRegistry.LIVING_ENTITY_OVERHEAT_ATTACHMENT);
-        if (overheat >= 5) {
+        if (overheat >= 7) {
             overheat -= 5;
 
             entity.setRemainingFireTicks(3 * 20);
@@ -558,8 +559,10 @@ public class EventHandler {
             float maxDmg = 3;
             float dmg = maxDmg - maxDmg * GeneralUtil.clamp(fireResistance / 10f, 0, 1);
             if (dmg > 0 && (!(entity instanceof Player player) || (!player.isCreative() && !player.isSpectator())) && !entity.getType().fireImmune()) entity.hurt(overheatDamage(entity.level().registryAccess()), dmg);
+        } else if (entity.tickCount % 5 == 0 && overheat > 0) {
+            overheat--;
         }
-        entity.setData(AttachmentTypeRegistry.LIVING_ENTITY_OVERHEAT_ATTACHMENT, overheat);
+        ModUtil.setEntityOverheat(entity, overheat);
     }
 
     public static DamageSource overheatDamage(RegistryAccess registryAccess) {

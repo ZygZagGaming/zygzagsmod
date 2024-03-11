@@ -8,7 +8,9 @@ import io.github.zygzaggaming.zygzagsmod.common.entity.BlazeSentry;
 import io.github.zygzaggaming.zygzagsmod.common.entity.IridiumGolem;
 import io.github.zygzaggaming.zygzagsmod.common.item.iridium.ISocketable;
 import io.github.zygzaggaming.zygzagsmod.common.networking.handler.ClientboundBlazeSentryRotationPacketHandler;
+import io.github.zygzaggaming.zygzagsmod.common.networking.handler.ClientboundSelfOverheatUpdatePacketHandler;
 import io.github.zygzaggaming.zygzagsmod.common.networking.packet.ClientboundBlazeSentryRotationPacket;
+import io.github.zygzaggaming.zygzagsmod.common.networking.packet.ClientboundSelfOverheatUpdatePacket;
 import io.github.zygzaggaming.zygzagsmod.common.registry.AttributeRegistry;
 import io.github.zygzaggaming.zygzagsmod.common.registry.EntityTypeRegistry;
 import io.github.zygzaggaming.zygzagsmod.common.registry.IridiumGearRegistry;
@@ -86,6 +88,9 @@ public class ModEventHandler {
         final IPayloadRegistrar registrar = event.registrar(Main.MODID);
         registrar.play(ClientboundBlazeSentryRotationPacket.ID, ClientboundBlazeSentryRotationPacket::new, handler -> handler
                 .client(ClientboundBlazeSentryRotationPacketHandler.getInstance()::handleData)
+        );
+        registrar.play(ClientboundSelfOverheatUpdatePacket.ID, ClientboundSelfOverheatUpdatePacket::new, handler -> handler
+                .client(ClientboundSelfOverheatUpdatePacketHandler.getInstance()::handleData)
         );
     }
 }

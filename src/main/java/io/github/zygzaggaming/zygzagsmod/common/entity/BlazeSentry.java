@@ -385,7 +385,7 @@ public class BlazeSentry extends Monster implements GeoAnimatable, ActingEntity<
                     double radialDistanceSqr = toTarget.subtract(angle.scale(cylDistance)).lengthSqr();
                     //System.out.printf("radial dist: %.4f, cyl dist: %.4f, this pos: (%.4f, %.4f, %.4f), other pos: (%.4f, %.4f, %.4f)%n", sqrt(radialDistanceSqr), cylDistance, getX(), getEyeY(), getZ(), targetCenter.x, targetCenter.y, targetCenter.z);
                     if (radialDistanceSqr < radiusSqr && cylDistance < range && cylDistance > 0) {
-                        if (entity instanceof LivingEntity living) living.setData(AttachmentTypeRegistry.LIVING_ENTITY_OVERHEAT_ATTACHMENT, living.getData(AttachmentTypeRegistry.LIVING_ENTITY_OVERHEAT_ATTACHMENT) + 1);
+                        if (entity instanceof LivingEntity living) ModUtil.incrementEntityOverheat(living, 1);
                         else if (entity instanceof ItemEntity) entity.kill();
                     }
                 }
