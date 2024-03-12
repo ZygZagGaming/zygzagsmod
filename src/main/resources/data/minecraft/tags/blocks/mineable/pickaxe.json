@@ -1,5 +1,17 @@
 {
   "values": [
-    "zygzagsmod:raw_iridium_block"
+    "zygzagsmod:raw_iridium_block",
+
+    "zygzagsmod:magmatic_nether_bricks",
+    "zygzagsmod:red_nether_brick_cache",
+    "zygzagsmod:end_stone_switch",
+    "zygzagsmod:chiseled_red_nether_bricks",
+    "zygzagsmod:cracked_red_nether_bricks",
+    "zygzagsmod:nether_quartz_glass",
+    "zygzagsmod:nether_quartz_glass_stairs",
+    "zygzagsmod:nether_quartz_glass_slab",
+    "zygzagsmod:girded_red_nether_bricks",
+    "zygzagsmod:nether_brick_button",
+    "zygzagsmod:red_nether_brick_button"
   ]
 }
