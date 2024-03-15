@@ -41,8 +41,16 @@ repositories {
     }
     maven { url = "https://maven.shedaniel.me" }
     maven {
-        name = "GitHubPackages"
+        name = "Hearty on GPR"
         url = uri("https://maven.pkg.github.com/zygzaggaming/hearty")
+        credentials {
+            username = project.findProperty("gpr.user") ?: System.getenv("GITHUB_ACTOR")
+            password = project.findProperty("gpr.key") ?: System.getenv("GITHUB_TOKEN")
+        }
+    }
+    maven {
+        name = "Hearty API on GPR"
+        url = uri("https://maven.pkg.github.com/zygzaggaming/hearty-api")
         credentials {
             username = project.findProperty("gpr.user") ?: System.getenv("GITHUB_ACTOR")
             password = project.findProperty("gpr.key") ?: System.getenv("GITHUB_TOKEN")
@@ -58,14 +66,10 @@ dependencies {
     runtimeOnly libs.jei.neo
     implementation libs.geckolib
 
-    jarJar(group: 'io.github.zygzaggaming.hearty', name: 'hearty-1.20.4-api', version: '[0.2.18,0.3)')
+    implementation libs.hearty.api
 
-    compileOnly libs.hearty.api
-    if (includeHeartyAtRuntime) {
-        runtimeOnly files("libs/hearty-1.20.4-neoforge-0.2.0.jar")
-    } else {
-        runtimeOnly libs.hearty.api
-    }
+    boolean includeHeartyAtRuntime = true
+    if (includeHeartyAtRuntime) runtimeOnly libs.hearty.mod
 }
 
 //jarJar.enable()
