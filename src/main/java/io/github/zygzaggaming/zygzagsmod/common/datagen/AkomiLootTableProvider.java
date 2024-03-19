@@ -50,6 +50,7 @@ public class AkomiLootTableProvider extends LootTableProvider {
                 BlockWithItemRegistry.END_SAND.block(),
                 BlockWithItemRegistry.END_STONE_SWITCH.block(),
                 BlockWithItemRegistry.RAW_IRIDIUM_BLOCK.block(),
+                BlockWithItemRegistry.CORONAL_AMBER.block(),
                 BlockItemEntityRegistry.RED_NETHER_BRICK_CACHE.block()
         );
 

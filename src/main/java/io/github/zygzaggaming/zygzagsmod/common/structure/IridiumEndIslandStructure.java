@@ -1,12 +1,12 @@
 package io.github.zygzaggaming.zygzagsmod.common.structure;
 
 import com.mojang.serialization.Codec;
+import io.github.zygzaggaming.zygzagsmod.common.block.EndStoneSwitchBlock;
 import io.github.zygzaggaming.zygzagsmod.common.registry.BlockItemEntityRegistry;
 import io.github.zygzaggaming.zygzagsmod.common.registry.BlockWithItemRegistry;
 import io.github.zygzaggaming.zygzagsmod.common.registry.StructurePieceTypeRegistry;
 import io.github.zygzaggaming.zygzagsmod.common.registry.StructureTypeRegistry;
 import io.github.zygzaggaming.zygzagsmod.common.util.GeneralUtil;
-import io.github.zygzaggaming.zygzagsmod.common.block.EndStoneSwitchBlock;
 import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -32,8 +32,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
-
-import static io.github.zygzaggaming.zygzagsmod.common.util.GeneralUtil.randomElement;
 
 @ParametersAreNonnullByDefault
 @MethodsReturnNonnullByDefault

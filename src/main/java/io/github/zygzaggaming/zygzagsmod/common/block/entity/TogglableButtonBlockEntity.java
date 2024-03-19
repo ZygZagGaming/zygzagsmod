@@ -1,7 +1,7 @@
 package io.github.zygzaggaming.zygzagsmod.common.block.entity;
 
-import io.github.zygzaggaming.zygzagsmod.common.registry.BlockEntityRegistry;
 import io.github.zygzaggaming.zygzagsmod.common.block.TogglableButtonBlock;
+import io.github.zygzaggaming.zygzagsmod.common.registry.BlockEntityRegistry;
 import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;

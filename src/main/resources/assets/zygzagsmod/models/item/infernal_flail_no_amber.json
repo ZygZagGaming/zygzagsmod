@@ -1,0 +1,6 @@
+{
+  "parent": "item/handheld_rod",
+  "textures": {
+    "layer0": "zygzagsmod:item/infernal_flail_no_amber"
+  }
+}

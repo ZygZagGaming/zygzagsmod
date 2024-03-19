@@ -27,6 +27,7 @@ public class ClientModEventHandler {
         event.registerEntityRenderer(EntityTypeRegistry.BEAM_AREA_EFFECT_CLOUD.get(), NoopRenderer::new);
         event.registerEntityRenderer(EntityTypeRegistry.OVERHEAT_BEAM_AREA_EFFECT_CLOUD.get(), NoopRenderer::new);
         event.registerEntityRenderer(EntityTypeRegistry.SPHERE_AREA_EFFECT_CLOUD.get(), NoopRenderer::new);
+        event.registerEntityRenderer(EntityTypeRegistry.FLAIL_PROJECTILE.get(), FlailProjectileRenderer::new);
         event.registerBlockEntityRenderer(BlockItemEntityRegistry.SUSPICIOUS_END_SAND.getBlockEntityType(), CustomBrushableBlockRenderer::new);
         event.registerBlockEntityRenderer(BlockItemEntityRegistry.RED_NETHER_BRICK_CACHE.getBlockEntityType(), CacheRenderer::new);
     }

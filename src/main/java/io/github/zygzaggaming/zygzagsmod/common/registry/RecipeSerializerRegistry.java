@@ -1,7 +1,7 @@
 package io.github.zygzaggaming.zygzagsmod.common.registry;
 
-import io.github.zygzaggaming.zygzagsmod.common.registry.base.AkomiRegistry;
 import io.github.zygzaggaming.zygzagsmod.common.recipe.TransmutationRecipe;
+import io.github.zygzaggaming.zygzagsmod.common.registry.base.AkomiRegistry;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.neoforged.neoforge.registries.DeferredRegister;

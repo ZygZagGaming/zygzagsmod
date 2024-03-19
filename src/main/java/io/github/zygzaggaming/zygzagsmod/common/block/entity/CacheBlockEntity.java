@@ -1,8 +1,8 @@
 package io.github.zygzaggaming.zygzagsmod.common.block.entity;
 
+import io.github.zygzaggaming.zygzagsmod.common.block.CacheBlock;
 import io.github.zygzaggaming.zygzagsmod.common.registry.BlockItemEntityRegistry;
 import io.github.zygzaggaming.zygzagsmod.common.registry.SoundEventRegistry;
-import io.github.zygzaggaming.zygzagsmod.common.block.CacheBlock;
 import io.github.zygzaggaming.zygzagsmod.common.util.GeneralUtil;
 import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.core.BlockPos;

@@ -1,8 +1,8 @@
 package io.github.zygzaggaming.zygzagsmod.common.registry;
 
-import io.github.zygzaggaming.zygzagsmod.common.registry.base.AkomiRegistry;
 import io.github.zygzaggaming.zygzagsmod.common.entity.IridiumGolem;
 import io.github.zygzaggaming.zygzagsmod.common.entity.animation.Actor;
+import io.github.zygzaggaming.zygzagsmod.common.registry.base.AkomiRegistry;
 import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.network.syncher.EntityDataSerializer;
 import net.neoforged.neoforge.registries.DeferredRegister;

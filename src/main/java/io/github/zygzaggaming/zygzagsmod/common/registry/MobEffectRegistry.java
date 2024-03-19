@@ -1,9 +1,9 @@
 package io.github.zygzaggaming.zygzagsmod.common.registry;
 
 
-import io.github.zygzaggaming.zygzagsmod.common.registry.base.AkomiRegistry;
 import io.github.zygzaggaming.zygzagsmod.common.Config;
 import io.github.zygzaggaming.zygzagsmod.common.effect.SightEffect;
+import io.github.zygzaggaming.zygzagsmod.common.registry.base.AkomiRegistry;
 import io.github.zygzaggaming.zygzagsmod.common.util.GeneralUtil;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.world.effect.MobEffect;

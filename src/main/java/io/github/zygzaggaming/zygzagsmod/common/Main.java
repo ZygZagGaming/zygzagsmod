@@ -1,12 +1,12 @@
 package io.github.zygzaggaming.zygzagsmod.common;
 
 import com.mojang.logging.LogUtils;
-import io.github.zygzaggaming.zygzagsmod.common.registry.*;
-import io.github.zygzaggaming.zygzagsmod.common.registry.base.AkomiRegistry;
 import io.github.zygzaggaming.zygzagsmod.common.capability.PlayerSightCache;
 import io.github.zygzaggaming.zygzagsmod.common.entity.animation.Action;
 import io.github.zygzaggaming.zygzagsmod.common.entity.animation.TransitionAction;
 import io.github.zygzaggaming.zygzagsmod.common.item.iridium.ISocketable;
+import io.github.zygzaggaming.zygzagsmod.common.registry.*;
+import io.github.zygzaggaming.zygzagsmod.common.registry.base.AkomiRegistry;
 import net.minecraft.core.Registry;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
@@ -76,6 +76,7 @@ public class Main {
     public static final UUID SPRINT_ENCHANTMENT_SPRINT_HUNGER_CONSUMPTION_MODIFIER_UUID = UUID.fromString("33e11794-56e2-4e54-b83b-af12df29549c");
     public static final UUID SPRINT_ENCHANTMENT_SPRINT_JUMP_HUNGER_CONSUMPTION_MODIFIER_UUID = UUID.fromString("9f93b995-da40-4674-be20-58ef794e2827");
     public static final UUID SHATTER_ENCHANTMENT_ARMOR_DURABILITY_REDUCTION_MODIFIER_UUID = UUID.fromString("dcfd17cb-8a70-48e1-a2e8-f23ffe3cab4a");
+    public static final UUID BASE_FLAIL_DAMAGE_UUID = UUID.fromString("d43f7bc2-9936-4646-ae0e-58377eca3313");
     public static PlayerSightCache CURRENT_PLAYER_CACHE = null;
 
     public static final BlockSetType NETHER_BRICK_BLOCK_SET_TYPE = BlockSetType.register(
@@ -169,8 +170,8 @@ public class Main {
                     ItemRegistry.IRIDIUM_PLATING,
                     ItemRegistry.RAW_IRIDIUM
             ).map((it) -> it.get().getDefaultInstance()).collect(Collectors.toList()));
-            event.acceptAll(ItemRegistry.IRIDIUM_GEAR_BLUEPRINTS.stream().map((it) -> it.get().getDefaultInstance()).collect(Collectors.toList()));
-            event.acceptAll(ItemRegistry.SOCKET_SCHEMATICS.stream().map((it) -> it.get().getDefaultInstance()).collect(Collectors.toList()));
+            event.acceptAll(ItemRegistry.IRIDIUM_GEAR_BLUEPRINTS.values().stream().map((it) -> it.get().getDefaultInstance()).collect(Collectors.toList()));
+            event.acceptAll(ItemRegistry.SOCKET_SCHEMATICS.values().stream().map((it) -> it.get().getDefaultInstance()).collect(Collectors.toList()));
         } else if (event.getTabKey() == CreativeModeTabs.NATURAL_BLOCKS) {
             event.acceptAll(Stream.of(
                     BlockWithItemRegistry.RAW_IRIDIUM_BLOCK.item(),

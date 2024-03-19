@@ -1,6 +1,8 @@
 package io.github.zygzaggaming.zygzagsmod.common.registry;
 
-import io.github.zygzaggaming.hearty.api.*;
+import io.github.zygzaggaming.hearty.api.HalfHeartContext;
+import io.github.zygzaggaming.hearty.api.HalfHeartLayer;
+import io.github.zygzaggaming.hearty.api.HeartyRegistries;
 import io.github.zygzaggaming.zygzagsmod.common.registry.base.AkomiRegistry;
 import net.minecraft.resources.ResourceLocation;
 import net.neoforged.neoforge.registries.DeferredRegister;

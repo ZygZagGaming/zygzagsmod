@@ -9,8 +9,10 @@ import io.github.zygzaggaming.zygzagsmod.common.entity.IridiumGolem;
 import io.github.zygzaggaming.zygzagsmod.common.item.iridium.ISocketable;
 import io.github.zygzaggaming.zygzagsmod.common.networking.handler.ClientboundBlazeSentryRotationPacketHandler;
 import io.github.zygzaggaming.zygzagsmod.common.networking.handler.ClientboundSelfOverheatUpdatePacketHandler;
+import io.github.zygzaggaming.zygzagsmod.common.networking.handler.ServerboundPlayerLeftClickEmptyPacketHandler;
 import io.github.zygzaggaming.zygzagsmod.common.networking.packet.ClientboundBlazeSentryRotationPacket;
 import io.github.zygzaggaming.zygzagsmod.common.networking.packet.ClientboundSelfOverheatUpdatePacket;
+import io.github.zygzaggaming.zygzagsmod.common.networking.packet.ServerboundPlayerLeftClickEmptyPacket;
 import io.github.zygzaggaming.zygzagsmod.common.registry.AttributeRegistry;
 import io.github.zygzaggaming.zygzagsmod.common.registry.EntityTypeRegistry;
 import io.github.zygzaggaming.zygzagsmod.common.registry.IridiumGearRegistry;
@@ -33,6 +35,7 @@ import net.neoforged.neoforge.network.registration.IPayloadRegistrar;
 
 import java.util.function.Supplier;
 
+@SuppressWarnings("unused")
 @Mod.EventBusSubscriber(modid = Main.MODID, bus = Mod.EventBusSubscriber.Bus.MOD)
 public class ModEventHandler {
     @SubscribeEvent
@@ -52,6 +55,7 @@ public class ModEventHandler {
                 event.add(type, AttributeRegistry.SPRINT_HUNGER_CONSUMPTION.get(), 1.0);
                 event.add(type, AttributeRegistry.SPRINT_JUMP_HUNGER_CONSUMPTION.get(), 1.0);
                 event.add(type, AttributeRegistry.ARMOR_DURABILITY_REDUCTION.get(), 1.0);
+                event.add(type, AttributeRegistry.FLAIL_DAMAGE.get(), 0.0);
             }
         }
     }
@@ -91,6 +95,9 @@ public class ModEventHandler {
         );
         registrar.play(ClientboundSelfOverheatUpdatePacket.ID, ClientboundSelfOverheatUpdatePacket::new, handler -> handler
                 .client(ClientboundSelfOverheatUpdatePacketHandler.getInstance()::handleData)
+        );
+        registrar.play(ServerboundPlayerLeftClickEmptyPacket.ID, ServerboundPlayerLeftClickEmptyPacket::new, handler -> handler
+                .server(ServerboundPlayerLeftClickEmptyPacketHandler.getInstance()::handleData)
         );
     }
 }

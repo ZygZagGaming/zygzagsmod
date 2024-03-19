@@ -1,8 +1,8 @@
 package io.github.zygzaggaming.zygzagsmod.common.enchant;
 
 import com.google.common.collect.Multimap;
-import io.github.zygzaggaming.zygzagsmod.common.registry.AttributeRegistry;
 import io.github.zygzaggaming.zygzagsmod.common.Main;
+import io.github.zygzaggaming.zygzagsmod.common.registry.AttributeRegistry;
 import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.ai.attributes.Attribute;

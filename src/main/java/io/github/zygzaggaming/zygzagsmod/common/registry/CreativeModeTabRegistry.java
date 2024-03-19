@@ -1,7 +1,7 @@
 package io.github.zygzaggaming.zygzagsmod.common.registry;
 
-import io.github.zygzaggaming.zygzagsmod.common.registry.base.AkomiRegistry;
 import io.github.zygzaggaming.zygzagsmod.common.item.iridium.Socket;
+import io.github.zygzaggaming.zygzagsmod.common.registry.base.AkomiRegistry;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.CreativeModeTab;
@@ -14,6 +14,7 @@ import java.util.function.Supplier;
 
 import static io.github.zygzaggaming.zygzagsmod.common.Main.MODID;
 
+@SuppressWarnings("unused")
 public class CreativeModeTabRegistry extends AkomiRegistry<CreativeModeTab> {
     public static final CreativeModeTabRegistry INSTANCE = new CreativeModeTabRegistry(DeferredRegister.create(BuiltInRegistries.CREATIVE_MODE_TAB, MODID));
     public static final List<Supplier<? extends Item>> CREATIVE_TAB_ORDER = List.of(
@@ -25,20 +26,20 @@ public class CreativeModeTabRegistry extends AkomiRegistry<CreativeModeTab> {
             ItemRegistry.RAW_IRIDIUM,
             BlockWithItemRegistry.RAW_IRIDIUM_BLOCK.item(),
             ItemRegistry.IRIDIUM_PLATING,
-            ItemRegistry.IRIDIUM_HELMET_BLUEPRINT,
-            ItemRegistry.IRIDIUM_CHESTPLATE_BLUEPRINT,
-            ItemRegistry.IRIDIUM_LEGGINGS_BLUEPRINT,
-            ItemRegistry.IRIDIUM_BOOTS_BLUEPRINT,
-            ItemRegistry.IRIDIUM_SWORD_BLUEPRINT,
-            ItemRegistry.IRIDIUM_PICKAXE_BLUEPRINT,
-            ItemRegistry.IRIDIUM_AXE_BLUEPRINT,
-            ItemRegistry.IRIDIUM_SHOVEL_BLUEPRINT,
-            ItemRegistry.IRIDIUM_HOE_BLUEPRINT,
-            ItemRegistry.DIAMOND_SOCKET_SCHEMATIC,
-            ItemRegistry.EMERALD_SOCKET_SCHEMATIC,
-            ItemRegistry.SKULL_SOCKET_SCHEMATIC,
-            ItemRegistry.WITHER_SKULL_SOCKET_SCHEMATIC,
-            ItemRegistry.AMETHYST_SOCKET_SCHEMATIC,
+            ItemRegistry.IRIDIUM_GEAR_BLUEPRINTS.get(IridiumGearType.HELMET),
+            ItemRegistry.IRIDIUM_GEAR_BLUEPRINTS.get(IridiumGearType.CHESTPLATE),
+            ItemRegistry.IRIDIUM_GEAR_BLUEPRINTS.get(IridiumGearType.LEGGINGS),
+            ItemRegistry.IRIDIUM_GEAR_BLUEPRINTS.get(IridiumGearType.BOOTS),
+            ItemRegistry.IRIDIUM_GEAR_BLUEPRINTS.get(IridiumGearType.SWORD),
+            ItemRegistry.IRIDIUM_GEAR_BLUEPRINTS.get(IridiumGearType.PICKAXE),
+            ItemRegistry.IRIDIUM_GEAR_BLUEPRINTS.get(IridiumGearType.AXE),
+            ItemRegistry.IRIDIUM_GEAR_BLUEPRINTS.get(IridiumGearType.SHOVEL),
+            ItemRegistry.IRIDIUM_GEAR_BLUEPRINTS.get(IridiumGearType.HOE),
+            ItemRegistry.SOCKET_SCHEMATICS.get(Socket.DIAMOND),
+            ItemRegistry.SOCKET_SCHEMATICS.get(Socket.EMERALD),
+            ItemRegistry.SOCKET_SCHEMATICS.get(Socket.SKULL),
+            ItemRegistry.SOCKET_SCHEMATICS.get(Socket.WITHER_SKULL),
+            ItemRegistry.SOCKET_SCHEMATICS.get(Socket.AMETHYST),
 
             // Then, iridium gear (partial platings and sockets come last)
             IridiumGearRegistry.IRIDIUM_HELMET,
@@ -82,11 +83,11 @@ public class CreativeModeTabRegistry extends AkomiRegistry<CreativeModeTab> {
             .withTabsBefore(CreativeModeTabs.COMBAT)
             .icon(() -> IridiumGearRegistry.SWORDS.get(Socket.NONE).get().getDefaultInstance())
             .displayItems((parameters, output) -> {
-                for (var gearType : IridiumGearRegistry.SocketedGearType.values()) {
+                for (var gearType : SocketedGearType.values()) {
                     var map = IridiumGearRegistry.ALL_SOCKETABLES.get(gearType);
-                    if (gearType == IridiumGearRegistry.SocketedGearType.CHESTPLATE) output.accept(IridiumGearRegistry.IRIDIUM_HELMET.get());
+                    if (gearType == SocketedGearType.CHESTPLATE) output.accept(IridiumGearRegistry.IRIDIUM_HELMET.get());
                     for (Socket socket : Socket.values()) output.accept(map.get(socket).get());
-                    if (gearType == IridiumGearRegistry.SocketedGearType.CHESTPLATE) {
+                    if (gearType == SocketedGearType.CHESTPLATE) {
                         output.accept(IridiumGearRegistry.IRIDIUM_LEGGINGS.get());
                         output.accept(IridiumGearRegistry.IRIDIUM_BOOTS.get());
                     }

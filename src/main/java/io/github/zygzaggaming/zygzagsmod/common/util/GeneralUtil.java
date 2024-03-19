@@ -1,9 +1,9 @@
 package io.github.zygzaggaming.zygzagsmod.common.util;
 
+import io.github.zygzaggaming.zygzagsmod.common.Config;
 import io.github.zygzaggaming.zygzagsmod.common.Main;
 import io.github.zygzaggaming.zygzagsmod.common.entity.animation.Action;
 import io.github.zygzaggaming.zygzagsmod.common.entity.animation.TransitionAction;
-import io.github.zygzaggaming.zygzagsmod.common.Config;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.particles.ParticleOptions;

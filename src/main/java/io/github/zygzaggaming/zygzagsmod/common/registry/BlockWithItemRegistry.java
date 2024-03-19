@@ -85,6 +85,12 @@ public class BlockWithItemRegistry {
             "red_nether_brick_button",
             () -> new TogglableButtonBlock(Main.RED_NETHER_BRICK_BLOCK_SET_TYPE, 2 * 60 * 20, BlockBehaviour.Properties.ofFullCopy(Blocks.RED_NETHER_BRICKS))
     );
+
+    public static final BlockWithItemSupplier<Block, BlockItem> CORONAL_AMBER = INSTANCE.register(
+            "coronal_amber",
+            () -> new CoronalAmberBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.AMETHYST_BLOCK).strength(2.5f))
+    );
+
     public DeferredRegister<Block> blockRegister = DeferredRegister.create(BuiltInRegistries.BLOCK, MODID);
     public DeferredRegister<Item> itemRegister = DeferredRegister.create(BuiltInRegistries.ITEM, MODID);
 

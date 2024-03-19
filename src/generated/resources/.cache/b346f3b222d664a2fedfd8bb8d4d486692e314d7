@@ -1,4 +1,4 @@
-// 1.20.4	2023-12-26T23:15:16.6358449	Item Models: zygzagsmod
+// 1.20.4	2024-03-15T18:22:18.5586741	Item Models: zygzagsmod
 15435321a16b6a9adcb19a948c2af0fa7344d370 assets/zygzagsmod/models/item/amethyst_socketed_iridium_axe.json
 15eb5bc299660d213b1379316f4264e348e7a421 assets/zygzagsmod/models/item/amethyst_socketed_iridium_chestplate.json
 da43fd45392876686e6ebd43c9df8c0d4bd150aa assets/zygzagsmod/models/item/amethyst_socketed_iridium_hoe.json
@@ -8,6 +8,7 @@ a2bfba0f70e5b646923c91fa22be16a0ec6d811b assets/zygzagsmod/models/item/amethyst_
 9673e4d3214bd63e7d3b7bc8bd729477fa7e314a assets/zygzagsmod/models/item/amethyst_socketed_iridium_sword.json
 63ec6c618a3a23eab4cab9c52d7d3250de9b516e assets/zygzagsmod/models/item/blaze_sentry_spawn_egg.json
 5b5fb228058a3ad89b74db2c3fe494cccbce27e4 assets/zygzagsmod/models/item/chiseled_red_nether_bricks.json
+6e13b0b68924bf413ae372bbba55a8adaaf86dec assets/zygzagsmod/models/item/coronal_amber.json
 0406ffbb2006fee674f85f505abd2cbf978af0c3 assets/zygzagsmod/models/item/cracked_red_nether_bricks.json
 246aec8a86c1954aebb6cf8e859120654b532ef0 assets/zygzagsmod/models/item/crushed_red_nether_bricks.json
 15435321a16b6a9adcb19a948c2af0fa7344d370 assets/zygzagsmod/models/item/diamond_socketed_iridium_axe.json

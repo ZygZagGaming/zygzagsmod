@@ -1,10 +1,10 @@
 package io.github.zygzaggaming.zygzagsmod.common.block;
 
+import io.github.zygzaggaming.zygzagsmod.common.Config;
 import io.github.zygzaggaming.zygzagsmod.common.block.entity.MagmaticNetherBrickBlockEntity;
 import io.github.zygzaggaming.zygzagsmod.common.entity.OverheatBeamAreaEffectCloud;
 import io.github.zygzaggaming.zygzagsmod.common.entity.SphereAreaEffectCloud;
 import io.github.zygzaggaming.zygzagsmod.common.registry.BlockItemEntityRegistry;
-import io.github.zygzaggaming.zygzagsmod.common.Config;
 import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;

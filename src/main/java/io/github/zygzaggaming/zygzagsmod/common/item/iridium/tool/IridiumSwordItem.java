@@ -1,8 +1,8 @@
 package io.github.zygzaggaming.zygzagsmod.common.item.iridium.tool;
 
-import io.github.zygzaggaming.zygzagsmod.common.item.iridium.Socket;
 import io.github.zygzaggaming.zygzagsmod.common.Config;
 import io.github.zygzaggaming.zygzagsmod.common.item.iridium.ISocketable;
+import io.github.zygzaggaming.zygzagsmod.common.item.iridium.Socket;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResultHolder;

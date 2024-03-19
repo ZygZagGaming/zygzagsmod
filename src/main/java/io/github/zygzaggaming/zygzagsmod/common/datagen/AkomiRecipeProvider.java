@@ -2,10 +2,7 @@ package io.github.zygzaggaming.zygzagsmod.common.datagen;
 
 import io.github.zygzaggaming.zygzagsmod.common.Main;
 import io.github.zygzaggaming.zygzagsmod.common.item.iridium.Socket;
-import io.github.zygzaggaming.zygzagsmod.common.registry.BlockItemEntityRegistry;
-import io.github.zygzaggaming.zygzagsmod.common.registry.BlockWithItemRegistry;
-import io.github.zygzaggaming.zygzagsmod.common.registry.IridiumGearRegistry;
-import io.github.zygzaggaming.zygzagsmod.common.registry.ItemRegistry;
+import io.github.zygzaggaming.zygzagsmod.common.registry.*;
 import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.data.PackOutput;
@@ -23,25 +20,25 @@ import java.util.function.Supplier;
 @MethodsReturnNonnullByDefault
 public class AkomiRecipeProvider extends RecipeProvider {
     private static final IridiumPlatingRecipeType[] PLATING_RECIPE_TYPES = {
-            new IridiumPlatingRecipeType("axe", ItemRegistry.IRIDIUM_AXE_BLUEPRINT.get(), IridiumGearRegistry.AXES.get(Socket.NONE).get(), Items.NETHERITE_AXE, IridiumGearRegistry.PARTIAL_AXES, 3, RecipeCategory.TOOLS),
-            new IridiumPlatingRecipeType("sword", ItemRegistry.IRIDIUM_SWORD_BLUEPRINT.get(), IridiumGearRegistry.SWORDS.get(Socket.NONE).get(), Items.NETHERITE_SWORD, IridiumGearRegistry.PARTIAL_SWORDS, 2, RecipeCategory.COMBAT),
-            new IridiumPlatingRecipeType("pickaxe", ItemRegistry.IRIDIUM_PICKAXE_BLUEPRINT.get(), IridiumGearRegistry.PICKAXES.get(Socket.NONE).get(), Items.NETHERITE_PICKAXE, IridiumGearRegistry.PARTIAL_PICKAXES, 3, RecipeCategory.TOOLS),
-            new IridiumPlatingRecipeType("shovel", ItemRegistry.IRIDIUM_SHOVEL_BLUEPRINT.get(), IridiumGearRegistry.SHOVELS.get(Socket.NONE).get(), Items.NETHERITE_SHOVEL, Map.of(), 1, RecipeCategory.TOOLS),
-            new IridiumPlatingRecipeType("hoe", ItemRegistry.IRIDIUM_HOE_BLUEPRINT.get(), IridiumGearRegistry.HOES.get(Socket.NONE).get(), Items.NETHERITE_HOE, IridiumGearRegistry.PARTIAL_HOES, 2, RecipeCategory.TOOLS),
-            new IridiumPlatingRecipeType("helmet", ItemRegistry.IRIDIUM_HELMET_BLUEPRINT.get(), IridiumGearRegistry.IRIDIUM_HELMET.get(), Items.NETHERITE_HELMET, IridiumGearRegistry.PARTIAL_HELMETS, 5, RecipeCategory.COMBAT),
-            new IridiumPlatingRecipeType("chestplate", ItemRegistry.IRIDIUM_CHESTPLATE_BLUEPRINT.get(), IridiumGearRegistry.CHESTPLATES.get(Socket.NONE).get(), Items.NETHERITE_CHESTPLATE, IridiumGearRegistry.PARTIAL_CHESTPLATES, 8, RecipeCategory.COMBAT),
-            new IridiumPlatingRecipeType("leggings", ItemRegistry.IRIDIUM_LEGGINGS_BLUEPRINT.get(), IridiumGearRegistry.IRIDIUM_LEGGINGS.get(), Items.NETHERITE_LEGGINGS, IridiumGearRegistry.PARTIAL_LEGGINGS, 7, RecipeCategory.COMBAT),
-            new IridiumPlatingRecipeType("boots", ItemRegistry.IRIDIUM_BOOTS_BLUEPRINT.get(), IridiumGearRegistry.IRIDIUM_BOOTS.get(), Items.NETHERITE_BOOTS, IridiumGearRegistry.PARTIAL_BOOTS, 4, RecipeCategory.COMBAT),
+            new IridiumPlatingRecipeType("axe", IridiumGearRegistry.AXES.get(Socket.NONE).get(), Items.NETHERITE_AXE, IridiumGearRegistry.PARTIAL_AXES, 3, RecipeCategory.TOOLS),
+            new IridiumPlatingRecipeType("sword", IridiumGearRegistry.SWORDS.get(Socket.NONE).get(), Items.NETHERITE_SWORD, IridiumGearRegistry.PARTIAL_SWORDS, 2, RecipeCategory.COMBAT),
+            new IridiumPlatingRecipeType("pickaxe", IridiumGearRegistry.PICKAXES.get(Socket.NONE).get(), Items.NETHERITE_PICKAXE, IridiumGearRegistry.PARTIAL_PICKAXES, 3, RecipeCategory.TOOLS),
+            new IridiumPlatingRecipeType("shovel", IridiumGearRegistry.SHOVELS.get(Socket.NONE).get(), Items.NETHERITE_SHOVEL, Map.of(), 1, RecipeCategory.TOOLS),
+            new IridiumPlatingRecipeType("hoe", IridiumGearRegistry.HOES.get(Socket.NONE).get(), Items.NETHERITE_HOE, IridiumGearRegistry.PARTIAL_HOES, 2, RecipeCategory.TOOLS),
+            new IridiumPlatingRecipeType("helmet", IridiumGearRegistry.IRIDIUM_HELMET.get(), Items.NETHERITE_HELMET, IridiumGearRegistry.PARTIAL_HELMETS, 5, RecipeCategory.COMBAT),
+            new IridiumPlatingRecipeType("chestplate", IridiumGearRegistry.CHESTPLATES.get(Socket.NONE).get(), Items.NETHERITE_CHESTPLATE, IridiumGearRegistry.PARTIAL_CHESTPLATES, 8, RecipeCategory.COMBAT),
+            new IridiumPlatingRecipeType("leggings", IridiumGearRegistry.IRIDIUM_LEGGINGS.get(), Items.NETHERITE_LEGGINGS, IridiumGearRegistry.PARTIAL_LEGGINGS, 7, RecipeCategory.COMBAT),
+            new IridiumPlatingRecipeType("boots", IridiumGearRegistry.IRIDIUM_BOOTS.get(), Items.NETHERITE_BOOTS, IridiumGearRegistry.PARTIAL_BOOTS, 4, RecipeCategory.COMBAT),
     };
 
     private static final IridiumSocketingRecipeType[] SOCKETING_RECIPE_TYPES = {
-            new IridiumSocketingRecipeType("sword", IridiumGearRegistry.SocketedGearType.SWORD, IridiumGearRegistry.SWORDS, RecipeCategory.COMBAT),
-            new IridiumSocketingRecipeType("pickaxe", IridiumGearRegistry.SocketedGearType.PICKAXE, IridiumGearRegistry.PICKAXES, RecipeCategory.TOOLS),
-            new IridiumSocketingRecipeType("axe", IridiumGearRegistry.SocketedGearType.AXE, IridiumGearRegistry.AXES, RecipeCategory.TOOLS),
-            new IridiumSocketingRecipeType("shovel", IridiumGearRegistry.SocketedGearType.SHOVEL, IridiumGearRegistry.SHOVELS, RecipeCategory.TOOLS),
-            new IridiumSocketingRecipeType("hoe", IridiumGearRegistry.SocketedGearType.HOE, IridiumGearRegistry.HOES, RecipeCategory.TOOLS),
-            new IridiumSocketingRecipeType("chestplate", IridiumGearRegistry.SocketedGearType.CHESTPLATE, IridiumGearRegistry.CHESTPLATES, RecipeCategory.COMBAT),
-            new IridiumSocketingRecipeType("scepter", IridiumGearRegistry.SocketedGearType.SCEPTER, IridiumGearRegistry.SCEPTERS, RecipeCategory.TOOLS),
+            new IridiumSocketingRecipeType("sword", SocketedGearType.SWORD, IridiumGearRegistry.SWORDS, RecipeCategory.COMBAT),
+            new IridiumSocketingRecipeType("pickaxe", SocketedGearType.PICKAXE, IridiumGearRegistry.PICKAXES, RecipeCategory.TOOLS),
+            new IridiumSocketingRecipeType("axe", SocketedGearType.AXE, IridiumGearRegistry.AXES, RecipeCategory.TOOLS),
+            new IridiumSocketingRecipeType("shovel", SocketedGearType.SHOVEL, IridiumGearRegistry.SHOVELS, RecipeCategory.TOOLS),
+            new IridiumSocketingRecipeType("hoe", SocketedGearType.HOE, IridiumGearRegistry.HOES, RecipeCategory.TOOLS),
+            new IridiumSocketingRecipeType("chestplate", SocketedGearType.CHESTPLATE, IridiumGearRegistry.CHESTPLATES, RecipeCategory.COMBAT),
+            new IridiumSocketingRecipeType("scepter", SocketedGearType.SCEPTER, IridiumGearRegistry.SCEPTERS, RecipeCategory.TOOLS),
     };
 
     public AkomiRecipeProvider(PackOutput output) {
@@ -111,9 +108,9 @@ public class AkomiRecipeProvider extends RecipeProvider {
         for (Socket socket : Socket.values())
             if (socket != Socket.NONE && socket.gearTypeFilter.test(recipeType.type)) {
                 SmithingTransformRecipeBuilder.smithing(
-                        Ingredient.of(socket.schematicSupplier.get()),
+                        Ingredient.of(socket.schematic()),
                         Ingredient.of(recipeType.finalItems().get(Socket.NONE).get()),
-                        Ingredient.of(socket.itemSupplier.get()),
+                        Ingredient.of(socket.item()),
                         recipeType.category(),
                         recipeType.finalItems().get(socket).get()
                 ).unlocks(
@@ -126,9 +123,12 @@ public class AkomiRecipeProvider extends RecipeProvider {
     private record IridiumPlatingRecipeType(String name, Item blueprint, Item finalItem, Item baseItem,
                                             Map<Integer, Supplier<Item>> partials, int itemPlatings,
                                             RecipeCategory category) {
+        IridiumPlatingRecipeType(String name, Item finalItem, Item baseItem, Map<Integer, Supplier<Item>> partials, int itemPlatings, RecipeCategory category) {
+            this(name, ItemRegistry.IRIDIUM_GEAR_BLUEPRINTS.get(name).get(), finalItem, baseItem, partials, itemPlatings, category);
+        }
     }
 
-    private record IridiumSocketingRecipeType(String name, IridiumGearRegistry.SocketedGearType type,
+    private record IridiumSocketingRecipeType(String name, SocketedGearType type,
                                               Map<Socket, Supplier<Item>> finalItems, RecipeCategory category) {
     }
 }

@@ -1,11 +1,11 @@
 package io.github.zygzaggaming.zygzagsmod.common.item.iridium.tool;
 
+import io.github.zygzaggaming.zygzagsmod.common.Config;
 import io.github.zygzaggaming.zygzagsmod.common.Main;
 import io.github.zygzaggaming.zygzagsmod.common.entity.PlayerAlliedSkeleton;
-import io.github.zygzaggaming.zygzagsmod.common.util.GeneralUtil;
-import io.github.zygzaggaming.zygzagsmod.common.Config;
 import io.github.zygzaggaming.zygzagsmod.common.item.iridium.ISocketable;
 import io.github.zygzaggaming.zygzagsmod.common.item.iridium.Socket;
+import io.github.zygzaggaming.zygzagsmod.common.util.GeneralUtil;
 import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;

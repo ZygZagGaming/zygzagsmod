@@ -2,11 +2,11 @@ package io.github.zygzaggaming.zygzagsmod.common.plugin.jei;
 
 import com.mojang.blaze3d.MethodsReturnNonnullByDefault;
 import io.github.zygzaggaming.zygzagsmod.common.Main;
+import io.github.zygzaggaming.zygzagsmod.common.item.iridium.Socket;
 import io.github.zygzaggaming.zygzagsmod.common.recipe.TransmutationRecipe;
 import io.github.zygzaggaming.zygzagsmod.common.registry.IridiumGearRegistry;
 import io.github.zygzaggaming.zygzagsmod.common.registry.ItemRegistry;
 import io.github.zygzaggaming.zygzagsmod.common.registry.RecipeTypeRegistry;
-import io.github.zygzaggaming.zygzagsmod.common.item.iridium.Socket;
 import mezz.jei.api.IModPlugin;
 import mezz.jei.api.JeiPlugin;
 import mezz.jei.api.recipe.category.IRecipeCategory;

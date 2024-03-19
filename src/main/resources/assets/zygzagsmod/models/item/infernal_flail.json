@@ -1,0 +1,14 @@
+{
+  "parent": "item/handheld_rod",
+  "textures": {
+    "layer0": "zygzagsmod:item/infernal_flail"
+  },
+  "overrides": [
+    {
+      "predicate": {
+        "custom_model_data": 1
+      },
+      "model": "zygzagsmod:item/infernal_flail_no_amber"
+    }
+  ]
+}

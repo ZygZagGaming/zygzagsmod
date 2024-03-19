@@ -45,7 +45,7 @@ public class EntityTypeRegistry extends AkomiRegistry<EntityType<?>> {
     );
     public static final Supplier<EntityType<BlazeSentry>> BLAZE_SENTRY = INSTANCE.register(
             "blaze_sentry",
-            () -> EntityType.Builder.<BlazeSentry>of(BlazeSentry::new, MobCategory.MONSTER)
+            () -> EntityType.Builder.of(BlazeSentry::new, MobCategory.MONSTER)
                     .fireImmune()
                     .sized(1f, 2.8f)
                     .build("blaze_sentry")
@@ -76,6 +76,15 @@ public class EntityTypeRegistry extends AkomiRegistry<EntityType<?>> {
                     .clientTrackingRange(10)
                     .updateInterval(Integer.MAX_VALUE)
                     .build("sphere_area_effect_cloud")
+    );
+    public static final Supplier<EntityType<FlailProjectile>> FLAIL_PROJECTILE = INSTANCE.register(
+            "flail_projectile",
+            () -> EntityType.Builder.<FlailProjectile>of(FlailProjectile::new, MobCategory.MISC)
+                    .fireImmune()
+                    .sized(0.6f, 0.6f)
+                    .clientTrackingRange(10)
+                    //.updateInterval(Integer.MAX_VALUE)
+                    .build("flail_projectile")
     );
     public EntityTypeRegistry(DeferredRegister<EntityType<?>> register) {
         super(register);

@@ -10,6 +10,7 @@
   "block.zygzagsmod.iridium_end_sand": "Iridium-Speckled End Sand",
   "block.zygzagsmod.suspicious_end_sand": "Suspicious End Sand",
   "block.zygzagsmod.sculk_jaw": "Sculk Jaw",
+  "block.zygzagsmod.coronal_amber": "Coronal Amber",
   "zygzagsmod.recipe.transmutation": "Transmutation",
   "entity.zygzagsmod.empowered_wither": "Empowered Wither",
   "entity.zygzagsmod.blaze_sentry": "Blaze Sentry",
@@ -67,6 +68,7 @@
   "block.zygzagsmod.raw_iridium_block": "Raw Iridium Block",
   "item.zygzagsmod.partial_iridium_hoe_1": "Iridium-Plated Netherite Hoe",
   "item.zygzagsmod.transmutation_charge": "Transmutation Charge",
+  "item.zygzagsmod.flail": "Infernal Flail",
   "container.cache": "Cache",
 
   "block.zygzagsmod.nether_quartz_glass": "Nether Quartz Glass",
@@ -290,5 +292,6 @@
   "attribute.name.generic.sprint_speed": "Sprint Speed",
   "attribute.name.generic.sprint_hunger_consumption": "Sprint Hunger Consumption",
   "attribute.name.generic.sprint_jump_hunger_consumption": "Sprint Jump Hunger Consumption",
-  "attribute.name.generic.armor_durability_reduction": "Armor Durability Reduction"
+  "attribute.name.generic.armor_durability_reduction": "Armor Durability Reduction",
+  "attribute.name.generic.flail_damage": "Flail Damage"
 }

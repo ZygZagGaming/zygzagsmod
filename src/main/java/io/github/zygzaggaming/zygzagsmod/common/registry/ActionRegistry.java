@@ -1,7 +1,7 @@
 package io.github.zygzaggaming.zygzagsmod.common.registry;
 
-import io.github.zygzaggaming.zygzagsmod.common.registry.base.CustomAkomiRegistry;
 import io.github.zygzaggaming.zygzagsmod.common.entity.animation.Action;
+import io.github.zygzaggaming.zygzagsmod.common.registry.base.CustomAkomiRegistry;
 import net.minecraft.core.Registry;
 import net.neoforged.bus.api.IEventBus;
 import software.bernie.geckolib.core.animation.RawAnimation;

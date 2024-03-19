@@ -1,6 +1,5 @@
 package io.github.zygzaggaming.zygzagsmod.common.entity;
 
-import io.github.zygzaggaming.zygzagsmod.common.registry.AttachmentTypeRegistry;
 import io.github.zygzaggaming.zygzagsmod.common.registry.EntityTypeRegistry;
 import io.github.zygzaggaming.zygzagsmod.common.registry.ParticleTypeRegistry;
 import io.github.zygzaggaming.zygzagsmod.common.util.ModUtil;

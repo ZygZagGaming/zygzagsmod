@@ -11,12 +11,14 @@ import io.github.zygzaggaming.zygzagsmod.common.item.iridium.armor.IridiumChestp
 import io.github.zygzaggaming.zygzagsmod.common.item.iridium.tool.IridiumAxeItem;
 import io.github.zygzaggaming.zygzagsmod.common.item.iridium.tool.IridiumHoeItem;
 import io.github.zygzaggaming.zygzagsmod.common.item.iridium.tool.IridiumSwordItem;
+import io.github.zygzaggaming.zygzagsmod.common.networking.packet.ServerboundPlayerLeftClickEmptyPacket;
 import io.github.zygzaggaming.zygzagsmod.common.registry.AttachmentTypeRegistry;
 import io.github.zygzaggaming.zygzagsmod.common.registry.AttributeRegistry;
 import io.github.zygzaggaming.zygzagsmod.common.registry.BlockRegistry;
 import io.github.zygzaggaming.zygzagsmod.common.registry.EnchantmentRegistry;
 import io.github.zygzaggaming.zygzagsmod.common.util.GeneralUtil;
 import io.github.zygzaggaming.zygzagsmod.common.util.ModUtil;
+import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.RegistryAccess;
@@ -76,6 +78,7 @@ import net.neoforged.neoforge.event.entity.item.ItemExpireEvent;
 import net.neoforged.neoforge.event.entity.living.*;
 import net.neoforged.neoforge.event.entity.player.CriticalHitEvent;
 import net.neoforged.neoforge.event.entity.player.PlayerEvent;
+import net.neoforged.neoforge.event.entity.player.PlayerInteractEvent;
 import net.neoforged.neoforge.event.level.BlockEvent;
 
 import java.util.HashMap;
@@ -570,4 +573,10 @@ public class EventHandler {
     }
 
     public static final ResourceKey<DamageType> OVERHEAT_DAMAGE_TYPE = ResourceKey.create(Registries.DAMAGE_TYPE, new ResourceLocation(Main.MODID, "overheat"));
+
+    @SubscribeEvent
+    public static void onSwing(final PlayerInteractEvent.LeftClickEmpty event) {
+        ServerboundPlayerLeftClickEmptyPacket packet = new ServerboundPlayerLeftClickEmptyPacket();
+        ((LocalPlayer) event.getEntity()).connection.send(packet);
+    }
 }

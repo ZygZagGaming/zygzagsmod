@@ -1,11 +1,7 @@
 package io.github.zygzaggaming.zygzagsmod.common.networking.handler;
 
-import io.github.zygzaggaming.zygzagsmod.common.Main;
-import io.github.zygzaggaming.zygzagsmod.common.entity.BlazeSentry;
-import io.github.zygzaggaming.zygzagsmod.common.networking.packet.ClientboundBlazeSentryRotationPacket;
 import io.github.zygzaggaming.zygzagsmod.common.networking.packet.ClientboundSelfOverheatUpdatePacket;
 import io.github.zygzaggaming.zygzagsmod.common.registry.AttachmentTypeRegistry;
-import net.minecraft.network.chat.Component;
 import net.neoforged.neoforge.network.handling.PlayPayloadContext;
 
 public class ClientboundSelfOverheatUpdatePacketHandler {

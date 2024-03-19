@@ -1,9 +1,9 @@
 package io.github.zygzaggaming.zygzagsmod.common.registry;
 
-import io.github.zygzaggaming.zygzagsmod.common.registry.base.AkomiRegistry;
 import io.github.zygzaggaming.zygzagsmod.common.block.BlessedSoilBlock;
 import io.github.zygzaggaming.zygzagsmod.common.block.GlowingSoilBlock;
 import io.github.zygzaggaming.zygzagsmod.common.block.StructurePlacerBlock;
+import io.github.zygzaggaming.zygzagsmod.common.registry.base.AkomiRegistry;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;

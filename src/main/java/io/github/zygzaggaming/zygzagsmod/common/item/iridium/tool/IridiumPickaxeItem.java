@@ -1,12 +1,12 @@
 package io.github.zygzaggaming.zygzagsmod.common.item.iridium.tool;
 
 import com.mojang.blaze3d.MethodsReturnNonnullByDefault;
+import io.github.zygzaggaming.zygzagsmod.common.Config;
+import io.github.zygzaggaming.zygzagsmod.common.item.iridium.ISocketable;
 import io.github.zygzaggaming.zygzagsmod.common.item.iridium.Socket;
 import io.github.zygzaggaming.zygzagsmod.common.recipe.TransmutationRecipe;
 import io.github.zygzaggaming.zygzagsmod.common.registry.MobEffectRegistry;
 import io.github.zygzaggaming.zygzagsmod.common.registry.RecipeTypeRegistry;
-import io.github.zygzaggaming.zygzagsmod.common.Config;
-import io.github.zygzaggaming.zygzagsmod.common.item.iridium.ISocketable;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;

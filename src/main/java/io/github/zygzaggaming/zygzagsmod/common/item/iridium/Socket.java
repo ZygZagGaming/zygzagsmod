@@ -2,8 +2,8 @@ package io.github.zygzaggaming.zygzagsmod.common.item.iridium;
 
 import com.mojang.blaze3d.FieldsAreNonnullByDefault;
 import com.mojang.blaze3d.MethodsReturnNonnullByDefault;
-import io.github.zygzaggaming.zygzagsmod.common.registry.IridiumGearRegistry;
 import io.github.zygzaggaming.zygzagsmod.common.registry.ItemRegistry;
+import io.github.zygzaggaming.zygzagsmod.common.registry.SocketedGearType;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Items;
 
@@ -15,28 +15,25 @@ import java.util.function.Supplier;
 @ParametersAreNonnullByDefault
 @FieldsAreNonnullByDefault
 public enum Socket {
-    NONE(() -> Items.AIR, () -> Items.AIR, 0xffffff),
-    DIAMOND(() -> Items.DIAMOND, ItemRegistry.DIAMOND_SOCKET_SCHEMATIC, 0x4aedd9),
-    EMERALD(() -> Items.EMERALD, ItemRegistry.EMERALD_SOCKET_SCHEMATIC, 0x41f384),
-    SKULL(() -> Items.SKELETON_SKULL, ItemRegistry.SKULL_SOCKET_SCHEMATIC, 0xd3d3d3),
-    WITHER_SKULL(() -> Items.WITHER_SKELETON_SKULL, ItemRegistry.WITHER_SKULL_SOCKET_SCHEMATIC, 0x515353),
-    AMETHYST(() -> Items.AMETHYST_SHARD, ItemRegistry.AMETHYST_SOCKET_SCHEMATIC, 0xcfa0f3);
+    NONE(() -> Items.AIR, 0xffffff),
+    DIAMOND(() -> Items.DIAMOND, 0x4aedd9),
+    EMERALD(() -> Items.EMERALD, 0x41f384),
+    SKULL(() -> Items.SKELETON_SKULL, 0xd3d3d3),
+    WITHER_SKULL(() -> Items.WITHER_SKELETON_SKULL, 0x515353),
+    AMETHYST(() -> Items.AMETHYST_SHARD, 0xcfa0f3);
 
     public final Supplier<Item> itemSupplier;
-    public final Supplier<Item> schematicSupplier;
     public final int color;
-    public final Predicate<IridiumGearRegistry.SocketedGearType> gearTypeFilter;
+    public final Predicate<SocketedGearType> gearTypeFilter;
 
-    Socket(Supplier<Item> itemSupplier, Supplier<Item> schematicSupplier, int color) {
+    Socket(Supplier<Item> itemSupplier, int color) {
         this.itemSupplier = itemSupplier;
-        this.schematicSupplier = schematicSupplier;
         this.color = color;
         this.gearTypeFilter = (it) -> true;
     }
 
-    Socket(Supplier<Item> itemSupplier, Supplier<Item> schematicSupplier, int color, Predicate<IridiumGearRegistry.SocketedGearType> gearTypeFilter) {
+    Socket(Supplier<Item> itemSupplier, int color, Predicate<SocketedGearType> gearTypeFilter) {
         this.itemSupplier = itemSupplier;
-        this.schematicSupplier = schematicSupplier;
         this.color = color;
         this.gearTypeFilter = gearTypeFilter;
     }
@@ -46,6 +43,10 @@ public enum Socket {
     }
 
     public Item schematic() {
-        return schematicSupplier.get();
+        return ItemRegistry.SOCKET_SCHEMATICS.get(this).get();
+    }
+
+    public String lowerName() {
+        return name().toLowerCase();
     }
 }
