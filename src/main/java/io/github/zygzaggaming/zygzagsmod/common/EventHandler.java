@@ -570,4 +570,9 @@ public class EventHandler {
     }
 
     public static final ResourceKey<DamageType> OVERHEAT_DAMAGE_TYPE = ResourceKey.create(Registries.DAMAGE_TYPE, new ResourceLocation(Main.MODID, "overheat"));
+
+    @SubscribeEvent
+    public static void serverTick(TickEvent.LevelTickEvent event) {
+        if (event.phase == TickEvent.Phase.END) event.level.setData(AttachmentTypeRegistry.LEVEL_TICK_COUNT_ATTACHMENT.get(), event.level.getData(AttachmentTypeRegistry.LEVEL_TICK_COUNT_ATTACHMENT.get()) + 1);
+    }
 }

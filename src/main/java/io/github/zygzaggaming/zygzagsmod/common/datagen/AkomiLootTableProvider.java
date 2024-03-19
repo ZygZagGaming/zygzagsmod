@@ -50,7 +50,8 @@ public class AkomiLootTableProvider extends LootTableProvider {
                 BlockWithItemRegistry.END_SAND.block(),
                 BlockWithItemRegistry.END_STONE_SWITCH.block(),
                 BlockWithItemRegistry.RAW_IRIDIUM_BLOCK.block(),
-                BlockItemEntityRegistry.RED_NETHER_BRICK_CACHE.block()
+                BlockItemEntityRegistry.RED_NETHER_BRICK_CACHE.block(),
+                BlockItemEntityRegistry.CITRINE.block()
         );
 
         public static final Map<Supplier<? extends Block>, Supplier<? extends Item>> DROP_OTHER = Map.of(

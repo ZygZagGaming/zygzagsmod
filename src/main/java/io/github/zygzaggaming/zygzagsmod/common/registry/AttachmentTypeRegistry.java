@@ -23,6 +23,11 @@ public class AttachmentTypeRegistry extends AkomiRegistry<AttachmentType<?>> {
             () -> AttachmentType.builder(() -> 0).serialize(Codec.INT).build()
     );
 
+    public static final Supplier<AttachmentType<Integer>> LEVEL_TICK_COUNT_ATTACHMENT = INSTANCE.register(
+            "level_tick_count",
+            () -> AttachmentType.builder(() -> 0).serialize(Codec.INT).build()
+    );
+
     public AttachmentTypeRegistry(DeferredRegister<AttachmentType<?>> register) {
         super(register);
     }

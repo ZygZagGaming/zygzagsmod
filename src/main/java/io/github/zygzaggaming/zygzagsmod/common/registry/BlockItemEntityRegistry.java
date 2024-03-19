@@ -1,14 +1,9 @@
 package io.github.zygzaggaming.zygzagsmod.common.registry;
 
-import io.github.zygzaggaming.zygzagsmod.common.block.CacheBlock;
-import io.github.zygzaggaming.zygzagsmod.common.block.MagmaticNetherBrickBlock;
-import io.github.zygzaggaming.zygzagsmod.common.block.SculkJawBlock;
-import io.github.zygzaggaming.zygzagsmod.common.block.SuspiciousEndSandBlock;
-import io.github.zygzaggaming.zygzagsmod.common.block.entity.CacheBlockEntity;
-import io.github.zygzaggaming.zygzagsmod.common.block.entity.CustomBrushableBlockEntity;
-import io.github.zygzaggaming.zygzagsmod.common.block.entity.MagmaticNetherBrickBlockEntity;
-import io.github.zygzaggaming.zygzagsmod.common.block.entity.SculkJawBlockEntity;
+import io.github.zygzaggaming.zygzagsmod.common.block.*;
+import io.github.zygzaggaming.zygzagsmod.common.block.entity.*;
 import io.github.zygzaggaming.zygzagsmod.common.registry.object.BlockItemEntitySupplier;
+import io.github.zygzaggaming.zygzagsmod.common.registry.object.BlockWithItemSupplier;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvents;
@@ -55,6 +50,12 @@ public class BlockItemEntityRegistry {
             "red_nether_brick_cache",
             () -> new CacheBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.RED_NETHER_BRICKS).strength(0.5f, 1f)),
             CacheBlockEntity::new
+    );
+
+    public static final BlockItemEntitySupplier<CitrineBlock, BlockItem, CitrineBlockEntity> CITRINE = INSTANCE.register(
+            "citrine",
+            () -> new CitrineBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.AMETHYST_BLOCK).isRedstoneConductor((a, b, c) -> false)),
+            CitrineBlockEntity::new
     );
 
     public <B extends Block, E extends BlockEntity> BlockItemEntitySupplier<B, BlockItem, E> register(String id, Supplier<B> blockSupplier, BlockEntityType.BlockEntitySupplier<E> beSupplier) {

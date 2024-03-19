@@ -41,6 +41,7 @@ public class AkomiItemModelProvider extends ItemModelProvider {
         makeBlock("nether_quartz_glass_stairs");
         makeBlock("girded_red_nether_bricks");
         makeBlock("crushed_red_nether_bricks");
+        makeBlock("citrine");
     }
 
     private void makeSpawnEgg(String entityName) {

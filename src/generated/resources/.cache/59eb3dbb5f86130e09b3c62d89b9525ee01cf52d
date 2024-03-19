@@ -1,6 +1,7 @@
-// 1.20.4	2023-12-31T15:38:06.577558	Loot Tables
+// 1.20.4	2024-03-18T11:36:13.2657074	Loot Tables
 2e7ab2529d359fcd4aa6c29cda16abdeb6878363 data/zygzagsmod/loot_tables/blocks/blessed_soil.json
 2c5ce403849d7e7a9ee650418cb74f8ca425c67c data/zygzagsmod/loot_tables/blocks/chiseled_red_nether_bricks.json
+12c534871823c974fd25d402ce86cd446b32a52a data/zygzagsmod/loot_tables/blocks/citrine.json
 b30d58dee6a92ba4aee5aba31714a8b0dce41ead data/zygzagsmod/loot_tables/blocks/cracked_red_nether_bricks.json
 d4a051b2a906fbda10e86ac4a9ee1ae3ed106f70 data/zygzagsmod/loot_tables/blocks/crushed_red_nether_bricks.json
 0ee66dc6d4d83e35d653ec5f07ab088f1c818cf6 data/zygzagsmod/loot_tables/blocks/end_sand.json

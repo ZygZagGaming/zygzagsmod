@@ -3,7 +3,7 @@ neo = "20.4.197"
 jei = "latest.release"
 geckolib = "latest.release"
 hearty-api = "1.0.0"
-hearty-mod = "1.0.0"
+hearty-mod = "1.0.3"
 neogradle-userdev = "7.0.+"
 neogradle-mixin = "7.0.+"
 

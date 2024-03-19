@@ -1,0 +1,14 @@
+{
+  "variants": {
+    "alive=false": [
+      {
+        "model": "minecraft:block/redstone_lamp"
+      }
+    ],
+    "alive=true": [
+      {
+        "model": "minecraft:block/redstone_lamp_on"
+      }
+    ]
+  }
+}
