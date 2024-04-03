@@ -1,6 +1,7 @@
 package io.github.zygzaggaming.zygzagsmod.common.registry;
 
 import io.github.zygzaggaming.zygzagsmod.common.entity.*;
+import io.github.zygzaggaming.zygzagsmod.common.entity.assembly.ShurikenAssembly;
 import io.github.zygzaggaming.zygzagsmod.common.registry.base.AkomiRegistry;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.world.entity.EntityType;
@@ -85,6 +86,27 @@ public class EntityTypeRegistry extends AkomiRegistry<EntityType<?>> {
                     .clientTrackingRange(10)
                     //.updateInterval(Integer.MAX_VALUE)
                     .build("flail_projectile")
+    );
+    public static final Supplier<EntityType<ShurikenAssembly>> SHURIKEN_ASSEMBLY_A = INSTANCE.register(
+            "shuriken_assembly_a",
+            () -> EntityType.Builder.<ShurikenAssembly>of((type, level) -> new ShurikenAssembly(type, level, false, false, 3, 4), MobCategory.MISC)
+                    .fireImmune()
+                    .sized(2.3f, 0.25f)
+                    .build("shuriken_assembly_a")
+    );
+    public static final Supplier<EntityType<ShurikenAssembly>> SHURIKEN_ASSEMBLY_B = INSTANCE.register(
+            "shuriken_assembly_b",
+            () -> EntityType.Builder.<ShurikenAssembly>of((type, level) -> new ShurikenAssembly(type, level, true, true, 3, 4), MobCategory.MISC)
+                    .fireImmune()
+                    .sized(2.3f, 0.25f)
+                    .build("shuriken_assembly_b")
+    );
+    public static final Supplier<EntityType<ShurikenAssembly>> SHURIKEN_ASSEMBLY_C = INSTANCE.register(
+            "shuriken_assembly_c",
+            () -> EntityType.Builder.<ShurikenAssembly>of((type, level) -> new ShurikenAssembly(type, level, true, false, 5, 4), MobCategory.MISC)
+                    .fireImmune()
+                    .sized(2.3f, 0.25f)
+                    .build("shuriken_assembly_c")
     );
     public EntityTypeRegistry(DeferredRegister<EntityType<?>> register) {
         super(register);

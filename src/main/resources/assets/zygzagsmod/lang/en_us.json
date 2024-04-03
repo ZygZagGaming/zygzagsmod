@@ -14,6 +14,7 @@
   "zygzagsmod.recipe.transmutation": "Transmutation",
   "entity.zygzagsmod.empowered_wither": "Empowered Wither",
   "entity.zygzagsmod.blaze_sentry": "Blaze Sentry",
+  "entity.zygzagsmod.shuriken_assembly": "Shuriken Assembly",
   "item.minecraft.potion.effect.rage": "Potion of Rage",
   "item.minecraft.splash_potion.effect.rage": "Splash Potion of Rage",
   "item.minecraft.lingering_potion.effect.rage": "Lingering Potion of Rage",
@@ -232,9 +233,9 @@
 
   "death.attack.sculk_jaw": "%1$s was chomped to death",
   "death.attack.sculk_jaw.player": "%1$s was chomped by %2$s",
-
   "death.attack.overheat": "%1$s was incinerated",
   "death.attack.overheat.player": "%1$s was incinerated by %2$s",
+  "death.attack.shuriken_assembly": "%1$s got battered by %2$s",
 
   "painting.zygzagsmod.golem.title": "Golem",
   "painting.zygzagsmod.golem.author": "BLAZEDShard",
