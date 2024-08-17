@@ -14,6 +14,8 @@ import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.tags.DamageTypeTags;
+import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
@@ -107,6 +109,25 @@ public class BlazeSentry extends Monster implements GeoAnimatable, ActingEntity<
         if (!level().isClientSide()) {
             entityData.set(DATA_TARGET, Optional.ofNullable(entity).map(Entity::getUUID));
             windDownTicks = 100;
+        }
+    }
+
+    private static boolean isReflectedFireball(DamageSource entity) {
+        return entity.getDirectEntity() instanceof LargeFireball && entity.getEntity() instanceof Player;
+    }
+
+    @Override
+    public boolean isInvulnerableTo(DamageSource fireball) {
+        return this.isInvulnerable() && !fireball.is(DamageTypeTags.BYPASSES_INVULNERABILITY) || !isReflectedFireball(fireball) && super.isInvulnerableTo(fireball);
+    }
+
+    @Override
+    public boolean hurt(DamageSource fireball, float p_32731_) {
+        if (isReflectedFireball(fireball)) {
+            super.hurt(fireball, 1000.0F);
+            return true;
+        } else {
+            return !this.isInvulnerableTo(fireball) && super.hurt(fireball, p_32731_);
         }
     }
 
@@ -290,7 +311,7 @@ public class BlazeSentry extends Monster implements GeoAnimatable, ActingEntity<
     public class FireBigGoal extends Goal {
         public static final EnumSet<Goal.Flag> flags = EnumSet.of(Flag.LOOK, Flag.TARGET);
         public static final int windup = 25, windDown = 53 - windup;
-        public static final double power = 4;
+        public static final double power = 2.5;
         int ticks = 0;
 
         @Override

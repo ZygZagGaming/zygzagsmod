@@ -273,6 +273,8 @@
   "advancements.nether.find_hive.description": "Enter the Blaze Hive",
   "advancements.nether.magmatic_damage.title": "Watch Your Step",
   "advancements.nether.magmatic_damage.description": "Take damage from a block of Magmatic Nether Bricks",
+  "advancements.nether.home_run.title": "Home Run",
+  "advancements.nether.home_run.description": "Parry a Blaze Sentry’s Fireball Back",
 
   "item.zygzagsmod.iridium_golem_spawn_egg": "Iridium Golem Spawn Egg",
   "item.zygzagsmod.blaze_sentry_spawn_egg": "Blaze Sentry Spawn Egg",
