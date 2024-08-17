@@ -2,7 +2,7 @@
   "description": {
     "translate": "enchantment.zygzagsmod.cooldown"
   },
-  "supported_items": "#zygzagsmod:iridium_gear",
+  "supported_items": "#zygzagsmod:enchantable/cooldown",
   "weight": 20,
   "max_level": 4,
   "min_cost": {

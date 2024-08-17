@@ -23,7 +23,7 @@ import java.util.List;
 public class IridiumHoeItem extends HoeItem implements ISocketable {
     Socket socket;
 
-    public IridiumHoeItem(Tier tier, int damage, float speed, Properties properties, Socket socket) {
+    public IridiumHoeItem(Tier tier, Properties properties, Socket socket) {
         super(tier, properties);
         this.socket = socket;
     }

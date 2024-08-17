@@ -16,7 +16,7 @@ public class PartialIridiumSwordItem extends SwordItem {
     int numberOfPlates;
     int maxNumOfPlates;
 
-    public PartialIridiumSwordItem(Tier tier, int damage, float speed, Properties properties, int maxNumOfPlates, int numberOfPlates) {
+    public PartialIridiumSwordItem(Tier tier, Properties properties, int maxNumOfPlates, int numberOfPlates) {
         super(tier, properties);
         this.numberOfPlates = numberOfPlates;
         this.maxNumOfPlates = maxNumOfPlates;

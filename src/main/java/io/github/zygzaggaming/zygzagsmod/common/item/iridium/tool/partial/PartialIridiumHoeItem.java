@@ -16,7 +16,7 @@ public class PartialIridiumHoeItem extends HoeItem {
     int numberOfPlates;
     int maxNumOfPlates;
 
-    public PartialIridiumHoeItem(Tier tier, int damage, float speed, Properties properties, int maxNumOfPlates, int numberOfPlates) {
+    public PartialIridiumHoeItem(Tier tier, Properties properties, int maxNumOfPlates, int numberOfPlates) {
         super(tier, properties);
         this.numberOfPlates = numberOfPlates;
         this.maxNumOfPlates = maxNumOfPlates;

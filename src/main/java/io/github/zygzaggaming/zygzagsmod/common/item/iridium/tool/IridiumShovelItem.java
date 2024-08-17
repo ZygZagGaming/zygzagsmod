@@ -41,7 +41,7 @@ import java.util.stream.Collectors;
 public class IridiumShovelItem extends ShovelItem implements ISocketable {
     Socket socket;
 
-    public IridiumShovelItem(Tier tier, float damage, float speed, Properties properties, Socket socket) {
+    public IridiumShovelItem(Tier tier, Properties properties, Socket socket) {
         super(tier, properties);
         this.socket = socket;
     }

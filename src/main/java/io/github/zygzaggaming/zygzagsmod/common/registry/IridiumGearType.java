@@ -7,6 +7,7 @@ import io.github.zygzaggaming.zygzagsmod.common.item.iridium.tool.partial.Partia
 import io.github.zygzaggaming.zygzagsmod.common.item.iridium.tool.partial.PartialIridiumSwordItem;
 import io.github.zygzaggaming.zygzagsmod.common.tier.IridiumToolTier;
 import net.minecraft.world.item.ArmorItem;
+import net.minecraft.world.item.SwordItem;
 
 public enum IridiumGearType {
     HELMET(5, (properties, platings) -> new PartialIridiumArmorItem(
@@ -39,33 +40,25 @@ public enum IridiumGearType {
     )),
     SWORD(2, (properties, platings) -> new PartialIridiumSwordItem(
             IridiumToolTier.getToolTier(platings, 2),
-            3,
-            -2.4F,
-            properties,
+            properties.attributes(SwordItem.createAttributes(IridiumToolTier.getToolTier(platings, 2), 3, -2.4f)),
             2,
             platings // theres only one but whatever
     )),
     PICKAXE(3, (properties, platings) -> new PartialIridiumPickaxeItem(
             IridiumToolTier.getToolTier(platings, 3),
-            1,
-            -2.8F,
-            properties,
+            properties.attributes(SwordItem.createAttributes(IridiumToolTier.getToolTier(platings, 2), 1, -2.8f)),
             3,
             platings
     )),
     AXE(3, (properties, platings) -> new PartialIridiumAxeItem(
             IridiumToolTier.getToolTier(platings, 3),
-            5,
-            -3.0F,
-            properties,
+            properties.attributes(SwordItem.createAttributes(IridiumToolTier.getToolTier(platings, 2), 5, -3)),
             3,
             platings
     )),
     HOE(2, (properties, platings) -> new PartialIridiumHoeItem(
             IridiumToolTier.getToolTier(platings, 2),
-            -1,
-            0.0F,
-            properties,
+            properties.attributes(SwordItem.createAttributes(IridiumToolTier.getToolTier(platings, 2), -1, 0)),
             2,
             platings
     )),

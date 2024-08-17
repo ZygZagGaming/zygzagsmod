@@ -1,6 +1,7 @@
 {
   "values": [
-    "#zygzagsmod:iridium_armor"
+    "#zygzagsmod:iridium_armor",
+    "#zygzagsmod:partial_iridium_armor"
   ],
   "override": false
 }

@@ -11,7 +11,7 @@ import net.neoforged.neoforge.common.loot.LootModifier;
 import org.jetbrains.annotations.NotNull;
 
 public class WitherPickNoDropModifier extends LootModifier {
-    public static MapCodec<WitherPickNoDropModifier> CODEC = RecordCodecBuilder.create((RecordCodecBuilder.Instance<WitherPickNoDropModifier> inst) -> codecStart(inst).apply(inst, WitherPickNoDropModifier::new)).fieldOf("wither_pick_no_drop");
+    public static MapCodec<WitherPickNoDropModifier> CODEC = RecordCodecBuilder.mapCodec((RecordCodecBuilder.Instance<WitherPickNoDropModifier> inst) -> codecStart(inst).apply(inst, WitherPickNoDropModifier::new));
 
     /**
      * Constructs a LootModifier.

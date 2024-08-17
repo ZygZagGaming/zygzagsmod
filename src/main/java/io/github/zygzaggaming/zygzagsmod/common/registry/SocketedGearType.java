@@ -4,52 +4,35 @@ import io.github.zygzaggaming.zygzagsmod.common.item.iridium.Socket;
 import io.github.zygzaggaming.zygzagsmod.common.item.iridium.armor.IridiumChestplateItem;
 import io.github.zygzaggaming.zygzagsmod.common.item.iridium.tool.*;
 import io.github.zygzaggaming.zygzagsmod.common.tier.IridiumToolTier;
+import net.minecraft.world.item.AxeItem;
+import net.minecraft.world.item.HoeItem;
+import net.minecraft.world.item.PickaxeItem;
+import net.minecraft.world.item.SwordItem;
 
 public enum SocketedGearType {
     SWORD((properties, socket) -> new IridiumSwordItem(
-            socket == Socket.DIAMOND ? IridiumToolTier.DIAMOND_SOCKETED :
-                    socket == Socket.EMERALD ? IridiumToolTier.EMERALD_SOCKETED :
-                            IridiumToolTier.FULL,
-            3,
-            -2.4f,
-            properties,
+            getTierForSocket(socket),
+            properties.attributes(SwordItem.createAttributes(IridiumToolTier.FULL, 3, -2.4f)),
             socket
     )),
     PICKAXE((properties, socket) -> new IridiumPickaxeItem(
-            socket == Socket.DIAMOND ? IridiumToolTier.DIAMOND_SOCKETED_PICK :
-                    socket == Socket.EMERALD ? IridiumToolTier.EMERALD_SOCKETED :
-                            socket == Socket.WITHER_SKULL ? IridiumToolTier.WITHER_SOCKETED_PICK :
-                                    IridiumToolTier.FULL,
-            1,
-            -2.8f,
-            properties,
+            socket == Socket.WITHER_SKULL ? IridiumToolTier.WITHER_SOCKETED_PICK : getTierForSocket(socket),
+            properties.attributes(PickaxeItem.createAttributes(IridiumToolTier.FULL, 1, -2.8f)),
             socket
     )),
     AXE((properties, socket) -> new IridiumAxeItem(
-            socket == Socket.DIAMOND ? IridiumToolTier.DIAMOND_SOCKETED :
-                    socket == Socket.EMERALD ? IridiumToolTier.EMERALD_SOCKETED :
-                            IridiumToolTier.FULL,
-            socket == Socket.DIAMOND ? 4.5f : 5,
-            -3,
-            properties,
+            getTierForSocket(socket),
+            properties.attributes(AxeItem.createAttributes(IridiumToolTier.FULL, socket == Socket.DIAMOND ? 4.5f : 5, -3.1f)),
             socket
     )),
     SHOVEL((properties, socket) -> new IridiumShovelItem(
-            socket == Socket.DIAMOND ? IridiumToolTier.DIAMOND_SOCKETED :
-                    socket == Socket.EMERALD ? IridiumToolTier.EMERALD_SOCKETED :
-                            IridiumToolTier.FULL,
-            1.5f,
-            -3,
-            properties,
+            getTierForSocket(socket),
+            properties.attributes(IridiumShovelItem.createAttributes(IridiumToolTier.FULL, 1.5f, -3f)),
             socket
     )),
     HOE((properties, socket) -> new IridiumHoeItem(
-            socket == Socket.DIAMOND ? IridiumToolTier.DIAMOND_SOCKETED :
-                    socket == Socket.EMERALD ? IridiumToolTier.EMERALD_SOCKETED :
-                            IridiumToolTier.FULL,
-            socket == Socket.WITHER_SKULL ? 3 : -1,
-            socket == Socket.WITHER_SKULL ? -2.4f : 0,
-            properties,
+            getTierForSocket(socket),
+            properties.attributes(HoeItem.createAttributes(IridiumToolTier.FULL, socket == Socket.WITHER_SKULL ? 3 : -4f, socket == Socket.WITHER_SKULL ? -2.4f : 0)),
             socket
     )),
     CHESTPLATE((properties, socket) -> new IridiumChestplateItem(
@@ -65,5 +48,9 @@ public enum SocketedGearType {
 
     SocketedGearType(IridiumGearRegistry.SocketedItemFactory factory) {
         itemFactory = factory;
+    }
+
+    public static IridiumToolTier getTierForSocket(Socket socket) {
+        return socket == Socket.DIAMOND ? IridiumToolTier.DIAMOND_SOCKETED : socket == Socket.EMERALD ? IridiumToolTier.EMERALD_SOCKETED : IridiumToolTier.FULL;
     }
 }

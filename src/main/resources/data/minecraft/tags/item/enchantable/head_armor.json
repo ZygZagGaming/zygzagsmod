@@ -1,6 +1,7 @@
 {
     "values": [
-        "#zygzagsmod:iridium_helmets"
+        "#zygzagsmod:partial_iridium_helmets",
+        "zygzagsmod:iridium_helmet"
     ],
     "override": false
 }

@@ -1,6 +1,7 @@
 {
     "values": [
-        "#zygzagsmod:iridium_leggings"
+        "#zygzagsmod:partial_iridium_leggings",
+        "zygzagsmod:iridium_leggings"
     ],
     "override": false
 }

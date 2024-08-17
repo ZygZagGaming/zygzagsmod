@@ -36,7 +36,7 @@ import java.util.List;
 public class IridiumAxeItem extends AxeItem implements ISocketable {
     Socket socket;
 
-    public IridiumAxeItem(Tier tier, float damage, float speed, Properties properties, Socket socket) {
+    public IridiumAxeItem(Tier tier, Properties properties, Socket socket) {
         super(tier, properties);
         this.socket = socket;
     }

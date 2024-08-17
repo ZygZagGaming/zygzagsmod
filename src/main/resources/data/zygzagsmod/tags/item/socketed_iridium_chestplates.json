@@ -1,0 +1,10 @@
+{
+    "values": [
+        "zygzagsmod:amethyst_socketed_iridium_chestplate",
+        "zygzagsmod:diamond_socketed_iridium_chestplate",
+        "zygzagsmod:emerald_socketed_iridium_chestplate",
+        "zygzagsmod:skull_socketed_iridium_chestplate",
+        "zygzagsmod:wither_skull_socketed_iridium_chestplate"
+    ],
+    "override": false
+}

@@ -1,5 +1,6 @@
 {
     "values": [
+        "#zygzagsmod:partial_iridium_axes",
         "#zygzagsmod:iridium_axes"
     ],
     "override": false

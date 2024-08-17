@@ -1,0 +1,10 @@
+{
+    "values": [
+        "zygzagsmod:amethyst_socketed_iridium_scepter",
+        "zygzagsmod:diamond_socketed_iridium_scepter",
+        "zygzagsmod:emerald_socketed_iridium_scepter",
+        "zygzagsmod:skull_socketed_iridium_scepter",
+        "zygzagsmod:wither_skull_socketed_iridium_scepter"
+    ],
+    "override": false
+}

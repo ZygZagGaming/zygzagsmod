@@ -2,29 +2,37 @@
   "type": "zygzagsmod:executioner",
   "conditions": [
     {
-      "condition": "minecraft:entity_properties",
-      "entity": "this",
-      "predicate": {
-        "type": "minecraft:player"
-      }
-    },
-    {
-      "condition": "minecraft:entity_properties",
-      "entity": "killer",
-      "predicate": {
-        "equipment": {
-          "mainhand": {
-            "items": [
-              "zygzagsmod:skull_socketed_iridium_axe"
-            ]
+      "condition": "minecraft:all_of",
+      "terms": [
+        {
+          "condition": "minecraft:entity_properties",
+          "entity": "this",
+          "predicate": {
+            "type": "minecraft:player"
           }
+        },
+        {
+          "condition": "minecraft:killed_by_player"
+        },
+        {
+          "condition": "minecraft:entity_properties",
+          "entity": "killer",
+          "predicate": {
+            "equipment": {
+              "mainhand": {
+                "items": [
+                  "zygzagsmod:skull_socketed_iridium_axe"
+                ]
+              }
+            }
+          }
+        },
+        {
+          "condition": "minecraft:random_chance_with_looting",
+          "chance": 0.1,
+          "looting_multiplier": 0.05
         }
-      }
-    },
-    {
-      "condition": "minecraft:random_chance_with_looting",
-      "chance": 0.1,
-      "looting_multiplier": 0.05
+      ]
     }
   ],
   "item_to_drop": "minecraft:player_head"

@@ -17,7 +17,7 @@ public class PartialIridiumPickaxeItem extends PickaxeItem {
     int numberOfPlates;
     int maxNumOfPlates;
 
-    public PartialIridiumPickaxeItem(Tier tier, int damage, float speed, Properties properties, int maxNumOfPlates, int numberOfPlates) {
+    public PartialIridiumPickaxeItem(Tier tier, Properties properties, int maxNumOfPlates, int numberOfPlates) {
         super(tier, properties);
         this.numberOfPlates = numberOfPlates;
         this.maxNumOfPlates = maxNumOfPlates;

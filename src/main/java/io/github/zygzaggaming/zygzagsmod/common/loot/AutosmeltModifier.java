@@ -18,7 +18,7 @@ import org.jetbrains.annotations.NotNull;
 import java.util.Optional;
 
 public class AutosmeltModifier extends LootModifier {
-    public static MapCodec<AutosmeltModifier> CODEC = RecordCodecBuilder.create((RecordCodecBuilder.Instance<AutosmeltModifier> it) -> codecStart(it).apply(it, AutosmeltModifier::new)).fieldOf("autosmelt");
+    public static MapCodec<AutosmeltModifier> CODEC = RecordCodecBuilder.mapCodec((RecordCodecBuilder.Instance<AutosmeltModifier> it) -> codecStart(it).apply(it, AutosmeltModifier::new));
 
     /**
      * Constructs a LootModifier.

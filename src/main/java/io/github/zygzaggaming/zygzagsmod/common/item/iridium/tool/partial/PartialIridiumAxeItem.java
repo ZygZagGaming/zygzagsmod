@@ -17,7 +17,7 @@ public class PartialIridiumAxeItem extends AxeItem {
     int maxNumOfPlates;
 
     //TODO: fix dmg and speed
-    public PartialIridiumAxeItem(Tier tier, int damage, float speed, Properties properties, int maxNumOfPlates, int numberOfPlates) {
+    public PartialIridiumAxeItem(Tier tier, Properties properties, int maxNumOfPlates, int numberOfPlates) {
         super(tier, properties);
         this.numberOfPlates = numberOfPlates;
         this.maxNumOfPlates = maxNumOfPlates;

@@ -25,7 +25,7 @@ import javax.annotation.ParametersAreNonnullByDefault;
 @MethodsReturnNonnullByDefault
 public class ExecutionerModifier extends LootModifier {
 
-    public static MapCodec<ExecutionerModifier> CODEC = RecordCodecBuilder.create(
+    public static MapCodec<ExecutionerModifier> CODEC = RecordCodecBuilder.mapCodec(
             (RecordCodecBuilder.Instance<ExecutionerModifier> inst) -> codecStart(inst)
                     .and(
                             inst.group(
@@ -38,7 +38,7 @@ public class ExecutionerModifier extends LootModifier {
                             inst,
                             ExecutionerModifier::new
                     )
-    ).fieldOf("executioner");
+    );
 
     Item itemOut;
 
@@ -55,10 +55,10 @@ public class ExecutionerModifier extends LootModifier {
     @NotNull
     @Override
     protected ObjectArrayList<ItemStack> doApply(ObjectArrayList<ItemStack> generatedLoot, LootContext context) {
-        if (!generatedLoot.contains(Items.WITHER_SKELETON_SKULL.getDefaultInstance())) { // if it ain't already have skull
+        if (!generatedLoot.contains(Items.WITHER_SKELETON_SKULL.getDefaultInstance())) {
             ItemStack item = itemOut.getDefaultInstance();
             Entity entity = context.getParam(LootContextParams.THIS_ENTITY);
-            if (entity instanceof Player player) item.set(DataComponents.PROFILE, new ResolvableProfile(player.getGameProfile()));
+            if (entity instanceof Player player && item.is(Items.PLAYER_HEAD)) item.set(DataComponents.PROFILE, new ResolvableProfile(player.getGameProfile()));
             generatedLoot.add(item);
         }
         return generatedLoot;

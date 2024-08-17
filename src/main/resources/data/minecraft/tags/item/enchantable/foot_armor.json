@@ -1,6 +1,7 @@
 {
     "values": [
-        "#zygzagsmod:iridium_boots"
+        "#zygzagsmod:partial_iridium_boots",
+        "zygzagsmod:iridium_boots"
     ],
     "override": false
 }
