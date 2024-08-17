@@ -7,13 +7,14 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.CropBlock;
+import net.minecraft.world.level.block.FarmBlock;
 import net.minecraft.world.level.block.state.BlockState;
 
 import javax.annotation.ParametersAreNonnullByDefault;
 
 @ParametersAreNonnullByDefault
 @MethodsReturnNonnullByDefault
-public class BlessedSoilBlock extends CustomFarmland {
+public class BlessedSoilBlock extends FarmBlock {
     public BlessedSoilBlock(Properties prop) {
         super(prop);
     }

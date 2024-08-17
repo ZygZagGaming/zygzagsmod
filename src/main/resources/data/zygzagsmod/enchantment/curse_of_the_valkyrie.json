@@ -1,0 +1,44 @@
+{
+  "description": {
+    "translate": "enchantment.zygzagsmod.curse_of_the_valkyrie"
+  },
+  "supported_items": "#minecraft:enchantable/sharp_weapon",
+  "weight": 3,
+  "max_level": 1,
+  "min_cost": {
+    "base": 30,
+    "per_level_above_first": 0
+  },
+  "max_cost": {
+    "base": 30,
+    "per_level_above_first": 0
+  },
+  "anvil_cost": 8,
+  "slots": [
+    "mainhand"
+  ],
+  "effects": {
+    "minecraft:attributes": [
+      {
+        "attribute": "zygzagsmod:player.crit_damage",
+        "amount": {
+          "type": "minecraft:linear",
+          "base": 0.2,
+          "per_level_above_first": 0.4
+        },
+        "operation": "add_multiplied_base",
+        "id": "zygzagsmod:curse_of_the_valyrie"
+      },
+      {
+        "attribute": "minecraft:generic.attack_speed",
+        "amount": {
+          "type": "minecraft:linear",
+          "base": 0.2,
+          "per_level_above_first": 0.4
+        },
+        "operation": "add_multiplied_base",
+        "id": "zygzagsmod:curse_of_the_valyrie"
+      }
+    ]
+  }
+}

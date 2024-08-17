@@ -1,0 +1,30 @@
+{
+  "description": {
+    "translate": "enchantment.zygzagsmod.shatter"
+  },
+  "supported_items": "#minecraft:enchantable/sharp_weapon",
+  "weight": 5,
+  "max_level": 1,
+  "min_cost": {
+    "base": 28,
+    "per_level_above_first": 0
+  },
+  "max_cost": {
+    "base": 30,
+    "per_level_above_first": 0
+  },
+  "anvil_cost": 16,
+  "slots": [
+    "mainhand"
+  ],
+  "effects": {
+    "minecraft:attributes": [
+      {
+        "attribute": "zygzagsmod:generic.armor_durability_reduction",
+        "amount": 2,
+        "operation": "add_multiplied_total",
+        "id": "zygzagsmod:shatter"
+      }
+    ]
+  }
+}

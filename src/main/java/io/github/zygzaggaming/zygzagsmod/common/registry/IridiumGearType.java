@@ -5,34 +5,33 @@ import io.github.zygzaggaming.zygzagsmod.common.item.iridium.tool.partial.Partia
 import io.github.zygzaggaming.zygzagsmod.common.item.iridium.tool.partial.PartialIridiumHoeItem;
 import io.github.zygzaggaming.zygzagsmod.common.item.iridium.tool.partial.PartialIridiumPickaxeItem;
 import io.github.zygzaggaming.zygzagsmod.common.item.iridium.tool.partial.PartialIridiumSwordItem;
-import io.github.zygzaggaming.zygzagsmod.common.tier.IridiumArmorMaterial;
 import io.github.zygzaggaming.zygzagsmod.common.tier.IridiumToolTier;
 import net.minecraft.world.item.ArmorItem;
 
 public enum IridiumGearType {
     HELMET(5, (properties, platings) -> new PartialIridiumArmorItem(
-            IridiumArmorMaterial.getArmorForPartial(platings, 5),
+            ArmorMaterialRegistry.getArmorForPartial(platings, 5),
             ArmorItem.Type.HELMET,
             properties,
             5,
             platings
     )),
     CHESTPLATE(8, (properties, platings) -> new PartialIridiumArmorItem(
-            IridiumArmorMaterial.getArmorForPartial(platings, 8),
+            ArmorMaterialRegistry.getArmorForPartial(platings, 8),
             ArmorItem.Type.CHESTPLATE,
             properties,
             8,
             platings
     )),
     LEGGINGS(7, (properties, platings) -> new PartialIridiumArmorItem(
-            IridiumArmorMaterial.getArmorForPartial(platings, 7),
+            ArmorMaterialRegistry.getArmorForPartial(platings, 7),
             ArmorItem.Type.LEGGINGS,
             properties,
             7,
             platings
     )),
     BOOTS(4, (properties, platings) -> new PartialIridiumArmorItem(
-            IridiumArmorMaterial.getArmorForPartial(platings, 4),
+            ArmorMaterialRegistry.getArmorForPartial(platings, 4),
             ArmorItem.Type.BOOTS,
             properties,
             4,

@@ -29,7 +29,7 @@ import javax.annotation.ParametersAreNonnullByDefault;
 public class TransmutationCategory implements IRecipeCategory<TransmutationRecipe> {
     public static final String TEXTURE_GUI_PATH = "textures/jei/gui/";
     public static final String TEXTURE_GUI_VANILLA = TEXTURE_GUI_PATH + "gui_vanilla.png";
-    public static final ResourceLocation RECIPE_GUI_VANILLA = new ResourceLocation(ModIds.JEI_ID, TEXTURE_GUI_VANILLA);
+    public static final ResourceLocation RECIPE_GUI_VANILLA = ResourceLocation.fromNamespaceAndPath(ModIds.JEI_ID,  TEXTURE_GUI_VANILLA);
     public static final RecipeType<TransmutationRecipe> TRANSMUTATION_RECIPE_TYPE = RecipeType.create("zygzagsmod", "transmutation", TransmutationRecipe.class);
     private final IJeiHelpers helpers;
     private final IGuiHelper guiHelper;

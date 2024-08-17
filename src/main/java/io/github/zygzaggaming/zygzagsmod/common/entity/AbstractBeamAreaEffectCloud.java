@@ -38,9 +38,9 @@ public abstract class AbstractBeamAreaEffectCloud extends AreaEffectCloud {
     }
 
     @Override
-    protected void defineSynchedData() {
-        super.defineSynchedData();
-        entityData.define(DATA_DIRECTION, Direction.UP);
+    protected void defineSynchedData(SynchedEntityData.Builder builder) {
+        super.defineSynchedData(builder);
+        builder.define(DATA_DIRECTION, Direction.UP);
     }
 
     public void addParticles() {

@@ -8,6 +8,7 @@ import net.minecraft.core.Vec3i;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
@@ -28,10 +29,10 @@ import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.Nullable;
 import software.bernie.geckolib.animatable.GeoEntity;
-import software.bernie.geckolib.core.animatable.instance.AnimatableInstanceCache;
-import software.bernie.geckolib.core.animation.AnimatableManager;
-import software.bernie.geckolib.core.animation.AnimationController;
-import software.bernie.geckolib.core.animation.RawAnimation;
+import software.bernie.geckolib.animatable.instance.AnimatableInstanceCache;
+import software.bernie.geckolib.animation.AnimatableManager;
+import software.bernie.geckolib.animation.AnimationController;
+import software.bernie.geckolib.animation.RawAnimation;
 import software.bernie.geckolib.util.GeckoLibUtil;
 
 import javax.annotation.ParametersAreNonnullByDefault;
@@ -42,7 +43,7 @@ import java.util.List;
 public class ShurikenAssembly extends Entity implements GeoEntity {
     public static final RawAnimation IDLE = RawAnimation.begin().thenLoop("animation.shuriken_assembly.idle"),
             SPIN_UP = RawAnimation.begin().thenPlay("animation.shuriken_assembly.spin_up").thenLoop("animation.shuriken_assembly.fast");
-    public static final ResourceKey<DamageType> DAMAGE_TYPE = ResourceKey.create(Registries.DAMAGE_TYPE, new ResourceLocation(Main.MODID, "shuriken_assembly"));
+    public static final ResourceKey<DamageType> DAMAGE_TYPE = ResourceKey.create(Registries.DAMAGE_TYPE, ResourceLocation.fromNamespaceAndPath(Main.MODID,  "shuriken_assembly"));
     private @Nullable Player target = null;
     private final AnimationController<ShurikenAssembly> controller = new AnimationController<>(this, "main", 0, (animState) -> animState.setAndContinue(target == null ? IDLE : SPIN_UP));
     private final AnimatableInstanceCache instanceCache = GeckoLibUtil.createInstanceCache(this);
@@ -62,7 +63,7 @@ public class ShurikenAssembly extends Entity implements GeoEntity {
     }
 
     @Override
-    protected void defineSynchedData() {
+    protected void defineSynchedData(SynchedEntityData.Builder builder) {
 
     }
 
@@ -174,7 +175,7 @@ public class ShurikenAssembly extends Entity implements GeoEntity {
             verticalCollisionBelow = verticalCollision && delta.y < 0;
             minorHorizontalCollision = horizontalCollision && isHorizontalCollisionMinor(delta);
 
-            setOnGroundWithKnownMovement(verticalCollisionBelow, delta);
+            setOnGroundWithMovement(verticalCollisionBelow, delta);
             BlockPos onPos = getOnPos();
             BlockState onState = level().getBlockState(onPos);
             checkFallDamage(delta.y, onGround(), onState, onPos);

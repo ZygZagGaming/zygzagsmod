@@ -4,6 +4,7 @@ import io.github.zygzaggaming.zygzagsmod.common.Main;
 import io.github.zygzaggaming.zygzagsmod.common.registry.EntityTypeRegistry;
 import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.core.registries.Registries;
+import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvents;
@@ -27,7 +28,7 @@ import javax.annotation.ParametersAreNonnullByDefault;
 @ParametersAreNonnullByDefault
 @MethodsReturnNonnullByDefault
 public class FlailProjectile extends Projectile {
-    public static final ResourceKey<DamageType> FLAIL_DMG_TYPE = ResourceKey.create(Registries.DAMAGE_TYPE, new ResourceLocation(Main.MODID, "flail"));
+    public static final ResourceKey<DamageType> FLAIL_DMG_TYPE = ResourceKey.create(Registries.DAMAGE_TYPE, ResourceLocation.fromNamespaceAndPath(Main.MODID,  "flail"));
     public double flatDamage, damagePerBlockPerTick;
     public FlailProjectile(EntityType<? extends Projectile> type, Level world) {
         super(type, world);
@@ -44,7 +45,7 @@ public class FlailProjectile extends Projectile {
     }
 
     @Override
-    protected void defineSynchedData() { }
+    protected void defineSynchedData(SynchedEntityData.Builder builder) { }
 
     @Override
     public void tick() {

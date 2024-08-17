@@ -9,6 +9,7 @@ import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.alchemy.Potion;
+import net.minecraft.world.item.alchemy.PotionContents;
 import net.minecraft.world.level.Level;
 
 import javax.annotation.ParametersAreNonnullByDefault;
@@ -31,7 +32,7 @@ public class BeamAreaEffectCloud extends AbstractBeamAreaEffectCloud {
 
     @Override
     public void afflict(LivingEntity living) {
-        for (MobEffectInstance instance : getPotion().getEffects()) {
+        for (MobEffectInstance instance : potionContents.getAllEffects()) {
             living.addEffect(new MobEffectInstance(instance.getEffect(), instance.getAmplifier(), instance.getDuration()));
         }
     }
@@ -46,11 +47,11 @@ public class BeamAreaEffectCloud extends AbstractBeamAreaEffectCloud {
         return 2 * 20;
     }
 
-    public static void spawn(Level world, BlockPos pos, Direction direction, Potion potion) {
+    public static void spawn(Level world, BlockPos pos, Direction direction, PotionContents potion) {
         BeamAreaEffectCloud cloud = new BeamAreaEffectCloud(world);
         cloud.setDirection(direction);
         cloud.setPos(pos.getX() + 0.5 + direction.getNormal().getX(), pos.getY() + 0.5 + direction.getNormal().getY(), pos.getZ() + 0.5 + direction.getNormal().getZ());
-        cloud.setPotion(potion);
+        cloud.setPotionContents(potion);
         world.addFreshEntity(cloud);
     }
 }

@@ -6,13 +6,14 @@ import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.FarmBlock;
 import net.minecraft.world.level.block.state.BlockState;
 
 import javax.annotation.ParametersAreNonnullByDefault;
 
 @ParametersAreNonnullByDefault
 @MethodsReturnNonnullByDefault
-public class GlowingSoilBlock extends CustomFarmland {
+public class GlowingSoilBlock extends FarmBlock {
     public GlowingSoilBlock(Properties prop) {
         super(prop);
     }

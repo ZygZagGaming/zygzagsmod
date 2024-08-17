@@ -3,7 +3,6 @@ package io.github.zygzaggaming.zygzagsmod.common.registry;
 import io.github.zygzaggaming.zygzagsmod.common.item.iridium.Socket;
 import io.github.zygzaggaming.zygzagsmod.common.item.iridium.armor.IridiumChestplateItem;
 import io.github.zygzaggaming.zygzagsmod.common.item.iridium.tool.*;
-import io.github.zygzaggaming.zygzagsmod.common.tier.IridiumArmorMaterial;
 import io.github.zygzaggaming.zygzagsmod.common.tier.IridiumToolTier;
 
 public enum SocketedGearType {
@@ -54,9 +53,9 @@ public enum SocketedGearType {
             socket
     )),
     CHESTPLATE((properties, socket) -> new IridiumChestplateItem(
-            socket == Socket.DIAMOND ? IridiumArmorMaterial.DIAMOND_SOCKETED :
-                    socket == Socket.EMERALD ? IridiumArmorMaterial.EMERALD_SOCKETED :
-                            IridiumArmorMaterial.IRIDIUM,
+            socket == Socket.DIAMOND ? ArmorMaterialRegistry.DIAMOND_SOCKETED :
+                    socket == Socket.EMERALD ? ArmorMaterialRegistry.EMERALD_SOCKETED :
+                            ArmorMaterialRegistry.IRIDIUM,
             properties,
             socket
     )),

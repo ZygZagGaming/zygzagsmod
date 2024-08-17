@@ -6,9 +6,9 @@ import net.minecraft.resources.ResourceLocation;
 import software.bernie.geckolib.model.GeoModel;
 
 public class IridiumGolemGeoModel extends GeoModel<IridiumGolem> {
-    private static final ResourceLocation modelResource = new ResourceLocation(Main.MODID, "geo/iridium_golem.geo.json");
-    private static final ResourceLocation textureResource = new ResourceLocation(Main.MODID, "textures/entity/iridium_golem.png");
-    private static final ResourceLocation animationResource = new ResourceLocation(Main.MODID, "animations/iridium_golem.animation.json");
+    private static final ResourceLocation modelResource = ResourceLocation.fromNamespaceAndPath(Main.MODID,  "geo/iridium_golem.geo.json");
+    private static final ResourceLocation textureResource = ResourceLocation.fromNamespaceAndPath(Main.MODID,  "textures/entity/iridium_golem.png");
+    private static final ResourceLocation animationResource = ResourceLocation.fromNamespaceAndPath(Main.MODID,  "animations/iridium_golem.animation.json");
 
     @Override
     public ResourceLocation getModelResource(IridiumGolem animatable) {

@@ -1,7 +1,7 @@
 package io.github.zygzaggaming.zygzagsmod.common.structure;
 
 import com.mojang.datafixers.util.Pair;
-import com.mojang.serialization.Codec;
+import com.mojang.serialization.MapCodec;
 import io.github.zygzaggaming.zygzagsmod.common.Main;
 import io.github.zygzaggaming.zygzagsmod.common.block.entity.StructurePlacerBlockEntity;
 import io.github.zygzaggaming.zygzagsmod.common.registry.BlockRegistry;
@@ -28,7 +28,7 @@ import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.chunk.ChunkAccess;
 import net.minecraft.world.level.chunk.ChunkGenerator;
 import net.minecraft.world.level.chunk.ChunkGeneratorStructureState;
-import net.minecraft.world.level.chunk.ChunkStatus;
+import net.minecraft.world.level.chunk.status.ChunkStatus;
 import net.minecraft.world.level.levelgen.Heightmap;
 import net.minecraft.world.level.levelgen.structure.*;
 import net.minecraft.world.level.levelgen.structure.pieces.StructurePieceSerializationContext;
@@ -45,7 +45,7 @@ import java.util.*;
 @ParametersAreNonnullByDefault
 @MethodsReturnNonnullByDefault
 public class CairnArrangementStructure extends Structure {
-    public static final Codec<CairnArrangementStructure> CODEC = simpleCodec(CairnArrangementStructure::new);
+    public static final MapCodec<CairnArrangementStructure> CODEC = simpleCodec(CairnArrangementStructure::new);
 
     public CairnArrangementStructure(StructureSettings settings) {
         super(settings);
@@ -116,9 +116,9 @@ public class CairnArrangementStructure extends Structure {
         public void postProcess(WorldGenLevel world, StructureManager manager, ChunkGenerator chunkGen, RandomSource rng, BoundingBox bounds, ChunkPos chunk, BlockPos origin) {
             if (world instanceof ServerLevel serverLevel) place(serverLevel, manager, chunkGen, rng, bounds, chunk, origin);
             else {
-                world.setBlock(origin, BlockRegistry.STRUCTURE_PLACER.get().defaultBlockState(), 3);
+                world.setBlock(origin, BlockRegistry.STRUCTURE_PLACER.value().defaultBlockState(), 3);
                 if (world.getBlockEntity(origin) instanceof StructurePlacerBlockEntity be) // should always be
-                    be.structure = world.registryAccess().registryOrThrow(Registries.STRUCTURE).get(new ResourceLocation(Main.MODID, "cairn_arrangement"));
+                    be.structure = world.registryAccess().registryOrThrow(Registries.STRUCTURE).get(ResourceLocation.fromNamespaceAndPath(Main.MODID,  "cairn_arrangement"));
             }
         }
 
@@ -253,7 +253,10 @@ public class CairnArrangementStructure extends Structure {
             int treasureOffset = groundLevelOffsetFromPosition(world, treasurePosition, 80) - 3;
             treasurePosition = treasurePosition.above(treasureOffset);
             world.setBlockAndUpdate(treasurePosition, Blocks.BARREL.defaultBlockState().setValue(BlockStateProperties.FACING, Direction.UP));
-            ((BarrelBlockEntity) world.getBlockEntity(treasurePosition)).setLootTable(new ResourceLocation(Main.MODID, "chests/buried_cairn_treasure"));
+            BlockPos finalTreasurePosition = treasurePosition;
+            world.registryAccess().registry(Registries.LOOT_TABLE).ifPresent(lootTableRegistry -> {
+                ((BarrelBlockEntity) Objects.requireNonNull(world.getBlockEntity(finalTreasurePosition))).setLootTable(lootTableRegistry.getResourceKey(Objects.requireNonNull(lootTableRegistry.get(ResourceLocation.fromNamespaceAndPath(Main.MODID, "chests/buried_cairn_treasure")))).orElseThrow());
+            });
         }
 
 //        public static void placeCairnMapCircle(Map<BlockPos, BlockState> structure, BlockPos origin, RandomSource rng, ServerLevel world, @Nullable HolderSet<Structure> cairnLocatedTag) {
@@ -490,7 +493,7 @@ public class CairnArrangementStructure extends Structure {
     @Nullable
     private static Pair<BlockPos, Holder<Structure>> getStructureGeneratingAt(Set<Holder<Structure>> structures, LevelReader world, StructureManager manager, boolean flag, StructurePlacement placement, ChunkPos pos) {
         for (Holder<Structure> structureHolder : structures) {
-            StructureCheckResult structureCheckResult = manager.checkStructurePresence(pos, structureHolder.value(), flag);
+            StructureCheckResult structureCheckResult = manager.checkStructurePresence(pos, structureHolder.value(), placement, flag);
             if (structureCheckResult != StructureCheckResult.START_NOT_PRESENT) {
                 if (!flag && structureCheckResult == StructureCheckResult.START_PRESENT) {
                     return Pair.of(placement.getLocatePos(pos), structureHolder);

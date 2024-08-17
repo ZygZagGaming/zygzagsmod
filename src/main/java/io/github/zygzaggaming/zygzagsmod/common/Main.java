@@ -4,7 +4,6 @@ import com.mojang.logging.LogUtils;
 import io.github.zygzaggaming.zygzagsmod.common.capability.PlayerSightCache;
 import io.github.zygzaggaming.zygzagsmod.common.entity.animation.Action;
 import io.github.zygzaggaming.zygzagsmod.common.entity.animation.TransitionAction;
-import io.github.zygzaggaming.zygzagsmod.common.item.iridium.ISocketable;
 import io.github.zygzaggaming.zygzagsmod.common.registry.*;
 import io.github.zygzaggaming.zygzagsmod.common.registry.base.AkomiRegistry;
 import net.minecraft.core.Registry;
@@ -15,11 +14,7 @@ import net.minecraft.sounds.SoundEvents;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.entity.EntityType;
-import net.minecraft.world.item.AxeItem;
-import net.minecraft.world.item.BrushItem;
 import net.minecraft.world.item.CreativeModeTabs;
-import net.minecraft.world.item.SwordItem;
-import net.minecraft.world.item.enchantment.EnchantmentCategory;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.SoundType;
@@ -27,7 +22,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.BlockSetType;
 import net.minecraft.world.level.levelgen.structure.Structure;
 import net.neoforged.bus.api.IEventBus;
-import net.neoforged.fml.ModLoadingContext;
+import net.neoforged.fml.ModContainer;
 import net.neoforged.fml.common.Mod;
 import net.neoforged.fml.config.ModConfig;
 import net.neoforged.fml.event.lifecycle.FMLClientSetupEvent;
@@ -43,26 +38,22 @@ import java.util.stream.Stream;
 
 @Mod(Main.MODID)
 public class Main {
-
-    public static final EnchantmentCategory COOLDOWN_CATEGORY = EnchantmentCategory.create("cooldown", (item) -> item instanceof ISocketable socketable && socketable.hasCooldown());
-    public static final EnchantmentCategory BRUSH_CATEGORY = EnchantmentCategory.create("brush", (item) -> item instanceof BrushItem);
-    public static final EnchantmentCategory SWORD_OR_AXE = EnchantmentCategory.create("sword_or_axe", (item) -> item instanceof SwordItem || item instanceof AxeItem);
-    public static final EnchantmentCategory AXE = EnchantmentCategory.create("axe", (item) -> item instanceof AxeItem);
     public static final String MODID = "zygzagsmod";
     @SuppressWarnings("unused")
     public static final Logger LOGGER = LogUtils.getLogger();
-    public static final TagKey<Block> NEEDS_IRIDIUM_TOOL_TAG = BlockTags.create(new ResourceLocation("zygzagsmod:needs_iridium_tool"));
-    public static final TagKey<Block> VEGETATION_TAG = BlockTags.create(new ResourceLocation("zygzagsmod:vegetation"));
-    //public static final TagKey<EntityType<?>> VILLAGER_HATED = TagKey.create(Registries.ENTITY_TYPE, new ResourceLocation("zygzagsmod:villager_hated"));
-    public static final TagKey<Block> VEINMINEABLE = TagKey.create(Registries.BLOCK, new ResourceLocation("zygzagsmod:veinmineable"));
-    //public static final TagKey<Block> NETHER_QUARTZ_GLASS = TagKey.create(Registries.BLOCK, new ResourceLocation("zygzagsmod:nether_quartz_glass"));
-    public static final TagKey<Block> SCULK_VEIN_LIKE = TagKey.create(BuiltInRegistries.BLOCK.key(), new ResourceLocation("zygzagsmod:sculk_vein_like"));
-    public static final TagKey<Block> REPLACEABLE_BY_CAIRN = TagKey.create(BuiltInRegistries.BLOCK.key(), new ResourceLocation("zygzagsmod:replaceable_by_cairn"));
-    public static final TagKey<Block> WORLD_CONTAINERS = TagKey.create(BuiltInRegistries.BLOCK.key(), new ResourceLocation("zygzagsmod:world_containers"));
-    public static final TagKey<EntityType<?>> BOSS_TAG = TagKey.create(Registries.ENTITY_TYPE, new ResourceLocation("zygzagsmod:bosses"));
-    public static final TagKey<EntityType<?>> SCULK_JAW_IMMUNE = TagKey.create(Registries.ENTITY_TYPE, new ResourceLocation("zygzagsmod:sculk_jaw_immune"));
+    public static final TagKey<Block> NEEDS_IRIDIUM_TOOL_TAG = BlockTags.create(ResourceLocation.parse("zygzagsmod:needs_iridium_tool"));
+    public static final TagKey<Block> INCORRECT_FOR_IRIDIUM_TOOL_TAG = BlockTags.create(ResourceLocation.parse("zygzagsmod:incorrect_for_iridium_tool"));
+    public static final TagKey<Block> VEGETATION_TAG = BlockTags.create(ResourceLocation.parse("zygzagsmod:vegetation"));
+    //public static final TagKey<EntityType<?>> VILLAGER_HATED = TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.parse("zygzagsmod:villager_hated"));
+    public static final TagKey<Block> VEINMINEABLE = TagKey.create(Registries.BLOCK, ResourceLocation.parse("zygzagsmod:veinmineable"));
+    //public static final TagKey<Block> NETHER_QUARTZ_GLASS = TagKey.create(Registries.BLOCK, ResourceLocation.parse("zygzagsmod:nether_quartz_glass"));
+    public static final TagKey<Block> SCULK_VEIN_LIKE = TagKey.create(BuiltInRegistries.BLOCK.key(), ResourceLocation.parse("zygzagsmod:sculk_vein_like"));
+    public static final TagKey<Block> REPLACEABLE_BY_CAIRN = TagKey.create(BuiltInRegistries.BLOCK.key(), ResourceLocation.parse("zygzagsmod:replaceable_by_cairn"));
+    public static final TagKey<Block> WORLD_CONTAINERS = TagKey.create(BuiltInRegistries.BLOCK.key(), ResourceLocation.parse("zygzagsmod:world_containers"));
+    public static final TagKey<EntityType<?>> BOSS_TAG = TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.parse("zygzagsmod:bosses"));
+    public static final TagKey<EntityType<?>> SCULK_JAW_IMMUNE = TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.parse("zygzagsmod:sculk_jaw_immune"));
 
-    public static final TagKey<Structure> CAIRN_BASIC = TagKey.create(Registries.STRUCTURE, new ResourceLocation("zygzagsmod:cairn/basic"));
+    public static final TagKey<Structure> CAIRN_BASIC = TagKey.create(Registries.STRUCTURE, ResourceLocation.parse("zygzagsmod:cairn/basic"));
 
     public static final UUID SPRINGS_ENCHANTMENT_MODIFIER_UUID = UUID.fromString("488b16bb-d01c-49bb-adf2-714c230d035f");
     public static final UUID STEADY_ENCHANTMENT_MODIFIER_UUID = UUID.fromString("4c0789ca-3380-416b-8d3e-723b24d272c2");
@@ -71,7 +62,7 @@ public class Main {
     public static final UUID CRITICAL_ENCHANTMENT_CRIT_DAMAGE_MODIFIER_UUID = UUID.fromString("218fd817-a62a-4911-b1a0-7d5789d6f923");
     public static final UUID COTV_ENCHANTMENT_CRIT_DAMAGE_MODIFIER_UUID = UUID.fromString("f7ec1ea1-ab1a-4679-9a22-d6ea95f0e1b2");
     public static final UUID COTV_ENCHANTMENT_ATTACK_SPEED_MODIFIER_UUID = UUID.fromString("997231b1-3775-43f8-a4e9-5c35307fc50e");
-    public static final UUID SPRINT_SPEED_ATTRIBUTE_MOVEMENT_SPEED_MODIFIER_UUID = UUID.fromString("5c8f65f0-903e-4af4-ba04-7ab20dea2a44");
+    public static final ResourceLocation SPRINT_SPEED_ATTRIBUTE_MOVEMENT_SPEED_MODIFIER_ID = ResourceLocation.fromNamespaceAndPath(MODID, "sprint_speed_attribute");
     public static final UUID SPRINT_ENCHANTMENT_SPRINT_SPEED_MODIFIER_UUID = UUID.fromString("92cfc16e-65b4-4c09-90d3-1e226562fe1c");
     public static final UUID SPRINT_ENCHANTMENT_SPRINT_HUNGER_CONSUMPTION_MODIFIER_UUID = UUID.fromString("33e11794-56e2-4e54-b83b-af12df29549c");
     public static final UUID SPRINT_ENCHANTMENT_SPRINT_JUMP_HUNGER_CONSUMPTION_MODIFIER_UUID = UUID.fromString("9f93b995-da40-4674-be20-58ef794e2827");
@@ -122,11 +113,11 @@ public class Main {
             BlockItemEntityRegistry.SCULK_JAW.getDefaultBlockState(), 2
     );
 
-    public Main(IEventBus modEventBus) {
+    public Main(IEventBus modEventBus, ModContainer modContainer) {
         modEventBus.addListener(this::commonSetup);
         modEventBus.addListener(this::clientSetup);
-        BuiltInRegistries.BLOCK.addAlias(new ResourceLocation(MODID, "red_nether_brick_pillar"), new ResourceLocation(MODID, "girded_red_nether_bricks"));
-        BuiltInRegistries.ITEM.addAlias(new ResourceLocation(MODID, "red_nether_brick_pillar"), new ResourceLocation(MODID, "girded_red_nether_bricks"));
+        BuiltInRegistries.BLOCK.addAlias(ResourceLocation.fromNamespaceAndPath(MODID, "red_nether_brick_pillar"), ResourceLocation.fromNamespaceAndPath(MODID,  "girded_red_nether_bricks"));
+        BuiltInRegistries.ITEM.addAlias(ResourceLocation.fromNamespaceAndPath(MODID, "red_nether_brick_pillar"), ResourceLocation.fromNamespaceAndPath(MODID,  "girded_red_nether_bricks"));
 
         AkomiRegistry.register(modEventBus);
 
@@ -134,7 +125,7 @@ public class Main {
 
         modEventBus.addListener(this::addCreative);
 
-        ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, Config.SPEC);
+        modContainer.registerConfig(ModConfig.Type.COMMON, Config.SPEC);
     }
 
     public static Registry<Action> actionRegistry() {

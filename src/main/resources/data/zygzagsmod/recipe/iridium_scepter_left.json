@@ -1,0 +1,17 @@
+{
+  "type": "crafting_shaped",
+  "pattern": [
+    " P ",
+    "PP ",
+    "  P"
+  ],
+  "key": {
+    "P": {
+      "item": "zygzagsmod:iridium_plating"
+    }
+  },
+  "result": {
+    "id": "zygzagsmod:iridium_scepter",
+    "count": 1
+  }
+}

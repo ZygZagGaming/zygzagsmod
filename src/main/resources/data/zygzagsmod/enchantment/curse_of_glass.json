@@ -1,0 +1,36 @@
+{
+  "description": {
+    "translate": "enchantment.zygzagsmod.curse_of_glass"
+  },
+  "supported_items": "#minecraft:enchantable/chest_armor",
+  "weight": 3,
+  "max_level": 1,
+  "min_cost": {
+    "base": 15,
+    "per_level_above_first": 0
+  },
+  "max_cost": {
+    "base": 30,
+    "per_level_above_first": 0
+  },
+  "anvil_cost": 12,
+  "slots": [
+    "chest"
+  ],
+  "effects": {
+    "minecraft:attributes": [
+      {
+        "attribute": "minecraft:generic.max_health",
+        "amount": -8,
+        "operation": "add_value",
+        "id": "zygzagsmod:curse_of_glass"
+      },
+      {
+        "attribute": "minecraft:generic.attack_damage",
+        "amount": 2,
+        "operation": "add_multiplied_total",
+        "id": "zygzagsmod:curse_of_glass"
+      }
+    ]
+  }
+}

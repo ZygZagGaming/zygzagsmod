@@ -28,9 +28,9 @@ import net.minecraft.world.level.pathfinder.Path;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.Nullable;
-import software.bernie.geckolib.core.animatable.instance.AnimatableInstanceCache;
-import software.bernie.geckolib.core.animation.AnimatableManager;
-import software.bernie.geckolib.core.animation.RawAnimation;
+import software.bernie.geckolib.animatable.instance.AnimatableInstanceCache;
+import software.bernie.geckolib.animation.AnimatableManager;
+import software.bernie.geckolib.animation.RawAnimation;
 import software.bernie.geckolib.util.GeckoLibUtil;
 
 import javax.annotation.ParametersAreNonnullByDefault;
@@ -68,7 +68,7 @@ public class IridiumGolem extends AbstractGolem implements NeutralMob, ActingEnt
     }
 
     public static AttributeSupplier.Builder createAttributes() {
-        return Mob.createMobAttributes().add(Attributes.MAX_HEALTH, 100.0D).add(Attributes.MOVEMENT_SPEED, 0.12).add(Attributes.KNOCKBACK_RESISTANCE, 1.0D).add(Attributes.ATTACK_DAMAGE, 15.0D);
+        return Mob.createMobAttributes().add(Attributes.MAX_HEALTH, 100.0D).add(Attributes.MOVEMENT_SPEED, 0.12).add(Attributes.KNOCKBACK_RESISTANCE, 1.0D).add(Attributes.ATTACK_DAMAGE, 15.0D).add(Attributes.STEP_HEIGHT, 1.2f);
     }
 
     protected void registerGoals() {
@@ -80,12 +80,12 @@ public class IridiumGolem extends AbstractGolem implements NeutralMob, ActingEnt
     }
 
     @Override
-    protected void defineSynchedData() {
-        super.defineSynchedData();
-        entityData.define(DATA_REMAINING_ANGER_TIME, 0);
-        entityData.define(DATA_MIND_STATE, MindState.IDLE);
-        entityData.define(DATA_TICKS_REMAINING_IN_ANIMATION, 0);
-        entityData.define(DATA_ANIMATOR_STATE, new Actor.State(
+    protected void defineSynchedData(SynchedEntityData.Builder builder) {
+        super.defineSynchedData(builder);
+        builder.define(DATA_REMAINING_ANGER_TIME, 0);
+        builder.define(DATA_MIND_STATE, MindState.IDLE);
+        builder.define(DATA_TICKS_REMAINING_IN_ANIMATION, 0);
+        builder.define(DATA_ANIMATOR_STATE, new Actor.State(
                 ActionRegistry.IridiumGolem.IDLE_BASE.get(),
                 ActionRegistry.IridiumGolem.IDLE_BASE.get(),
                 null,
@@ -216,11 +216,6 @@ public class IridiumGolem extends AbstractGolem implements NeutralMob, ActingEnt
     @Override
     public double getTick(Object o) {
         return tickCount;
-    }
-
-    @Override
-    public float getStepHeight() {
-        return 1.2f;
     }
 
     @Override

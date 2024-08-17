@@ -3,27 +3,25 @@ package io.github.zygzaggaming.zygzagsmod.common.recipe;
 
 import com.mojang.blaze3d.MethodsReturnNonnullByDefault;
 import com.mojang.serialization.Codec;
+import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import io.github.zygzaggaming.zygzagsmod.common.registry.RecipeSerializerRegistry;
 import io.github.zygzaggaming.zygzagsmod.common.registry.RecipeTypeRegistry;
-import net.minecraft.core.RegistryAccess;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.core.registries.BuiltInRegistries;
-import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.network.RegistryFriendlyByteBuf;
+import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.SimpleContainer;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.crafting.Ingredient;
-import net.minecraft.world.item.crafting.Recipe;
-import net.minecraft.world.item.crafting.RecipeSerializer;
-import net.minecraft.world.item.crafting.RecipeType;
+import net.minecraft.world.item.crafting.*;
 import net.minecraft.world.level.Level;
 
 import javax.annotation.ParametersAreNonnullByDefault;
 
 @MethodsReturnNonnullByDefault
 @ParametersAreNonnullByDefault
-public class TransmutationRecipe implements Recipe<SimpleContainer> {
+public class TransmutationRecipe implements Recipe<SingleRecipeInput> {
     Ingredient inItem;
     Item outItem;
     double rate;
@@ -35,12 +33,12 @@ public class TransmutationRecipe implements Recipe<SimpleContainer> {
     }
 
     @Override
-    public boolean matches(SimpleContainer holder, Level world) {
+    public boolean matches(SingleRecipeInput holder, Level world) {
         return inItem.test(holder.getItem(0));
     }
 
     @Override
-    public ItemStack assemble(SimpleContainer holder, RegistryAccess access) {
+    public ItemStack assemble(SingleRecipeInput holder, HolderLookup.Provider provider) {
         int count = holder.getItem(0).getCount();
         double random = (count * rate) % 1;
         int newCount = (int) (count * rate) + (Math.random() <= random ? 1 : 0);
@@ -53,7 +51,7 @@ public class TransmutationRecipe implements Recipe<SimpleContainer> {
     }
 
     @Override
-    public ItemStack getResultItem(RegistryAccess access) {
+    public ItemStack getResultItem(HolderLookup.Provider provider) {
         return outItem.getDefaultInstance();
     }
 
@@ -80,21 +78,27 @@ public class TransmutationRecipe implements Recipe<SimpleContainer> {
     }
 
     public static class TransmutationSerializer implements RecipeSerializer<TransmutationRecipe> {
+        public static final StreamCodec<RegistryFriendlyByteBuf, TransmutationRecipe> STREAM_CODEC = StreamCodec.of(
+                (buf, recipe) -> {
+                    ResourceLocation id = BuiltInRegistries.ITEM.getKey(recipe.outItem);
+                    buf.writeUtf(id.toString());
+                    Ingredient.CONTENTS_STREAM_CODEC.encode(buf, recipe.inItem);
+                    buf.writeDouble(recipe.rate);
+                },
+                (buf) -> {
+                    Item item = BuiltInRegistries.ITEM.get(ResourceLocation.parse(buf.readUtf()));
+                    return new TransmutationRecipe(
+                            Ingredient.CONTENTS_STREAM_CODEC.decode(buf),
+                            item,
+                            buf.readDouble()
+                    );
+                }
+        );
         @Override
-        public TransmutationRecipe fromNetwork(FriendlyByteBuf buf) {
-            Item item = BuiltInRegistries.ITEM.get(new ResourceLocation(buf.readUtf()));
-            return new TransmutationRecipe(
-                    Ingredient.fromNetwork(buf),
-                    item,
-                    buf.readDouble()
-            );
-        }
-
-        @Override
-        public Codec<TransmutationRecipe> codec() {
-            return RecordCodecBuilder.create(instance ->
+        public MapCodec<TransmutationRecipe> codec() {
+            return RecordCodecBuilder.mapCodec((RecordCodecBuilder.Instance<TransmutationRecipe> instance) ->
                     instance.group(
-                            Ingredient.VANILLA_CODEC.fieldOf("inItem").forGetter(TransmutationRecipe::inItem),
+                            Ingredient.CODEC.fieldOf("inItem").forGetter(TransmutationRecipe::inItem),
                             BuiltInRegistries.ITEM.byNameCodec().fieldOf("outItem").forGetter(TransmutationRecipe::outItem),
                             Codec.DOUBLE.fieldOf("rate").forGetter(TransmutationRecipe::rate)
                     ).apply(instance, TransmutationRecipe::new)
@@ -102,11 +106,8 @@ public class TransmutationRecipe implements Recipe<SimpleContainer> {
         }
 
         @Override
-        public void toNetwork(FriendlyByteBuf buf, TransmutationRecipe recipe) {
-            ResourceLocation id = BuiltInRegistries.ITEM.getKey(recipe.outItem);
-            buf.writeUtf(id.toString());
-            recipe.inItem.toNetwork(buf);
-            buf.writeDouble(recipe.rate);
+        public StreamCodec<RegistryFriendlyByteBuf, TransmutationRecipe> streamCodec() {
+            return STREAM_CODEC;
         }
     }
 

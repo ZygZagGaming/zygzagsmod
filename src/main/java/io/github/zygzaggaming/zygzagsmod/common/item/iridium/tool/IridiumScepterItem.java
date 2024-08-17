@@ -5,6 +5,7 @@ import io.github.zygzaggaming.zygzagsmod.common.entity.HomingWitherSkull;
 import io.github.zygzaggaming.zygzagsmod.common.item.iridium.ISocketable;
 import io.github.zygzaggaming.zygzagsmod.common.item.iridium.Socket;
 import net.minecraft.MethodsReturnNonnullByDefault;
+import net.minecraft.core.component.DataComponents;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvents;
@@ -16,6 +17,7 @@ import net.minecraft.world.InteractionResultHolder;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.ExperienceOrb;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.item.ItemEntity;
@@ -26,14 +28,13 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.TooltipFlag;
-import net.minecraft.world.item.alchemy.PotionUtils;
+import net.minecraft.world.item.alchemy.PotionContents;
 import net.minecraft.world.item.alchemy.Potions;
 import net.minecraft.world.item.trading.MerchantOffer;
 import net.minecraft.world.item.trading.MerchantOffers;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.AABB;
 
-import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.List;
 
@@ -66,13 +67,12 @@ public class IridiumScepterItem extends Item implements ISocketable {
                 aabb = new AABB(x - 20, y - 20, z - 20, x + 20, y + 20, z + 20);
                 List<ItemEntity> items = world.getEntities(EntityType.ITEM, aabb, (v) -> true);
                 for (ItemEntity v : items) {
-                    if (v.getItem().is(ItemTags.create(new ResourceLocation("zygzagsmod:diamond_scepter_consumable")))) {
+                    if (v.getItem().is(ItemTags.create(ResourceLocation.parse("zygzagsmod:diamond_scepter_consumable")))) {
                         int amount = v.getItem().getCount() / 8;
                         ExperienceOrb orb = new ExperienceOrb(world, v.getX(), v.getY(), v.getZ(), amount);
                         world.addFreshEntity(orb);
                         v.kill();
-                        item.hurtAndBreak(1, player, (p) -> {
-                        });
+                        item.hurtAndBreak(1, player, EquipmentSlot.MAINHAND);
                     }
                 }
             }
@@ -86,8 +86,7 @@ public class IridiumScepterItem extends Item implements ISocketable {
                         MerchantOffer offer = offers.get(i);
                         while (offer.isOutOfStock()) {
                             offer.increaseUses();
-                            item.hurtAndBreak(1, player, (p) -> {
-                            });
+                            item.hurtAndBreak(1, player, EquipmentSlot.MAINHAND);
                         }
                     }
                 }
@@ -96,7 +95,7 @@ public class IridiumScepterItem extends Item implements ISocketable {
             case WITHER_SKULL -> {
                 if (!player.getCooldowns().isOnCooldown(this)) {
                     var power = player.getLookAngle().scale(1.5);
-                    var skull = new HomingWitherSkull(world, player, power.x, power.y, power.z);
+                    var skull = new HomingWitherSkull(world, player, 1.5);
                     //skull.shootFromRotation(player, (float) player.getLookAngle().x, (float) player.getLookAngle().y, (float) player.getLookAngle().z, 3, 0);
                     world.addFreshEntity(skull);
                     addCooldown(player, item);
@@ -109,8 +108,7 @@ public class IridiumScepterItem extends Item implements ISocketable {
                     for (LivingEntity e : entities) {
                         e.addEffect(new MobEffectInstance(MobEffects.BLINDNESS, 200));
                         e.addEffect(new MobEffectInstance(MobEffects.GLOWING, 200));
-                        item.hurtAndBreak(1, player, (p) -> {
-                        });
+                        item.hurtAndBreak(1, player, EquipmentSlot.MAINHAND);
                     }
                     addCooldown(player, item);
                 }
@@ -120,7 +118,7 @@ public class IridiumScepterItem extends Item implements ISocketable {
                 if (!world.isClientSide) {
                     ThrownPotion thrownpotion = new ThrownPotion(world, player);
                     ItemStack potionItem = Items.LINGERING_POTION.getDefaultInstance();
-                    PotionUtils.setPotion(potionItem, Potions.LONG_POISON);
+                    potionItem.set(DataComponents.POTION_CONTENTS, new PotionContents(Potions.LONG_POISON));
                     thrownpotion.setItem(potionItem);
                     thrownpotion.shootFromRotation(player, player.getXRot(), player.getYRot(), -20.0F, 0.5F, 1.0F);
                     world.addFreshEntity(thrownpotion);
@@ -128,11 +126,9 @@ public class IridiumScepterItem extends Item implements ISocketable {
 
                 player.awardStat(Stats.ITEM_USED.get(this));
                 if (!player.getAbilities().instabuild) {
-                    item.hurtAndBreak(4, player, (e) -> {
-                    });
+                    item.hurtAndBreak(4, player, EquipmentSlot.MAINHAND);
                 }
-                item.hurtAndBreak(1, player, (p) -> {
-                });
+                item.hurtAndBreak(1, player, EquipmentSlot.MAINHAND);
                 addCooldown(player, item);
             }
         }
@@ -140,8 +136,8 @@ public class IridiumScepterItem extends Item implements ISocketable {
     }
 
     @Override
-    public void appendHoverText(ItemStack stack, @Nullable Level world, List<Component> text, TooltipFlag flag) {
-        appendHoverText(stack, world, text, flag, "scepter");
+    public void appendHoverText(ItemStack stack, TooltipContext ctx, List<Component> text, TooltipFlag flag) {
+        appendHoverText(stack, ctx, text, flag, "scepter");
     }
 
     @Override

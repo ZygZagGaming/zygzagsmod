@@ -28,12 +28,12 @@ import net.minecraft.world.entity.projectile.LargeFireball;
 import net.minecraft.world.entity.projectile.SmallFireball;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.pathfinder.BlockPathTypes;
+import net.minecraft.world.level.pathfinder.PathType;
 import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.Nullable;
-import software.bernie.geckolib.core.animatable.GeoAnimatable;
-import software.bernie.geckolib.core.animatable.instance.AnimatableInstanceCache;
-import software.bernie.geckolib.core.animation.AnimatableManager;
+import software.bernie.geckolib.animatable.GeoAnimatable;
+import software.bernie.geckolib.animatable.instance.AnimatableInstanceCache;
+import software.bernie.geckolib.animation.AnimatableManager;
 import software.bernie.geckolib.util.GeckoLibUtil;
 
 import javax.annotation.ParametersAreNonnullByDefault;
@@ -59,17 +59,12 @@ public class BlazeSentry extends Monster implements GeoAnimatable, ActingEntity<
 
     public BlazeSentry(EntityType<? extends BlazeSentry> type, Level world) {
         super(type, world);
-        setPathfindingMalus(BlockPathTypes.WATER, -1);
-        setPathfindingMalus(BlockPathTypes.LAVA, 8);
-        setPathfindingMalus(BlockPathTypes.DANGER_FIRE, 0);
-        setPathfindingMalus(BlockPathTypes.DAMAGE_FIRE, 0);
+        setPathfindingMalus(PathType.WATER, -1);
+        setPathfindingMalus(PathType.LAVA, 8);
+        setPathfindingMalus(PathType.DANGER_FIRE, 0);
+        setPathfindingMalus(PathType.DAMAGE_FIRE, 0);
         xpReward = 10;
         setPersistenceRequired();
-    }
-
-    @Override
-    public float getEyeHeight(Pose pose) {
-        return 2.2f;
     }
 
     /*public BlazeSentry(Level world) {
@@ -81,9 +76,9 @@ public class BlazeSentry extends Monster implements GeoAnimatable, ActingEntity<
     }
 
     @Override
-    protected void defineSynchedData() {
-        super.defineSynchedData();
-        entityData.define(DATA_ANIMATOR_STATE, new Actor.State(
+    protected void defineSynchedData(SynchedEntityData.Builder builder) {
+        super.defineSynchedData(builder);
+        builder.define(DATA_ANIMATOR_STATE, new Actor.State(
                 ActionRegistry.BlazeSentry.IDLE_BASE.get(),
                 ActionRegistry.BlazeSentry.IDLE_BASE.get(),
                 null,
@@ -91,8 +86,8 @@ public class BlazeSentry extends Monster implements GeoAnimatable, ActingEntity<
                 60,
                 new LinkedList<>()
         ));
-        entityData.define(DATA_TARGET, Optional.empty());
-        //entityData.define(DATA_ROTATION, new SimplEntityRotation());
+        builder.define(DATA_TARGET, Optional.empty());
+        //builder.define(DATA_ROTATION, new SimplEntityRotation());
     }
 
     @Nullable
@@ -273,8 +268,7 @@ public class BlazeSentry extends Monster implements GeoAnimatable, ActingEntity<
                 LivingEntity target = getTarget();
                 assert target != null;
                 Vec3 angle = rotations.get(1).directionVector();
-                SmallFireball fireball = new SmallFireball(level(), BlazeSentry.this, angle.x, angle.y, angle.z);
-                fireball.xPower *= power; fireball.yPower *= power; fireball.zPower *= power;
+                SmallFireball fireball = new SmallFireball(level(), BlazeSentry.this, new Vec3(angle.x, angle.y, angle.z));
                 fireball.setDeltaMovement(angle.scale(power));
                 fireball.moveTo(getEyePosition().add(angle.scale(0.25)));
                 level().addFreshEntity(fireball);
@@ -328,8 +322,7 @@ public class BlazeSentry extends Monster implements GeoAnimatable, ActingEntity<
                 LivingEntity target = getTarget();
                 assert target != null; //TODO: null check
                 Vec3 angle = rotations.get(1).directionVector();
-                LargeFireball fireball = new LargeFireball(level(), BlazeSentry.this, angle.x, angle.y, angle.z, 1);
-                fireball.xPower *= power; fireball.yPower *= power; fireball.zPower *= power;
+                LargeFireball fireball = new LargeFireball(level(), BlazeSentry.this, new Vec3(angle.x, angle.y, angle.z), 1);
                 fireball.setDeltaMovement(angle.scale(power));
                 fireball.moveTo(getEyePosition().add(angle.scale(0.25)));
                 level().addFreshEntity(fireball);

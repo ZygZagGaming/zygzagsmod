@@ -8,10 +8,10 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.level.Level;
 import org.jetbrains.annotations.Nullable;
-import software.bernie.geckolib.core.animation.AnimatableManager;
-import software.bernie.geckolib.core.animation.AnimationController;
-import software.bernie.geckolib.core.animation.AnimationState;
-import software.bernie.geckolib.core.object.PlayState;
+import software.bernie.geckolib.animation.AnimatableManager;
+import software.bernie.geckolib.animation.AnimationController;
+import software.bernie.geckolib.animation.AnimationState;
+import software.bernie.geckolib.animation.PlayState;
 
 import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.LinkedList;
@@ -165,19 +165,19 @@ public class Actor<T extends LivingEntity & ActingEntity<T>> {
         public static State fromNetwork(FriendlyByteBuf buf) {
             Action currentAction;
             {
-                ResourceLocation location = new ResourceLocation(buf.readUtf());
+                ResourceLocation location = ResourceLocation.parse(buf.readUtf());
                 currentAction = Main.actionRegistry().get(location);
                 if (currentAction == null) throw new IllegalArgumentException("Invalid animation id recieved: " + location);
             }
             Action lastAction;
             {
-                ResourceLocation location = new ResourceLocation(buf.readUtf());
+                ResourceLocation location = ResourceLocation.parse(buf.readUtf());
                 lastAction = Main.actionRegistry().get(location);
                 if (lastAction == null) throw new IllegalArgumentException("Invalid animation id recieved: " + location);
             }
             AbstractAction transientAction;
             {
-                ResourceLocation location = new ResourceLocation(buf.readUtf());
+                ResourceLocation location = ResourceLocation.parse(buf.readUtf());
                 transientAction = Main.actionRegistry().get(location);
                 if (transientAction == null) transientAction = Main.transitionActionRegistry().get(location);
             }
@@ -186,7 +186,7 @@ public class Actor<T extends LivingEntity & ActingEntity<T>> {
             int numQueuedAnims = buf.readInt();
             Queue<AbstractAction> queuedActions = new LinkedList<>();
             for (int i = 0; i < numQueuedAnims; i++) {
-                ResourceLocation location = new ResourceLocation(buf.readUtf());
+                ResourceLocation location = ResourceLocation.parse(buf.readUtf());
                 AbstractAction action = Main.actionRegistry().get(location);
                 if (action == null) action = Main.transitionActionRegistry().get(location);
                 queuedActions.add(action);

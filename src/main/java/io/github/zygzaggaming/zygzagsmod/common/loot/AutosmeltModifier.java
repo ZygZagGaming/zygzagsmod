@@ -1,12 +1,12 @@
 package io.github.zygzaggaming.zygzagsmod.common.loot;
 
-import com.mojang.serialization.Codec;
+import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import it.unimi.dsi.fastutil.objects.ObjectArrayList;
-import net.minecraft.world.SimpleContainer;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.RecipeHolder;
 import net.minecraft.world.item.crafting.RecipeType;
+import net.minecraft.world.item.crafting.SingleRecipeInput;
 import net.minecraft.world.item.crafting.SmeltingRecipe;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.storage.loot.LootContext;
@@ -18,7 +18,7 @@ import org.jetbrains.annotations.NotNull;
 import java.util.Optional;
 
 public class AutosmeltModifier extends LootModifier {
-    public static Codec<AutosmeltModifier> CODEC = RecordCodecBuilder.create(inst -> codecStart(inst).apply(inst, AutosmeltModifier::new));
+    public static MapCodec<AutosmeltModifier> CODEC = RecordCodecBuilder.create((RecordCodecBuilder.Instance<AutosmeltModifier> it) -> codecStart(it).apply(it, AutosmeltModifier::new)).fieldOf("autosmelt");
 
     /**
      * Constructs a LootModifier.
@@ -34,7 +34,7 @@ public class AutosmeltModifier extends LootModifier {
         Level world = context.getLevel();
         for (int i = 0; i < generatedLoot.size(); i++) {
             ItemStack stack = generatedLoot.get(i);
-            SimpleContainer cont = new SimpleContainer(stack);
+            SingleRecipeInput cont = new SingleRecipeInput(stack);
             Optional<SmeltingRecipe> opt = world.getRecipeManager().getRecipeFor(RecipeType.SMELTING, cont, world).map(RecipeHolder::value);
             if (opt.isPresent()) {
                 ItemStack outStack = opt.get().assemble(cont, context.getLevel().registryAccess());
@@ -46,7 +46,7 @@ public class AutosmeltModifier extends LootModifier {
     }
 
     @Override
-    public Codec<? extends IGlobalLootModifier> codec() {
+    public MapCodec<? extends IGlobalLootModifier> codec() {
         return CODEC;
     }
 }

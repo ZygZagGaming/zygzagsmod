@@ -1,0 +1,39 @@
+{
+  "description": {
+    "translate": "enchantment.zygzagsmod.critical"
+  },
+  "supported_items": "#minecraft:enchantable/sharp_weapon",
+  "primary_items": "#minecraft:enchantable/sword",
+  "weight": 20,
+  "max_level": 3,
+  "min_cost": {
+    "base": 24,
+    "per_level_above_first": 3
+  },
+  "max_cost": {
+    "base": 28,
+    "per_level_above_first": 1
+  },
+  "anvil_cost": 4,
+  "slots": [
+    "mainhand"
+  ],
+  "effects": {
+    "minecraft:attributes": [
+      {
+        "attribute": "zygzagsmod:player.crit_damage",
+        "amount": {
+          "type": "minecraft:lookup",
+          "fallback": 0.4,
+          "values": [
+            0.15,
+            0.25,
+            0.4
+          ]
+        },
+        "operation": "add_multiplied_base",
+        "id": "zygzagsmod:critical"
+      }
+    ]
+  }
+}

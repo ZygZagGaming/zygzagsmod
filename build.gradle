@@ -19,7 +19,7 @@ base {
 }
 
 jarJar.enable()
-java.toolchain.languageVersion = JavaLanguageVersion.of(17)
+java.toolchain.languageVersion = JavaLanguageVersion.of(21)
 
 repositories {
     //mavenLocal()
@@ -42,7 +42,7 @@ repositories {
     maven { url = "https://maven.shedaniel.me" }
     maven {
         name = "Hearty on GPR"
-        url = uri("https://maven.pkg.github.com/zygzaggaming/hearty")
+        url = uri("https://maven.pkg.github.com/ZygZagZaming/hearty")
         credentials {
             username = project.findProperty("gpr.user") ?: System.getenv("GITHUB_ACTOR")
             password = project.findProperty("gpr.key") ?: System.getenv("GITHUB_TOKEN")
@@ -50,7 +50,7 @@ repositories {
     }
     maven {
         name = "Hearty API on GPR"
-        url = uri("https://maven.pkg.github.com/zygzaggaming/hearty-api")
+        url = uri("https://maven.pkg.github.com/ZygZagGaming/hearty-api")
         credentials {
             username = project.findProperty("gpr.user") ?: System.getenv("GITHUB_ACTOR")
             password = project.findProperty("gpr.key") ?: System.getenv("GITHUB_TOKEN")
@@ -122,7 +122,7 @@ tasks.withType(ProcessResources).configureEach {
     ]
     inputs.properties replaceProperties
 
-    filesMatching(["META-INF/mods.toml", "pack.mcmeta"]) {
+    filesMatching(["META-INF/neoforge.mods.toml", "pack.mcmeta"]) {
         expand replaceProperties + [project: project]
     }
 }

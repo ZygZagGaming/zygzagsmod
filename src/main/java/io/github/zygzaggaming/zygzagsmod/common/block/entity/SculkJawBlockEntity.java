@@ -6,6 +6,7 @@ import io.github.zygzaggaming.zygzagsmod.common.registry.SoundEventRegistry;
 import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.core.RegistryAccess;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.nbt.CompoundTag;
@@ -37,7 +38,7 @@ import static io.github.zygzaggaming.zygzagsmod.common.block.SculkJawBlock.*;
 @ParametersAreNonnullByDefault
 @MethodsReturnNonnullByDefault
 public class SculkJawBlockEntity extends BlockEntity {
-    public static final ResourceKey<DamageType> SCULK_JAW_DAMAGE_TYPE = ResourceKey.create(Registries.DAMAGE_TYPE, new ResourceLocation(Main.MODID, "sculk_jaw"));
+    public static final ResourceKey<DamageType> SCULK_JAW_DAMAGE_TYPE = ResourceKey.create(Registries.DAMAGE_TYPE, ResourceLocation.fromNamespaceAndPath(Main.MODID,  "sculk_jaw"));
     private final SculkSpreader sculkSpreader = SculkSpreader.createLevelSpreader();
     @Nullable
     public Entity latchedEntity = null;
@@ -85,7 +86,7 @@ public class SculkJawBlockEntity extends BlockEntity {
             } else {
                 latchedEntity.setPos(targetPos.add(latchedEntity.position()).scale(0.5));
                 latchedEntity.setDeltaMovement(Vec3.ZERO);
-                if (state.getValue(DEAL_DAMAGE) && latchedEntity instanceof LivingEntity living && ticksEntityLatched % 10 == 5) {
+                if (state.getValue(DEAL_DAMAGE) && latchedEntity instanceof LivingEntity living && ticksEntityLatched % 10 == 5 && world instanceof ServerLevel sWorld) {
                     int xp;
                     if (living instanceof Player player && (player.experienceLevel > 0 || player.experienceProgress > 0)) {
                         xp = Math.min(10, player.totalExperience);
@@ -94,7 +95,7 @@ public class SculkJawBlockEntity extends BlockEntity {
                         float originalHealth = living.getHealth();
                         living.hurt(sculkJawDamage(world.registryAccess()), 1.5f);
                         float healthChange = originalHealth - living.getHealth();
-                        xp = (int) Math.floor(healthChange * (living instanceof Player ? 30 : living.getExperienceReward()) / living.getMaxHealth() + Math.random()/* + Math.random()*/);
+                        xp = (int) Math.floor(healthChange * (living instanceof Player ? 30 : living.getExperienceReward(sWorld, null)) / living.getMaxHealth() + Math.random()/* + Math.random()*/);
                         if (living.getHealth() == 0) living.skipDropExperience();
                     }
 
@@ -129,8 +130,8 @@ public class SculkJawBlockEntity extends BlockEntity {
     }
 
     @Override
-    public void load(CompoundTag tag) {
-        super.load(tag);
+    public void loadAdditional(CompoundTag tag, HolderLookup.Provider provider) {
+        super.loadAdditional(tag, provider);
         ticksSinceEntityLatched = tag.getInt("ticks_since_entity_latched");
         ticksEntityLatched = tag.getInt("ticks_entity_latched");
         if (tag.contains("latched_entity") && level != null) {
@@ -143,12 +144,12 @@ public class SculkJawBlockEntity extends BlockEntity {
     }
 
     @Override
-    protected void saveAdditional(CompoundTag tag) {
+    protected void saveAdditional(CompoundTag tag, HolderLookup.Provider provider) {
         sculkSpreader.save(tag);
         tag.putInt("ticks_since_entity_latched", ticksSinceEntityLatched);
         tag.putInt("ticks_entity_latched", ticksEntityLatched);
         if (latchedEntity != null) tag.putUUID("latched_entity", latchedEntity.getUUID());
-        super.saveAdditional(tag);
+        super.saveAdditional(tag, provider);
     }
 
     public boolean shouldLetGoOfEntity(Level world, BlockPos pos, BlockState state) {

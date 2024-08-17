@@ -2,14 +2,16 @@ package io.github.zygzaggaming.zygzagsmod.common.block.entity;
 
 import com.mojang.logging.LogUtils;
 import io.github.zygzaggaming.zygzagsmod.common.registry.BlockItemEntityRegistry;
-import io.github.zygzaggaming.zygzagsmod.common.registry.EnchantmentRegistry;
 import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.advancements.CriteriaTriggers;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.core.HolderLookup;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
@@ -53,7 +55,7 @@ public class CustomBrushableBlockEntity extends BlockEntity {
     @Nullable
     private Direction hitDirection;
     @Nullable
-    private ResourceLocation lootTable;
+    private ResourceKey<LootTable> lootTable;
     private long lootTableSeed;
 
     public CustomBrushableBlockEntity(BlockPos pPos, BlockState pBlockState) {
@@ -70,7 +72,7 @@ public class CustomBrushableBlockEntity extends BlockEntity {
             this.coolDownEndsAtTick = pStartTick + 10L;
             this.unpackLootTable(pPlayer);
             int i = this.getCompletionState();
-            var numTicks = 10 - 2 * EnchantmentHelper.getTagEnchantmentLevel(EnchantmentRegistry.BRUSH_EFFICIENCY_ENCHANTMENT.get(), pPlayer.getMainHandItem());
+            var numTicks = 10;
             if (++this.brushCount >= numTicks) {
                 this.brushingCompleted(pPlayer);
                 return true;
@@ -92,29 +94,26 @@ public class CustomBrushableBlockEntity extends BlockEntity {
 
     public void unpackLootTable(Player pPlayer) {
         if (this.lootTable != null && this.level != null && !this.level.isClientSide() && this.level.getServer() != null) {
-            if (pPlayer instanceof ServerPlayer) {
-                ServerPlayer serverplayer = (ServerPlayer) pPlayer;
+            LootTable loottable = this.level.getServer().reloadableRegistries().getLootTable(this.lootTable);
+            if (pPlayer instanceof ServerPlayer serverplayer) {
                 CriteriaTriggers.GENERATE_LOOT.trigger(serverplayer, this.lootTable);
             }
 
             //System.out.println(this.lootTable);
-            LootTable loottable = this.level.getServer().getLootData().getLootTable(this.lootTable);
             LootParams lootparams = (new LootParams.Builder((ServerLevel) this.level))
                     .withParameter(LootContextParams.ORIGIN, Vec3.atCenterOf(this.worldPosition))
                     .withOptionalParameter(LootContextParams.THIS_ENTITY, pPlayer)
                     .create(LootContextParamSets.CHEST);
             ObjectArrayList<ItemStack> objectarraylist = loottable.getRandomItems(lootparams, this.lootTableSeed);
-            ItemStack itemstack;
-            switch (objectarraylist.size()) {
-                case 0 -> itemstack = ItemStack.EMPTY;
-                case 1 -> itemstack = objectarraylist.get(0);
-                default -> {
-                    LOGGER.warn("Expected max 1 loot from loot table " + this.lootTable + " got " + objectarraylist.size());
-                    itemstack = objectarraylist.get(0);
-                }
-            }
 
-            this.item = itemstack;
+            this.item = switch (objectarraylist.size()) {
+                case 0 -> ItemStack.EMPTY;
+                case 1 -> objectarraylist.getFirst();
+                default -> {
+                    LOGGER.warn("Expected max 1 loot from loot table {} got {}", this.lootTable, objectarraylist.size());
+                    yield objectarraylist.getFirst();
+                }
+            };
             this.lootTable = null;
             this.setChanged();
         }
@@ -125,17 +124,14 @@ public class CustomBrushableBlockEntity extends BlockEntity {
             this.dropContent(pPlayer);
             BlockState blockstate = this.getBlockState();
             this.level.levelEvent(3008, this.getBlockPos(), Block.getId(blockstate));
-            Block block = this.getBlockState().getBlock();
-            Block block1;
-            if (block instanceof BrushableBlock) {
-                BrushableBlock brushableblock = (BrushableBlock) block;
-                block1 = brushableblock.getTurnsInto();
+            Block block;
+            if (this.getBlockState().getBlock() instanceof BrushableBlock brushableblock) {
+                block = brushableblock.getTurnsInto();
             } else {
-                block1 = Blocks.AIR;
+                block = Blocks.AIR;
             }
 
-            level.setBlockAndUpdate(this.worldPosition, block1.defaultBlockState());
-            block1.defaultBlockState().neighborChanged(level, worldPosition, Blocks.AIR, worldPosition.relative(Direction.UP), false);
+            this.level.setBlock(this.worldPosition, block.defaultBlockState(), 3);
         }
     }
 
@@ -187,7 +183,7 @@ public class CustomBrushableBlockEntity extends BlockEntity {
 
     private boolean tryLoadLootTable(CompoundTag pTag) {
         if (pTag.contains("LootTable", 8)) {
-            this.lootTable = new ResourceLocation(pTag.getString("LootTable"));
+            this.lootTable = ResourceKey.create(Registries.LOOT_TABLE, ResourceLocation.parse(pTag.getString("LootTable")));
             this.lootTableSeed = pTag.getLong("LootTableSeed");
             return true;
         } else {
@@ -199,7 +195,7 @@ public class CustomBrushableBlockEntity extends BlockEntity {
         if (this.lootTable == null) {
             return false;
         } else {
-            pTag.putString("LootTable", this.lootTable.toString());
+            pTag.putString("LootTable", this.lootTable.location().toString());
             if (this.lootTableSeed != 0L) {
                 pTag.putLong("LootTableSeed", this.lootTableSeed);
             }
@@ -208,13 +204,16 @@ public class CustomBrushableBlockEntity extends BlockEntity {
         }
     }
 
-    public CompoundTag getUpdateTag() {
-        CompoundTag compoundtag = super.getUpdateTag();
+    public CompoundTag getUpdateTag(HolderLookup.Provider provider) {
+        CompoundTag compoundtag = super.getUpdateTag(provider);
         if (this.hitDirection != null) {
             compoundtag.putInt("hit_direction", this.hitDirection.ordinal());
         }
 
-        compoundtag.put("item", this.item.save(new CompoundTag()));
+        if (!this.item.isEmpty()) {
+            compoundtag.put("item", this.item.save(provider));
+        }
+
         return compoundtag;
     }
 
@@ -222,30 +221,34 @@ public class CustomBrushableBlockEntity extends BlockEntity {
         return ClientboundBlockEntityDataPacket.create(this);
     }
 
-    public void load(CompoundTag pTag) {
-        if (!this.tryLoadLootTable(pTag) && pTag.contains("item")) {
-            this.item = ItemStack.of(pTag.getCompound("item"));
+    @Override
+    protected void loadAdditional(CompoundTag tag, HolderLookup.Provider provider) {
+        super.loadAdditional(tag, provider);
+        if (!this.tryLoadLootTable(tag) && tag.contains("item")) {
+            this.item = ItemStack.parse(provider, tag.getCompound("item")).orElse(ItemStack.EMPTY);
+        } else {
+            this.item = ItemStack.EMPTY;
         }
 
-        if (pTag.contains("hit_direction")) {
-            this.hitDirection = Direction.values()[pTag.getInt("hit_direction")];
+        if (tag.contains("hit_direction")) {
+            this.hitDirection = Direction.values()[tag.getInt("hit_direction")];
         }
-
     }
 
-    protected void saveAdditional(CompoundTag pTag) {
-        if (!this.trySaveLootTable(pTag)) {
-            pTag.put("item", this.item.save(new CompoundTag()));
+    @Override
+    protected void saveAdditional(CompoundTag tag, HolderLookup.Provider provider) {
+        super.saveAdditional(tag, provider);
+        if (!this.trySaveLootTable(tag) && !this.item.isEmpty()) {
+            tag.put("item", this.item.save(provider));
         }
-
     }
 
-    public void setLootTable(ResourceLocation pLootTable, long pLootTableSeed) {
-        this.lootTable = pLootTable;
-        this.lootTableSeed = pLootTableSeed;
+    public void setLootTable(ResourceKey<LootTable> tableKey, long seed) {
+        this.lootTable = tableKey;
+        this.lootTableSeed = seed;
     }
 
-    private int getCompletionState() {
+    public int getCompletionState() {
         if (this.brushCount == 0) {
             return 0;
         } else if (this.brushCount < 3) {

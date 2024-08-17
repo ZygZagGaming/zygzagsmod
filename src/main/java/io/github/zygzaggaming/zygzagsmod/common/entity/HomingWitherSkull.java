@@ -40,24 +40,13 @@ public class HomingWitherSkull extends WitherSkull {
         super(type, world);
     }
 
-    public HomingWitherSkull(Level world, LivingEntity owner, double xPower, double yPower, double zPower) {
+    public HomingWitherSkull(Level world, LivingEntity owner, double powerMultiplier) {
         super(EntityTypeRegistry.HOMING_WITHER_SKULL.get(), world);
         setOwner(owner);
         this.setRot(owner.getYRot(), owner.getXRot());
         this.moveTo(owner.getX(), owner.getY() + owner.getEyeHeight() - 0.5, owner.getZ(), owner.getYRot(), owner.getXRot());
         this.reapplyPosition();
-        double d0 = Math.sqrt(xPower * xPower + yPower * yPower + zPower * zPower);
-        if (d0 != 0.0D) {
-            this.xPower = xPower / d0;
-            this.yPower = yPower / d0;
-            this.zPower = zPower / d0;
-        }
-    }
-
-    public HomingWitherSkull(Level world, LivingEntity owner, double x, double y, double z, LivingEntity target) {
-        this(world, owner, x, y, z);
-        setTarget(target.getUUID());
-        setAutoTarget(false);
+        setDeltaMovement(owner.getLookAngle().scale(powerMultiplier));
     }
 
     @Override
@@ -137,9 +126,10 @@ public class HomingWitherSkull extends WitherSkull {
     }
 
     @Override
-    protected void defineSynchedData() {
-        entityData.define(DATA_TARGET_UUID, Optional.empty());
-        entityData.define(DATA_AUTO_TARGET, true);
+    protected void defineSynchedData(SynchedEntityData.Builder builder) {
+        builder.define(DATA_TARGET_UUID, Optional.empty());
+        builder.define(DATA_AUTO_TARGET, true);
+        super.defineSynchedData(builder);
     }
 
     @Override
@@ -150,7 +140,7 @@ public class HomingWitherSkull extends WitherSkull {
             speed *= 1.005;
             //super.tick();
             if (this.shouldBurn()) {
-                this.setSecondsOnFire(1);
+                this.setRemainingFireTicks(20);
             }
 
             HitResult hitresult = ProjectileUtil.getHitResultOnMoveVector(this, this::canHitEntity);
@@ -163,24 +153,7 @@ public class HomingWitherSkull extends WitherSkull {
             double d0 = this.getX() + vec3.x;
             double d1 = this.getY() + vec3.y;
             double d2 = this.getZ() + vec3.z;
-            ProjectileUtil.rotateTowardsMovement(this, 0.2F);
-            float f = this.getInertia();
-            if (this.isInWater()) {
-                for (int i = 0; i < 4; ++i) {
-                    level().addParticle(ParticleTypes.BUBBLE, d0 - vec3.x * 0.25D, d1 - vec3.y * 0.25D, d2 - vec3.z * 0.25D, vec3.x, vec3.y, vec3.z);
-                }
-
-                f = 0.8F;
-            }
-
-            this.setDeltaMovement(vec3.add(this.xPower, this.yPower, this.zPower).normalize().scale(speed));
-            level().addParticle(this.getTrailParticle(), d0, d1 + 0.5D, d2, 0.0D, 0.0D, 0.0D);
             this.setPos(d0, d1, d2);
-            if (getTargetUUID().isEmpty() || shouldAutoTarget()) {
-                Entity e = findTarget();
-                if (e != null) setTarget(e.getUUID());
-                else setNoTarget();
-            }
 
             Entity target = getTarget();
 
@@ -191,9 +164,16 @@ public class HomingWitherSkull extends WitherSkull {
                 double amt = 0.15;
                 Vec3 vec = (new Vec3(x, y, z).normalize().multiply(amt, amt, amt).add(getDeltaMovement().normalize().multiply(1 - amt, 1 - amt, 1 - amt)));
                 setDeltaMovement(vec.scale(speed));
-                xPower = vec.x * speed;
-                yPower = vec.y * speed;
-                zPower = vec.z * speed;
+            }
+
+            ProjectileUtil.rotateTowardsMovement(this, 0.75F);
+
+            var particle = this.getTrailParticle();
+            if (particle != null) level().addParticle(particle, d0, d1 + 0.5D, d2, 0.0D, 0.0D, 0.0D);
+            if (getTargetUUID().isEmpty() || shouldAutoTarget()) {
+                Entity e = findTarget();
+                if (e != null) setTarget(e.getUUID());
+                else setNoTarget();
             }
         } else {
             this.discard();

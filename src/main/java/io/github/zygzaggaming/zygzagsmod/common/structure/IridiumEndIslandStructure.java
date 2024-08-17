@@ -1,6 +1,6 @@
 package io.github.zygzaggaming.zygzagsmod.common.structure;
 
-import com.mojang.serialization.Codec;
+import com.mojang.serialization.MapCodec;
 import io.github.zygzaggaming.zygzagsmod.common.block.EndStoneSwitchBlock;
 import io.github.zygzaggaming.zygzagsmod.common.registry.BlockItemEntityRegistry;
 import io.github.zygzaggaming.zygzagsmod.common.registry.BlockWithItemRegistry;
@@ -10,6 +10,7 @@ import io.github.zygzaggaming.zygzagsmod.common.util.GeneralUtil;
 import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
@@ -33,10 +34,12 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
+import static io.github.zygzaggaming.zygzagsmod.common.Main.MODID;
+
 @ParametersAreNonnullByDefault
 @MethodsReturnNonnullByDefault
 public class IridiumEndIslandStructure extends Structure {
-    public static final Codec<IridiumEndIslandStructure> CODEC = simpleCodec(IridiumEndIslandStructure::new);
+    public static final MapCodec<IridiumEndIslandStructure> CODEC = simpleCodec(IridiumEndIslandStructure::new);
 
     public IridiumEndIslandStructure(StructureSettings settings) {
         super(settings);
@@ -174,10 +177,10 @@ public class IridiumEndIslandStructure extends Structure {
             for (BlockPos position : structure.keySet()) {
                 BlockState state = structure.get(position);
                 world.setBlock(position, state, 3);
-                if (state.is(BlockItemEntityRegistry.SUSPICIOUS_END_SAND.getBlock())) {
-                    world.getBlockEntity(position, BlockItemEntityRegistry.SUSPICIOUS_END_SAND.getBlockEntityType()).ifPresent((it) ->
-                            it.setLootTable(new ResourceLocation("zygzagsmod:archaeology/suspicious_end_sand"), rng.nextLong())
-                    );
+                if (state.is(BlockItemEntityRegistry.SUSPICIOUS_END_SAND.getBlock())) { // TODO: fix horrible functional spam
+                    world.registryAccess().registry(Registries.LOOT_TABLE).ifPresent(lootTableRegistry -> world.getBlockEntity(position, BlockItemEntityRegistry.SUSPICIOUS_END_SAND.getBlockEntityType()).ifPresent((it) ->
+                            it.setLootTable(Optional.ofNullable(lootTableRegistry.get(ResourceLocation.fromNamespaceAndPath(MODID, "archaeology/suspicious_end_sand"))).flatMap(lootTableRegistry::getResourceKey).orElseThrow(), rng.nextLong())
+                    ));
                 }
             }
         }

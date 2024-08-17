@@ -16,7 +16,6 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.AABB;
 import org.jetbrains.annotations.NotNull;
 
-import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.List;
 
@@ -25,13 +24,13 @@ public class IridiumSwordItem extends SwordItem implements ISocketable {
     Socket socket;
 
     public IridiumSwordItem(Tier tier, int damage, float speed, Properties properties, Socket socket) {
-        super(tier, damage, speed, properties);
+        super(tier, properties);
         this.socket = socket;
     }
 
     @Override
-    public void appendHoverText(ItemStack stack, @Nullable Level world, List<Component> text, TooltipFlag flag) {
-        appendHoverText(stack, world, text, flag, "sword");
+    public void appendHoverText(ItemStack stack, TooltipContext ctx, List<Component> text, TooltipFlag flag) {
+        appendHoverText(stack, ctx, text, flag, "sword");
     }
 
     @Override

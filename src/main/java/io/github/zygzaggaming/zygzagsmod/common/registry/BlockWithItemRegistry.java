@@ -61,7 +61,7 @@ public class BlockWithItemRegistry {
     );
     public static final BlockWithItemSupplier<Block, BlockItem> NETHER_QUARTZ_GLASS_STAIRS = INSTANCE.register(
             "nether_quartz_glass_stairs",
-            () -> new GlassStairBlock(NETHER_QUARTZ_GLASS::getDefaultBlockState, BlockBehaviour.Properties.ofFullCopy(Blocks.QUARTZ_BLOCK).noOcclusion().isValidSpawn(BlockWithItemRegistry::never).isRedstoneConductor(BlockWithItemRegistry::never).isSuffocating(BlockWithItemRegistry::never).isViewBlocking(BlockWithItemRegistry::never))
+            () -> new GlassStairBlock(NETHER_QUARTZ_GLASS.getDefaultBlockState(), BlockBehaviour.Properties.ofFullCopy(Blocks.QUARTZ_BLOCK).noOcclusion().isValidSpawn(BlockWithItemRegistry::never).isRedstoneConductor(BlockWithItemRegistry::never).isSuffocating(BlockWithItemRegistry::never).isViewBlocking(BlockWithItemRegistry::never))
     );
     public static final BlockWithItemSupplier<Block, BlockItem> NETHER_QUARTZ_GLASS_SLAB = INSTANCE.register(
             "nether_quartz_glass_slab",
@@ -98,7 +98,7 @@ public class BlockWithItemRegistry {
         //Main.LOGGER.debug("registered block with id " + id);
         var blockRegObj = blockRegister.register(id, blockSupplier);
         return new BlockWithItemSupplier<>(
-                new ResourceLocation(MODID, id),
+                ResourceLocation.fromNamespaceAndPath(MODID,  id),
                 blockRegObj,
                 itemRegister.register(id, () -> new BlockItem(blockRegObj.get(), properties))
         );

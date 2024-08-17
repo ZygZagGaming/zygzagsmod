@@ -6,9 +6,9 @@ import net.minecraft.resources.ResourceLocation;
 import software.bernie.geckolib.model.GeoModel;
 
 public class BlazeSentryGeoModel extends GeoModel<BlazeSentry> {
-    private static final ResourceLocation modelResource = new ResourceLocation(Main.MODID, "geo/blaze_sentry.geo.json");
-    private static final ResourceLocation textureResource = new ResourceLocation(Main.MODID, "textures/entity/blaze_sentry.png");
-    private static final ResourceLocation animationResource = new ResourceLocation(Main.MODID, "animations/blaze_sentry.animation.json");
+    private static final ResourceLocation modelResource = ResourceLocation.fromNamespaceAndPath(Main.MODID,  "geo/blaze_sentry.geo.json");
+    private static final ResourceLocation textureResource = ResourceLocation.fromNamespaceAndPath(Main.MODID,  "textures/entity/blaze_sentry.png");
+    private static final ResourceLocation animationResource = ResourceLocation.fromNamespaceAndPath(Main.MODID,  "animations/blaze_sentry.animation.json");
 
     @Override
     public ResourceLocation getModelResource(BlazeSentry animatable) {

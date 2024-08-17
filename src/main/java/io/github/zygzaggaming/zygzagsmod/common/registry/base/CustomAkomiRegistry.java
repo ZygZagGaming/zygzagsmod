@@ -20,7 +20,7 @@ public class CustomAkomiRegistry<T> extends AkomiRegistry<T> {
     }
 
     public CustomAkomiRegistry(String registryPath, String registerModid) {
-        this(new ResourceLocation(MODID, registryPath), registerModid);
+        this(ResourceLocation.fromNamespaceAndPath(MODID, registryPath),  registerModid);
     }
 
     public CustomAkomiRegistry(String registryPath) {

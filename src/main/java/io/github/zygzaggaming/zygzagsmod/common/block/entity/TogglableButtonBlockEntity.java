@@ -4,6 +4,7 @@ import io.github.zygzaggaming.zygzagsmod.common.block.TogglableButtonBlock;
 import io.github.zygzaggaming.zygzagsmod.common.registry.BlockEntityRegistry;
 import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
@@ -42,14 +43,14 @@ public class TogglableButtonBlockEntity extends BlockEntity {
     }
 
     @Override
-    protected void saveAdditional(CompoundTag tag) {
-        super.saveAdditional(tag);
+    protected void saveAdditional(CompoundTag tag, HolderLookup.Provider provider) {
+        super.saveAdditional(tag, provider);
         tag.putInt("ticks_pressed", ticksPressed);
     }
 
     @Override
-    public void load(CompoundTag tag) {
+    public void loadAdditional(CompoundTag tag, HolderLookup.Provider provider) {
         ticksPressed = tag.getInt("ticks_pressed");
-        super.load(tag);
+        super.loadAdditional(tag, provider);
     }
 }

@@ -17,6 +17,7 @@ import net.minecraft.sounds.SoundSource;
 import net.minecraft.tags.EntityTypeTags;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResultHolder;
+import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.npc.Villager;
 import net.minecraft.world.entity.player.Player;
@@ -27,7 +28,6 @@ import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.entity.BellBlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 
-import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -42,7 +42,7 @@ public class IridiumShovelItem extends ShovelItem implements ISocketable {
     Socket socket;
 
     public IridiumShovelItem(Tier tier, float damage, float speed, Properties properties, Socket socket) {
-        super(tier, damage, speed, properties);
+        super(tier, properties);
         this.socket = socket;
     }
 
@@ -51,8 +51,8 @@ public class IridiumShovelItem extends ShovelItem implements ISocketable {
     }
 
     @Override
-    public void appendHoverText(ItemStack stack, @Nullable Level world, List<Component> text, TooltipFlag flag) {
-        appendHoverText(stack, world, text, flag, "shovel");
+    public void appendHoverText(ItemStack stack, TooltipContext ctx, List<Component> text, TooltipFlag flag) {
+        appendHoverText(stack, ctx, text, flag, "shovel");
     }
 
     @Override
@@ -104,12 +104,11 @@ public class IridiumShovelItem extends ShovelItem implements ISocketable {
                             if (numDestroyed == Config.diamondShovelBlockCount) break;
                         }
                     }
-                    if (tempList.size() == 0) break;
+                    if (tempList.isEmpty()) break;
                     arr = tempList;
                 }
             }
-            stack.hurtAndBreak((int) (numDestroyed * Config.diamondShovelDurabilityMultiplier), user, (e) -> {
-            });
+            stack.hurtAndBreak((int) (numDestroyed * Config.diamondShovelDurabilityMultiplier), user, EquipmentSlot.MAINHAND);
         }
         return super.mineBlock(stack, level, state, pos, user);
     }
@@ -193,8 +192,7 @@ public class IridiumShovelItem extends ShovelItem implements ISocketable {
                         }
                     }
                     ISocketable.addCooldown(player, stack, Config.witherSkullShovelCooldown);
-                    stack.hurtAndBreak(4, player, (e) -> {
-                    });
+                    stack.hurtAndBreak(4, player, EquipmentSlot.MAINHAND);
 
                     return InteractionResultHolder.consume(stack);
                 }

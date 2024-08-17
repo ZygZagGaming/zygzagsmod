@@ -1,0 +1,39 @@
+{
+  "description": {
+    "translate": "enchantment.zygzagsmod.steady"
+  },
+  "exclusive_set": "zygzagsmod:sprint",
+  "supported_items": "#minecraft:enchantable/foot_armor",
+  "weight": 10,
+  "max_level": 3,
+  "min_cost": {
+    "base": 24,
+    "per_level_above_first": 3
+  },
+  "max_cost": {
+    "base": 28,
+    "per_level_above_first": 1
+  },
+  "anvil_cost": 4,
+  "slots": [
+    "feet"
+  ],
+  "effects": {
+    "minecraft:attributes": [
+      {
+        "attribute": "zygzagsmod:player.crit_damage",
+        "amount": {
+          "type": "minecraft:lookup",
+          "fallback": 0.2,
+          "values": [
+            0.05,
+            0.1,
+            0.2
+          ]
+        },
+        "operation": "add_value",
+        "id": "zygzagsmod:steady"
+      }
+    ]
+  }
+}

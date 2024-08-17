@@ -4,6 +4,7 @@ import io.github.zygzaggaming.zygzagsmod.common.entity.IridiumGolem;
 import io.github.zygzaggaming.zygzagsmod.common.entity.animation.Actor;
 import io.github.zygzaggaming.zygzagsmod.common.registry.base.AkomiRegistry;
 import net.minecraft.MethodsReturnNonnullByDefault;
+import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.network.syncher.EntityDataSerializer;
 import net.neoforged.neoforge.registries.DeferredRegister;
 import net.neoforged.neoforge.registries.NeoForgeRegistries;
@@ -20,14 +21,21 @@ public class EntityDataSerializerRegistry extends AkomiRegistry<EntityDataSerial
 
     public static final Supplier<EntityDataSerializer<Actor.State>> ACTOR_STATE = INSTANCE.register(
             "actor_state",
-            () -> EntityDataSerializer.simple(
-                    (buf, state) -> state.toNetwork(buf),
-                    Actor.State::fromNetwork
+            () -> EntityDataSerializer.forValueType(
+                    StreamCodec.of(
+                        (buf, state) -> state.toNetwork(buf),
+                        Actor.State::fromNetwork
+                    )
             )
     );
     public static final Supplier<EntityDataSerializer<IridiumGolem.MindState>> IRIDIUM_GOLEM_MIND_STATE = INSTANCE.register(
             "iridium_golem_mind_state",
-            () -> EntityDataSerializer.simpleEnum(IridiumGolem.MindState.class)
+            () -> EntityDataSerializer.forValueType(
+                    StreamCodec.of(
+                            (buf, state) -> buf.writeUtf(state.name()),
+                            (buf) -> IridiumGolem.MindState.valueOf(buf.readUtf())
+                    )
+            )
     );
 //    public static final Supplier<EntityDataSerializer<SimplEntityRotation>> ROTATION = INSTANCE.register(
 //            "entity_rotation",

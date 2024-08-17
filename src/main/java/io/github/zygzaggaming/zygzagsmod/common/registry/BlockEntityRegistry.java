@@ -15,7 +15,7 @@ public class BlockEntityRegistry extends AkomiRegistry<BlockEntityType<?>> {
     public static final BlockEntityRegistry INSTANCE = new BlockEntityRegistry(DeferredRegister.create(BuiltInRegistries.BLOCK_ENTITY_TYPE, MODID));
 
     public static final Supplier<BlockEntityType<?>> STRUCTURE_PLACER = INSTANCE.register("structure_placer", () ->
-            BlockEntityType.Builder.of(StructurePlacerBlockEntity::new, BlockRegistry.STRUCTURE_PLACER.get()).build(null)
+            BlockEntityType.Builder.of(StructurePlacerBlockEntity::new, BlockRegistry.STRUCTURE_PLACER.value()).build(null)
     );
     public static final Supplier<BlockEntityType<?>> TOGGLABLE_BUTTON = INSTANCE.register("togglable_button", () ->
             BlockEntityType.Builder.of(TogglableButtonBlockEntity::new, BlockWithItemRegistry.NETHER_BRICK_BUTTON.getBlock(), BlockWithItemRegistry.RED_NETHER_BRICK_BUTTON.getBlock()).build(null)

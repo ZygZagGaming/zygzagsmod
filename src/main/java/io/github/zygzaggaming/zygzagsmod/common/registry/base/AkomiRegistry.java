@@ -2,9 +2,11 @@ package io.github.zygzaggaming.zygzagsmod.common.registry.base;
 
 
 import io.github.zygzaggaming.zygzagsmod.common.registry.*;
+import net.minecraft.core.Holder;
 import net.minecraft.core.Registry;
 import net.minecraft.resources.ResourceKey;
 import net.neoforged.bus.api.IEventBus;
+import net.neoforged.neoforge.registries.DeferredHolder;
 import net.neoforged.neoforge.registries.DeferredRegister;
 import net.neoforged.neoforge.registries.RegisterEvent;
 
@@ -19,7 +21,7 @@ public class AkomiRegistry<T> {
             BlockWithItemRegistry.INSTANCE::registerTo,
             BlockEntityRegistry.INSTANCE::registerTo,
             BlockItemEntityRegistry.INSTANCE::registerTo,
-            EnchantmentRegistry.INSTANCE::registerTo,
+            ArmorMaterialRegistry.INSTANCE::registerTo,
             EntityTypeRegistry.INSTANCE::registerTo,
             GlobalLootModifierSerializerRegistry.INSTANCE::registerTo,
             IridiumGearRegistry.INSTANCE::registerTo,
@@ -29,7 +31,6 @@ public class AkomiRegistry<T> {
             RecipeTypeRegistry.INSTANCE::registerTo,
             SoundEventRegistry.INSTANCE::registerTo,
             CreativeModeTabRegistry.INSTANCE::registerTo,
-            PaintingVariantRegistry.INSTANCE::registerTo,
             EntityDataSerializerRegistry.INSTANCE::registerTo,
             StructureTypeRegistry.INSTANCE::registerTo,
             StructurePieceTypeRegistry.INSTANCE::registerTo,
@@ -65,7 +66,7 @@ public class AkomiRegistry<T> {
 
     public void onRegisterEvent(RegisterEvent event) { }
 
-    public <P extends T> Supplier<P> register(String id, Supplier<P> supplier) {
+    public <P extends T> DeferredHolder<T, P> register(String id, Supplier<P> supplier) {
         return register.register(id, supplier);
     }
 }

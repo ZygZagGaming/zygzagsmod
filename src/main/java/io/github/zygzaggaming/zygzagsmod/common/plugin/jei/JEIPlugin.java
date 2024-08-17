@@ -30,7 +30,7 @@ public class JEIPlugin implements IModPlugin {
 
     @Override
     public ResourceLocation getPluginUid() {
-        return new ResourceLocation(Main.MODID + ".plugin.jei");
+        return ResourceLocation.fromNamespaceAndPath(Main.MODID, "jei_plugin");
     }
 
     @Override
@@ -41,6 +41,8 @@ public class JEIPlugin implements IModPlugin {
     @Override
     public void registerRecipes(IRecipeRegistration registration) {
         if (Minecraft.getInstance().level != null) {
+//            System.out.println(Minecraft.getInstance().level.getRecipeManager().getAllRecipesFor(RecipeTypeRegistry.TRANSMUTATION.get()));
+//            it took me way too long to realize that recipes should be in the "recipe" folder instead of "recipes" since 1.21
             registration.addRecipes(TransmutationCategory.TRANSMUTATION_RECIPE_TYPE, Minecraft.getInstance().level.getRecipeManager().getAllRecipesFor(RecipeTypeRegistry.TRANSMUTATION.get()).stream().map(RecipeHolder::value).toList());
         }
     }

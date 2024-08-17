@@ -1,0 +1,73 @@
+{
+  "description": {
+    "translate": "enchantment.zygzagsmod.sprint"
+  },
+  "exclusive_set": "zygzagsmod:steady",
+  "supported_items": "#minecraft:enchantable/foot_armor",
+  "weight": 13,
+  "max_level": 5,
+  "min_cost": {
+    "base": 18,
+    "per_level_above_first": 3
+  },
+  "max_cost": {
+    "base": 26,
+    "per_level_above_first": 1
+  },
+  "anvil_cost": 3,
+  "slots": [
+    "feet"
+  ],
+  "effects": {
+    "minecraft:attributes": [
+      {
+        "attribute": "zygzagsmod:player.sprint_speed",
+        "amount": {
+          "type": "minecraft:lookup",
+          "fallback": 0.5,
+          "values": [
+            0.05,
+            0.1,
+            0.2,
+            0.4,
+            0.5
+          ]
+        },
+        "operation": "add_multiplied_total",
+        "id": "zygzagsmod:sprint"
+      },
+      {
+        "attribute": "zygzagsmod:player.sprint_hunger_consumption",
+        "amount": {
+          "type": "minecraft:lookup",
+          "fallback": 0.5,
+          "values": [
+            -0.02,
+            -0.05,
+            -0.1,
+            -0.2,
+            -0.25
+          ]
+        },
+        "operation": "add_multiplied_total",
+        "id": "zygzagsmod:sprint"
+      },
+      {
+        "attribute": "zygzagsmod:player.sprint_jump_hunger_consumption",
+        "amount": {
+          "type": "minecraft:lookup",
+          "fallback": 0.5,
+          "values": [
+            -0.06,
+            -0.1,
+            -0.2,
+            -0.4,
+            -0.5
+          ]
+        },
+        "operation": "add_multiplied_total",
+        "id": "zygzagsmod:sprint"
+      }
+    ]
+  }
+}

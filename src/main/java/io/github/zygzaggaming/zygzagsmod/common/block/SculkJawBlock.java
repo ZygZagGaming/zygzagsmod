@@ -6,17 +6,14 @@ import io.github.zygzaggaming.zygzagsmod.common.registry.BlockItemEntityRegistry
 import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
-import net.minecraft.util.RandomSource;
+import net.minecraft.util.valueproviders.ConstantInt;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.LevelReader;
-import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.Blocks;
-import net.minecraft.world.level.block.EntityBlock;
-import net.minecraft.world.level.block.SimpleWaterloggedBlock;
+import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityTicker;
 import net.minecraft.world.level.block.entity.BlockEntityType;
@@ -40,7 +37,7 @@ import static net.minecraft.world.level.block.state.properties.BlockStatePropert
 
 @ParametersAreNonnullByDefault
 @MethodsReturnNonnullByDefault
-public class SculkJawBlock extends Block implements EntityBlock, SimpleWaterloggedBlock {
+public class SculkJawBlock extends DropExperienceBlock implements EntityBlock, SimpleWaterloggedBlock {
     public static final IntegerProperty CLOSED = IntegerProperty.create("closed", 0, 3);
     public static final DirectionProperty FACE = DirectionProperty.create("face");
     public static final BooleanProperty POWERED = BlockStateProperties.POWERED;
@@ -91,7 +88,7 @@ public class SculkJawBlock extends Block implements EntityBlock, SimpleWaterlogg
     );
 
     public SculkJawBlock(Properties properties) {
-        super(properties);
+        super(ConstantInt.of(5), properties);
         registerDefaultState(defaultBlockState().setValue(DEAL_DAMAGE, true).setValue(CLOSED, 0).setValue(FACE, Direction.UP).setValue(POWERED, false).setValue(WATERLOGGED, false));
     }
 
@@ -170,11 +167,6 @@ public class SculkJawBlock extends Block implements EntityBlock, SimpleWaterlogg
         var be = world.getBlockEntity(pos);
         if (!(be instanceof SculkJawBlockEntity sculkJaw)) return 0;
         return sculkJaw.latchedEntity == null ? 0 : 15; // TODO: add different signal strengths for different mobs?
-    }
-
-    @Override
-    public int getExpDrop(BlockState state, net.minecraft.world.level.LevelReader level, RandomSource randomSource, BlockPos pos, int fortuneLevel, int silkTouchLevel) {
-        return silkTouchLevel == 0 ? 5 : 0;
     }
 
     public FluidState getFluidState(BlockState state) {

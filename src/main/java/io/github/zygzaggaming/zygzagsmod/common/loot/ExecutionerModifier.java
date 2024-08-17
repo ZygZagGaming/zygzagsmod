@@ -1,15 +1,17 @@
 package io.github.zygzaggaming.zygzagsmod.common.loot;
 
-import com.mojang.serialization.Codec;
+import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import it.unimi.dsi.fastutil.objects.ObjectArrayList;
+import net.minecraft.MethodsReturnNonnullByDefault;
+import net.minecraft.core.component.DataComponents;
 import net.minecraft.core.registries.BuiltInRegistries;
-import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
+import net.minecraft.world.item.component.ResolvableProfile;
 import net.minecraft.world.level.storage.loot.LootContext;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
 import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
@@ -17,24 +19,26 @@ import net.neoforged.neoforge.common.loot.IGlobalLootModifier;
 import net.neoforged.neoforge.common.loot.LootModifier;
 import org.jetbrains.annotations.NotNull;
 
+import javax.annotation.ParametersAreNonnullByDefault;
+
+@ParametersAreNonnullByDefault
+@MethodsReturnNonnullByDefault
 public class ExecutionerModifier extends LootModifier {
 
-    public static Codec<ExecutionerModifier> CODEC = RecordCodecBuilder.create(
-            inst -> codecStart(inst)
+    public static MapCodec<ExecutionerModifier> CODEC = RecordCodecBuilder.create(
+            (RecordCodecBuilder.Instance<ExecutionerModifier> inst) -> codecStart(inst)
                     .and(
                             inst.group(
                                     BuiltInRegistries.ITEM.byNameCodec()
                                             .fieldOf("item_to_drop")
-                                            .forGetter(
-                                                    (it) -> it.itemOut
-                                            )
+                                            .forGetter((it) -> it.itemOut)
                             ).t1()
                     )
                     .apply(
                             inst,
                             ExecutionerModifier::new
                     )
-    );
+    ).fieldOf("executioner");
 
     Item itemOut;
 
@@ -54,17 +58,14 @@ public class ExecutionerModifier extends LootModifier {
         if (!generatedLoot.contains(Items.WITHER_SKELETON_SKULL.getDefaultInstance())) { // if it ain't already have skull
             ItemStack item = itemOut.getDefaultInstance();
             Entity entity = context.getParam(LootContextParams.THIS_ENTITY);
-            if (entity instanceof Player player) {
-                CompoundTag tag = item.getOrCreateTag();
-                tag.putString("SkullOwner", player.getScoreboardName());
-            }
+            if (entity instanceof Player player) item.set(DataComponents.PROFILE, new ResolvableProfile(player.getGameProfile()));
             generatedLoot.add(item);
         }
         return generatedLoot;
     }
 
     @Override
-    public Codec<? extends IGlobalLootModifier> codec() {
+    public MapCodec<? extends IGlobalLootModifier> codec() {
         return CODEC;
     }
 }

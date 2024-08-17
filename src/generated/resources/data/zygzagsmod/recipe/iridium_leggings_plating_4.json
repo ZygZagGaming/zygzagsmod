@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:smithing_transform",
+  "addition": {
+    "item": "zygzagsmod:iridium_plating"
+  },
+  "base": {
+    "item": "zygzagsmod:partial_iridium_leggings_4"
+  },
+  "result": {
+    "count": 1,
+    "id": "zygzagsmod:partial_iridium_leggings_5"
+  },
+  "template": {
+    "item": "zygzagsmod:iridium_leggings_blueprint"
+  }
+}

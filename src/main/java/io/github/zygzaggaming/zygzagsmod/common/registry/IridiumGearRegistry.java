@@ -2,7 +2,6 @@ package io.github.zygzaggaming.zygzagsmod.common.registry;
 
 import io.github.zygzaggaming.zygzagsmod.common.item.iridium.Socket;
 import io.github.zygzaggaming.zygzagsmod.common.registry.base.AkomiRegistry;
-import io.github.zygzaggaming.zygzagsmod.common.tier.IridiumArmorMaterial;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.world.item.ArmorItem;
 import net.minecraft.world.item.Item;
@@ -21,7 +20,7 @@ public class IridiumGearRegistry extends AkomiRegistry<Item> {
     public static final Supplier<Item> IRIDIUM_HELMET = INSTANCE.register(
             "iridium_helmet",
             () -> new ArmorItem(
-                    IridiumArmorMaterial.IRIDIUM,
+                    ArmorMaterialRegistry.IRIDIUM,
                     ArmorItem.Type.HELMET,
                     new Item.Properties()
                             .fireResistant()
@@ -31,7 +30,7 @@ public class IridiumGearRegistry extends AkomiRegistry<Item> {
     public static final Supplier<Item> IRIDIUM_LEGGINGS = INSTANCE.register(
             "iridium_leggings",
             () -> new ArmorItem(
-                    IridiumArmorMaterial.IRIDIUM,
+                    ArmorMaterialRegistry.IRIDIUM,
                     ArmorItem.Type.LEGGINGS,
                     new Item.Properties()
                             .fireResistant()
@@ -41,7 +40,7 @@ public class IridiumGearRegistry extends AkomiRegistry<Item> {
     public static final Supplier<Item> IRIDIUM_BOOTS = INSTANCE.register(
             "iridium_boots",
             () -> new ArmorItem(
-                    IridiumArmorMaterial.IRIDIUM,
+                    ArmorMaterialRegistry.IRIDIUM,
                     ArmorItem.Type.BOOTS,
                     new Item.Properties()
                             .fireResistant()

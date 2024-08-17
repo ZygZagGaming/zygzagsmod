@@ -14,6 +14,7 @@ import net.minecraft.world.entity.projectile.ThrowableItemProjectile;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.RecipeHolder;
+import net.minecraft.world.item.crafting.SingleRecipeInput;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.HitResult;
@@ -40,8 +41,8 @@ public class ThrownTransmutationCharge extends ThrowableItemProjectile {
         return ItemRegistry.TRANSMUTATION_CHARGE.get();
     }
 
-    protected float getGravity() {
-        return 0.07F;
+    protected double getDefaultGravity() {
+        return 0.07;
     }
 
     protected void onHit(HitResult result) {
@@ -54,7 +55,7 @@ public class ThrownTransmutationCharge extends ThrowableItemProjectile {
             List<TransmutationRecipe> recipes = level.getRecipeManager().getAllRecipesFor(RecipeTypeRegistry.TRANSMUTATION.get()).stream().map(RecipeHolder::value).toList();
             for (ItemEntity itemEntity : entities) {
                 for (TransmutationRecipe recipe : recipes) {
-                    SimpleContainer holder = new SimpleContainer(itemEntity.getItem());
+                    SingleRecipeInput holder = new SingleRecipeInput(itemEntity.getItem());
                     if (recipe.matches(holder, level)) {
                         ItemStack output = recipe.assemble(holder, level.registryAccess());
                         int stackSize = output.getItem().getMaxStackSize(output);

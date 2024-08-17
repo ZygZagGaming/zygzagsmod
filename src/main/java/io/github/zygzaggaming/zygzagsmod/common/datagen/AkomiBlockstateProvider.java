@@ -22,7 +22,7 @@ public class AkomiBlockstateProvider extends BlockStateProvider {
 //        var builder = getVariantBuilder(BlockItemEntityRegistry.MAGMATIC_NETHER_BRICKS.getBlock());
 //        for (int i = 0; i < 104; i++) {
 //            var partialState = builder.partialState().with(PULSE, i);
-//            builder.setModels(partialState, partialState.modelForState().modelFile(models().cubeAll("magmatic_nether_bricks_" + (i % 4), new ResourceLocation(MODID, "block/magmatic_nether_brick/magmatic_nether_bricks_" + (i % 4)))).buildLast());
+//            builder.setModels(partialState, partialState.modelForState().modelFile(models().cubeAll("magmatic_nether_bricks_" + (i % 4), ResourceLocation.fromNamespaceAndPath(MODID,  "block/magmatic_nether_brick/magmatic_nether_bricks_" + (i % 4)))).buildLast());
 //        }
         makeSimpleBlockExistingModel(BlockWithItemRegistry.CORONAL_AMBER.getBlock(), "coronal_amber");
     }
@@ -30,6 +30,6 @@ public class AkomiBlockstateProvider extends BlockStateProvider {
     private void makeSimpleBlockExistingModel(Block block, String id) {
         var builder = getVariantBuilder(block);
         var partialState = builder.partialState();
-        builder.setModels(partialState, partialState.modelForState().modelFile(new ModelFile.ExistingModelFile(new ResourceLocation(MODID, "block/" + id), helper)).buildLast());
+        builder.setModels(partialState, partialState.modelForState().modelFile(new ModelFile.ExistingModelFile(ResourceLocation.fromNamespaceAndPath(MODID, "block/" + id),  helper)).buildLast());
     }
 }

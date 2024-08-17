@@ -1,11 +1,8 @@
 package io.github.zygzaggaming.zygzagsmod.common;
 
-import io.github.zygzaggaming.zygzagsmod.common.block.entity.CustomBrushableBlockEntity;
-import io.github.zygzaggaming.zygzagsmod.common.enchant.CustomEnchantment;
 import io.github.zygzaggaming.zygzagsmod.common.entity.BlazeSentry;
 import io.github.zygzaggaming.zygzagsmod.common.entity.HomingWitherSkull;
 import io.github.zygzaggaming.zygzagsmod.common.item.iridium.IEffectAttackWeapon;
-import io.github.zygzaggaming.zygzagsmod.common.item.iridium.ISocketable;
 import io.github.zygzaggaming.zygzagsmod.common.item.iridium.Socket;
 import io.github.zygzaggaming.zygzagsmod.common.item.iridium.armor.IridiumChestplateItem;
 import io.github.zygzaggaming.zygzagsmod.common.item.iridium.tool.IridiumAxeItem;
@@ -15,27 +12,23 @@ import io.github.zygzaggaming.zygzagsmod.common.networking.packet.ServerboundPla
 import io.github.zygzaggaming.zygzagsmod.common.registry.AttachmentTypeRegistry;
 import io.github.zygzaggaming.zygzagsmod.common.registry.AttributeRegistry;
 import io.github.zygzaggaming.zygzagsmod.common.registry.BlockRegistry;
-import io.github.zygzaggaming.zygzagsmod.common.registry.EnchantmentRegistry;
 import io.github.zygzaggaming.zygzagsmod.common.util.GeneralUtil;
 import io.github.zygzaggaming.zygzagsmod.common.util.ModUtil;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.Direction;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.core.RegistryAccess;
 import net.minecraft.core.Vec3i;
+import net.minecraft.core.component.DataComponents;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.sounds.SoundEvent;
-import net.minecraft.sounds.SoundEvents;
-import net.minecraft.sounds.SoundSource;
 import net.minecraft.stats.Stats;
 import net.minecraft.tags.DamageTypeTags;
+import net.minecraft.tags.EntityTypeTags;
 import net.minecraft.world.Difficulty;
-import net.minecraft.world.InteractionHand;
-import net.minecraft.world.SimpleContainer;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.damagesource.DamageType;
 import net.minecraft.world.effect.MobEffectInstance;
@@ -48,44 +41,46 @@ import net.minecraft.world.entity.ai.village.poi.PoiManager;
 import net.minecraft.world.entity.ai.village.poi.PoiTypes;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.*;
+import net.minecraft.world.item.ArmorItem;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
 import net.minecraft.world.item.crafting.RecipeHolder;
 import net.minecraft.world.item.crafting.RecipeType;
+import net.minecraft.world.item.crafting.SingleRecipeInput;
 import net.minecraft.world.item.crafting.SmeltingRecipe;
+import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.item.enchantment.Enchantments;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
-import net.minecraft.world.level.block.BrushableBlock;
-import net.minecraft.world.level.block.entity.BlockEntity;
-import net.minecraft.world.level.block.entity.BrushableBlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.material.Fluids;
 import net.minecraft.world.phys.AABB;
-import net.minecraft.world.phys.BlockHitResult;
-import net.minecraft.world.phys.HitResult;
-import net.neoforged.bus.api.Event;
 import net.neoforged.bus.api.SubscribeEvent;
-import net.neoforged.fml.common.Mod;
+import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.client.event.MovementInputUpdateEvent;
 import net.neoforged.neoforge.common.Tags;
-import net.neoforged.neoforge.event.ItemAttributeModifierEvent;
-import net.neoforged.neoforge.event.TickEvent;
 import net.neoforged.neoforge.event.entity.EntityMobGriefingEvent;
 import net.neoforged.neoforge.event.entity.item.ItemExpireEvent;
-import net.neoforged.neoforge.event.entity.living.*;
+import net.neoforged.neoforge.event.entity.living.LivingDamageEvent;
+import net.neoforged.neoforge.event.entity.living.LivingEvent;
+import net.neoforged.neoforge.event.entity.living.LivingExperienceDropEvent;
+import net.neoforged.neoforge.event.entity.living.LivingFallEvent;
 import net.neoforged.neoforge.event.entity.player.CriticalHitEvent;
-import net.neoforged.neoforge.event.entity.player.PlayerEvent;
 import net.neoforged.neoforge.event.entity.player.PlayerInteractEvent;
 import net.neoforged.neoforge.event.level.BlockEvent;
+import net.neoforged.neoforge.event.tick.EntityTickEvent;
+import net.neoforged.neoforge.event.tick.LevelTickEvent;
+import net.neoforged.neoforge.event.tick.PlayerTickEvent;
 
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Optional;
 
-@Mod.EventBusSubscriber(modid = Main.MODID)
+@EventBusSubscriber(modid = Main.MODID)
 @SuppressWarnings("unused")
 public class EventHandler {
 //    public static float DIURNAL_MULTIPLIER = 1f, NOCTURNAL_MULTIPLIER = 1f;
@@ -99,8 +94,8 @@ public class EventHandler {
 //    }
 
     @SubscribeEvent
-    public static void onTick(final TickEvent.LevelTickEvent event) {
-        if (event.phase == TickEvent.Phase.START && event.level instanceof ServerLevel world) {
+    public static void onTick(final LevelTickEvent.Pre event) {
+        if (event.getLevel() instanceof ServerLevel world) {
             List<ServerPlayer> players = world.players();
             HashSet<BlockPos> allCauldrons = new HashSet<>();
             for (ServerPlayer player : players) {
@@ -127,10 +122,10 @@ public class EventHandler {
                     }
                     if (progress > 2) continue; // failed smelts will stop incrementing
 
-                    SimpleContainer container = new SimpleContainer(item.getItem());
+                    SingleRecipeInput container = new SingleRecipeInput(item.getItem());
                     List<RecipeHolder<SmeltingRecipe>> list = world.getRecipeManager().getRecipesFor(RecipeType.SMELTING, container, world);
                     if (list.isEmpty()) continue;
-                    SmeltingRecipe recipe = list.get(0).value();
+                    SmeltingRecipe recipe = list.getFirst().value();
                     ItemStack output = recipe.assemble(container, world.registryAccess());
                     item.setItem(output.copyWithCount(output.getCount() * item.getItem().getCount()));
                     item.setData(AttachmentTypeRegistry.ITEM_ENTITY_BULK_SMELTING_ATTACHMENT, 0.0);
@@ -159,18 +154,19 @@ public class EventHandler {
         BlockPos blockPos = item.blockPosition();
         BlockState stateAtPos = world.getBlockState(blockPos);
         if (stateAtPos.is(Main.WORLD_CONTAINERS) && item.age < 20 * 60 * 20 /* dies after 20 mins */) {
-            event.setExtraLife(0);
-            event.setCanceled(true);
+            event.addExtraLife(20 * 60 * 20);
         }
     }
 
     @SubscribeEvent
-    public static void onHurt(final LivingDamageEvent evt) {
+    public static void onHurt(final LivingDamageEvent.Pre evt) {
+        Optional<HolderLookup.RegistryLookup<Enchantment>> enchantmentLookup = evt.getEntity().level().registryAccess().lookup(Registries.ENCHANTMENT);
+
         LivingEntity entity = evt.getEntity();
         Level world = entity.level();
         long time = world.dayTime();
         DamageSource source = evt.getSource();
-        float amt = evt.getAmount();
+        float amt = evt.getNewDamage();
         ItemStack chestplateStack = entity.getItemBySlot(EquipmentSlot.CHEST);
         if (chestplateStack.getItem() instanceof IridiumChestplateItem chestplate && chestplate.getSocket() == Socket.DIAMOND) {
             AABB box = entity.getBoundingBox().inflate(16.0);
@@ -190,7 +186,7 @@ public class EventHandler {
                 }
             }
             extra += map.size();
-            evt.setAmount(Math.max(evt.getAmount() - ((float) extra * 0.25f), 0.05f / (extra + 1)));
+            evt.setNewDamage(Math.max(evt.getNewDamage() - ((float) extra * 0.25f), 0.05f / (extra + 1)));
         }
 
         if (source.getEntity() != null) {
@@ -202,10 +198,12 @@ public class EventHandler {
                 Item chestItem = living.getItemBySlot(EquipmentSlot.CHEST).getItem();
                 BlockPos pos = living.blockPosition();
 
-                if (chestplateStack.getItem() instanceof IridiumChestplateItem chestplate && chestplate.getSocket() == Socket.WITHER_SKULL) {
-                    int th = EnchantmentHelper.getTagEnchantmentLevel(Enchantments.THORNS, chestplateStack);
-                    MobEffectInstance effect = new MobEffectInstance(MobEffects.WITHER, 60 * (3 + th), th / 2);
-                    living.addEffect(effect);
+                if (chestplateStack.getItem() instanceof IridiumChestplateItem chestplate && chestplate.getSocket() == Socket.WITHER_SKULL && enchantmentLookup.isPresent()) {
+                    enchantmentLookup.get().get(Enchantments.THORNS).ifPresent(thorns -> {
+                        int th = EnchantmentHelper.getTagEnchantmentLevel(thorns, chestplateStack);
+                        MobEffectInstance effect = new MobEffectInstance(MobEffects.WITHER, 60 * (3 + th), th / 2);
+                        living.addEffect(effect);
+                    });
                 }
 
                 if (mainhandItem instanceof IEffectAttackWeapon effectAttackWeapon) {
@@ -215,39 +213,34 @@ public class EventHandler {
                     }
                 }
 
-                for (var entry : mainhandStack.getAllEnchantments().entrySet())
-                    if (entry.getKey() instanceof CustomEnchantment enchantment)
-                        for (var effect : enchantment.attackEffects())
-                            entity.addEffect(effect);
-
                 if (mainhandItem instanceof IridiumSwordItem sword && sword.getSocket() == Socket.DIAMOND) {
                     int height = attacker.getBlockY();
                     double a = Config.diamondSwordMaxDamageBonus, b = Config.diamondSwordMinDamageBonus,
                             m = (b - a) / 384.0;
                     float damageBonus = (float) (m * (height + 64) + a);
-                    evt.setAmount(amt + damageBonus);
+                    evt.setNewDamage(amt + damageBonus);
                 } else if (mainhandItem instanceof IridiumSwordItem sword && sword.getSocket() == Socket.SKULL) {
                     double chance = Config.skullSwordInstakillChance;
                     if (entity.getType().is(Main.BOSS_TAG)) chance = Config.skullSwordInstakillChanceBosses;
                     else if (entity.getType() == EntityType.PLAYER) chance = Config.skullSwordInstakillChancePlayers;
                     if (world.getRandom().nextDouble() <= chance) {
-                        evt.setAmount(Float.MAX_VALUE);
+                        evt.setNewDamage(Float.MAX_VALUE);
                     }
                     //System.out.println("chance " + chance);
                 } else if (mainhandItem instanceof IridiumHoeItem hoe && hoe.getSocket() == Socket.SKULL) {
-                    if (entity.getMobType() == MobType.UNDEAD) {
-                        if (entity.getType().is(Main.BOSS_TAG)) evt.setAmount(25f);
-                        else evt.setAmount(Float.MAX_VALUE);
+                    if (entity.getType().is(EntityTypeTags.UNDEAD)) {
+                        if (entity.getType().is(Main.BOSS_TAG)) evt.setNewDamage(25f);
+                        else evt.setNewDamage(Float.MAX_VALUE);
                     }
                 } else if (mainhandItem instanceof IridiumAxeItem axe && axe.getSocket() == Socket.AMETHYST) {
                     if (GeneralUtil.isExposedToSunlight(pos, world)) {
                         double damageBonus = 1 + Config.amethystAxeDamageBonus * Math.exp(-(time - 12000.0) * (time - 12000.0) / 12000.0);
-                        evt.setAmount(evt.getAmount() * (float) damageBonus);
+                        evt.setNewDamage(evt.getNewDamage() * (float) damageBonus);
                     }
                 } else if (mainhandItem instanceof IridiumSwordItem sword && sword.getSocket() == Socket.AMETHYST) {
                     if (GeneralUtil.isExposedToSunlight(pos, world)) {
                         double damageBonus = 1 + Config.amethystSwordDamageBonus * Math.exp(-((time + 12000.0) % 24000.0 - 12000.0) * ((time + 12000.0) % 24000.0 - 12000.0) / 12000.0);
-                        evt.setAmount(evt.getAmount() * (float) damageBonus);
+                        evt.setNewDamage(evt.getNewDamage() * (float) damageBonus);
                     }
                 } else if (mainhandItem instanceof IridiumAxeItem axe && axe.getSocket() == Socket.EMERALD) {
                     if (living instanceof Player player && !player.getCooldowns().isOnCooldown(axe)) {
@@ -265,18 +258,17 @@ public class EventHandler {
                 }
 
                 if (attacker instanceof Player attackerPlayer && entity instanceof Player attacked) {
-                    var amount = evt.getAmount() / 4 * (attackerPlayer.getAttributeValue(AttributeRegistry.ARMOR_DURABILITY_REDUCTION.get()) - 1);
+                    var amount = evt.getNewDamage() / 4 * (attackerPlayer.getAttributeValue(AttributeRegistry.ARMOR_DURABILITY_REDUCTION) - 1);
                     if (amount > 0) {
                         if (amount < 1) amount = 1;
 
                         for (int i = 0; i < 4; i++) {
                             ItemStack stack = attacked.getInventory().armor.get(i);
-                            if ((!source.is(DamageTypeTags.IS_FIRE) || !stack.getItem().isFireResistant()) && stack.getItem() instanceof ArmorItem) {
-                                int finalI = i;
+                            if ((!source.is(DamageTypeTags.IS_FIRE) || !stack.has(DataComponents.FIRE_RESISTANT)) && stack.getItem() instanceof ArmorItem) {
                                 stack.hurtAndBreak(
                                         (int) amount,
                                         attacked,
-                                        it -> it.broadcastBreakEvent(EquipmentSlot.byTypeAndIndex(EquipmentSlot.Type.ARMOR, finalI))
+                                        EquipmentSlot.values()[i + 2]
                                 );
                             }
                         }
@@ -343,15 +335,15 @@ public class EventHandler {
                         }
                     }
                 }
-                case EMERALD -> event.setFinalState(BlockRegistry.BLESSED_SOIL.get().defaultBlockState());
-                case AMETHYST -> event.setFinalState(BlockRegistry.GLOWING_SOIL.get().defaultBlockState());
+                case EMERALD -> event.setFinalState(BlockRegistry.BLESSED_SOIL.value().defaultBlockState());
+                case AMETHYST -> event.setFinalState(BlockRegistry.GLOWING_SOIL.value().defaultBlockState());
             }
         }
     }
 
     @SubscribeEvent
-    public static void onPlayerTick(TickEvent.PlayerTickEvent event) {
-        Player player = event.player;
+    public static void onPlayerTick(PlayerTickEvent.Pre event) {
+        Player player = event.getEntity();
         ItemStack chestStack = player.getItemBySlot(EquipmentSlot.CHEST);
         Item chestItem = chestStack.getItem();
         Level world = player.level();
@@ -381,142 +373,16 @@ public class EventHandler {
         }
     }
 
-    @SubscribeEvent
-    public static void brush(final LivingEntityUseItemEvent.Tick event) {
-        var living = event.getEntity();
-        var stack = living.getMainHandItem();
-        var world = living.level();
-        var remainingUseDuration = living.getUseItemRemainingTicks();
-        if (stack.getItem() instanceof BrushItem brush) {
-            if (remainingUseDuration >= 0 && living instanceof Player player) {
-                HitResult hitresult = brush.calculateHitResult(player);
-                if (hitresult instanceof BlockHitResult blockhitresult) {
-                    if (hitresult.getType() == HitResult.Type.BLOCK) {
-                        int i = brush.getUseDuration(stack) - remainingUseDuration + 1;
-                        boolean flag = i % 10 == 5;
-                        if (flag) {
-                            BlockPos blockpos = blockhitresult.getBlockPos();
-                            BlockState blockstate = world.getBlockState(blockpos);
-                            HumanoidArm humanoidarm = living.getUsedItemHand() == InteractionHand.MAIN_HAND ? player.getMainArm() : player.getMainArm().getOpposite();
-                            brush.spawnDustParticles(world, blockhitresult, blockstate, living.getViewVector(0.0F), humanoidarm);
-                            Block $$18 = blockstate.getBlock();
-                            SoundEvent soundevent;
-                            if ($$18 instanceof BrushableBlock brushableblock) {
-                                soundevent = brushableblock.getBrushSound();
-                            } else {
-                                soundevent = SoundEvents.BRUSH_GENERIC;
-                            }
-
-                            world.playSound(player, blockpos, soundevent, SoundSource.BLOCKS);
-                            if (!world.isClientSide()) {
-                                BlockEntity blockentity = world.getBlockEntity(blockpos);
-                                if (blockentity instanceof CustomBrushableBlockEntity brushableblockentity) {
-                                    boolean flag1 = brushableblockentity.brush(world.getGameTime(), player, blockhitresult.getDirection());
-                                    if (flag1) {
-                                        EquipmentSlot equipmentslot = stack.equals(player.getItemBySlot(EquipmentSlot.OFFHAND)) ? EquipmentSlot.OFFHAND : EquipmentSlot.MAINHAND;
-                                        stack.hurtAndBreak(1, living, (p_279044_) -> {
-                                            p_279044_.broadcastBreakEvent(equipmentslot);
-                                        });
-                                    }
-                                } else if (blockentity instanceof BrushableBlockEntity brushableblockentity) {
-                                    boolean flag1 = brush(brushableblockentity, world, world.getGameTime(), player, blockhitresult.getDirection());
-                                    if (flag1) {
-                                        EquipmentSlot equipmentslot = stack.equals(player.getItemBySlot(EquipmentSlot.OFFHAND)) ? EquipmentSlot.OFFHAND : EquipmentSlot.MAINHAND;
-                                        stack.hurtAndBreak(1, living, (p_279044_) -> {
-                                            p_279044_.broadcastBreakEvent(equipmentslot);
-                                        });
-                                    }
-                                }
-                            }
-                        }
-
-                        return;
-                    }
-                }
-
-            }
-            living.releaseUsingItem();
-        }
-    }
-
-    public static boolean brush(BrushableBlockEntity be, Level level, long pStartTick, Player pPlayer, Direction pHitDirection) {
-        if (be.getHitDirection() == null) {
-            be.hitDirection = pHitDirection;
-        }
-
-        be.brushCountResetsAtTick = pStartTick + 40L;
-        if (pStartTick >= be.coolDownEndsAtTick && level instanceof ServerLevel) {
-            be.coolDownEndsAtTick = pStartTick + 10L;
-            be.unpackLootTable(pPlayer);
-            int i = be.getCompletionState();
-            var numTicks = 10 - 2 * EnchantmentHelper.getTagEnchantmentLevel(EnchantmentRegistry.BRUSH_EFFICIENCY_ENCHANTMENT.get(), pPlayer.getMainHandItem());
-            if (++be.brushCount >= numTicks) {
-                be.brushingCompleted(pPlayer);
-                return true;
-            } else {
-                level.scheduleTick(be.getBlockPos(), be.getBlockState().getBlock(), 40);
-                int j = be.getCompletionState();
-                if (i != j) {
-                    BlockState blockstate = be.getBlockState();
-                    BlockState blockstate1 = blockstate.setValue(BlockStateProperties.DUSTED, j);
-                    level.setBlock(be.getBlockPos(), blockstate1, 3);
-                }
-
-                return false;
-            }
-        } else {
-            return false;
-        }
-    }
-
-    @SubscribeEvent
-    public static void itemAttrModifier(final ItemAttributeModifierEvent event) {
-        ItemStack stack = event.getItemStack();
-        for (var entry : stack.getAllEnchantments().entrySet()) if (entry.getKey() instanceof CustomEnchantment customEnchant) {
-            int level = entry.getValue();
-            var attributeMap = customEnchant.attributes(event.getSlotType(), level);
-            for (var attributeModifierEntry : attributeMap.entries()) {
-                event.addModifier(attributeModifierEntry.getKey(), attributeModifierEntry.getValue());
-                //System.out.println(attributeModifierEntry.getValue().getAmount() + (Minecraft.getInstance().isLocalServer() ? " local server" : " not local server"));
-            }
-        }
-
-        if (stack.getItem() instanceof ISocketable socketable) {
-            var attributeMap = socketable.attributes(event.getSlotType());
-            for (var attributeModifierEntry : attributeMap.entries()) event.addModifier(attributeModifierEntry.getKey(), attributeModifierEntry.getValue());
-        }
-    }
-
-    @SubscribeEvent
-    public static void breakSpeed(final PlayerEvent.BreakSpeed event) {
-        int multiplier = EnchantmentHelper.getEnchantmentLevel(EnchantmentRegistry.STEADY_ENCHANTMENT.get(), event.getEntity()) + 1;
-        if (!event.getEntity().onGround()) event.setNewSpeed(event.getNewSpeed() * multiplier);
-    }
-
-    @SubscribeEvent
-    public static void jump(final LivingEvent.LivingJumpEvent event) {
-        LivingEntity entity = event.getEntity();
-        AttributeInstance instance = entity.getAttribute(AttributeRegistry.JUMP_POWER.get());
-        if (instance != null) {
-            var delta = entity.getDeltaMovement();
-            entity.setDeltaMovement(delta.x, entity.getAttributeValue(AttributeRegistry.JUMP_POWER.get()), delta.z);
-            instance.setBaseValue(0.42F * entity.getBlockJumpFactor() + entity.getJumpBoostPower());
-        }
-
-        if (entity instanceof Player player && player.isSprinting()) {
-            player.causeFoodExhaustion(0.2f * ((float) player.getAttributeValue(AttributeRegistry.SPRINT_JUMP_HUNGER_CONSUMPTION.get()) - 1));
-        }
-    }
-
-    @SubscribeEvent
-    public static void fall(final LivingFallEvent event) {
-        event.setDistance((float) (event.getDistance() - 7.14f * event.getEntity().getAttributeValue(AttributeRegistry.JUMP_POWER.get())) + 3);
-    }
+//    @SubscribeEvent // TODO: maybe come back to this feature?
+//    public static void breakSpeed(final PlayerEvent.BreakSpeed event) {
+//        int multiplier = EnchantmentHelper.getEnchantmentLevel(EnchantmentRegistry.STEADY_ENCHANTMENT.get(), event.getEntity()) + 1;
+//        if (!event.getEntity().onGround()) event.setNewSpeed(event.getNewSpeed() * multiplier);
+//    }
 
     @SubscribeEvent
     public static void crit(final CriticalHitEvent event) {
-        AttributeInstance inst = event.getEntity().getAttribute(AttributeRegistry.CRIT_DAMAGE.get());
-        if (event.isVanillaCritical() && inst != null) event.setDamageModifier((float) inst.getValue());
+        AttributeInstance inst = event.getEntity().getAttribute(AttributeRegistry.CRIT_DAMAGE);
+        if (event.isVanillaCritical() && inst != null) event.setDamageMultiplier((float) inst.getValue());
     }
 
     @SubscribeEvent
@@ -525,21 +391,20 @@ public class EventHandler {
         double dx = player.getX() - player.xOld, dy = player.getY() - player.yOld, dz = player.getZ() - player.zOld;
         AttributeInstance attributeInstance = player.getAttribute(Attributes.MOVEMENT_SPEED);
         if (attributeInstance == null) return;
-        attributeInstance.removeModifier(Main.SPRINT_SPEED_ATTRIBUTE_MOVEMENT_SPEED_MODIFIER_UUID);
+        attributeInstance.removeModifier(Main.SPRINT_SPEED_ATTRIBUTE_MOVEMENT_SPEED_MODIFIER_ID);
         if (player.isSprinting()) {
             attributeInstance.addTransientModifier(
                     new AttributeModifier(
-                            Main.SPRINT_SPEED_ATTRIBUTE_MOVEMENT_SPEED_MODIFIER_UUID,
-                            "Sprint speed movement modifier",
-                            player.getAttributeValue(AttributeRegistry.SPRINT_SPEED.get()) - 1,
-                            AttributeModifier.Operation.MULTIPLY_TOTAL
+                            Main.SPRINT_SPEED_ATTRIBUTE_MOVEMENT_SPEED_MODIFIER_ID,
+                            player.getAttributeValue(AttributeRegistry.SPRINT_SPEED) - 1,
+                            AttributeModifier.Operation.ADD_MULTIPLIED_TOTAL
                     )
             );
             //System.out.println("modifiers " + player.getAttribute(Attributes.MOVEMENT_SPEED).getModifiers() + " on " + GeneralUtil.stringCS(player.level()));
             if (!player.isPassenger() && !player.isSwimming() && !player.isEyeInFluidType(Fluids.WATER.getFluidType()) && !player.isInWater() && !player.onClimbable() && player.onGround()) {
                 int cmTraveled = Math.round((float) Math.sqrt(dx * dx + dz * dz) * 100);
                 float vanillaExhaustion = (float) cmTraveled * 0.001f; // 0.1 per meter
-                float newExhaustion = (float) (vanillaExhaustion * player.getAttributeValue(AttributeRegistry.SPRINT_HUNGER_CONSUMPTION.get()));
+                float newExhaustion = (float) (vanillaExhaustion * player.getAttributeValue(AttributeRegistry.SPRINT_HUNGER_CONSUMPTION));
                 player.causeFoodExhaustion(newExhaustion - vanillaExhaustion);
             }
         }
@@ -547,32 +412,34 @@ public class EventHandler {
 
     @SubscribeEvent
     public static void mobGrief(final EntityMobGriefingEvent event) {
-        if (event.getEntity() instanceof BlazeSentry) event.setResult(Event.Result.DENY);
+        if (event.getEntity() instanceof BlazeSentry) event.setCanGrief(false);
     }
 
     @SubscribeEvent
-    public static void livingEntityTick(final LivingEvent.LivingTickEvent event) {
-        LivingEntity entity = event.getEntity();
-        int overheat = entity.getData(AttachmentTypeRegistry.LIVING_ENTITY_OVERHEAT_ATTACHMENT);
-        if (overheat >= 7) {
-            overheat -= 5;
+    public static void livingEntityTick(final EntityTickEvent.Pre event) {
+        if (event.getEntity() instanceof LivingEntity entity) {
+            int overheat = entity.getData(AttachmentTypeRegistry.LIVING_ENTITY_OVERHEAT_ATTACHMENT);
+            if (overheat >= 7) {
+                overheat -= 5;
 
-            entity.setRemainingFireTicks(3 * 20);
-            int fireResistance = GeneralUtil.fireResistance(entity);
-            float maxDmg = 3;
-            float dmg = maxDmg - maxDmg * GeneralUtil.clamp(fireResistance / 10f, 0, 1);
-            if (dmg > 0 && (!(entity instanceof Player player) || (!player.isCreative() && !player.isSpectator())) && !entity.getType().fireImmune()) entity.hurt(overheatDamage(entity.level().registryAccess()), dmg);
-        } else if (entity.tickCount % 5 == 0 && overheat > 0) {
-            overheat--;
+                entity.setRemainingFireTicks(3 * 20);
+                int fireResistance = GeneralUtil.fireResistance(entity);
+                float maxDmg = 3;
+                float dmg = maxDmg - maxDmg * GeneralUtil.clamp(fireResistance / 10f, 0, 1);
+                if (dmg > 0 && (!(entity instanceof Player player) || (!player.isCreative() && !player.isSpectator())) && !entity.getType().fireImmune())
+                    entity.hurt(overheatDamage(entity.level().registryAccess()), dmg);
+            } else if (entity.tickCount % 5 == 0 && overheat > 0) {
+                overheat--;
+            }
+            ModUtil.setEntityOverheat(entity, overheat);
         }
-        ModUtil.setEntityOverheat(entity, overheat);
     }
 
     public static DamageSource overheatDamage(RegistryAccess registryAccess) {
         return new DamageSource(registryAccess.registryOrThrow(Registries.DAMAGE_TYPE).getHolderOrThrow(OVERHEAT_DAMAGE_TYPE));
     }
 
-    public static final ResourceKey<DamageType> OVERHEAT_DAMAGE_TYPE = ResourceKey.create(Registries.DAMAGE_TYPE, new ResourceLocation(Main.MODID, "overheat"));
+    public static final ResourceKey<DamageType> OVERHEAT_DAMAGE_TYPE = ResourceKey.create(Registries.DAMAGE_TYPE, ResourceLocation.fromNamespaceAndPath(Main.MODID,  "overheat"));
 
     @SubscribeEvent
     public static void onSwing(final PlayerInteractEvent.LeftClickEmpty event) {

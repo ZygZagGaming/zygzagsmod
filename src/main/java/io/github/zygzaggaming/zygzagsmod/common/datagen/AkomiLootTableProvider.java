@@ -3,10 +3,14 @@ package io.github.zygzaggaming.zygzagsmod.common.datagen;
 import io.github.zygzaggaming.zygzagsmod.common.registry.BlockItemEntityRegistry;
 import io.github.zygzaggaming.zygzagsmod.common.registry.BlockRegistry;
 import io.github.zygzaggaming.zygzagsmod.common.registry.BlockWithItemRegistry;
+import net.minecraft.MethodsReturnNonnullByDefault;
+import net.minecraft.core.Holder;
+import net.minecraft.core.HolderLookup;
+import net.minecraft.core.WritableRegistry;
 import net.minecraft.data.PackOutput;
 import net.minecraft.data.loot.BlockLootSubProvider;
 import net.minecraft.data.loot.LootTableProvider;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.util.ProblemReporter;
 import net.minecraft.world.flag.FeatureFlags;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Items;
@@ -16,20 +20,24 @@ import net.minecraft.world.level.storage.loot.ValidationContext;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParamSets;
 import net.neoforged.neoforge.registries.DeferredHolder;
 
+import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.concurrent.CompletableFuture;
 import java.util.function.Supplier;
 import java.util.stream.Stream;
 
+@ParametersAreNonnullByDefault
+@MethodsReturnNonnullByDefault
 public class AkomiLootTableProvider extends LootTableProvider {
-    public AkomiLootTableProvider(PackOutput output) {
-        super(output, Set.of(), List.of(new SubProviderEntry(AkomiBlockLoot::new, LootContextParamSets.BLOCK)));
+    public AkomiLootTableProvider(PackOutput output, CompletableFuture<HolderLookup.Provider> future) {
+        super(output, Set.of(), List.of(new SubProviderEntry(AkomiBlockLoot::new, LootContextParamSets.BLOCK)), future);
     }
 
     @Override
-    protected void validate(Map<ResourceLocation, LootTable> map, ValidationContext ctx) {
-        map.forEach((k, v) -> v.validate(ctx));
+    protected void validate(WritableRegistry<LootTable> registry, ValidationContext ctx, ProblemReporter.Collector collector) {
+        registry.forEach((k) -> k.validate(ctx));
     }
 
     static class AkomiBlockLoot extends BlockLootSubProvider {
@@ -54,13 +62,13 @@ public class AkomiLootTableProvider extends LootTableProvider {
                 BlockItemEntityRegistry.RED_NETHER_BRICK_CACHE.block()
         );
 
-        public static final Map<Supplier<? extends Block>, Supplier<? extends Item>> DROP_OTHER = Map.of(
-                BlockRegistry.BLESSED_SOIL, (Supplier<? extends Item>) () -> Items.DIRT,
-                BlockRegistry.GLOWING_SOIL, (Supplier<? extends Item>) () -> Items.DIRT,
+        public static final Map<Holder<? extends Block>, Holder<? extends Item>> DROP_OTHER = Map.of(
+                BlockRegistry.BLESSED_SOIL, Holder.direct(Items.DIRT),
+                BlockRegistry.GLOWING_SOIL, Holder.direct(Items.DIRT),
                 BlockItemEntityRegistry.SUSPICIOUS_END_SAND.block(), BlockWithItemRegistry.IRIDIUM_END_SAND.item()
         );
 
-        public static final List<Supplier<? extends Block>> DROP_NOTHING = List.of(
+        public static final List<Holder<? extends Block>> DROP_NOTHING = List.of(
                 BlockRegistry.STRUCTURE_PLACER
         );
 
@@ -70,15 +78,15 @@ public class AkomiLootTableProvider extends LootTableProvider {
                 BlockItemEntityRegistry.MAGMATIC_NETHER_BRICKS.block()
         );
 
-        public AkomiBlockLoot() {
-            super(Set.of(), FeatureFlags.REGISTRY.allFlags());
+        public AkomiBlockLoot(HolderLookup.Provider provider) {
+            super(Set.of(), FeatureFlags.REGISTRY.allFlags(), provider);
         }
 
         @Override
         protected void generate() {
             for (var blockSupplier : DROP_SELF) dropSelf(blockSupplier.get());
-            for (var blockSupplier : DROP_OTHER.keySet()) dropOther(blockSupplier.get(), DROP_OTHER.get(blockSupplier).get());
-            for (var blockSupplier : DROP_NOTHING) add(blockSupplier.get(), noDrop());
+            for (var blockSupplier : DROP_OTHER.keySet()) dropOther(blockSupplier.value(), DROP_OTHER.get(blockSupplier).value());
+            for (var blockSupplier : DROP_NOTHING) add(blockSupplier.value(), noDrop());
             for (var blockSupplier : DROP_SILK) dropWhenSilkTouch(blockSupplier.get());
         }
 

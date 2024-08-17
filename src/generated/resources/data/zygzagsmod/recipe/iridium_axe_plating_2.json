@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:smithing_transform",
+  "addition": {
+    "item": "zygzagsmod:iridium_plating"
+  },
+  "base": {
+    "item": "zygzagsmod:partial_iridium_axe_2"
+  },
+  "result": {
+    "count": 1,
+    "id": "zygzagsmod:iridium_axe"
+  },
+  "template": {
+    "item": "zygzagsmod:iridium_axe_blueprint"
+  }
+}

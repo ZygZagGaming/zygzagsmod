@@ -6,7 +6,10 @@ import io.github.zygzaggaming.zygzagsmod.common.entity.animation.Action;
 import io.github.zygzaggaming.zygzagsmod.common.entity.animation.TransitionAction;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.core.Holder;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.core.particles.ParticleOptions;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.util.Mth;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.effect.MobEffects;
@@ -236,20 +239,20 @@ public class GeneralUtil {
 
     public static int fireResistance(LivingEntity entity) {
         AtomicInteger value = new AtomicInteger(); // thanks intellij
-        runIterationOnInventory((enchant, level) -> {
-            if (enchant == Enchantments.FIRE_PROTECTION) value.addAndGet(level);
-        }, entity.getArmorSlots());
+        entity.level().registryAccess().lookup(Registries.ENCHANTMENT).ifPresent(lookup -> runIterationOnInventory((enchant, level) -> {
+            if (enchant.getKey() == Enchantments.FIRE_PROTECTION) value.addAndGet(level);
+        }, entity.getArmorSlots(), lookup));
         if (entity.hasEffect(MobEffects.FIRE_RESISTANCE)) value.addAndGet(6);
         return value.get();
     }
 
-    public static void runIterationOnInventory(EnchantmentVisitor visitor, Iterable<ItemStack> inventory) {
-        for (var item : inventory) runIterationOnItem(visitor, item);
+    public static void runIterationOnInventory(EnchantmentVisitor visitor, Iterable<ItemStack> inventory, HolderLookup.RegistryLookup<Enchantment> lookup) {
+        for (var item : inventory) runIterationOnItem(visitor, item, lookup);
     }
 
-    public static void runIterationOnItem(EnchantmentVisitor visitor, ItemStack stack) {
-        if (!stack.isEmpty()) for (Map.Entry<Enchantment, Integer> entry : stack.getAllEnchantments().entrySet()) {
-            visitor.accept(entry.getKey(), entry.getValue());
+    public static void runIterationOnItem(EnchantmentVisitor visitor, ItemStack stack, HolderLookup.RegistryLookup<Enchantment> lookup) {
+        if (!stack.isEmpty()) for (var entry : stack.getAllEnchantments(lookup).entrySet()) {
+            visitor.accept(entry.getKey(), entry.getIntValue());
         }
     }
 
@@ -263,7 +266,7 @@ public class GeneralUtil {
 
     @FunctionalInterface
     public interface EnchantmentVisitor {
-        void accept(Enchantment enchant, int level);
+        void accept(Holder<Enchantment> enchant, int level);
     }
 
     public static <K, V> void map(Map<K, V> map, K key, Function<V, V> function) {

@@ -12,12 +12,11 @@ import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
 
 import javax.annotation.ParametersAreNonnullByDefault;
-import java.util.function.Supplier;
 
 @ParametersAreNonnullByDefault
 @MethodsReturnNonnullByDefault
 public class GlassStairBlock extends StairBlock {
-    public GlassStairBlock(Supplier<BlockState> state, Properties properties) {
+    public GlassStairBlock(BlockState state, Properties properties) {
         super(state, properties);
     }
 

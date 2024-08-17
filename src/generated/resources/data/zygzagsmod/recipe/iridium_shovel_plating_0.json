@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:smithing_transform",
+  "addition": {
+    "item": "zygzagsmod:iridium_plating"
+  },
+  "base": {
+    "item": "minecraft:netherite_shovel"
+  },
+  "result": {
+    "count": 1,
+    "id": "zygzagsmod:iridium_shovel"
+  },
+  "template": {
+    "item": "zygzagsmod:iridium_shovel_blueprint"
+  }
+}

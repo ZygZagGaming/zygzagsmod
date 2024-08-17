@@ -3,7 +3,7 @@ package io.github.zygzaggaming.zygzagsmod.common.entity.animation;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.world.entity.LivingEntity;
 import org.jetbrains.annotations.Nullable;
-import software.bernie.geckolib.core.animatable.GeoAnimatable;
+import software.bernie.geckolib.animatable.GeoAnimatable;
 
 import java.util.List;
 

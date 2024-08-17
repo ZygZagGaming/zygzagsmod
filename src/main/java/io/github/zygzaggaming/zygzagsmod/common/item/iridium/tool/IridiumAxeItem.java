@@ -25,11 +25,9 @@ import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.material.Fluids;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
-import net.neoforged.neoforge.common.ToolAction;
-import net.neoforged.neoforge.common.ToolActions;
-
+import net.neoforged.neoforge.common.ItemAbilities;
+import net.neoforged.neoforge.common.ItemAbility;
 import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.List;
 
@@ -39,13 +37,13 @@ public class IridiumAxeItem extends AxeItem implements ISocketable {
     Socket socket;
 
     public IridiumAxeItem(Tier tier, float damage, float speed, Properties properties, Socket socket) {
-        super(tier, damage, speed, properties);
+        super(tier, properties);
         this.socket = socket;
     }
 
     @Override
-    public void appendHoverText(ItemStack stack, @Nullable Level world, List<Component> text, TooltipFlag flag) {
-        appendHoverText(stack, world, text, flag, "axe");
+    public void appendHoverText(ItemStack stack, TooltipContext ctx, List<Component> text, TooltipFlag flag) {
+        appendHoverText(stack, ctx, text, flag, "axe");
     }
 
     @Override
@@ -119,8 +117,8 @@ public class IridiumAxeItem extends AxeItem implements ISocketable {
     }
 
     @Override
-    public boolean canPerformAction(ItemStack stack, ToolAction toolAction) {
-        if (socket == Socket.DIAMOND && toolAction == ToolActions.SWORD_SWEEP) return true;
-        return ToolActions.DEFAULT_AXE_ACTIONS.contains(toolAction);
+    public boolean canPerformAction(ItemStack stack, ItemAbility ability) {
+        if (socket == Socket.DIAMOND && ability == ItemAbilities.SWORD_SWEEP) return true;
+        return ItemAbilities.DEFAULT_AXE_ACTIONS.contains(ability);
     }
 }

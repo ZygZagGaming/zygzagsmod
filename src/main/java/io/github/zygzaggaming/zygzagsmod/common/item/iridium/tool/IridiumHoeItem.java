@@ -10,13 +10,11 @@ import net.minecraft.world.item.HoeItem;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Tier;
 import net.minecraft.world.item.TooltipFlag;
-import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.AABB;
-import net.neoforged.neoforge.common.ToolAction;
-import net.neoforged.neoforge.common.ToolActions;
+import net.neoforged.neoforge.common.ItemAbilities;
+import net.neoforged.neoforge.common.ItemAbility;
 import org.jetbrains.annotations.NotNull;
 
-import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.List;
 
@@ -26,7 +24,7 @@ public class IridiumHoeItem extends HoeItem implements ISocketable {
     Socket socket;
 
     public IridiumHoeItem(Tier tier, int damage, float speed, Properties properties, Socket socket) {
-        super(tier, damage, speed, properties);
+        super(tier, properties);
         this.socket = socket;
     }
 
@@ -36,8 +34,8 @@ public class IridiumHoeItem extends HoeItem implements ISocketable {
     }
 
     @Override
-    public void appendHoverText(ItemStack stack, @Nullable Level world, List<Component> text, TooltipFlag flag) {
-        appendHoverText(stack, world, text, flag, "hoe");
+    public void appendHoverText(ItemStack stack, TooltipContext ctx, List<Component> text, TooltipFlag flag) {
+        appendHoverText(stack, ctx, text, flag, "hoe");
     }
 
     @Override
@@ -51,9 +49,9 @@ public class IridiumHoeItem extends HoeItem implements ISocketable {
     }
 
     @Override
-    public boolean canPerformAction(ItemStack stack, ToolAction toolAction) {
-        if (socket == Socket.WITHER_SKULL && toolAction == ToolActions.SWORD_SWEEP) return true;
-        return super.canPerformAction(stack, toolAction);
+    public boolean canPerformAction(ItemStack stack, ItemAbility ability) {
+        if (socket == Socket.WITHER_SKULL && ability == ItemAbilities.SWORD_SWEEP) return true;
+        return super.canPerformAction(stack, ability);
     }
 
     @NotNull

@@ -1,0 +1,20 @@
+{
+  "type": "crafting_shaped",
+  "pattern": [
+    " S ",
+    "SRS",
+    " S "
+  ],
+  "key": {
+    "S": {
+      "item": "minecraft:end_stone_bricks"
+    },
+    "R": {
+      "item": "minecraft:redstone"
+    }
+  },
+  "result": {
+    "id": "zygzagsmod:end_stone_switch",
+    "count": 1
+  }
+}

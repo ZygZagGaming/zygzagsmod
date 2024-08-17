@@ -2,7 +2,7 @@ package io.github.zygzaggaming.zygzagsmod.common.entity.animation;
 
 import io.github.zygzaggaming.zygzagsmod.common.Main;
 import net.minecraft.resources.ResourceLocation;
-import software.bernie.geckolib.core.animation.RawAnimation;
+import software.bernie.geckolib.animation.RawAnimation;
 
 import java.util.function.Function;
 import java.util.function.Supplier;

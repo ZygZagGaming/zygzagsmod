@@ -1,9 +1,0 @@
-{
-  "type": "minecraft:blasting",
-  "ingredient": {
-    "item": "zygzagsmod:raw_iridium_block"
-  },
-  "result": "zygzagsmod:iridium_plating",
-  "experience": 1,
-  "cookingtime": 100
-}

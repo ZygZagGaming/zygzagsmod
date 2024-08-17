@@ -33,12 +33,12 @@ public class TogglableButtonBlock extends ButtonBlock implements EntityBlock {
     }
 
     @Override
-    public InteractionResult use(BlockState state, Level world, BlockPos pos, Player player, InteractionHand hand, BlockHitResult result) {
+    public InteractionResult useWithoutItem(BlockState state, Level world, BlockPos pos, Player player, BlockHitResult result) {
         if (state.getValue(POWERED)) {
             depress(world, pos, state);
             return InteractionResult.sidedSuccess(world.isClientSide);
         } else if (world.getBlockEntity(pos) instanceof TogglableButtonBlockEntity tbbe) tbbe.pressed();
-        return super.use(state, world, pos, player, hand, result);
+        return super.useWithoutItem(state, world, pos, player, result);
     }
 
     public void depress(Level world, BlockPos pos, BlockState state) {

@@ -17,26 +17,25 @@ import io.github.zygzaggaming.zygzagsmod.common.registry.AttributeRegistry;
 import io.github.zygzaggaming.zygzagsmod.common.registry.EntityTypeRegistry;
 import io.github.zygzaggaming.zygzagsmod.common.registry.IridiumGearRegistry;
 import net.minecraft.data.DataProvider;
-import net.minecraft.data.loot.LootTableProvider;
 import net.minecraft.data.recipes.RecipeProvider;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.monster.AbstractSkeleton;
 import net.minecraft.world.item.Item;
 import net.neoforged.bus.api.SubscribeEvent;
-import net.neoforged.fml.common.Mod;
+import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.client.event.RegisterColorHandlersEvent;
 import net.neoforged.neoforge.client.model.generators.BlockStateProvider;
 import net.neoforged.neoforge.client.model.generators.ItemModelProvider;
 import net.neoforged.neoforge.data.event.GatherDataEvent;
 import net.neoforged.neoforge.event.entity.EntityAttributeCreationEvent;
 import net.neoforged.neoforge.event.entity.EntityAttributeModificationEvent;
-import net.neoforged.neoforge.network.event.RegisterPayloadHandlerEvent;
-import net.neoforged.neoforge.network.registration.IPayloadRegistrar;
+import net.neoforged.neoforge.network.event.RegisterPayloadHandlersEvent;
+import net.neoforged.neoforge.network.registration.PayloadRegistrar;
 
 import java.util.function.Supplier;
 
 @SuppressWarnings("unused")
-@Mod.EventBusSubscriber(modid = Main.MODID, bus = Mod.EventBusSubscriber.Bus.MOD)
+@EventBusSubscriber(modid = Main.MODID, bus = EventBusSubscriber.Bus.MOD)
 public class ModEventHandler {
     @SubscribeEvent
     public static void doAttributes(final EntityAttributeCreationEvent event) {
@@ -48,14 +47,13 @@ public class ModEventHandler {
     @SubscribeEvent
     public static void modifyAttributes(final EntityAttributeModificationEvent event) {
         for (var type : event.getTypes()) {
-            event.add(type, AttributeRegistry.JUMP_POWER.get(), 0.42);
             if (type == EntityType.PLAYER) {
-                event.add(type, AttributeRegistry.CRIT_DAMAGE.get(), 1.5);
-                event.add(type, AttributeRegistry.SPRINT_SPEED.get(), 1.0);
-                event.add(type, AttributeRegistry.SPRINT_HUNGER_CONSUMPTION.get(), 1.0);
-                event.add(type, AttributeRegistry.SPRINT_JUMP_HUNGER_CONSUMPTION.get(), 1.0);
-                event.add(type, AttributeRegistry.ARMOR_DURABILITY_REDUCTION.get(), 1.0);
-                event.add(type, AttributeRegistry.FLAIL_DAMAGE.get(), 0.0);
+                event.add(type, AttributeRegistry.CRIT_DAMAGE, 1.5);
+                event.add(type, AttributeRegistry.SPRINT_SPEED, 1.0);
+                event.add(type, AttributeRegistry.SPRINT_HUNGER_CONSUMPTION, 1.0);
+                event.add(type, AttributeRegistry.SPRINT_JUMP_HUNGER_CONSUMPTION, 1.0);
+                event.add(type, AttributeRegistry.ARMOR_DURABILITY_REDUCTION, 1.0);
+                event.add(type, AttributeRegistry.FLAIL_DAMAGE, 0.0);
             }
         }
     }
@@ -75,7 +73,7 @@ public class ModEventHandler {
         );
         event.getGenerator().addProvider(
                 event.includeClient(),
-                (DataProvider.Factory<RecipeProvider>) AkomiRecipeProvider::new
+                (DataProvider.Factory<RecipeProvider>) (it) -> new AkomiRecipeProvider(it, event.getLookupProvider())
         );
         event.getGenerator().addProvider(
                 event.includeClient(),
@@ -83,21 +81,15 @@ public class ModEventHandler {
         );
         event.getGenerator().addProvider(
                 event.includeServer(),
-                (DataProvider.Factory<LootTableProvider>) AkomiLootTableProvider::new
+                (DataProvider.Factory<? extends DataProvider>) (it) -> new AkomiLootTableProvider(it, event.getLookupProvider())
         );
     }
 
     @SubscribeEvent
-    public static void registerPayloadHandlers(final RegisterPayloadHandlerEvent event) {
-        final IPayloadRegistrar registrar = event.registrar(Main.MODID);
-        registrar.play(ClientboundBlazeSentryRotationPacket.ID, ClientboundBlazeSentryRotationPacket::new, handler -> handler
-                .client(ClientboundBlazeSentryRotationPacketHandler.getInstance()::handleData)
-        );
-        registrar.play(ClientboundSelfOverheatUpdatePacket.ID, ClientboundSelfOverheatUpdatePacket::new, handler -> handler
-                .client(ClientboundSelfOverheatUpdatePacketHandler.getInstance()::handleData)
-        );
-        registrar.play(ServerboundPlayerLeftClickEmptyPacket.ID, ServerboundPlayerLeftClickEmptyPacket::new, handler -> handler
-                .server(ServerboundPlayerLeftClickEmptyPacketHandler.getInstance()::handleData)
-        );
+    public static void registerPayloadHandlers(final RegisterPayloadHandlersEvent event) {
+        final PayloadRegistrar registrar = event.registrar(Main.MODID);
+        registrar.playToClient(ClientboundBlazeSentryRotationPacket.TYPE, ClientboundBlazeSentryRotationPacket.STREAM_CODEC, ClientboundBlazeSentryRotationPacketHandler.getInstance()::handleData);
+        registrar.playToClient(ClientboundSelfOverheatUpdatePacket.TYPE, ClientboundSelfOverheatUpdatePacket.STREAM_CODEC, ClientboundSelfOverheatUpdatePacketHandler.getInstance()::handleData);
+        registrar.playToServer(ServerboundPlayerLeftClickEmptyPacket.TYPE, ServerboundPlayerLeftClickEmptyPacket.STREAM_CODEC, ServerboundPlayerLeftClickEmptyPacketHandler.getInstance()::handleData);
     }
 }

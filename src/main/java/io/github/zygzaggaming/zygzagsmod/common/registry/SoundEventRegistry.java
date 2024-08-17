@@ -17,7 +17,7 @@ public class SoundEventRegistry extends AkomiRegistry<SoundEvent> {
 
     public static final Supplier<SoundEvent> END_SAND_BREAK = INSTANCE.register(
             "end_sand_break",
-            () -> SoundEvent.createVariableRangeEvent(new ResourceLocation(MODID, "end_sand_break"))
+            () -> SoundEvent.createVariableRangeEvent(ResourceLocation.fromNamespaceAndPath(MODID,  "end_sand_break"))
     );
     public static final DeferredSoundType END_SAND = new DeferredSoundType(
             1.0F,
@@ -39,7 +39,7 @@ public class SoundEventRegistry extends AkomiRegistry<SoundEvent> {
     }
 
     public static Supplier<SoundEvent> makeSimpleSoundEvent(String id) {
-        return makeSimpleSoundEvent(id, new ResourceLocation(MODID, id));
+        return makeSimpleSoundEvent(id, ResourceLocation.fromNamespaceAndPath(MODID,  id));
     }
     public static Supplier<SoundEvent> makeSimpleSoundEvent(String id, ResourceLocation soundLocation) {
         return INSTANCE.register(

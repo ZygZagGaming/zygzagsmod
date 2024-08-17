@@ -64,7 +64,7 @@ public class BlockItemEntityRegistry {
     public <B extends Block, E extends BlockEntity> BlockItemEntitySupplier<B, BlockItem, E> register(String id, Supplier<B> blockSupplier, Item.Properties properties, BlockEntityType.BlockEntitySupplier<E> beSupplier) {
         var blockRegObj = blockRegister.register(id, blockSupplier);
         return new BlockItemEntitySupplier<>(
-                new ResourceLocation(MODID, id),
+                ResourceLocation.fromNamespaceAndPath(MODID,  id),
                 blockRegObj,
                 itemRegister.register(id, () -> new BlockItem(blockRegObj.get(), properties)),
                 beRegister.register(id, () -> BlockEntityType.Builder.of(beSupplier, blockRegObj.get()).build(null))

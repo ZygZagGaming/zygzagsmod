@@ -1,0 +1,40 @@
+{
+  "description": {
+    "translate": "enchantment.zygzagsmod.springs"
+  },
+  "supported_items": "#minecraft:enchantable/leg_armor",
+  "weight": 8,
+  "max_level": 5,
+  "min_cost": {
+    "base": 18,
+    "per_level_above_first": 3
+  },
+  "max_cost": {
+    "base": 26,
+    "per_level_above_first": 1
+  },
+  "anvil_cost": 3,
+  "slots": [
+    "legs"
+  ],
+  "effects": {
+    "minecraft:attributes": [
+      {
+        "attribute": "minecraft:generic.jump_strength",
+        "amount": {
+          "type": "minecraft:lookup",
+          "fallback": 0.75,
+          "values": [
+            0.1,
+            0.2,
+            0.3,
+            0.5,
+            0.75
+          ]
+        },
+        "operation": "add_multiplied_base",
+        "id": "zygzagsmod:springs"
+      }
+    ]
+  }
+}

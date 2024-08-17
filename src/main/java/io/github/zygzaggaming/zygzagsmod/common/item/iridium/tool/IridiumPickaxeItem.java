@@ -14,6 +14,7 @@ import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResultHolder;
 import net.minecraft.world.SimpleContainer;
 import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
@@ -21,6 +22,7 @@ import net.minecraft.world.item.PickaxeItem;
 import net.minecraft.world.item.Tier;
 import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.item.crafting.RecipeHolder;
+import net.minecraft.world.item.crafting.SingleRecipeInput;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
@@ -40,13 +42,13 @@ public class IridiumPickaxeItem extends PickaxeItem implements ISocketable {
     Socket socket;
 
     public IridiumPickaxeItem(Tier tier, int damage, float speed, Properties properties, Socket socket) {
-        super(tier, damage, speed, properties);
+        super(tier, properties);
         this.socket = socket;
     }
 
     @Override
-    public void appendHoverText(ItemStack stack, @Nullable Level world, List<Component> text, TooltipFlag flag) {
-        appendHoverText(stack, world, text, flag, "pickaxe");
+    public void appendHoverText(ItemStack stack, TooltipContext ctx, List<Component> text, TooltipFlag flag) {
+        appendHoverText(stack, ctx, text, flag, "pickaxe");
     }
 
     @Override
@@ -108,8 +110,7 @@ public class IridiumPickaxeItem extends PickaxeItem implements ISocketable {
                                 }
                             }
                         }
-                        stack.hurtAndBreak(n * 4, player, (e) -> {
-                        });
+                        stack.hurtAndBreak(n * 4, player, EquipmentSlot.MAINHAND);
                     }
                     return InteractionResultHolder.success(stack);
                 }
@@ -123,27 +124,25 @@ public class IridiumPickaxeItem extends PickaxeItem implements ISocketable {
                         for (ItemEntity itemEntity : entities) {
                             for (TransmutationRecipe recipe : recipes) {
                                 if (n >= 10) break;
-                                SimpleContainer holder = new SimpleContainer(itemEntity.getItem());
+                                SingleRecipeInput holder = new SingleRecipeInput(itemEntity.getItem());
                                 if (recipe.matches(holder, world)) {
                                     int in = itemEntity.getItem().getCount();
                                     dura += in;
                                     ItemEntity newItem = new ItemEntity(world, itemEntity.getX(), itemEntity.getY(), itemEntity.getZ(), recipe.assemble(holder, world.registryAccess()));
                                     world.addFreshEntity(newItem);
-                                    if (!player.getAbilities().instabuild) stack.hurtAndBreak(in, player, (it) -> {
-                                    });
+                                    if (!player.getAbilities().instabuild) stack.hurtAndBreak(in, player, EquipmentSlot.MAINHAND);
                                     itemEntity.kill();
                                     n++;
                                 }
                             }
                         }
-                        stack.hurtAndBreak(dura, player, (p) -> {
-                        });
+                        stack.hurtAndBreak(dura, player, EquipmentSlot.MAINHAND);
                         return InteractionResultHolder.success(stack);
                     }
                 }
                 case AMETHYST -> {
                     if (!player.getCooldowns().isOnCooldown(this)) {
-                        player.addEffect(new MobEffectInstance(MobEffectRegistry.SIGHT_EFFECT.get(), 2 * 20, 1));
+                        player.addEffect(new MobEffectInstance(MobEffectRegistry.SIGHT_EFFECT, 2 * 20, 1));
                         ISocketable.addCooldown(player, stack, Config.amethystPickaxeCooldown);
                     }
                     return InteractionResultHolder.consume(stack);

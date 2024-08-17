@@ -5,8 +5,8 @@ import io.github.zygzaggaming.zygzagsmod.common.block.entity.CacheBlockEntity;
 import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.core.component.DataComponents;
 import net.minecraft.world.Containers;
-import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.MenuProvider;
 import net.minecraft.world.entity.LivingEntity;
@@ -54,7 +54,7 @@ public class CacheBlock extends BaseEntityBlock implements SimpleWaterloggedBloc
     }
 
     @Override
-    public InteractionResult use(BlockState state, Level world, BlockPos pos, Player player, InteractionHand hand, BlockHitResult result) {
+    public InteractionResult useWithoutItem(BlockState state, Level world, BlockPos pos, Player player, BlockHitResult result) {
         if (world.isClientSide) {
             return InteractionResult.SUCCESS;
         } else {
@@ -93,10 +93,10 @@ public class CacheBlock extends BaseEntityBlock implements SimpleWaterloggedBloc
 
     @Override
     public void setPlacedBy(Level world, BlockPos pos, BlockState state, @Nullable LivingEntity placer, ItemStack stack) {
-        if (stack.hasCustomHoverName()) {
+        if (stack.has(DataComponents.CUSTOM_NAME)) {
             BlockEntity be = world.getBlockEntity(pos);
             if (be instanceof CacheBlockEntity cacheBlockEntity) {
-                cacheBlockEntity.setCustomName(stack.getHoverName());
+                cacheBlockEntity.setComponents(stack.getComponents());
             }
         }
     }

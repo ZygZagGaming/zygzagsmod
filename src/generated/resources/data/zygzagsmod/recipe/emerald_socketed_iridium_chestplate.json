@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:smithing_transform",
+  "addition": {
+    "item": "minecraft:emerald"
+  },
+  "base": {
+    "item": "zygzagsmod:iridium_chestplate"
+  },
+  "result": {
+    "count": 1,
+    "id": "zygzagsmod:emerald_socketed_iridium_chestplate"
+  },
+  "template": {
+    "item": "zygzagsmod:emerald_socket_schematic"
+  }
+}

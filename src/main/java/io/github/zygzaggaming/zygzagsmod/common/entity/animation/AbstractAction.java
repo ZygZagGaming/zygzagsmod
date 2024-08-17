@@ -1,7 +1,7 @@
 package io.github.zygzaggaming.zygzagsmod.common.entity.animation;
 
 import net.minecraft.resources.ResourceLocation;
-import software.bernie.geckolib.core.animation.RawAnimation;
+import software.bernie.geckolib.animation.RawAnimation;
 
 public abstract class AbstractAction {
     private final RawAnimation raw;
