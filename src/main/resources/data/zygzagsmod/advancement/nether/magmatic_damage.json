@@ -25,7 +25,7 @@
     "frame": "task",
     "hidden": false,
     "icon": {
-      "item": "zygzagsmod:magmatic_nether_bricks"
+      "id": "zygzagsmod:magmatic_nether_bricks"
     },
     "show_toast": true,
     "title": {
