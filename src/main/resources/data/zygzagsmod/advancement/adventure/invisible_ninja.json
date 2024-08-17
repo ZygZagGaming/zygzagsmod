@@ -38,17 +38,18 @@
     }
   },
   "display": {
-    "announce_to_chat": true,
     "description": {
       "translate": "advancements.adventure.invisible_ninja.description"
     },
     "frame": "goal",
-    "hidden": false,
     "icon": {
-      "item": "minecraft:potion",
-      "nbt": "{Potion:\"minecraft:invisibility\"}"
+      "id": "minecraft:potion",
+      "components": {
+        "minecraft:potion_contents": {
+          "potion": "minecraft:invisibility"
+        }
+      }
     },
-    "show_toast": true,
     "title": {
       "translate": "advancements.adventure.invisible_ninja.title"
     }
@@ -57,5 +58,6 @@
     [
       "sneak_around"
     ]
-  ]
+  ],
+  "sends_telemetry_event": true
 }

@@ -20,7 +20,7 @@
     "frame": "task",
     "hidden": false,
     "icon": {
-      "item": "zygzagsmod:iridium_helmet_blueprint"
+      "id": "zygzagsmod:iridium_helmet_blueprint"
     },
     "show_toast": true,
     "title": {

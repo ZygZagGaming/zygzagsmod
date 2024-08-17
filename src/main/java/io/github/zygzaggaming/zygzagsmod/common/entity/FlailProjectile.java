@@ -1,6 +1,7 @@
 package io.github.zygzaggaming.zygzagsmod.common.entity;
 
 import io.github.zygzaggaming.zygzagsmod.common.Main;
+import io.github.zygzaggaming.zygzagsmod.common.registry.AttachmentTypeRegistry;
 import io.github.zygzaggaming.zygzagsmod.common.registry.EntityTypeRegistry;
 import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.core.registries.Registries;
@@ -24,6 +25,8 @@ import net.minecraft.world.phys.Vec3;
 
 import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
+import java.util.Optional;
+import java.util.function.Consumer;
 
 @ParametersAreNonnullByDefault
 @MethodsReturnNonnullByDefault
@@ -42,6 +45,8 @@ public class FlailProjectile extends Projectile {
         noPhysics = false;
         this.flatDamage = flatDamage;
         this.damagePerBlockPerTick = damagePerBlockPerTick;
+
+        owner.setData(AttachmentTypeRegistry.PLAYER_FLAIL, Optional.of(this));
     }
 
     @Override
@@ -52,12 +57,10 @@ public class FlailProjectile extends Projectile {
         super.tick();
 
         Player owner = getPlayerOwner();
-        if (owner == null) discard();
+        if (owner == null) discardFlailProjectile();
         else {
             Vec3 diff = getBoundingBox().getCenter().subtract(owner.getBoundingBox().getCenter());
-            if (diff.lengthSqr() >= 60 * 60) discard();
-//            else if (diff.lengthSqr() <= 1.2 * 1.2 && tickCount >= 5)
-//                discard();
+            if (diff.lengthSqr() >= 60 * 60) discardFlailProjectile();
             else {
                 Vec3 before = position();
                 move(MoverType.SELF, getDeltaMovement());
@@ -74,30 +77,43 @@ public class FlailProjectile extends Projectile {
                 }
             }
         }
+        if (isRemoved()) discardFlailProjectile();
     }
 
     @Override
     public void playerTouch(Player player) {
+        ifPlayerOwned((owner) -> {
+            if (player.is(owner) && !this.level().isClientSide) {
+                discardFlailProjectile();
+            }
+        });
+    }
+
+    public void discardFlailProjectile() {
+        level().playLocalSound(
+                getX(),
+                getY(),
+                getZ(),
+                SoundEvents.ITEM_PICKUP,
+                SoundSource.PLAYERS,
+                0.2F,
+                (random.nextFloat() - random.nextFloat()) * 1.4F + 2.0F,
+                false
+        );
         Player owner = getPlayerOwner();
-        if (owner != null && player.is(owner) && !this.level().isClientSide) {
-            level().playLocalSound(
-                    getX(),
-                    getY(),
-                    getZ(),
-                    SoundEvents.ITEM_PICKUP,
-                    SoundSource.PLAYERS,
-                    0.2F,
-                    (random.nextFloat() - random.nextFloat()) * 1.4F + 2.0F,
-                    false
-            );
-            discard();
-        }
+        if (owner != null) owner.setData(AttachmentTypeRegistry.PLAYER_FLAIL, Optional.empty());
+        discard();
     }
 
     @Nullable
     public Player getPlayerOwner() {
         Entity entity = this.getOwner();
         return entity instanceof Player ? (Player)entity : null;
+    }
+
+    public void ifPlayerOwned(Consumer<Player> func) {
+        Player owner = getPlayerOwner();
+        if (owner != null) func.accept(owner);
     }
 
     public double damage() {

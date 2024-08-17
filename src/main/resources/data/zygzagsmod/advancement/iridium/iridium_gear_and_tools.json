@@ -86,7 +86,7 @@
     "frame": "goal",
     "hidden": false,
     "icon": {
-      "item": "zygzagsmod:diamond_socketed_iridium_sword"
+      "id": "zygzagsmod:diamond_socketed_iridium_sword"
     },
     "show_toast": true,
     "title": {

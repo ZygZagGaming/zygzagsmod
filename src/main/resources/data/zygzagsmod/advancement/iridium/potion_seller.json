@@ -5,15 +5,14 @@
       "conditions": {
         "items": [
           {
-            "items": [
-              "zygzagsmod:skull_socketed_iridium_scepter"
-            ],
-            "enchantments": [
-              {
-                "enchantment": "zygzagsmod:cooldown",
-                "levels": 4
+            "items": "zygzagsmod:skull_socketed_iridium_scepter",
+            "components": {
+              "minecraft:enchantments": {
+                "levels": {
+                  "zygzagsmod:cooldown": 4
+                }
               }
-            ]
+            }
           }
         ]
       },
@@ -28,7 +27,7 @@
     "frame": "challenge",
     "hidden": false,
     "icon": {
-      "item": "zygzagsmod:skull_socketed_iridium_scepter"
+      "id": "zygzagsmod:skull_socketed_iridium_scepter"
     },
     "show_toast": true,
     "title": {

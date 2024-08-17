@@ -13,7 +13,7 @@ public class ClientboundSelfOverheatUpdatePacketHandler {
 
     public void handleData(final ClientboundSelfOverheatUpdatePacket data, final IPayloadContext context) {
         context.enqueueWork(() -> {
-            context.player().setData(AttachmentTypeRegistry.LIVING_ENTITY_OVERHEAT_ATTACHMENT.get(), data.overheat());
+            context.player().setData(AttachmentTypeRegistry.LIVING_ENTITY_OVERHEAT.get(), data.overheat());
         });
     }
 }

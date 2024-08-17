@@ -20,7 +20,7 @@
     "frame": "task",
     "hidden": false,
     "icon": {
-      "item": "zygzagsmod:skull_socketed_iridium_pickaxe"
+      "id": "zygzagsmod:skull_socketed_iridium_pickaxe"
     },
     "show_toast": true,
     "title": {

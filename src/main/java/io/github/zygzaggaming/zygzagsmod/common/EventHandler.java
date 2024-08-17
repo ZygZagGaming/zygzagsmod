@@ -65,9 +65,7 @@ import net.neoforged.neoforge.common.Tags;
 import net.neoforged.neoforge.event.entity.EntityMobGriefingEvent;
 import net.neoforged.neoforge.event.entity.item.ItemExpireEvent;
 import net.neoforged.neoforge.event.entity.living.LivingDamageEvent;
-import net.neoforged.neoforge.event.entity.living.LivingEvent;
 import net.neoforged.neoforge.event.entity.living.LivingExperienceDropEvent;
-import net.neoforged.neoforge.event.entity.living.LivingFallEvent;
 import net.neoforged.neoforge.event.entity.player.CriticalHitEvent;
 import net.neoforged.neoforge.event.entity.player.PlayerInteractEvent;
 import net.neoforged.neoforge.event.level.BlockEvent;
@@ -114,10 +112,10 @@ public class EventHandler {
                 for (ItemEntity item : itemEntitiesInsideCauldron) totalItems += item.getItem().getCount();
                 double smeltingSpeed = Math.min(0.01 / totalItems, 0.004921875 / totalItems + 0.000078125); // percentage of the smelting that gets done every tick
                 for (ItemEntity item : itemEntitiesInsideCauldron) {
-                    double progress = item.getData(AttachmentTypeRegistry.ITEM_ENTITY_BULK_SMELTING_ATTACHMENT);
+                    double progress = item.getData(AttachmentTypeRegistry.ITEM_ENTITY_BULK_SMELTING);
                     progress += smeltingSpeed;
                     if (progress < 1) {
-                        item.setData(AttachmentTypeRegistry.ITEM_ENTITY_BULK_SMELTING_ATTACHMENT, progress);
+                        item.setData(AttachmentTypeRegistry.ITEM_ENTITY_BULK_SMELTING, progress);
                         continue;
                     }
                     if (progress > 2) continue; // failed smelts will stop incrementing
@@ -128,7 +126,7 @@ public class EventHandler {
                     SmeltingRecipe recipe = list.getFirst().value();
                     ItemStack output = recipe.assemble(container, world.registryAccess());
                     item.setItem(output.copyWithCount(output.getCount() * item.getItem().getCount()));
-                    item.setData(AttachmentTypeRegistry.ITEM_ENTITY_BULK_SMELTING_ATTACHMENT, 0.0);
+                    item.setData(AttachmentTypeRegistry.ITEM_ENTITY_BULK_SMELTING, 0.0);
 
                     // TODO: particles
                 }
@@ -418,7 +416,7 @@ public class EventHandler {
     @SubscribeEvent
     public static void livingEntityTick(final EntityTickEvent.Pre event) {
         if (event.getEntity() instanceof LivingEntity entity) {
-            int overheat = entity.getData(AttachmentTypeRegistry.LIVING_ENTITY_OVERHEAT_ATTACHMENT);
+            int overheat = entity.getData(AttachmentTypeRegistry.LIVING_ENTITY_OVERHEAT);
             if (overheat >= 7) {
                 overheat -= 5;
 

@@ -1,5 +1,4 @@
 {
-  "parent": "minecraft:end/enter_end_gateway",
   "criteria": {
     "raw_iridium": {
       "conditions": {
@@ -27,18 +26,19 @@
     }
   },
   "display": {
-    "announce_to_chat": true,
+    "announce_to_chat": false,
+    "background": "minecraft:textures/gui/advancements/backgrounds/end.png",
     "description": {
       "translate": "advancements.iridium.root.description"
     },
     "frame": "task",
     "hidden": false,
     "icon": {
-      "item": "zygzagsmod:raw_iridium"
+      "id": "zygzagsmod:raw_iridium"
     },
-    "show_toast": true,
+    "show_toast": false,
     "title": {
-      "translate": "advancements.end.obtain_iridium.title"
+      "translate": "advancements.iridium.root.title"
     }
   },
   "requirements": [

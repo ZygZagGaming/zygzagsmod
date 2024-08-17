@@ -1,6 +1,7 @@
 package io.github.zygzaggaming.zygzagsmod.common.item;
 
 import io.github.zygzaggaming.zygzagsmod.common.entity.FlailProjectile;
+import io.github.zygzaggaming.zygzagsmod.common.registry.AttachmentTypeRegistry;
 import io.github.zygzaggaming.zygzagsmod.common.registry.AttributeRegistry;
 import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.core.component.DataComponents;
@@ -45,7 +46,7 @@ public class FlailItem extends Item {
     }
 
     public void onSwing(Player player, ItemStack stack) {
-        if ((!stack.has(DataComponents.CUSTOM_MODEL_DATA) || stack.get(DataComponents.CUSTOM_MODEL_DATA) == CustomModelData.DEFAULT) && player.getAttackStrengthScale(0.5f) >= 1f) {
+        if (player.getData(AttachmentTypeRegistry.PLAYER_FLAIL).isEmpty() && player.getAttackStrengthScale(0.5f) >= 1f) {
             Level world = player.level();
 
             AttributeInstance instance = player.getAttribute(AttributeRegistry.FLAIL_DAMAGE);
