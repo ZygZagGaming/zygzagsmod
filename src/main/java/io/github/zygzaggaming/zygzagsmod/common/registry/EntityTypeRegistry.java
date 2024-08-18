@@ -1,5 +1,6 @@
 package io.github.zygzaggaming.zygzagsmod.common.registry;
 
+import io.github.zygzaggaming.zygzagsmod.client.renderer.SmallMagmaticFireballRenderer;
 import io.github.zygzaggaming.zygzagsmod.common.entity.*;
 import io.github.zygzaggaming.zygzagsmod.common.entity.assembly.ShurikenAssembly;
 import io.github.zygzaggaming.zygzagsmod.common.registry.base.AkomiRegistry;
@@ -27,6 +28,14 @@ public class EntityTypeRegistry extends AkomiRegistry<EntityType<?>> {
                     .sized(0.3125F, 0.3125F)
                     .clientTrackingRange(4)
                     .build("homing_wither_skull")
+    );
+
+    public static final Supplier<EntityType<SmallMagmaticFireball>> SMALL_MAGMATIC_FIREBALL = INSTANCE.register(
+            "small_magmatic_fireball",
+            () -> EntityType.Builder.<SmallMagmaticFireball>of(SmallMagmaticFireball::new, MobCategory.MISC)
+                    .sized(0.3125F, 0.3125F)
+                    .clientTrackingRange(4)
+                    .build("small_magmatic_fireball")
     );
     public static final Supplier<EntityType<PlayerAlliedSkeleton>> PLAYER_ALLIED_SKELETON = INSTANCE.register(
             "player_allied_skeleton",

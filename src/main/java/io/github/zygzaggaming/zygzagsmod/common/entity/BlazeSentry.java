@@ -27,7 +27,7 @@ import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.monster.Monster;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.LargeFireball;
-import net.minecraft.world.entity.projectile.SmallFireball;
+import io.github.zygzaggaming.zygzagsmod.common.entity.SmallMagmaticFireball;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.pathfinder.PathType;
@@ -289,7 +289,7 @@ public class BlazeSentry extends Monster implements GeoAnimatable, ActingEntity<
                 LivingEntity target = getTarget();
                 assert target != null;
                 Vec3 angle = rotations.get(1).directionVector();
-                SmallFireball fireball = new SmallFireball(level(), BlazeSentry.this, new Vec3(angle.x, angle.y, angle.z));
+                SmallMagmaticFireball fireball = new SmallMagmaticFireball(level(), BlazeSentry.this, new Vec3(angle.x, angle.y, angle.z));
                 fireball.setDeltaMovement(angle.scale(power));
                 fireball.moveTo(getEyePosition().add(angle.scale(0.25)));
                 level().addFreshEntity(fireball);

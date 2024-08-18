@@ -4,6 +4,7 @@ import io.github.zygzaggaming.zygzagsmod.common.networking.packet.ClientboundSel
 import io.github.zygzaggaming.zygzagsmod.common.registry.AttachmentTypeRegistry;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.phys.EntityHitResult;
 
 public class ModUtil {
     public static void incrementEntityOverheat(LivingEntity entity, int increment) {
@@ -19,6 +20,13 @@ public class ModUtil {
         if (old != newOverheat) {
             entity.setData(AttachmentTypeRegistry.LIVING_ENTITY_OVERHEAT.get(), newOverheat);
             if (entity instanceof ServerPlayer player) player.connection.send(new ClientboundSelfOverheatUpdatePacket(newOverheat));
+        }
+    }
+    public static void incrementOnHitEntityOverheat(EntityHitResult entity, int increment) {
+        if (increment != 0) {
+            int old = entity.getEntity().getData(AttachmentTypeRegistry.LIVING_ENTITY_OVERHEAT.get());
+            entity.getEntity().setData(AttachmentTypeRegistry.LIVING_ENTITY_OVERHEAT.get(), old + increment);
+            if (entity.getEntity() instanceof ServerPlayer player) player.connection.send(new ClientboundSelfOverheatUpdatePacket(old + increment));
         }
     }
 }
