@@ -14,6 +14,7 @@ import io.github.zygzaggaming.zygzagsmod.common.registry.AttributeRegistry;
 import io.github.zygzaggaming.zygzagsmod.common.registry.BlockRegistry;
 import io.github.zygzaggaming.zygzagsmod.common.util.GeneralUtil;
 import io.github.zygzaggaming.zygzagsmod.common.util.ModUtil;
+import io.github.zygzaggaming.zygzagsmod.common.util.ProjectileImpactEntityEvent;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.HolderLookup;
@@ -41,6 +42,7 @@ import net.minecraft.world.entity.ai.village.poi.PoiManager;
 import net.minecraft.world.entity.ai.village.poi.PoiTypes;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.entity.projectile.Projectile;
 import net.minecraft.world.item.ArmorItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
@@ -72,6 +74,7 @@ import net.neoforged.neoforge.event.level.BlockEvent;
 import net.neoforged.neoforge.event.tick.EntityTickEvent;
 import net.neoforged.neoforge.event.tick.LevelTickEvent;
 import net.neoforged.neoforge.event.tick.PlayerTickEvent;
+import net.minecraft.world.entity.projectile.Snowball;
 
 import java.util.HashMap;
 import java.util.HashSet;
@@ -443,5 +446,16 @@ public class EventHandler {
     public static void onSwing(final PlayerInteractEvent.LeftClickEmpty event) {
         ServerboundPlayerLeftClickEmptyPacket packet = new ServerboundPlayerLeftClickEmptyPacket();
         ((LocalPlayer) event.getEntity()).connection.send(packet);
+    }
+
+    @SubscribeEvent
+    public static void onProjectileImpact(ProjectileImpactEntityEvent event) {
+        Projectile projectile = event.getProjectile();
+        if (projectile instanceof Snowball) {
+            Entity hitEntity = event.getRay().getEntity();
+            int i = hitEntity instanceof BlazeSentry ? 100 : 0; //set 100 for test
+            hitEntity.hurt(projectile.damageSources().thrown(projectile, projectile.getOwner()), (float)i);
+            event.setCanceled(true);
+        }
     }
 }
