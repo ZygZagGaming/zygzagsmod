@@ -9,7 +9,7 @@
             "entity": "this",
             "predicate": {
               "location": {
-                "structure": "zygzagsmod:blaze_hive"
+                "structures": "zygzagsmod:blaze_hive"
               }
             }
           }
@@ -19,16 +19,13 @@
     }
   },
   "display": {
-    "announce_to_chat": true,
     "description": {
       "translate": "advancements.nether.find_hive.description"
     },
     "frame": "task",
-    "hidden": false,
     "icon": {
       "id": "minecraft:red_nether_bricks"
     },
-    "show_toast": true,
     "title": {
       "translate": "advancements.nether.find_hive.title"
     }
