@@ -68,6 +68,7 @@ import net.neoforged.neoforge.event.entity.EntityMobGriefingEvent;
 import net.neoforged.neoforge.event.entity.item.ItemExpireEvent;
 import net.neoforged.neoforge.event.entity.living.LivingDamageEvent;
 import net.neoforged.neoforge.event.entity.living.LivingExperienceDropEvent;
+import net.neoforged.neoforge.event.entity.living.LivingIncomingDamageEvent;
 import net.neoforged.neoforge.event.entity.player.CriticalHitEvent;
 import net.neoforged.neoforge.event.entity.player.PlayerInteractEvent;
 import net.neoforged.neoforge.event.level.BlockEvent;
@@ -449,13 +450,12 @@ public class EventHandler {
     }
 
     @SubscribeEvent
-    public static void onProjectileImpact(ProjectileImpactEntityEvent event) {
-        Projectile projectile = event.getProjectile();
+    public static void onProjectileImpact(LivingIncomingDamageEvent event) {
+        DamageSource source = event.getSource();
+        Entity projectile = source.getDirectEntity();
         if (projectile instanceof Snowball) {
-            Entity hitEntity = event.getRay().getEntity();
-            int i = hitEntity instanceof BlazeSentry ? 100 : 0; //set 100 for test
-            hitEntity.hurt(projectile.damageSources().thrown(projectile, projectile.getOwner()), (float)i);
-            event.setCanceled(true);
+            Entity hitEntity = event.getEntity();
+            if (hitEntity instanceof BlazeSentry) event.setAmount(3);
         }
     }
 }
