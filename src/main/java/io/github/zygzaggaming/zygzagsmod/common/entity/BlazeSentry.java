@@ -35,6 +35,7 @@ import io.github.zygzaggaming.zygzagsmod.common.entity.SmallMagmaticFireball;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
+import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.pathfinder.PathType;
 import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.Nullable;
@@ -83,7 +84,8 @@ public class BlazeSentry extends Monster implements GeoAnimatable, ActingEntity<
     }
 
     public static boolean checkBlazeSentrySpawn(EntityType<BlazeSentry> entityType, LevelAccessor level, MobSpawnType spawnType, BlockPos pos, RandomSource random) {
-        return checkAnyLightMonsterSpawnRules(entityType, level, spawnType, pos, random) && level.getBlockState(pos).is(BlockWithItemRegistry.CHISELED_RED_NETHER_BRICKS.getBlock());
+        return checkAnyLightMonsterSpawnRules(entityType, level, spawnType, pos, random) && level.
+                getBlockState(pos.below()).is(BlockWithItemRegistry.CHISELED_RED_NETHER_BRICKS.block());
     }
 
     @Override
