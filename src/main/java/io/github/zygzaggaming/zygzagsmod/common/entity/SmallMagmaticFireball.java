@@ -3,11 +3,14 @@ package io.github.zygzaggaming.zygzagsmod.common.entity;
 import io.github.zygzaggaming.zygzagsmod.common.util.ModUtil;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.Difficulty;
+import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Mob;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.Fireball;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.level.Level;
@@ -44,7 +47,12 @@ public class SmallMagmaticFireball extends Fireball {
             } else {
                 EnchantmentHelper.doPostAttackEffects(serverlevel, entity1, $$6);
             }
-            ModUtil.incrementOnHitEntityOverheat(living, 1);
+            Difficulty difficultyInstance = level().getDifficulty();
+            int i = 2;
+            if (difficultyInstance == Difficulty.EASY) i = 1;
+            else if (difficultyInstance == Difficulty.NORMAL) i = 2;
+            else if (difficultyInstance == Difficulty.HARD) i = 3;
+            ModUtil.incrementOnHitEntityOverheat(living, i);
         }
     }
 

@@ -8,13 +8,17 @@ import io.github.zygzaggaming.zygzagsmod.common.registry.ActionRegistry;
 import io.github.zygzaggaming.zygzagsmod.common.registry.EntityDataSerializerRegistry;
 import io.github.zygzaggaming.zygzagsmod.common.registry.ItemRegistry;
 import io.github.zygzaggaming.zygzagsmod.common.registry.ParticleTypeRegistry;
+import io.github.zygzaggaming.zygzagsmod.common.registry.BlockWithItemRegistry;
+import io.github.zygzaggaming.zygzagsmod.common.registry.object.BlockWithItemSupplier;
 import io.github.zygzaggaming.zygzagsmod.common.util.*;
 import net.minecraft.MethodsReturnNonnullByDefault;
+import net.minecraft.core.BlockPos;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.tags.DamageTypeTags;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
@@ -30,6 +34,7 @@ import net.minecraft.world.entity.projectile.LargeFireball;
 import io.github.zygzaggaming.zygzagsmod.common.entity.SmallMagmaticFireball;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.pathfinder.PathType;
 import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.Nullable;
@@ -75,6 +80,10 @@ public class BlazeSentry extends Monster implements GeoAnimatable, ActingEntity<
 
     public static AttributeSupplier.Builder createAttributes() {
         return Monster.createMonsterAttributes().add(Attributes.ATTACK_DAMAGE, 6.0D).add(Attributes.MOVEMENT_SPEED, 0.23).add(Attributes.FOLLOW_RANGE, 48.0D).add(Attributes.KNOCKBACK_RESISTANCE, 1.0D);
+    }
+
+    public static boolean checkBlazeSentrySpawn(EntityType<BlazeSentry> entityType, LevelAccessor level, MobSpawnType spawnType, BlockPos pos, RandomSource random) {
+        return checkAnyLightMonsterSpawnRules(entityType, level, spawnType, pos, random) && level.getBlockState(pos).is(BlockWithItemRegistry.CHISELED_RED_NETHER_BRICKS.getBlock());
     }
 
     @Override
