@@ -2,6 +2,8 @@ package io.github.zygzaggaming.zygzagsmod.common;
 
 import io.github.zygzaggaming.zygzagsmod.common.entity.BlazeSentry;
 import io.github.zygzaggaming.zygzagsmod.common.entity.HomingWitherSkull;
+import io.github.zygzaggaming.zygzagsmod.common.entity.SocketAmethystAreaCloud;
+import io.github.zygzaggaming.zygzagsmod.common.entity.SphereAreaEffectCloud;
 import io.github.zygzaggaming.zygzagsmod.common.item.iridium.IEffectAttackWeapon;
 import io.github.zygzaggaming.zygzagsmod.common.item.iridium.Socket;
 import io.github.zygzaggaming.zygzagsmod.common.item.iridium.armor.IridiumChestplateItem;
@@ -16,10 +18,7 @@ import io.github.zygzaggaming.zygzagsmod.common.util.GeneralUtil;
 import io.github.zygzaggaming.zygzagsmod.common.util.ModUtil;
 import io.github.zygzaggaming.zygzagsmod.common.util.ProjectileImpactEntityEvent;
 import net.minecraft.client.player.LocalPlayer;
-import net.minecraft.core.BlockPos;
-import net.minecraft.core.HolderLookup;
-import net.minecraft.core.RegistryAccess;
-import net.minecraft.core.Vec3i;
+import net.minecraft.core.*;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceKey;
@@ -164,6 +163,7 @@ public class EventHandler {
     public static void onHurt(final LivingDamageEvent.Pre evt) {
         Optional<HolderLookup.RegistryLookup<Enchantment>> enchantmentLookup = evt.getEntity().level().registryAccess().lookup(Registries.ENCHANTMENT);
 
+        Direction dir = Direction.NORTH;
         LivingEntity entity = evt.getEntity();
         Level world = entity.level();
         long time = world.dayTime();
@@ -235,11 +235,15 @@ public class EventHandler {
                         else evt.setNewDamage(Float.MAX_VALUE);
                     }
                 } else if (mainhandItem instanceof IridiumAxeItem axe && axe.getSocket() == Socket.AMETHYST) {
+
                     if (GeneralUtil.isExposedToSunlight(pos, world)) {
                         double damageBonus = 1 + Config.amethystAxeDamageBonus * Math.exp(-(time - 12000.0) * (time - 12000.0) / 12000.0);
                         evt.setNewDamage(evt.getNewDamage() * (float) damageBonus);
                     }
                 } else if (mainhandItem instanceof IridiumSwordItem sword && sword.getSocket() == Socket.AMETHYST) {
+                    SocketAmethystAreaCloud amethystCloud = new SocketAmethystAreaCloud(world);
+                    amethystCloud.setPos(entity.getEyePosition());
+                    world.addFreshEntity(amethystCloud);
                     if (GeneralUtil.isExposedToSunlight(pos, world)) {
                         double damageBonus = 1 + Config.amethystSwordDamageBonus * Math.exp(-((time + 12000.0) % 24000.0 - 12000.0) * ((time + 12000.0) % 24000.0 - 12000.0) / 12000.0);
                         evt.setNewDamage(evt.getNewDamage() * (float) damageBonus);

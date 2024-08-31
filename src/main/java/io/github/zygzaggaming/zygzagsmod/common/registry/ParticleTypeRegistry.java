@@ -36,6 +36,10 @@ public class ParticleTypeRegistry extends AkomiRegistry<ParticleType<?>> {
             "overheat_sphere",
             () -> new SimpleParticleType(false)
     );
+    public static Supplier<SimpleParticleType> AMETHYST_SPHERE_PARTICLES = INSTANCE.register(
+            "amethyst_sp",
+            () -> new SimpleParticleType(false)
+    );
     public ParticleTypeRegistry(DeferredRegister<ParticleType<?>> register) {
         super(register);
     }

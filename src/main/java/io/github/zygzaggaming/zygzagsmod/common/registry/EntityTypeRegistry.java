@@ -1,8 +1,8 @@
 package io.github.zygzaggaming.zygzagsmod.common.registry;
 
-import io.github.zygzaggaming.zygzagsmod.client.renderer.SmallMagmaticFireballRenderer;
 import io.github.zygzaggaming.zygzagsmod.common.entity.*;
 import io.github.zygzaggaming.zygzagsmod.common.entity.assembly.ShurikenAssembly;
+import io.github.zygzaggaming.zygzagsmod.common.entity.SocketAmethystAreaCloud;
 import io.github.zygzaggaming.zygzagsmod.common.registry.base.AkomiRegistry;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.world.entity.EntityType;
@@ -117,6 +117,15 @@ public class EntityTypeRegistry extends AkomiRegistry<EntityType<?>> {
                     .fireImmune()
                     .sized(2.3f, 0.25f)
                     .build("shuriken_assembly_c")
+    );
+    public static final Supplier<EntityType<SocketAmethystAreaCloud>> SOCKET_AMETHYST_AREA_CLOUD = INSTANCE.register(
+            "socket_amethyst_area_cloud",
+            () -> EntityType.Builder.<SocketAmethystAreaCloud>of(SocketAmethystAreaCloud::new, MobCategory.MISC)
+                    .fireImmune()
+                    .sized(1f, 1f)
+                    .clientTrackingRange(10)
+                    .updateInterval(Integer.MAX_VALUE)
+                    .build("socket_amethyst_area_cloud")
     );
     public EntityTypeRegistry(DeferredRegister<EntityType<?>> register) {
         super(register);
