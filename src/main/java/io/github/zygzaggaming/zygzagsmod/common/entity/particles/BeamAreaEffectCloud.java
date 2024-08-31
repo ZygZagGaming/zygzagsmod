@@ -1,4 +1,4 @@
-package io.github.zygzaggaming.zygzagsmod.common.entity;
+package io.github.zygzaggaming.zygzagsmod.common.entity.particles;
 
 import io.github.zygzaggaming.zygzagsmod.common.registry.EntityTypeRegistry;
 import net.minecraft.MethodsReturnNonnullByDefault;
@@ -8,7 +8,6 @@ import net.minecraft.core.particles.ParticleOptions;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.item.alchemy.Potion;
 import net.minecraft.world.item.alchemy.PotionContents;
 import net.minecraft.world.level.Level;
 

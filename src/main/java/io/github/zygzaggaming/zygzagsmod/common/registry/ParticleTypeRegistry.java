@@ -40,6 +40,22 @@ public class ParticleTypeRegistry extends AkomiRegistry<ParticleType<?>> {
             "amethyst_sp",
             () -> new SimpleParticleType(false)
     );
+    public static Supplier<SimpleParticleType> DIAMOND_SPHERE_PARTICLES = INSTANCE.register(
+            "diamond_sp",
+            () -> new SimpleParticleType(false)
+    );
+    public static Supplier<SimpleParticleType> EMERALD_SPHERE_PARTICLES = INSTANCE.register(
+            "emerald_sp",
+            () -> new SimpleParticleType(false)
+    );
+    public static Supplier<SimpleParticleType> SKULL_SPHERE_PARTICLES = INSTANCE.register(
+            "skull_sp",
+            () -> new SimpleParticleType(false)
+    );
+    public static Supplier<SimpleParticleType> WRSKULL_SPHERE_PARTICLES = INSTANCE.register(
+            "wrskull_sp",
+            () -> new SimpleParticleType(false)
+    );
     public ParticleTypeRegistry(DeferredRegister<ParticleType<?>> register) {
         super(register);
     }

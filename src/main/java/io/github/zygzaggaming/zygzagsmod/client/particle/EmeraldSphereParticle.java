@@ -9,10 +9,10 @@ import javax.annotation.ParametersAreNonnullByDefault;
 
 @ParametersAreNonnullByDefault
 @MethodsReturnNonnullByDefault
-public class SocketSphereParticle extends TextureSheetParticle {
+public class EmeraldSphereParticle extends TextureSheetParticle {
     private final SpriteSet sprites;
 
-    protected SocketSphereParticle(ClientLevel world, double x, double y, double z, double dX, double dY, double dZ, SpriteSet sprites) {
+    protected EmeraldSphereParticle(ClientLevel world, double x, double y, double z, double dX, double dY, double dZ, SpriteSet sprites) {
         super(world, x, y, z, dX, dY, dZ);
         this.sprites = sprites;
         setSprite(sprites.get(world.random));
@@ -46,7 +46,7 @@ public class SocketSphereParticle extends TextureSheetParticle {
         }
 
         public Particle createParticle(SimpleParticleType pType, ClientLevel pLevel, double pX, double pY, double pZ, double pXSpeed, double pYSpeed, double pZSpeed) {
-            return new SocketSphereParticle(pLevel, pX, pY, pZ, pXSpeed, pYSpeed, pZSpeed, sprites);
+            return new EmeraldSphereParticle(pLevel, pX, pY, pZ, pXSpeed, pYSpeed, pZSpeed, sprites);
         }
     }
 }

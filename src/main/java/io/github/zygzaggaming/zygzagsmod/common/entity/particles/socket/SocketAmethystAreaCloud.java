@@ -1,4 +1,4 @@
-package io.github.zygzaggaming.zygzagsmod.common.entity;
+package io.github.zygzaggaming.zygzagsmod.common.entity.particles.socket;
 
 import com.google.common.collect.Maps;
 import io.github.zygzaggaming.zygzagsmod.common.registry.EntityTypeRegistry;
@@ -15,17 +15,17 @@ import java.util.Map;
 
 @ParametersAreNonnullByDefault
 @MethodsReturnNonnullByDefault
-public class SphereAreaEffectCloud extends AreaEffectCloud {
-    private final int duration = 5 * 20;
-    private final float radius = 5.5f;
+public class SocketAmethystAreaCloud extends AreaEffectCloud {
+    private final int duration = 4;
+    private final float radius = 0.5f;
     private final Map<Entity, Integer> victims = Maps.newHashMap();
 
-    public SphereAreaEffectCloud(EntityType<? extends SphereAreaEffectCloud> type, Level world) {
+    public SocketAmethystAreaCloud(EntityType<? extends SocketAmethystAreaCloud> type, Level world) {
         super(type, world);
     }
 
-    public SphereAreaEffectCloud(Level world) {
-        this(EntityTypeRegistry.SPHERE_AREA_EFFECT_CLOUD.get(), world);
+    public SocketAmethystAreaCloud(Level world) {
+        this(EntityTypeRegistry.SOCKET_AMETHYST_AREA_CLOUD.get(), world);
     }
 
     @Override
@@ -36,20 +36,18 @@ public class SphereAreaEffectCloud extends AreaEffectCloud {
     public void tick() {
         baseTick();
         if (level().isClientSide) {
-            for (int particles = 0; particles < 40; ++particles) {
-                double x = random.nextGaussian() * 0.5;
-                double y = random.nextGaussian() * 0.5;
-                double z = random.nextGaussian() * 0.5;
+            for (int particles = 0; particles < 5; ++particles) {
+                double x = random.nextGaussian() * 0.1;
+                double y = random.nextGaussian() * 0.1;
+                double z = random.nextGaussian() * 0.1;
                 double multiplier = Math.pow(random.nextGaussian(), 2) / Math.sqrt(x * x + y * y + z * z) * radius / 6;
 
-                level().addAlwaysVisibleParticle(ParticleTypeRegistry.OVERHEAT_SPHERE_PARTICLES.get(), getX() + x, getY() + radius + y, getZ() + z, x * multiplier, y * multiplier, z * multiplier);
+                level().addAlwaysVisibleParticle(ParticleTypeRegistry.AMETHYST_SPHERE_PARTICLES.get(), getX() + x, getY() + radius + y, getZ() + z, x * multiplier, y * multiplier, z * multiplier);
             }
         } else {
             if (tickCount >= duration) {
                 discard();
-                return;
             }
-
             if (tickCount % 5 == 0) {
                 victims.entrySet().removeIf((entry) -> tickCount >= entry.getValue());
 
@@ -58,7 +56,6 @@ public class SphereAreaEffectCloud extends AreaEffectCloud {
                     for (LivingEntity living : entitiesInBoundingBox) {
                         if (!victims.containsKey(living) && living.isAffectedByPotions() && living.getBoundingBox().getCenter().distanceToSqr(getBoundingBox().getCenter()) <= radius * radius * 1.5) {
                             victims.put(living, tickCount + 20);
-                            ModUtil.incrementEntityOverheat(living, 1);
                         }
                     }
                 }
