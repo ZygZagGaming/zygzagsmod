@@ -167,7 +167,7 @@
   "passive_ability.zygzagsmod.axe.amethyst": "Diurnal",
   "description.passive_ability.zygzagsmod.axe.amethyst": "The sunlight powers up your axe, dealing more damage based on current sunlight level.",
   "passive_ability.zygzagsmod.axe.skull": "Executioner",
-  "description.passive_ability.zygzagsmod.axe.skull": "Mobs killed have a 10% chance to drop their head.",
+  "description.passive_ability.zygzagsmod.axe.skull": "Mobs killed have a 5% chance to drop their head.",
   "use_ability.zygzagsmod.axe.wither_skull": "Withering Away",
   "description.use_ability.zygzagsmod.axe.wither_skull": "Withers a sphere centered on the player, inflicting the Wither effect and destroying vegetation.",
   "passive_ability.zygzagsmod.axe.diamond": "Collateral Damage",

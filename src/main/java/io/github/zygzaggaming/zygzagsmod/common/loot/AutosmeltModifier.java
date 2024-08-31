@@ -42,6 +42,7 @@ public class AutosmeltModifier extends LootModifier {
                 generatedLoot.set(i, outStack);
             }
         }
+
         return generatedLoot;
     }
 

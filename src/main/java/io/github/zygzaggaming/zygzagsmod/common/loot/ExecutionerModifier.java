@@ -24,7 +24,6 @@ import javax.annotation.ParametersAreNonnullByDefault;
 @ParametersAreNonnullByDefault
 @MethodsReturnNonnullByDefault
 public class ExecutionerModifier extends LootModifier {
-
     public static MapCodec<ExecutionerModifier> CODEC = RecordCodecBuilder.mapCodec(
             (RecordCodecBuilder.Instance<ExecutionerModifier> inst) -> codecStart(inst)
                     .and(

@@ -2,29 +2,39 @@
   "type": "zygzagsmod:executioner",
   "conditions": [
     {
-      "condition": "minecraft:entity_properties",
-      "entity": "this",
-      "predicate": {
-        "type": "minecraft:zombie"
-      }
-    },
-    {
-      "condition": "minecraft:entity_properties",
-      "entity": "killer",
-      "predicate": {
-        "equipment": {
-          "mainhand": {
-            "items": [
-              "zygzagsmod:skull_socketed_iridium_axe"
-            ]
+      "condition": "minecraft:all_of",
+      "terms": [
+        {
+          "condition": "minecraft:entity_properties",
+          "entity": "this",
+          "predicate": {
+            "type": "minecraft:zombie"
           }
+        },
+        {
+          "condition": "minecraft:entity_properties",
+          "entity": "direct_attacker",
+          "predicate": {
+            "equipment": {
+              "mainhand": {
+                "items": [
+                  "zygzagsmod:skull_socketed_iridium_axe"
+                ]
+              }
+            }
+          }
+        },
+        {
+          "condition": "minecraft:random_chance_with_enchanted_bonus",
+          "unenchanted_chance": 0.1,
+          "enchanted_chance": {
+            "type": "linear",
+            "base": 0.15,
+            "per_level_above_first": 0.05
+          },
+          "enchantment": "looting"
         }
-      }
-    },
-    {
-      "condition": "minecraft:random_chance_with_looting",
-      "chance": 0.1,
-      "looting_multiplier": 0.05
+      ]
     }
   ],
   "item_to_drop": "minecraft:zombie_head"
