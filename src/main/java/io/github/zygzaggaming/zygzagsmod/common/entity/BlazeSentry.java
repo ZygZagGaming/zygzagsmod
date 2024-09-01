@@ -83,10 +83,13 @@ public class BlazeSentry extends Monster implements GeoAnimatable, ActingEntity<
         return Monster.createMonsterAttributes().add(Attributes.ATTACK_DAMAGE, 6.0D).add(Attributes.MOVEMENT_SPEED, 0.23).add(Attributes.FOLLOW_RANGE, 48.0D).add(Attributes.KNOCKBACK_RESISTANCE, 1.0D);
     }
 
+    //irrelevant || causes jigsaw BS despawning
+    /*
     public static boolean checkBlazeSentrySpawn(EntityType<BlazeSentry> entityType, LevelAccessor level, MobSpawnType spawnType, BlockPos pos, RandomSource random) {
         return checkAnyLightMonsterSpawnRules(entityType, level, spawnType, pos, random) && level.
                 getBlockState(pos.below()).is(BlockWithItemRegistry.CHISELED_RED_NETHER_BRICKS.block());
     }
+    */
 
     @Override
     protected void defineSynchedData(SynchedEntityData.Builder builder) {
