@@ -81,8 +81,8 @@ public class BlazeSentry extends Monster implements GeoAnimatable, ActingEntity<
 
     //irrelevant || causes jigsaw BS despawning
     public static boolean checkBlazeSentrySpawn(EntityType<BlazeSentry> entityType, LevelAccessor level, MobSpawnType spawnType, BlockPos pos, RandomSource random) {
-        return checkAnyLightMonsterSpawnRules(entityType, level, spawnType, pos, random) && level.
-                getBlockState(pos.below()).is(BlockWithItemRegistry.CHISELED_RED_NETHER_BRICKS.block());
+        return checkAnyLightMonsterSpawnRules(entityType, level, spawnType, pos, random) && level.getBlockState(pos//.below() Sets Spawning
+                ).is(BlockWithItemRegistry.END_SAND.block()); //Set To Random Non-Generated Block In Blaze Hive
     }
 
     @Override
