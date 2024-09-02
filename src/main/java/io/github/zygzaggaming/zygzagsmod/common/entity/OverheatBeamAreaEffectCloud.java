@@ -1,4 +1,4 @@
-package io.github.zygzaggaming.zygzagsmod.common.entity.particles;
+package io.github.zygzaggaming.zygzagsmod.common.entity;
 
 import io.github.zygzaggaming.zygzagsmod.common.registry.EntityTypeRegistry;
 import io.github.zygzaggaming.zygzagsmod.common.registry.ParticleTypeRegistry;

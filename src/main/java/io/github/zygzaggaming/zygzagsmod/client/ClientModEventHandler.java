@@ -3,6 +3,7 @@ package io.github.zygzaggaming.zygzagsmod.client;
 import io.github.zygzaggaming.zygzagsmod.client.particle.*;
 import io.github.zygzaggaming.zygzagsmod.client.renderer.*;
 import io.github.zygzaggaming.zygzagsmod.common.Main;
+import io.github.zygzaggaming.zygzagsmod.common.particle.SocketParticleOption;
 import io.github.zygzaggaming.zygzagsmod.common.registry.BlockItemEntityRegistry;
 import io.github.zygzaggaming.zygzagsmod.common.registry.EntityTypeRegistry;
 import io.github.zygzaggaming.zygzagsmod.common.registry.ParticleTypeRegistry;
@@ -28,13 +29,6 @@ public class ClientModEventHandler {
         event.registerEntityRenderer(EntityTypeRegistry.BLAZE_SENTRY.get(), BlazeSentryRenderer::new);
         event.registerEntityRenderer(EntityTypeRegistry.BEAM_AREA_EFFECT_CLOUD.get(), NoopRenderer::new);
         event.registerEntityRenderer(EntityTypeRegistry.OVERHEAT_BEAM_AREA_EFFECT_CLOUD.get(), NoopRenderer::new);
-        //SocketSphereParticles{
-        event.registerEntityRenderer(EntityTypeRegistry.SOCKET_AMETHYST_AREA_CLOUD.get(), NoopRenderer::new);
-        event.registerEntityRenderer(EntityTypeRegistry.SOCKET_DIAMOND_AREA_CLOUD.get(), NoopRenderer::new);
-        event.registerEntityRenderer(EntityTypeRegistry.SOCKET_EMERALD_AREA_CLOUD.get(), NoopRenderer::new);
-        event.registerEntityRenderer(EntityTypeRegistry.SOCKET_SKULL_AREA_CLOUD.get(), NoopRenderer::new);
-        event.registerEntityRenderer(EntityTypeRegistry.SOCKET_WRSKULL_AREA_CLOUD.get(), NoopRenderer::new);
-        //SocketSphereParticles}
         event.registerEntityRenderer(EntityTypeRegistry.SPHERE_AREA_EFFECT_CLOUD.get(), NoopRenderer::new);
         event.registerEntityRenderer(EntityTypeRegistry.FLAIL_PROJECTILE.get(), FlailProjectileRenderer::new);
         event.registerEntityRenderer(EntityTypeRegistry.SHURIKEN_ASSEMBLY_A.get(), ShurikenAssemblyRenderer::new);
@@ -51,11 +45,6 @@ public class ClientModEventHandler {
         event.registerSpriteSet(ParticleTypeRegistry.OVERHEAT_BEAM_PARTICLES.get(), OverheatBeamParticle.Provider::new);
         event.registerSpriteSet(ParticleTypeRegistry.FLAMETHROW_PARTICLES.get(), FlamethrowParticle.Provider::new);
         event.registerSpriteSet(ParticleTypeRegistry.OVERHEAT_SPHERE_PARTICLES.get(), OverheatSphereParticle.Provider::new);
-        //SocketSphereParticles{
-        event.registerSpriteSet(ParticleTypeRegistry.AMETHYST_SPHERE_PARTICLES.get(), AmethystSphereParticle.Provider::new);
-        event.registerSpriteSet(ParticleTypeRegistry.DIAMOND_SPHERE_PARTICLES.get(), DiamondSphereParticle.Provider::new);
-        event.registerSpriteSet(ParticleTypeRegistry.EMERALD_SPHERE_PARTICLES.get(), EmeraldSphereParticle.Provider::new);
-        event.registerSpriteSet(ParticleTypeRegistry.SKULL_SPHERE_PARTICLES.get(), SkullSphereParticle.Provider::new);
-        event.registerSpriteSet(ParticleTypeRegistry.WRSKULL_SPHERE_PARTICLES.get(), WRSkullSphereParticle.Provider::new);
+        event.registerSpriteSet(ParticleTypeRegistry.SOCKET_HIT.get(), SocketHitParticle.Provider::new);
     }
 }

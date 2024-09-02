@@ -9,9 +9,11 @@ import io.github.zygzaggaming.zygzagsmod.common.entity.IridiumGolem;
 import io.github.zygzaggaming.zygzagsmod.common.item.iridium.ISocketable;
 import io.github.zygzaggaming.zygzagsmod.common.networking.handler.ClientboundBlazeSentryRotationPacketHandler;
 import io.github.zygzaggaming.zygzagsmod.common.networking.handler.ClientboundSelfOverheatUpdatePacketHandler;
+import io.github.zygzaggaming.zygzagsmod.common.networking.handler.ClientboundSocketHitPacketHandler;
 import io.github.zygzaggaming.zygzagsmod.common.networking.handler.ServerboundPlayerLeftClickEmptyPacketHandler;
 import io.github.zygzaggaming.zygzagsmod.common.networking.packet.ClientboundBlazeSentryRotationPacket;
 import io.github.zygzaggaming.zygzagsmod.common.networking.packet.ClientboundSelfOverheatUpdatePacket;
+import io.github.zygzaggaming.zygzagsmod.common.networking.packet.ClientboundSocketHitPacket;
 import io.github.zygzaggaming.zygzagsmod.common.networking.packet.ServerboundPlayerLeftClickEmptyPacket;
 import io.github.zygzaggaming.zygzagsmod.common.registry.AttributeRegistry;
 import io.github.zygzaggaming.zygzagsmod.common.registry.EntityTypeRegistry;
@@ -21,12 +23,10 @@ import net.minecraft.data.recipes.RecipeProvider;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.SpawnPlacementTypes;
 import net.minecraft.world.entity.monster.AbstractSkeleton;
-import net.minecraft.world.entity.monster.Monster;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.levelgen.Heightmap;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
-import net.neoforged.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.neoforged.neoforge.client.event.RegisterColorHandlersEvent;
 import net.neoforged.neoforge.client.model.generators.BlockStateProvider;
 import net.neoforged.neoforge.client.model.generators.ItemModelProvider;
@@ -101,6 +101,7 @@ public class ModEventHandler {
         final PayloadRegistrar registrar = event.registrar(Main.MODID);
         registrar.playToClient(ClientboundBlazeSentryRotationPacket.TYPE, ClientboundBlazeSentryRotationPacket.STREAM_CODEC, ClientboundBlazeSentryRotationPacketHandler.getInstance()::handleData);
         registrar.playToClient(ClientboundSelfOverheatUpdatePacket.TYPE, ClientboundSelfOverheatUpdatePacket.STREAM_CODEC, ClientboundSelfOverheatUpdatePacketHandler.getInstance()::handleData);
+        registrar.playToClient(ClientboundSocketHitPacket.TYPE, ClientboundSocketHitPacket.STREAM_CODEC, ClientboundSocketHitPacketHandler.getInstance()::handleData);
         registrar.playToServer(ServerboundPlayerLeftClickEmptyPacket.TYPE, ServerboundPlayerLeftClickEmptyPacket.STREAM_CODEC, ServerboundPlayerLeftClickEmptyPacketHandler.getInstance()::handleData);
     }
 }

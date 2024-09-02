@@ -4,11 +4,7 @@ import io.github.zygzaggaming.zygzagsmod.common.entity.animation.ActingEntity;
 import io.github.zygzaggaming.zygzagsmod.common.entity.animation.Action;
 import io.github.zygzaggaming.zygzagsmod.common.entity.animation.Actor;
 import io.github.zygzaggaming.zygzagsmod.common.networking.packet.ClientboundBlazeSentryRotationPacket;
-import io.github.zygzaggaming.zygzagsmod.common.registry.ActionRegistry;
-import io.github.zygzaggaming.zygzagsmod.common.registry.EntityDataSerializerRegistry;
-import io.github.zygzaggaming.zygzagsmod.common.registry.ItemRegistry;
-import io.github.zygzaggaming.zygzagsmod.common.registry.ParticleTypeRegistry;
-import io.github.zygzaggaming.zygzagsmod.common.registry.BlockWithItemRegistry;
+import io.github.zygzaggaming.zygzagsmod.common.registry.*;
 import io.github.zygzaggaming.zygzagsmod.common.registry.object.BlockWithItemSupplier;
 import io.github.zygzaggaming.zygzagsmod.common.util.*;
 import net.minecraft.MethodsReturnNonnullByDefault;
@@ -75,21 +71,19 @@ public class BlazeSentry extends Monster implements GeoAnimatable, ActingEntity<
         setPersistenceRequired();
     }
 
-    /*public BlazeSentry(Level world) {
+    public BlazeSentry(Level world) {
         this(EntityTypeRegistry.BLAZE_SENTRY.get(), world);
-    }*/
+    }
 
     public static AttributeSupplier.Builder createAttributes() {
         return Monster.createMonsterAttributes().add(Attributes.ATTACK_DAMAGE, 6.0D).add(Attributes.MOVEMENT_SPEED, 0.23).add(Attributes.FOLLOW_RANGE, 48.0D).add(Attributes.KNOCKBACK_RESISTANCE, 1.0D);
     }
 
     //irrelevant || causes jigsaw BS despawning
-    /*
     public static boolean checkBlazeSentrySpawn(EntityType<BlazeSentry> entityType, LevelAccessor level, MobSpawnType spawnType, BlockPos pos, RandomSource random) {
         return checkAnyLightMonsterSpawnRules(entityType, level, spawnType, pos, random) && level.
                 getBlockState(pos.below()).is(BlockWithItemRegistry.CHISELED_RED_NETHER_BRICKS.block());
     }
-    */
 
     @Override
     protected void defineSynchedData(SynchedEntityData.Builder builder) {

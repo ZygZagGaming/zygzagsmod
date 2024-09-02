@@ -1,4 +1,4 @@
-package io.github.zygzaggaming.zygzagsmod.common.entity.particles;
+package io.github.zygzaggaming.zygzagsmod.common.entity;
 
 import com.google.common.collect.Maps;
 import net.minecraft.MethodsReturnNonnullByDefault;
