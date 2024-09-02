@@ -63,9 +63,9 @@ public class ModEventHandler {
         }
     }
 
-    @SubscribeEvent
-    public static void entitySpawnAndRestriction(RegisterSpawnPlacementsEvent event) {
-        event.register(EntityTypeRegistry.BLAZE_SENTRY.get(), SpawnPlacementTypes.ON_GROUND, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES,
+      @SubscribeEvent
+      public static void entitySpawnAndRestriction(RegisterSpawnPlacementsEvent event) {
+          event.register(EntityTypeRegistry.BLAZE_SENTRY.get(), SpawnPlacementTypes.ON_GROUND, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES,
                 BlazeSentry::checkBlazeSentrySpawn, RegisterSpawnPlacementsEvent.Operation.REPLACE);
     }
 
