@@ -47,13 +47,13 @@ public class BlockItemEntityRegistry {
 
     public static final BlockItemEntitySupplier<MagmaticNetherBrickBlock, BlockItem, MagmaticNetherBrickBlockEntity> MAGMATIC_NETHER_BRICKS = INSTANCE.register(
             "magmatic_nether_bricks",
-            () -> new MagmaticNetherBrickBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.RED_NETHER_BRICKS).strength(0.5f, 1f)),
+            () -> new MagmaticNetherBrickBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.RED_NETHER_BRICKS).strength(3f, 6f)),
             MagmaticNetherBrickBlockEntity::new
     );
 
     public static final BlockItemEntitySupplier<CacheBlock, BlockItem, CacheBlockEntity> RED_NETHER_BRICK_CACHE = INSTANCE.register(
             "red_nether_brick_cache",
-            () -> new CacheBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.RED_NETHER_BRICKS).strength(0.5f, 1f)),
+            () -> new CacheBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.RED_NETHER_BRICKS).strength(3f, 6f)),
             CacheBlockEntity::new
     );
 

@@ -23,8 +23,13 @@ public class StructurePieceTypeRegistry extends AkomiRegistry<StructurePieceType
             () -> (StructurePieceType.ContextlessType) IridiumEndIslandStructure.IridiumEndIslandPiece::new
     );
 
-    public static final Supplier<StructurePieceType> CAIRN_ARRANGEMENT = INSTANCE.register(
-            "cairn_arrangement",
-            () -> CairnArrangementStructure.CairnArrangementStructurePiece::new
+    public static final Supplier<StructurePieceType> CAIRN = INSTANCE.register(
+            "cairn",
+            () -> (ctx, tag) -> new CairnArrangementStructure.Cairn(tag)
+    );
+
+    public static final Supplier<StructurePieceType> COMPASS_CAIRN = INSTANCE.register(
+            "compass_cairn",
+            () -> (ctx, tag) -> new CairnArrangementStructure.CompassCairn(tag)
     );
 }

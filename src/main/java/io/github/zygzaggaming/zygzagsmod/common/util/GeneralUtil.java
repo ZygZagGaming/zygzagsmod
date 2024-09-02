@@ -653,4 +653,6 @@ public class GeneralUtil {
         if (Float.isNaN(k[0]) || Float.isNaN(k[1])) throw new RuntimeException("Lerping between rotations (%f, %f, %f) and (%f, %f, %f) with t=%.4f yields problematic rot [%.4f, %.4f]".formatted(v0[0], v0[1], v0[2], v1[0], v1[1], v1[2], t, k[0], k[1]));
         return k;
     }
+
+
 }

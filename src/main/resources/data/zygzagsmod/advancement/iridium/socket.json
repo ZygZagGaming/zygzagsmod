@@ -5,7 +5,7 @@
       "conditions": {
         "items": [
           {
-            "tag": "zygzagsmod:socketed"
+            "items": "#zygzagsmod:socketed"
           }
         ]
       },

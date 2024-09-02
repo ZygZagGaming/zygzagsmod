@@ -6,14 +6,14 @@
       "terms": [
         {
           "condition": "minecraft:entity_properties",
-          "entity": "direct_attacker",
+          "entity": "this",
           "predicate": {
             "type": "minecraft:creeper"
           }
         },
         {
           "condition": "minecraft:entity_properties",
-          "entity": "killer",
+          "entity": "direct_attacker",
           "predicate": {
             "equipment": {
               "mainhand": {

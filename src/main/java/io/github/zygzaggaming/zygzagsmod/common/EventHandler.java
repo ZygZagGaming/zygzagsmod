@@ -430,7 +430,7 @@ public class EventHandler {
                 float dmg = maxDmg - maxDmg * GeneralUtil.clamp(fireResistance / 10f, 0, 1);
                 if (dmg > 0 && (!(entity instanceof Player player) || (!player.isCreative() && !player.isSpectator())) && !entity.getType().fireImmune())
                     entity.hurt(overheatDamage(entity.level().registryAccess()), dmg);
-            } else if (entity.tickCount % 5 == 0 && overheat > 0) {
+            } else if (entity.tickCount % 15 == 0 && overheat > 0) {
                 overheat--;
             }
             ModUtil.setEntityOverheat(entity, overheat);
