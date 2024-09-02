@@ -2,6 +2,11 @@ package io.github.zygzaggaming.zygzagsmod.common;
 
 import io.github.zygzaggaming.zygzagsmod.common.entity.BlazeSentry;
 import io.github.zygzaggaming.zygzagsmod.common.entity.HomingWitherSkull;
+import io.github.zygzaggaming.zygzagsmod.common.entity.particles.socket.SocketAmethystAreaCloud;
+import io.github.zygzaggaming.zygzagsmod.common.entity.particles.socket.SocketDiamondAreaCloud;
+import io.github.zygzaggaming.zygzagsmod.common.entity.particles.socket.SocketEmeraldAreaCloud;
+import io.github.zygzaggaming.zygzagsmod.common.entity.particles.socket.SocketSkullAreaCloud;
+import io.github.zygzaggaming.zygzagsmod.common.entity.particles.socket.SocketWRSkullAreaCloud;
 import io.github.zygzaggaming.zygzagsmod.common.item.iridium.IEffectAttackWeapon;
 import io.github.zygzaggaming.zygzagsmod.common.item.iridium.Socket;
 import io.github.zygzaggaming.zygzagsmod.common.item.iridium.armor.IridiumChestplateItem;
@@ -14,12 +19,8 @@ import io.github.zygzaggaming.zygzagsmod.common.registry.AttributeRegistry;
 import io.github.zygzaggaming.zygzagsmod.common.registry.BlockRegistry;
 import io.github.zygzaggaming.zygzagsmod.common.util.GeneralUtil;
 import io.github.zygzaggaming.zygzagsmod.common.util.ModUtil;
-import io.github.zygzaggaming.zygzagsmod.common.util.ProjectileImpactEntityEvent;
 import net.minecraft.client.player.LocalPlayer;
-import net.minecraft.core.BlockPos;
-import net.minecraft.core.HolderLookup;
-import net.minecraft.core.RegistryAccess;
-import net.minecraft.core.Vec3i;
+import net.minecraft.core.*;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceKey;
@@ -42,7 +43,6 @@ import net.minecraft.world.entity.ai.village.poi.PoiManager;
 import net.minecraft.world.entity.ai.village.poi.PoiTypes;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.entity.projectile.Projectile;
 import net.minecraft.world.item.ArmorItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
@@ -164,6 +164,7 @@ public class EventHandler {
     public static void onHurt(final LivingDamageEvent.Pre evt) {
         Optional<HolderLookup.RegistryLookup<Enchantment>> enchantmentLookup = evt.getEntity().level().registryAccess().lookup(Registries.ENCHANTMENT);
 
+        Direction dir = Direction.NORTH;
         LivingEntity entity = evt.getEntity();
         Level world = entity.level();
         long time = world.dayTime();
@@ -205,6 +206,9 @@ public class EventHandler {
                         int th = EnchantmentHelper.getTagEnchantmentLevel(thorns, chestplateStack);
                         MobEffectInstance effect = new MobEffectInstance(MobEffects.WITHER, 60 * (3 + th), th / 2);
                         living.addEffect(effect);
+                        SocketWRSkullAreaCloud wrSkullCloud = new SocketWRSkullAreaCloud(world);
+                        wrSkullCloud.setPos(entity.position());
+                        world.addFreshEntity(wrSkullCloud);
                     });
                 }
 
@@ -214,43 +218,83 @@ public class EventHandler {
                         entity.addEffect(entry.getValue());
                     }
                 }
-
+                //Swords
                 if (mainhandItem instanceof IridiumSwordItem sword && sword.getSocket() == Socket.DIAMOND) {
+                    SocketDiamondAreaCloud diamondCloud = new SocketDiamondAreaCloud(world);
+                    diamondCloud.setPos(entity.position());
+                    world.addFreshEntity(diamondCloud);
                     int height = attacker.getBlockY();
                     double a = Config.diamondSwordMaxDamageBonus, b = Config.diamondSwordMinDamageBonus,
                             m = (b - a) / 384.0;
                     float damageBonus = (float) (m * (height + 64) + a);
                     evt.setNewDamage(amt + damageBonus);
+                } else if (mainhandItem instanceof IridiumSwordItem sword && sword.getSocket() == Socket.EMERALD) {
+                    SocketEmeraldAreaCloud emeraldCloud = new SocketEmeraldAreaCloud(world);
+                    emeraldCloud.setPos(entity.getEyePosition());
+                    world.addFreshEntity(emeraldCloud);
                 } else if (mainhandItem instanceof IridiumSwordItem sword && sword.getSocket() == Socket.SKULL) {
+                    SocketSkullAreaCloud skullCloud = new SocketSkullAreaCloud(world);
+                    skullCloud.setPos(entity.getEyePosition());
+                    world.addFreshEntity(skullCloud);
                     double chance = Config.skullSwordInstakillChance;
                     if (entity.getType().is(Main.BOSS_TAG)) chance = Config.skullSwordInstakillChanceBosses;
                     else if (entity.getType() == EntityType.PLAYER) chance = Config.skullSwordInstakillChancePlayers;
                     if (world.getRandom().nextDouble() <= chance) {
                         evt.setNewDamage(Float.MAX_VALUE);
                     }
+                } else if (mainhandItem instanceof IridiumSwordItem sword && sword.getSocket() == Socket.WITHER_SKULL) {
+                    SocketWRSkullAreaCloud wrSkullCloud = new SocketWRSkullAreaCloud(world);
+                    wrSkullCloud.setPos(entity.position());
+                    world.addFreshEntity(wrSkullCloud);
                     //System.out.println("chance " + chance);
-                } else if (mainhandItem instanceof IridiumHoeItem hoe && hoe.getSocket() == Socket.SKULL) {
-                    if (entity.getType().is(EntityTypeTags.UNDEAD)) {
-                        if (entity.getType().is(Main.BOSS_TAG)) evt.setNewDamage(25f);
-                        else evt.setNewDamage(Float.MAX_VALUE);
-                    }
-                } else if (mainhandItem instanceof IridiumAxeItem axe && axe.getSocket() == Socket.AMETHYST) {
-                    if (GeneralUtil.isExposedToSunlight(pos, world)) {
-                        double damageBonus = 1 + Config.amethystAxeDamageBonus * Math.exp(-(time - 12000.0) * (time - 12000.0) / 12000.0);
-                        evt.setNewDamage(evt.getNewDamage() * (float) damageBonus);
-                    }
                 } else if (mainhandItem instanceof IridiumSwordItem sword && sword.getSocket() == Socket.AMETHYST) {
+                    SocketAmethystAreaCloud amethystCloud = new SocketAmethystAreaCloud(world);
+                    amethystCloud.setPos(entity.getEyePosition());
+                    world.addFreshEntity(amethystCloud);
                     if (GeneralUtil.isExposedToSunlight(pos, world)) {
                         double damageBonus = 1 + Config.amethystSwordDamageBonus * Math.exp(-((time + 12000.0) % 24000.0 - 12000.0) * ((time + 12000.0) % 24000.0 - 12000.0) / 12000.0);
                         evt.setNewDamage(evt.getNewDamage() * (float) damageBonus);
                     }
+                //Axes
+                } else if (mainhandItem instanceof IridiumAxeItem axe && axe.getSocket() == Socket.AMETHYST) {
+                    SocketAmethystAreaCloud amethystCloud = new SocketAmethystAreaCloud(world);
+                    amethystCloud.setPos(entity.getEyePosition());
+                    world.addFreshEntity(amethystCloud);
+                    if (GeneralUtil.isExposedToSunlight(pos, world)) {
+                        double damageBonus = 1 + Config.amethystAxeDamageBonus * Math.exp(-(time - 12000.0) * (time - 12000.0) / 12000.0);
+                        evt.setNewDamage(evt.getNewDamage() * (float) damageBonus);
+                    }
+                } else if (mainhandItem instanceof IridiumAxeItem axe && axe.getSocket() == Socket.DIAMOND) {
+                    SocketDiamondAreaCloud diamondCloud = new SocketDiamondAreaCloud(world);
+                    diamondCloud.setPos(entity.position());
+                    world.addFreshEntity(diamondCloud);
                 } else if (mainhandItem instanceof IridiumAxeItem axe && axe.getSocket() == Socket.EMERALD) {
+                    SocketEmeraldAreaCloud emeraldCloud = new SocketEmeraldAreaCloud(world);
+                    emeraldCloud.setPos(entity.getEyePosition());
+                    world.addFreshEntity(emeraldCloud);
                     if (living instanceof Player player && !player.getCooldowns().isOnCooldown(axe)) {
                         LightningBolt bolt = new LightningBolt(EntityType.LIGHTNING_BOLT, world);
                         if (living instanceof ServerPlayer sPlayer) bolt.setCause(sPlayer);
                         bolt.moveTo(entity.position());
                         world.addFreshEntity(bolt);
                         axe.addCooldown(player, mainhandStack);
+                    }
+                } else if (mainhandItem instanceof IridiumAxeItem axe && axe.getSocket() == Socket.SKULL) {
+                    SocketSkullAreaCloud skullCloud = new SocketSkullAreaCloud(world);
+                    skullCloud.setPos(entity.getEyePosition());
+                    world.addFreshEntity(skullCloud);
+                } else if (mainhandItem instanceof IridiumAxeItem axe && axe.getSocket() == Socket.WITHER_SKULL) {
+                    SocketWRSkullAreaCloud wrSkullCloud = new SocketWRSkullAreaCloud(world);
+                    wrSkullCloud.setPos(entity.position());
+                    world.addFreshEntity(wrSkullCloud);
+                //Other
+                } else if (mainhandItem instanceof IridiumHoeItem hoe && hoe.getSocket() == Socket.SKULL) {
+                    SocketSkullAreaCloud skullCloud = new SocketSkullAreaCloud(world);
+                    skullCloud.setPos(entity.getEyePosition());
+                    world.addFreshEntity(skullCloud);
+                    if (entity.getType().is(EntityTypeTags.UNDEAD)) {
+                        if (entity.getType().is(Main.BOSS_TAG)) evt.setNewDamage(25f);
+                        else evt.setNewDamage(Float.MAX_VALUE);
                     }
                 }
 
@@ -277,6 +321,9 @@ public class EventHandler {
                     }
                 }
             } else if (attacker instanceof HomingWitherSkull hws) {
+                SocketWRSkullAreaCloud sCloud = new SocketWRSkullAreaCloud(world);
+                sCloud.setPos(entity.getEyePosition());
+                world.addFreshEntity(sCloud);
                 int i = 0;
                 if (world.getDifficulty() == Difficulty.NORMAL) {
                     i = 7;

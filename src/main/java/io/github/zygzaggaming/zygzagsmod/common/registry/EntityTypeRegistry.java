@@ -1,8 +1,15 @@
 package io.github.zygzaggaming.zygzagsmod.common.registry;
 
-import io.github.zygzaggaming.zygzagsmod.client.renderer.SmallMagmaticFireballRenderer;
 import io.github.zygzaggaming.zygzagsmod.common.entity.*;
 import io.github.zygzaggaming.zygzagsmod.common.entity.assembly.ShurikenAssembly;
+import io.github.zygzaggaming.zygzagsmod.common.entity.particles.BeamAreaEffectCloud;
+import io.github.zygzaggaming.zygzagsmod.common.entity.particles.OverheatBeamAreaEffectCloud;
+import io.github.zygzaggaming.zygzagsmod.common.entity.particles.socket.SocketAmethystAreaCloud;
+import io.github.zygzaggaming.zygzagsmod.common.entity.particles.socket.SocketDiamondAreaCloud;
+import io.github.zygzaggaming.zygzagsmod.common.entity.particles.socket.SocketEmeraldAreaCloud;
+import io.github.zygzaggaming.zygzagsmod.common.entity.particles.socket.SocketSkullAreaCloud;
+import io.github.zygzaggaming.zygzagsmod.common.entity.particles.socket.SocketWRSkullAreaCloud;
+import io.github.zygzaggaming.zygzagsmod.common.entity.particles.SphereAreaEffectCloud;
 import io.github.zygzaggaming.zygzagsmod.common.registry.base.AkomiRegistry;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.world.entity.EntityType;
@@ -118,6 +125,53 @@ public class EntityTypeRegistry extends AkomiRegistry<EntityType<?>> {
                     .sized(2.3f, 0.25f)
                     .build("shuriken_assembly_c")
     );
+    // -Socket Particle Clouds-
+    public static final Supplier<EntityType<SocketAmethystAreaCloud>> SOCKET_AMETHYST_AREA_CLOUD = INSTANCE.register(
+            "socket_amethyst_area_cloud",
+            () -> EntityType.Builder.<SocketAmethystAreaCloud>of(SocketAmethystAreaCloud::new, MobCategory.MISC)
+                    .fireImmune()
+                    .sized(1f, 1f)
+                    .clientTrackingRange(10)
+                    .updateInterval(Integer.MAX_VALUE)
+                    .build("socket_amethyst_area_cloud")
+    );
+    public static final Supplier<EntityType<SocketDiamondAreaCloud>> SOCKET_DIAMOND_AREA_CLOUD = INSTANCE.register(
+            "socket_diamond_area_cloud",
+            () -> EntityType.Builder.<SocketDiamondAreaCloud>of(SocketDiamondAreaCloud::new, MobCategory.MISC)
+                    .fireImmune()
+                    .sized(1f, 1f)
+                    .clientTrackingRange(10)
+                    .updateInterval(Integer.MAX_VALUE)
+                    .build("socket_diamond_area_cloud")
+    );
+    public static final Supplier<EntityType<SocketEmeraldAreaCloud>> SOCKET_EMERALD_AREA_CLOUD = INSTANCE.register(
+            "socket_emerald_area_cloud",
+            () -> EntityType.Builder.<SocketEmeraldAreaCloud>of(SocketEmeraldAreaCloud::new, MobCategory.MISC)
+                    .fireImmune()
+                    .sized(1f, 1f)
+                    .clientTrackingRange(10)
+                    .updateInterval(Integer.MAX_VALUE)
+                    .build("socket_emerald_area_cloud")
+    );
+    public static final Supplier<EntityType<SocketSkullAreaCloud>> SOCKET_SKULL_AREA_CLOUD = INSTANCE.register(
+            "socket_skull_area_cloud",
+            () -> EntityType.Builder.<SocketSkullAreaCloud>of(SocketSkullAreaCloud::new, MobCategory.MISC)
+                    .fireImmune()
+                    .sized(1f, 1f)
+                    .clientTrackingRange(10)
+                    .updateInterval(Integer.MAX_VALUE)
+                    .build("socket_skull_area_cloud")
+    );
+    public static final Supplier<EntityType<SocketWRSkullAreaCloud>> SOCKET_WRSKULL_AREA_CLOUD = INSTANCE.register(
+            "socket_wrskull_area_cloud",
+            () -> EntityType.Builder.<SocketWRSkullAreaCloud>of(SocketWRSkullAreaCloud::new, MobCategory.MISC)
+                    .fireImmune()
+                    .sized(1f, 1f)
+                    .clientTrackingRange(10)
+                    .updateInterval(Integer.MAX_VALUE)
+                    .build("socket_wrskull_area_cloud")
+    );
+    // -Socket Particle Clouds-
     public EntityTypeRegistry(DeferredRegister<EntityType<?>> register) {
         super(register);
     }

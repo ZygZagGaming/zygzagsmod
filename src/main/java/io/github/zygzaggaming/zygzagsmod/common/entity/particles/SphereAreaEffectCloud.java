@@ -1,4 +1,4 @@
-package io.github.zygzaggaming.zygzagsmod.common.entity;
+package io.github.zygzaggaming.zygzagsmod.common.entity.particles;
 
 import com.google.common.collect.Maps;
 import io.github.zygzaggaming.zygzagsmod.common.registry.EntityTypeRegistry;
@@ -57,7 +57,6 @@ public class SphereAreaEffectCloud extends AreaEffectCloud {
 
             if (tickCount % 5 == 0) {
                 victims.entrySet().removeIf((entry) -> tickCount >= entry.getValue());
-
                 List<LivingEntity> entitiesInBoundingBox = level().getEntitiesOfClass(LivingEntity.class, getBoundingBox());
                 if (!entitiesInBoundingBox.isEmpty()) {
                     for (LivingEntity living : entitiesInBoundingBox) {
