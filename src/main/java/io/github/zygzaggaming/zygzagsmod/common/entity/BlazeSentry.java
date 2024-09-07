@@ -5,7 +5,6 @@ import io.github.zygzaggaming.zygzagsmod.common.entity.animation.Action;
 import io.github.zygzaggaming.zygzagsmod.common.entity.animation.Actor;
 import io.github.zygzaggaming.zygzagsmod.common.networking.packet.ClientboundBlazeSentryRotationPacket;
 import io.github.zygzaggaming.zygzagsmod.common.registry.*;
-import io.github.zygzaggaming.zygzagsmod.common.registry.object.BlockWithItemSupplier;
 import io.github.zygzaggaming.zygzagsmod.common.util.*;
 import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.core.BlockPos;
@@ -13,6 +12,9 @@ import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.sounds.SoundEvent;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.sounds.SoundSource;
 import net.minecraft.tags.DamageTypeTags;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.damagesource.DamageSource;
@@ -27,11 +29,9 @@ import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.monster.Monster;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.LargeFireball;
-import io.github.zygzaggaming.zygzagsmod.common.entity.SmallMagmaticFireball;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
-import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.pathfinder.PathType;
 import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.Nullable;
@@ -166,6 +166,21 @@ public class BlazeSentry extends Monster implements GeoAnimatable, ActingEntity<
     }
 
     @Override
+    protected SoundEvent getAmbientSound() {
+        return SoundEventRegistry.BLAZE_SENTRY_AMBIENT.get();
+    }
+
+    @Override
+    protected SoundEvent getHurtSound(DamageSource p_32235_) {
+        return SoundEvents.BLAZE_HURT;
+    }
+
+    @Override
+    protected SoundEvent getDeathSound() {
+        return SoundEvents.BLAZE_DEATH;
+    }
+
+    @Override
     public AnimatableInstanceCache getAnimatableInstanceCache() {
         return instanceCache;
     }
@@ -292,6 +307,7 @@ public class BlazeSentry extends Monster implements GeoAnimatable, ActingEntity<
         @Override
         public void tick() {
             //System.out.println("ticks: " + ticks);
+            RandomSource randomsource = level().random;
             ticks++;
             if (ticks > windup && (ticks - windup) % ticksBetweenFireballs == 0) {
                 LivingEntity target = getTarget();
@@ -301,6 +317,7 @@ public class BlazeSentry extends Monster implements GeoAnimatable, ActingEntity<
                 fireball.setDeltaMovement(angle.scale(power));
                 fireball.moveTo(getEyePosition().add(angle.scale(0.25)));
                 level().addFreshEntity(fireball);
+                playSound(SoundEvents.BLAZE_SHOOT, 1.0F, 1.0F / (getRandom().nextFloat() * 0.4F + 0.8F));
             }
         }
 
@@ -352,6 +369,7 @@ public class BlazeSentry extends Monster implements GeoAnimatable, ActingEntity<
                 assert target != null; //TODO: null check
                 Vec3 angle = rotations.get(1).directionVector();
                 LargeFireball fireball = new LargeFireball(level(), BlazeSentry.this, new Vec3(angle.x, angle.y, angle.z), 1);
+                level().playSound(null, BlockPos.containing(getEyePosition()), SoundEvents.GHAST_SHOOT, SoundSource.HOSTILE);
                 fireball.setDeltaMovement(angle.scale(power));
                 fireball.moveTo(getEyePosition().add(angle.scale(0.25)));
                 level().addFreshEntity(fireball);

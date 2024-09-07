@@ -33,6 +33,8 @@ public class SoundEventRegistry extends AkomiRegistry<SoundEvent> {
     public static final Supplier<SoundEvent> SCULK_JAW_CLOSE = makeSimpleSoundEvent("sculk_jaw_close");
     public static final Supplier<SoundEvent> CACHE_OPEN = makeSimpleSoundEvent("cache_open");
     public static final Supplier<SoundEvent> CACHE_CLOSE = makeSimpleSoundEvent("cache_close");
+    public static final Supplier<SoundEvent> BLAZE_SENTRY_AMBIENT = makeSimpleSoundEvent("blaze_sentry_ambient");
+    public static final Supplier<SoundEvent> BIG_FIREBALL = makeSimpleSoundEvent("big_fireball");
 
     public SoundEventRegistry(DeferredRegister<SoundEvent> register) {
         super(register);

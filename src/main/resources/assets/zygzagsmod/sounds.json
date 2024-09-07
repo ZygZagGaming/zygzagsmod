@@ -43,5 +43,19 @@
       "zygzagsmod:block/cache/close"
     ],
     "subtitle": "subtitles.block.cache.close"
+  },
+  "blaze_sentry_ambient": {
+    "sounds": [
+      "zygzagsmod:entity/entities/blaze_sentry/ambient/bsentry_idle_0",
+      "zygzagsmod:entity/entities/blaze_sentry/ambient/bsentry_idle_1",
+      "zygzagsmod:entity/entities/blaze_sentry/ambient/bsentry_idle_2"
+    ],
+    "subtitle": "subtitles.entity.entities.blaze_sentry.ambient"
+  },
+  "big_fireball": {
+    "sounds": [
+      "zygzagsmod:entity/entities/projectile/big_fireball/big_fireball_0"
+    ],
+    "subtitle": "subtitles.entity.entities.projectile.big_fireball"
   }
 }

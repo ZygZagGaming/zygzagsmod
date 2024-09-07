@@ -231,6 +231,10 @@
   "subtitles.block.cache.open": "Cache opens",
   "subtitles.block.cache.close": "Cache closes",
 
+  "subtitles.entity.entities.blaze_sentry.ambient": "Blaze Sentry breathes",
+
+  "subtitles.entity.entities.projectile.big_fireball": "Blaze Sentry Fireball Shot",
+
   "death.attack.sculk_jaw": "%1$s was chomped to death",
   "death.attack.sculk_jaw.player": "%1$s was chomped by %2$s",
   "death.attack.overheat": "%1$s was incinerated",
