@@ -261,7 +261,7 @@ public class BlazeSentry extends Monster implements GeoAnimatable, ActingEntity<
         goalSelector.addGoal(1, new FlamethrowGoal());
         goalSelector.addGoal(2, new FireGoal());
         goalSelector.addGoal(2, new FireBigGoal());
-        goalSelector.addGoal(3, new RandomLookAroundGoal());
+        //goalSelector.addGoal(3, new RandomLookAroundGoal());
     }
 
     @Override
