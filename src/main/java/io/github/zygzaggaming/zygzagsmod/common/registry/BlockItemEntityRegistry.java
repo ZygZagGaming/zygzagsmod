@@ -47,7 +47,7 @@ public class BlockItemEntityRegistry {
 
     public static final BlockItemEntitySupplier<MagmaticNetherBrickBlock, BlockItem, MagmaticNetherBrickBlockEntity> MAGMATIC_NETHER_BRICKS = INSTANCE.register(
             "magmatic_nether_bricks",
-            () -> new MagmaticNetherBrickBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.RED_NETHER_BRICKS).strength(3f, 6f)),
+            () -> new MagmaticNetherBrickBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.RED_NETHER_BRICKS).strength(60f, 6f)),
             MagmaticNetherBrickBlockEntity::new
     );
 
