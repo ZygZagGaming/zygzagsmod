@@ -96,6 +96,13 @@ public class EntityTypeRegistry extends AkomiRegistry<EntityType<?>> {
                     //.updateInterval(Integer.MAX_VALUE)
                     .build("flail_projectile")
     );
+    public static final Supplier<EntityType<SmallRod>> SMALL_ROD = INSTANCE.register(
+            "small_rod",
+            () -> EntityType.Builder.<SmallRod>of((type, level) -> new SmallRod(type, level, 3), MobCategory.MISC)
+                    .fireImmune()
+                    .sized(0.4f, 1f)
+                    .build("small_rod")
+    );
     public static final Supplier<EntityType<ShurikenAssembly>> SHURIKEN_ASSEMBLY_A = INSTANCE.register(
             "shuriken_assembly_a",
             () -> EntityType.Builder.<ShurikenAssembly>of((type, level) -> new ShurikenAssembly(type, level, false, false, 3, 4), MobCategory.MISC)

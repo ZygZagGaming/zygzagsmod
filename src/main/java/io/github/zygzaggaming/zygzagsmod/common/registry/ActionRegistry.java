@@ -19,6 +19,7 @@ public class ActionRegistry extends CustomAkomiRegistry<Action> {
     public void registerTo(IEventBus bus) {
         IridiumGolem.init(); // make the IridiumGolem class load, subclasses don't load unless they're used
         BlazeSentry.init();
+        SmallRod.init();
         super.registerTo(bus);
     }
 
@@ -42,6 +43,14 @@ public class ActionRegistry extends CustomAkomiRegistry<Action> {
         public static final Supplier<Action> AGRO_BASE = INSTANCE.register("blaze_sentry_agro_base", () -> new Action(RawAnimation.begin().thenPlay("animation.blaze_sentry.agro_loop_2"), 40, false));
         public static final Supplier<Action> SHOOT_BIG_BASE = INSTANCE.register("blaze_sentry_shoot_big_base", () -> new Action(RawAnimation.begin().thenPlay("animation.blaze_sentry.shoot_big_fireball"), 53, false));
         public static final Supplier<Action> FLAMETHROW_BASE = INSTANCE.register("blaze_sentry_flamethrow_base", () -> new Action(RawAnimation.begin().thenPlay("animation.blaze_sentry.flamethrow"), 30, false));
+
+        public static void init() {
+        }
+    }
+
+    public static class SmallRod {
+        public static final Supplier<Action> SPIN_BASE_0 = INSTANCE.register("small_rod_spin_base_0", () -> new Action(RawAnimation.begin().thenPlay("animation.small_rod.spin_0"), 40, true));
+        public static final Supplier<Action> SPIN_BASE_1 = INSTANCE.register("small_rod_spin_base_1", () -> new Action(RawAnimation.begin().thenPlay("animation.small_rod.spin_1"), 40, true));
 
         public static void init() {
         }

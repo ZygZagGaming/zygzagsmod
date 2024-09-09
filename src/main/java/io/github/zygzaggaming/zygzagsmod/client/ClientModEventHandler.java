@@ -1,5 +1,6 @@
 package io.github.zygzaggaming.zygzagsmod.client;
 
+import com.ibm.icu.util.CodePointTrie;
 import io.github.zygzaggaming.zygzagsmod.client.particle.*;
 import io.github.zygzaggaming.zygzagsmod.client.renderer.*;
 import io.github.zygzaggaming.zygzagsmod.common.Main;
@@ -31,6 +32,7 @@ public class ClientModEventHandler {
         event.registerEntityRenderer(EntityTypeRegistry.OVERHEAT_BEAM_AREA_EFFECT_CLOUD.get(), NoopRenderer::new);
         event.registerEntityRenderer(EntityTypeRegistry.SPHERE_AREA_EFFECT_CLOUD.get(), NoopRenderer::new);
         event.registerEntityRenderer(EntityTypeRegistry.FLAIL_PROJECTILE.get(), FlailProjectileRenderer::new);
+        event.registerEntityRenderer(EntityTypeRegistry.SMALL_ROD.get(), SmallRodRenderer::new);
         event.registerEntityRenderer(EntityTypeRegistry.SHURIKEN_ASSEMBLY_A.get(), ShurikenAssemblyRenderer::new);
         event.registerEntityRenderer(EntityTypeRegistry.SHURIKEN_ASSEMBLY_B.get(), ShurikenAssemblyRenderer::new);
         event.registerEntityRenderer(EntityTypeRegistry.SHURIKEN_ASSEMBLY_C.get(), ShurikenAssemblyRenderer::new);
