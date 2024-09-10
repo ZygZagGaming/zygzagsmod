@@ -7,6 +7,8 @@ import io.github.zygzaggaming.zygzagsmod.client.gecko.geomodel.SmallRodGeoModel;
 import io.github.zygzaggaming.zygzagsmod.common.entity.BlazeSentry;
 import io.github.zygzaggaming.zygzagsmod.common.entity.SmallRod;
 import io.github.zygzaggaming.zygzagsmod.common.entity.assembly.ShurikenAssembly;
+import io.github.zygzaggaming.zygzagsmod.common.util.Rotation;
+import io.github.zygzaggaming.zygzagsmod.common.util.RotationArray;
 import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
@@ -24,17 +26,24 @@ public class SmallRodRenderer extends GeoEntityRenderer<SmallRod> {
         super(context, new SmallRodGeoModel());
     }
 
-    public float getMotionAnimThreshold(ShurikenAssembly animatable) {
+    public float getMotionAnimThreshold(SmallRod animatable) {
         return 0.0001f;
     }
 
     @Override
     public void preRender(PoseStack poseStack, SmallRod rod, BakedGeoModel model, @Nullable MultiBufferSource bufferSource, @Nullable VertexConsumer buffer, boolean isReRender, float partialTick, int packedLight, int packedOverlay, int color) {
         super.preRender(poseStack, rod, model, bufferSource, buffer, isReRender, partialTick, packedLight, packedOverlay, color);
+        RotationArray rotations = rod.rotations;
+        Rotation rodBody = rotations.get(0);
+        final float p = partialTick;
+        model.getBone("rod_wrapper").ifPresent((rods) -> {
+            //System.out.println("rod rot is " + rodBody.getXRot(partialTick) + ", " + rodBody.getYRot(partialTick));
+            rods.updateRotation(rodBody.getXRot(p), rodBody.getYRot(p), 0);
+        });
     }
 
     @Override
-    protected int getBlockLightLevel(SmallRod sentry, BlockPos pos) {
+    protected int getBlockLightLevel(SmallRod smallRod, BlockPos pos) {
         return 15;
     }
 }

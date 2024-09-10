@@ -6,15 +6,10 @@ import io.github.zygzaggaming.zygzagsmod.common.datagen.AkomiLootTableProvider;
 import io.github.zygzaggaming.zygzagsmod.common.datagen.AkomiRecipeProvider;
 import io.github.zygzaggaming.zygzagsmod.common.entity.BlazeSentry;
 import io.github.zygzaggaming.zygzagsmod.common.entity.IridiumGolem;
+import io.github.zygzaggaming.zygzagsmod.common.entity.SmallRod;
 import io.github.zygzaggaming.zygzagsmod.common.item.iridium.ISocketable;
-import io.github.zygzaggaming.zygzagsmod.common.networking.handler.ClientboundBlazeSentryRotationPacketHandler;
-import io.github.zygzaggaming.zygzagsmod.common.networking.handler.ClientboundSelfOverheatUpdatePacketHandler;
-import io.github.zygzaggaming.zygzagsmod.common.networking.handler.ClientboundSocketHitPacketHandler;
-import io.github.zygzaggaming.zygzagsmod.common.networking.handler.ServerboundPlayerLeftClickEmptyPacketHandler;
-import io.github.zygzaggaming.zygzagsmod.common.networking.packet.ClientboundBlazeSentryRotationPacket;
-import io.github.zygzaggaming.zygzagsmod.common.networking.packet.ClientboundSelfOverheatUpdatePacket;
-import io.github.zygzaggaming.zygzagsmod.common.networking.packet.ClientboundSocketHitPacket;
-import io.github.zygzaggaming.zygzagsmod.common.networking.packet.ServerboundPlayerLeftClickEmptyPacket;
+import io.github.zygzaggaming.zygzagsmod.common.networking.handler.*;
+import io.github.zygzaggaming.zygzagsmod.common.networking.packet.*;
 import io.github.zygzaggaming.zygzagsmod.common.registry.AttributeRegistry;
 import io.github.zygzaggaming.zygzagsmod.common.registry.EntityTypeRegistry;
 import io.github.zygzaggaming.zygzagsmod.common.registry.IridiumGearRegistry;
@@ -47,6 +42,7 @@ public class ModEventHandler {
         event.put(EntityTypeRegistry.PLAYER_ALLIED_SKELETON.get(), AbstractSkeleton.createAttributes().build());
         event.put(EntityTypeRegistry.IRIDIUM_GOLEM.get(), IridiumGolem.createAttributes().build());
         event.put(EntityTypeRegistry.BLAZE_SENTRY.get(), BlazeSentry.createAttributes().build());
+        event.put(EntityTypeRegistry.SMALL_ROD.get(), SmallRod.createAttributes().build());
     }
 
     @SubscribeEvent
@@ -100,6 +96,7 @@ public class ModEventHandler {
     public static void registerPayloadHandlers(final RegisterPayloadHandlersEvent event) {
         final PayloadRegistrar registrar = event.registrar(Main.MODID);
         registrar.playToClient(ClientboundBlazeSentryRotationPacket.TYPE, ClientboundBlazeSentryRotationPacket.STREAM_CODEC, ClientboundBlazeSentryRotationPacketHandler.getInstance()::handleData);
+        registrar.playToClient(ClientboundSmallRodRotationPacket.TYPE, ClientboundSmallRodRotationPacket.STREAM_CODEC, ClientboundSmallRodRotationPacketHandler.getInstance()::handleData);
         registrar.playToClient(ClientboundSelfOverheatUpdatePacket.TYPE, ClientboundSelfOverheatUpdatePacket.STREAM_CODEC, ClientboundSelfOverheatUpdatePacketHandler.getInstance()::handleData);
         registrar.playToClient(ClientboundSocketHitPacket.TYPE, ClientboundSocketHitPacket.STREAM_CODEC, ClientboundSocketHitPacketHandler.getInstance()::handleData);
         registrar.playToServer(ServerboundPlayerLeftClickEmptyPacket.TYPE, ServerboundPlayerLeftClickEmptyPacket.STREAM_CODEC, ServerboundPlayerLeftClickEmptyPacketHandler.getInstance()::handleData);

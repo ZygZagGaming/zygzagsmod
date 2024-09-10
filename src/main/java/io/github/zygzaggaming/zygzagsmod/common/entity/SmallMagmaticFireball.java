@@ -21,6 +21,8 @@ import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
 
 public class SmallMagmaticFireball extends Fireball {
+    private int explosionPower = 0;
+
     public SmallMagmaticFireball(EntityType<? extends SmallMagmaticFireball> p_37364_, Level p_37365_) {
         super(p_37364_, p_37365_);
     }
@@ -31,6 +33,11 @@ public class SmallMagmaticFireball extends Fireball {
 
     public SmallMagmaticFireball(Level p_37367_, double p_37368_, double p_37369_, double p_37370_, Vec3 p_347543_) {
         super(EntityType.SMALL_FIREBALL, p_37368_, p_37369_, p_37370_, p_347543_, p_37367_);
+    }
+
+    public SmallMagmaticFireball(Level p_181151_, LivingEntity p_181152_, Vec3 p_347580_, int p_181156_) {
+        super(EntityType.SMALL_FIREBALL, p_181152_, p_347580_, p_181151_);
+        this.explosionPower = p_181156_;
     }
 
     @Override

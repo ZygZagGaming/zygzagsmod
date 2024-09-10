@@ -278,7 +278,7 @@ public class BlazeSentry extends Monster implements GeoAnimatable, ActingEntity<
     public class FireGoal extends Goal {
         public static final EnumSet<Goal.Flag> flags = EnumSet.of(Flag.LOOK, Flag.TARGET);
         public static final int windup = 60, ticksBetweenFireballs = 3, maxFireballs = 50, windDown = 60 + 80;
-        public static final double power = 1.5;
+        public static final double power = 2.5;
         int ticks = 0;
         double chanceToUse = 0.66;
 
