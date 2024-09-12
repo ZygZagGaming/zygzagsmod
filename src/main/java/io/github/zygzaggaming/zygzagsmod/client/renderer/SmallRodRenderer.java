@@ -34,11 +34,11 @@ public class SmallRodRenderer extends GeoEntityRenderer<SmallRod> {
     public void preRender(PoseStack poseStack, SmallRod rod, BakedGeoModel model, @Nullable MultiBufferSource bufferSource, @Nullable VertexConsumer buffer, boolean isReRender, float partialTick, int packedLight, int packedOverlay, int color) {
         super.preRender(poseStack, rod, model, bufferSource, buffer, isReRender, partialTick, packedLight, packedOverlay, color);
         RotationArray rotations = rod.rotations;
-        Rotation rodBody = rotations.get(0);
+        Rotation head = rotations.get(0);
         final float p = partialTick;
-        model.getBone("rod_wrapper").ifPresent((rods) -> {
+        model.getBone("head").ifPresent((headBone) -> {
             //System.out.println("rod rot is " + rodBody.getXRot(partialTick) + ", " + rodBody.getYRot(partialTick));
-            rods.updateRotation(rodBody.getXRot(p), rodBody.getYRot(p), 0);
+            headBone.updateRotation(head.getXRot(p), head.getYRot(p), 0);
         });
     }
 

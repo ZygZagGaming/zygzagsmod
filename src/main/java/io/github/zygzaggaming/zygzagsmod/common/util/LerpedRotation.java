@@ -5,7 +5,6 @@ import com.mojang.serialization.codecs.RecordCodecBuilder;
 
 import static io.github.zygzaggaming.zygzagsmod.common.util.GeneralUtil.lerpRotations;
 
-@SuppressWarnings("unused")
 public class LerpedRotation extends SimpleRotation {
     public static Codec<LerpedRotation> CODEC = RecordCodecBuilder.create(instance ->
             instance.group(

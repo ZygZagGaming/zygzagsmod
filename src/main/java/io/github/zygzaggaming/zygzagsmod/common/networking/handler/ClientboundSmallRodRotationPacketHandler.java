@@ -18,9 +18,9 @@ public class ClientboundSmallRodRotationPacketHandler {
         context.enqueueWork(() -> {
             Player player = context.player();
             player.level().getEntitiesOfClass(SmallRod.class, player.getBoundingBox().inflate(100), (it) -> it.getUUID().equals(data.uuid())).stream().findFirst().ifPresent(thisRod -> {
-                thisRod.rotations.get(0).set(data.rodBone().xRot, data.rodBone().yRot);
-                thisRod.rotations.get(0).setOldXRot(data.rodBone().oldXRot);
-                thisRod.rotations.get(0).setOldYRot(data.rodBone().oldYRot);
+                thisRod.rotations.get(0).set(data.head().xRot, data.head().yRot);
+                thisRod.rotations.get(0).setOldXRot(data.head().oldXRot);
+                thisRod.rotations.get(0).setOldYRot(data.head().oldYRot);
             });
         }).exceptionally(e -> {
             context.disconnect(Component.translatable(Main.MODID + ".networking.failed", e.getMessage()));
