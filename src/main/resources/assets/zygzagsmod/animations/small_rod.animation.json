@@ -1,11 +1,26 @@
 {
 	"format_version": "1.8.0",
 	"animations": {
-		"animation.small_rod.spin_0": {
+		"animation.small_rod.small_rod_idle": {
+			"animation_length": 1,
+			"bones": {
+				"head": {
+					"position": {
+						"0.0": {
+							"vector": [0, 0, 0]
+						},
+						"1.0": {
+							"vector": [0, 0, 0]
+						}
+					}
+				}
+			}
+		},
+		"animation.small_rod.small_rod_spin_0": {
 			"loop": true,
 			"animation_length": 2,
 			"bones": {
-				"rod_wrapper": {
+				"rod": {
 					"rotation": {
 						"0.0": {
 							"vector": [0, 0, 0]
@@ -17,11 +32,11 @@
 				}
 			}
 		},
-		"animation.small_rod.spin_1": {
+		"animation.small_rod.small_rod_spin_1": {
 			"loop": true,
 			"animation_length": 2,
 			"bones": {
-				"rod_wrapper": {
+				"rod": {
 					"rotation": {
 						"0.0": {
 							"vector": [0, 0, 0]

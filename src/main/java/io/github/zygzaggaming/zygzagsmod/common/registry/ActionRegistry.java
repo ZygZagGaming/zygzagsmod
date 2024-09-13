@@ -51,6 +51,7 @@ public class ActionRegistry extends CustomAkomiRegistry<Action> {
     public static class SmallRod {
         public static final Supplier<Action> SPIN_BASE_0 = INSTANCE.register("small_rod_spin_base_0", () -> new Action(RawAnimation.begin().thenPlay("animation.small_rod.spin_0"), 40, true));
         public static final Supplier<Action> SPIN_BASE_1 = INSTANCE.register("small_rod_spin_base_1", () -> new Action(RawAnimation.begin().thenPlay("animation.small_rod.spin_1"), 40, true));
+        public static final Supplier<Action> IDLE_BASE = INSTANCE.register("small_rod_idle", () -> new Action(RawAnimation.begin().thenPlay("animation.small_rod.idle"), 20, true));
 
         public static void init() {
         }

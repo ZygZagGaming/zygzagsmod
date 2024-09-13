@@ -7,6 +7,7 @@ import io.github.zygzaggaming.zygzagsmod.client.gecko.geomodel.SmallRodGeoModel;
 import io.github.zygzaggaming.zygzagsmod.common.entity.BlazeSentry;
 import io.github.zygzaggaming.zygzagsmod.common.entity.SmallRod;
 import io.github.zygzaggaming.zygzagsmod.common.entity.assembly.ShurikenAssembly;
+import io.github.zygzaggaming.zygzagsmod.common.util.GeneralUtil;
 import io.github.zygzaggaming.zygzagsmod.common.util.Rotation;
 import io.github.zygzaggaming.zygzagsmod.common.util.RotationArray;
 import net.minecraft.MethodsReturnNonnullByDefault;
@@ -37,7 +38,7 @@ public class SmallRodRenderer extends GeoEntityRenderer<SmallRod> {
         Rotation head = rotations.get(0);
         final float p = partialTick;
         model.getBone("head").ifPresent((headBone) -> {
-            //System.out.println("rod rot is " + rodBody.getXRot(partialTick) + ", " + rodBody.getYRot(partialTick));
+            //System.out.println("rod rot is " + GeneralUtil.radiansToDegrees(head.getXRot(partialTick)) + ", " + GeneralUtil.radiansToDegrees(head.getYRot(partialTick)));
             headBone.updateRotation(head.getXRot(p), head.getYRot(p), 0);
         });
     }

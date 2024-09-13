@@ -1,5 +1,11 @@
 package io.github.zygzaggaming.zygzagsmod.common.entity;
 
+import io.github.zygzaggaming.zygzagsmod.common.entity.animation.ActingEntity;
+import io.github.zygzaggaming.zygzagsmod.common.entity.animation.Action;
+import io.github.zygzaggaming.zygzagsmod.common.entity.animation.Actor;
+import io.github.zygzaggaming.zygzagsmod.common.registry.ActionRegistry;
+import io.github.zygzaggaming.zygzagsmod.common.registry.EntityDataSerializerRegistry;
+import io.github.zygzaggaming.zygzagsmod.common.registry.EntityTypeRegistry;
 import io.github.zygzaggaming.zygzagsmod.common.util.*;
 import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.MethodsReturnNonnullByDefault;
@@ -7,30 +13,25 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.tags.DamageTypeTags;
-import net.minecraft.util.Mth;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.damagesource.DamageTypes;
 import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
-import net.minecraft.world.entity.ai.control.LookControl;
 import net.minecraft.world.entity.ai.control.MoveControl;
 import net.minecraft.world.entity.ai.goal.Goal;
-import net.minecraft.world.entity.ai.goal.LookAtPlayerGoal;
 import net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal;
 import net.minecraft.world.entity.animal.AbstractGolem;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.LargeFireball;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.phys.AABB;
+import net.minecraft.world.level.pathfinder.PathType;
 import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.Nullable;
-import software.bernie.geckolib.animatable.GeoEntity;
+import software.bernie.geckolib.animatable.GeoAnimatable;
 import software.bernie.geckolib.animatable.instance.AnimatableInstanceCache;
 import software.bernie.geckolib.animation.AnimatableManager;
-import software.bernie.geckolib.animation.AnimationController;
-import software.bernie.geckolib.animation.RawAnimation;
 import software.bernie.geckolib.util.GeckoLibUtil;
 
 import javax.annotation.ParametersAreNonnullByDefault;
@@ -41,39 +42,38 @@ import static java.lang.Math.atan2;
 
 @ParametersAreNonnullByDefault
 @MethodsReturnNonnullByDefault
-public class SmallRod extends FlyingMob implements GeoEntity {
+public class SmallRod extends FlyingMob implements GeoAnimatable, ActingEntity<SmallRod> {
     private static final EntityDataAccessor<Boolean> DATA_IS_CHARGING = SynchedEntityData.defineId(SmallRod.class, EntityDataSerializers.BOOLEAN);
+    protected static final EntityDataAccessor<Actor.State> DATA_ANIMATOR_STATE = SynchedEntityData.defineId(SmallRod.class, EntityDataSerializerRegistry.ACTOR_STATE.get());
     private final AnimatableInstanceCache instanceCache = GeckoLibUtil.createInstanceCache(this);
-    public static final RawAnimation SPIN_0 = RawAnimation.begin().thenLoop("animation.small_rod.spin_0"),
-            SPIN_1 = RawAnimation.begin().thenLoop("animation.small_rod.spin_1");
-    private final RawAnimation SPIN_BASE = (Math.random() <= 0.5) ? SPIN_0 : SPIN_1;
+    private final Action SPIN_BASE = (Math.random() <= 0.5) ? ActionRegistry.SmallRod.SPIN_BASE_0.get() : ActionRegistry.SmallRod.SPIN_BASE_1.get();
     public static float[] maxRotationPerTick = {(float) (0.03125 * Math.PI), (float) (0.0166666667 * Math.PI)};
     public RotationArray rotations = new RotationArray(new Rotation[]{
             new LimitedRotation(0, 0, 0, 0, maxRotationPerTick[0])
     });
+    private final Actor<SmallRod> actor = new Actor<>(this, SPIN_BASE);
     protected static final EntityDataAccessor<Optional<UUID>> DATA_TARGET = SynchedEntityData.defineId(SmallRod.class, EntityDataSerializers.OPTIONAL_UUID);
     private @Nullable Player target = null;
     //private @Nullable LivingEntity target = null;
     private int explosionPower = 0;
-    private final AnimationController<SmallRod> controller = new AnimationController<>(this, "main", 0, (animState) -> animState.setAndContinue(SPIN_BASE));
     private int health;
+    private int chargeTime;
 
-    public SmallRod(EntityType<? extends SmallRod> type, Level world) {
-        this(type, world, 3);
+    public SmallRod(Level world) {
+        this(EntityTypeRegistry.SMALL_ROD.get(), world, 3);
     }
 
     public SmallRod(EntityType<? extends SmallRod> type, Level world, int health) {
         super(type, world);
         this.health = health;
-        this.moveControl = new SmallRod.RodMoveControl(this);
+        setPathfindingMalus(PathType.WATER, -1);
+        setPathfindingMalus(PathType.LAVA, 8);
+        //this.moveControl = new SmallRod.RodMoveControl(this);
     }
 
     @Override
     protected void registerGoals() {
         this.goalSelector.addGoal(5, new SmallRod.RandomFloatAroundGoal(this));
-//        this.goalSelector.addGoal(7, new SmallRod.RodLookGoal(this));
-        this.goalSelector.addGoal(8, new LookAtPlayerGoal(this, Player.class, 8.0F));
-        this.goalSelector.addGoal(8, new LookAtPlayerGoal(this, AbstractGolem.class, 8.0F));
         this.goalSelector.addGoal(7, new SmallRod.RodShootFireballGoal(this));
         targetSelector.addGoal(3, new SmallRod.OsuNATGoal<>(this, LivingEntity.class, 1, true, false, (entity) -> (entity instanceof Player player && !player.isCreative() && !player.isSpectator()) || entity instanceof AbstractGolem));    }
 
@@ -84,8 +84,42 @@ public class SmallRod extends FlyingMob implements GeoEntity {
     @Override
     protected void defineSynchedData(SynchedEntityData.Builder builder) {
         super.defineSynchedData(builder);
+        builder.define(DATA_ANIMATOR_STATE, new Actor.State(
+                SPIN_BASE,
+                SPIN_BASE,
+                null,
+                99999999,
+                40,
+                new LinkedList<>()
+        ));
         builder.define(DATA_IS_CHARGING, false);
         builder.define(DATA_TARGET, Optional.empty());
+    }
+
+    @Override
+    public boolean isIdle() {
+        return getTarget() == null;
+    }
+
+    @Override
+    public Actor<SmallRod> getActor() {
+        return actor;
+    }
+
+    @Override
+    public @Nullable Action getActionChange() {
+        if (getTarget() == null) return SPIN_BASE;
+        else return null;
+    }
+
+    @Override
+    public List<Action> idleActions() {
+        return List.of();
+    }
+
+    @Override
+    public EntityDataAccessor<Actor.State> actionStateAccessor() {
+        return DATA_ANIMATOR_STATE;
     }
 
     public boolean canTarget(Player player) {
@@ -118,8 +152,8 @@ public class SmallRod extends FlyingMob implements GeoEntity {
     }
 
     @Override
-    public void registerControllers(AnimatableManager.ControllerRegistrar registrar) {
-        registrar.add(controller);
+    public void registerControllers(AnimatableManager.ControllerRegistrar controllerRegistrar) {
+        actor.register(controllerRegistrar);
     }
 
     @Override
@@ -172,7 +206,7 @@ public class SmallRod extends FlyingMob implements GeoEntity {
     }
 
     public void resetBodyRotation() {
-        rotations.get(0).set(-0.5f * (float) Math.PI, 0);
+        rotations.get(0).set(0, 0);
     }
 
     public void lookAt(LivingEntity target) {
@@ -185,18 +219,29 @@ public class SmallRod extends FlyingMob implements GeoEntity {
     }
 
     @Override
+    public boolean doesIdleActions() {
+        return false;
+    }
+
+    @Override
     public void tick() {
-        LivingEntity livingEntity = getTarget();
+        var livingEntity = getTarget();
         if (livingEntity != null) {
-            getLookControl().setLookAt(livingEntity, 90.0F, 90.0F);
-            //setLookAt(double wantedX, double wantedY, double wantedZ, float speedX, float speedY)
-            getLookControl().tick();
-            this.lookAt(livingEntity);
-            this.setYRot(this.yHeadRot);
+            if (this.chargeTime == 60) {
+                this.lookAt(livingEntity);
+                if (actor.getCurrentAction().is(SPIN_BASE)) actor.setNextAction(ActionRegistry.SmallRod.IDLE_BASE.get());
+            }
+        }
+        else {
+            if (this.chargeTime == 100) {
+                resetBodyRotation();
+                actor.setNextAction(SPIN_BASE);
+            }
         }
 
         rotations.tick();
         super.tick();
+        actor.tick();
     }
 
     @Override
@@ -204,108 +249,9 @@ public class SmallRod extends FlyingMob implements GeoEntity {
         return true;
     }
 
-    static class RodMoveControl extends MoveControl {
-        private final SmallRod smallRod;
-        private int floatDuration;
-
-        public RodMoveControl(SmallRod rod) {
-            super(rod);
-            this.smallRod = rod;
-        }
-
-        @Override
-        public void tick() {
-            LivingEntity livingentity = this.smallRod.getTarget();
-            if (livingentity != null) {
-                if (this.operation == Operation.MOVE_TO) {
-                    if (this.floatDuration-- <= 0) {
-                        this.floatDuration = this.floatDuration + this.smallRod.getRandom().nextInt(5) + 2;
-                        Vec3 vec3 = new Vec3(this.wantedX - this.smallRod.getX(), this.wantedY - this.smallRod.getY(), this.wantedZ - this.smallRod.getZ());
-                        double d0 = vec3.length();
-                        vec3 = vec3.normalize();
-                        if (this.canReach(vec3, Mth.ceil(d0))) {
-                            this.smallRod.setDeltaMovement(this.smallRod.getDeltaMovement().add(vec3.scale(0.1)));
-                        } else {
-                            this.operation = Operation.WAIT;
-                        }
-                    }
-                }
-            }
-        }
-
-        private boolean canReach(Vec3 pos, int p_32772_) {
-            AABB aabb = this.smallRod.getBoundingBox();
-
-            for (int i = 1; i < p_32772_; i++) {
-                aabb = aabb.move(pos);
-                if (!this.smallRod.level().noCollision(this.smallRod, aabb)) {
-                    return false;
-                }
-            }
-
-            return true;
-        }
-    }
-
-    static class RodLookGoal extends MoveControl {
-        private final SmallRod smallRod;
-
-
-        public RodLookGoal(SmallRod rod) {
-            super(rod);
-            this.smallRod = rod;
-            //this.setFlags(EnumSet.of(Goal.Flag.LOOK));
-        }
-
-        @Override
-        public void tick() {
-            if (this.smallRod.getTarget() == null) {
-                Vec3 vec3 = this.smallRod.getDeltaMovement();
-                this.smallRod.setYRot(-((float)Mth.atan2(vec3.x, vec3.z)) * (180.0F / (float)Math.PI));
-                this.smallRod.yBodyRot = this.smallRod.getYRot();
-            } else {
-                LivingEntity livingentity = this.smallRod.getTarget();
-                double v0 = 64.0;
-                if (livingentity.distanceToSqr(this.smallRod) < 4096.0) {
-                    double v1 = livingentity.getX() - this.smallRod.getX();
-                    double v2 = livingentity.getZ() - this.smallRod.getZ();
-                    this.smallRod.setYRot(-((float) Mth.atan2(v1, v2)) * (180.0F / (float) Math.PI));
-                    this.smallRod.yBodyRot = this.smallRod.getYRot();
-
-                    Vec3 vec3 = new Vec3(
-                            livingentity.getX() - this.smallRod.getX(),
-                            livingentity.getY() - this.smallRod.getY(),
-                            livingentity.getZ() - this.smallRod.getZ());
-                    double d0 = vec3.length();
-                    double d1 = vec3.x / d0;
-                    double d2 = vec3.y / d0;
-                    double d3 = vec3.z / d0;
-                    float f = (float) (Mth.atan2(vec3.z, vec3.x) * 180.0F / (float) Math.PI) - 90.0F;
-                    this.smallRod.setYRot(this.rotlerp(this.smallRod.getYRot(), f, 90.0F));
-                    this.smallRod.yBodyRot = this.smallRod.getYRot();
-                    LookControl lookcontrol = this.smallRod.getLookControl();
-                    double d8 = this.smallRod.getX() + d1 * 2.0;
-                    double d9 = this.smallRod.getEyeY() + d2 / d0;
-                    double d10 = this.smallRod.getZ() + d3 * 2.0;
-                    double d11 = lookcontrol.getWantedX();
-                    double d12 = lookcontrol.getWantedY();
-                    double d13 = lookcontrol.getWantedZ();
-                    if (!lookcontrol.isLookingAtTarget()) {
-                        d11 = d8;
-                        d12 = d9;
-                        d13 = d10;
-                    }
-
-                    this.smallRod.getLookControl().setLookAt(Mth.lerp(0.125, d11, d8), Mth.lerp(0.125, d12, d9), Mth.lerp(0.125, d13, d10), 10.0F, 40.0F);
-                }
-            }
-        }
-    }
-
-
     static class RodShootFireballGoal extends Goal {
+        public static final EnumSet<Goal.Flag> flags = EnumSet.of(Flag.LOOK, Flag.TARGET);
         private final SmallRod smallRod;
-        public int chargeTime;
 
         public RodShootFireballGoal(SmallRod rod) {
             this.smallRod = rod;
@@ -317,13 +263,20 @@ public class SmallRod extends FlyingMob implements GeoEntity {
         }
 
         @Override
+        public EnumSet<Flag> getFlags() {
+            return flags;
+        }
+
+        @Override
         public void start() {
-            this.chargeTime = 0;
+            this.smallRod.chargeTime = 0;
+            this.smallRod.actor.setNextAction(this.smallRod.SPIN_BASE);
         }
 
         @Override
         public void stop() {
             this.smallRod.setCharging(false);
+            this.smallRod.actor.setNextAction(this.smallRod.SPIN_BASE);
         }
 
         @Override
@@ -335,11 +288,10 @@ public class SmallRod extends FlyingMob implements GeoEntity {
         public void tick() {
             LivingEntity livingentity = this.smallRod.getTarget();
             if (livingentity != null) {
-                double d0 = 64.0;
-                if (livingentity.distanceToSqr(this.smallRod) < 4096.0 && this.smallRod.hasLineOfSight(livingentity)) {
+                if (livingentity.distanceToSqr(this.smallRod) < 4096.0 && this.smallRod.getTarget() != null) {
                     Level level = this.smallRod.level();
-                    this.chargeTime++;
-                    if (this.chargeTime == 10 && !this.smallRod.isSilent()) {
+                    this.smallRod.chargeTime++;
+                    if (this.smallRod.chargeTime == 10 && !this.smallRod.isSilent()) {
                         level.levelEvent(null, 1015, this.smallRod.blockPosition(), 0);
                     }
 
@@ -347,29 +299,23 @@ public class SmallRod extends FlyingMob implements GeoEntity {
 //                        this.smallRod.lookAt(livingentity);
 //                    }
 
-                    //Shooting
-                    if (this.chargeTime == 100) {
+                    if (this.smallRod.chargeTime == 100) {
                         double d1 = 4.0;
-                        Vec3 vec3 = this.smallRod.getViewVector(1.0F);
-                        double d2 = livingentity.getX() - (this.smallRod.getX() + vec3.x * 4.0);
-                        double d3 = livingentity.getY(0.85) - (this.smallRod.getY(0.5));
-                        double d4 = livingentity.getZ() - (this.smallRod.getZ() + vec3.z * 4.0);
-                        Vec3 vec31 = new Vec3(d2, d3, d4);
+                        Vec3 vec3 = this.smallRod.rotations.get(0).directionVector();
                         if (!this.smallRod.isSilent()) {
                             level.levelEvent(null, 1016, this.smallRod.blockPosition(), 0);
                         }
-
-                        SmallMagmaticFireball fireball = new SmallMagmaticFireball(level, this.smallRod, vec31.normalize(), this.smallRod.getExplosionPower());
+                        SmallMagmaticFireball fireball = new SmallMagmaticFireball(level, this.smallRod, vec3.normalize(), this.smallRod.getExplosionPower());
                         fireball.setPos(this.smallRod.getX(), this.smallRod.getY(), fireball.getZ() + vec3.z);
                         level.addFreshEntity(fireball);
-                        this.chargeTime = -120;
+                        this.smallRod.chargeTime = -120;
 //                        this.smallRod.resetBodyRotation();
                     }
-                } else if (this.chargeTime > 0) {
-                    this.chargeTime--;
+                } else if (this.smallRod.chargeTime > 0) {
+                    this.smallRod.chargeTime--;
                 }
 
-                this.smallRod.setCharging(this.chargeTime > 10);
+                this.smallRod.setCharging(this.smallRod.chargeTime > 10);
             }
         }
     }
@@ -435,7 +381,7 @@ public class SmallRod extends FlyingMob implements GeoEntity {
             Vec3 thisCenter = getBoundingBox().getCenter(), otherCenter = potentialTarget.getBoundingBox().getCenter();
             Vec3 difference = thisCenter.subtract(otherCenter);
             float[] rotationWanted = GeneralUtil.rectangularToXYRot(difference);
-            return (int) (thisCenter.distanceTo(otherCenter) + GeneralUtil.angleDifferenceSpherical(Math.PI * 0.5 - rotations.get(1).getXRot(), rotations.get(1).getYRot(), rotationWanted[0], rotationWanted[1]) * 200);
+            return (int) (thisCenter.distanceTo(otherCenter) + GeneralUtil.angleDifferenceSpherical(Math.PI * 0.5 - rotations.get(0).getXRot(), rotations.get(0).getYRot(), rotationWanted[0], rotationWanted[1]) * 200);
         }
     }
 
