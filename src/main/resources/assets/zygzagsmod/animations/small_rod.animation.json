@@ -1,53 +1,64 @@
 {
 	"format_version": "1.8.0",
 	"animations": {
-		"animation.small_rod.small_rod_idle": {
+		"animation.small_rod.idle": {
 			"animation_length": 1,
 			"bones": {
-				"head": {
+				"rod": {
 					"position": {
-						"0.0": {
-							"vector": [0, 0, 0]
-						},
-						"1.0": {
-							"vector": [0, 0, 0]
-						}
+						"0.0": [
+							0,
+							0,
+							0
+						],
+						"1.0": [
+							0,
+							0,
+							0
+						]
 					}
 				}
 			}
 		},
-		"animation.small_rod.small_rod_spin_0": {
+		"animation.small_rod.spin_0": {
 			"loop": true,
 			"animation_length": 2,
 			"bones": {
 				"rod": {
 					"rotation": {
-						"0.0": {
-							"vector": [0, 0, 0]
-						},
-						"2.0": {
-							"vector": [0, -360, 0]
-						}
+						"0.0": [
+							0,
+							0,
+							0
+						],
+						"2.0": [
+							0,
+							-360,
+							0
+						]
 					}
 				}
 			}
 		},
-		"animation.small_rod.small_rod_spin_1": {
+		"animation.small_rod.spin_1": {
 			"loop": true,
 			"animation_length": 2,
 			"bones": {
 				"rod": {
 					"rotation": {
-						"0.0": {
-							"vector": [0, 0, 0]
-						},
-						"2.0": {
-							"vector": [0, 360, 0]
-						}
+						"0.0": [
+							0,
+							0,
+							0
+						],
+						"2.0": [
+							0,
+							360,
+							0
+						]
 					}
 				}
 			}
 		}
-	},
-	"geckolib_format_version": 2
+	}
 }

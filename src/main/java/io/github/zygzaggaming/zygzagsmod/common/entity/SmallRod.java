@@ -13,6 +13,7 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.tags.DamageTypeTags;
+import net.minecraft.util.Mth;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.damagesource.DamageTypes;
@@ -23,10 +24,12 @@ import net.minecraft.world.entity.ai.control.MoveControl;
 import net.minecraft.world.entity.ai.goal.Goal;
 import net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal;
 import net.minecraft.world.entity.animal.AbstractGolem;
+import net.minecraft.world.entity.monster.Ghast;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.LargeFireball;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.pathfinder.PathType;
+import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.Nullable;
 import software.bernie.geckolib.animatable.GeoAnimatable;
@@ -68,6 +71,7 @@ public class SmallRod extends FlyingMob implements GeoAnimatable, ActingEntity<S
         this.health = health;
         setPathfindingMalus(PathType.WATER, -1);
         setPathfindingMalus(PathType.LAVA, 8);
+        this.moveControl = new SmallRod.RodMoveControl(this);
         //this.moveControl = new SmallRod.RodMoveControl(this);
     }
 
@@ -225,18 +229,22 @@ public class SmallRod extends FlyingMob implements GeoAnimatable, ActingEntity<S
 
     @Override
     public void tick() {
+
         var livingEntity = getTarget();
-        if (livingEntity != null) {
-            if (this.chargeTime == 60) {
+        if (livingEntity != null ) {
+            if (chargeTime > 60 && chargeTime < 110) {
                 this.lookAt(livingEntity);
-                if (actor.getCurrentAction().is(SPIN_BASE)) actor.setNextAction(ActionRegistry.SmallRod.IDLE_BASE.get());
+                if (actor.getCurrentAction().is(SPIN_BASE))
+                    actor.setNextAction(ActionRegistry.SmallRod.IDLE_BASE.get());
+            }
+            else {
+                resetBodyRotation();
+                if (actor.getCurrentAction().is(ActionRegistry.SmallRod.IDLE_BASE.get()))
+                    actor.setNextAction(SPIN_BASE);
             }
         }
         else {
-            if (this.chargeTime == 100) {
                 resetBodyRotation();
-                actor.setNextAction(SPIN_BASE);
-            }
         }
 
         rotations.tick();
@@ -351,9 +359,9 @@ public class SmallRod extends FlyingMob implements GeoAnimatable, ActingEntity<S
         public void start() {
             RandomSource randomsource = this.smallRod.getRandom();
             double d0 = this.smallRod.getX() + (double)((randomsource.nextFloat() * 2.0F - 1.0F) * 4.0F);
-            double d1 = this.smallRod.getY() + (double)((randomsource.nextFloat() * 2.0F - 1.0F) * 1.1F);
+            double d1 = this.smallRod.getY() + (double)((randomsource.nextFloat() * 2.0F - 1.0F) * 1.05F);
             double d2 = this.smallRod.getZ() + (double)((randomsource.nextFloat() * 2.0F - 1.0F) * 4.0F);
-            this.smallRod.getMoveControl().setWantedPosition(d0, d1, d2, 0.0005);
+            this.smallRod.getMoveControl().setWantedPosition(d0, d1, d2, 0.01); //minimum speed set
         }
     }
 
@@ -382,6 +390,46 @@ public class SmallRod extends FlyingMob implements GeoAnimatable, ActingEntity<S
             Vec3 difference = thisCenter.subtract(otherCenter);
             float[] rotationWanted = GeneralUtil.rectangularToXYRot(difference);
             return (int) (thisCenter.distanceTo(otherCenter) + GeneralUtil.angleDifferenceSpherical(Math.PI * 0.5 - rotations.get(0).getXRot(), rotations.get(0).getYRot(), rotationWanted[0], rotationWanted[1]) * 200);
+        }
+    }
+
+    static class RodMoveControl extends MoveControl {
+        private final SmallRod smallRod;
+        private int floatDuration;
+
+        public RodMoveControl(SmallRod p_32768_) {
+            super(p_32768_);
+            this.smallRod = p_32768_;
+        }
+
+        @Override
+        public void tick() {
+            if (this.operation == MoveControl.Operation.MOVE_TO) {
+                if (this.floatDuration-- <= 0) {
+                    this.floatDuration = this.floatDuration + this.smallRod.getRandom().nextInt(5) + 2;
+                    Vec3 vec3 = new Vec3(this.wantedX - this.smallRod.getX(), this.wantedY - this.smallRod.getY(), this.wantedZ - this.smallRod.getZ());
+                    double d0 = vec3.length();
+                    vec3 = vec3.normalize();
+                    if (this.canReach(vec3, Mth.ceil(d0))) {
+                        this.smallRod.setDeltaMovement(this.smallRod.getDeltaMovement().add(vec3.scale(0.1)));
+                    } else {
+                        this.operation = MoveControl.Operation.WAIT;
+                    }
+                }
+            }
+        }
+
+        private boolean canReach(Vec3 p_32771_, int p_32772_) {
+            AABB aabb = this.smallRod.getBoundingBox();
+
+            for (int i = 1; i < p_32772_; i++) {
+                aabb = aabb.move(p_32771_);
+                if (!this.smallRod.level().noCollision(this.smallRod, aabb)) {
+                    return false;
+                }
+            }
+
+            return true;
         }
     }
 
