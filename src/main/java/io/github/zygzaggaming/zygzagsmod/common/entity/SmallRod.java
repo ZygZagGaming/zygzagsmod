@@ -55,7 +55,6 @@ public class SmallRod extends FlyingMob implements GeoAnimatable, ActingEntity<S
     protected static final EntityDataAccessor<Optional<UUID>> DATA_TARGET = SynchedEntityData.defineId(SmallRod.class, EntityDataSerializers.OPTIONAL_UUID);
     private @Nullable Player target = null;
     //private @Nullable LivingEntity target = null;
-    private int explosionPower = 0;
     private int health;
     private int chargeTime;
 
@@ -69,7 +68,6 @@ public class SmallRod extends FlyingMob implements GeoAnimatable, ActingEntity<S
         setPathfindingMalus(PathType.WATER, -1);
         setPathfindingMalus(PathType.LAVA, 8);
         this.moveControl = new SmallRod.RodMoveControl(this);
-        //this.moveControl = new SmallRod.RodMoveControl(this);
     }
 
     @Override
@@ -127,10 +125,6 @@ public class SmallRod extends FlyingMob implements GeoAnimatable, ActingEntity<S
         return !player.isSpectator() && !player.getAbilities().instabuild && player.isAlive();
     }
 
-    public int getExplosionPower() {
-        return this.explosionPower;
-    }
-
     private static boolean isReflectedFireball(DamageSource entity) {
         return entity.getDirectEntity() instanceof LargeFireball && entity.getEntity() instanceof Player;
     }
@@ -139,6 +133,7 @@ public class SmallRod extends FlyingMob implements GeoAnimatable, ActingEntity<S
         return this.isInvulnerable() && !fireball.is(DamageTypeTags.BYPASSES_INVULNERABILITY) || !isReflectedFireball(fireball) && super.isInvulnerableTo(fireball);
     }
 
+    //Add Particles For Hurt()
     @Override
     public boolean hurt(DamageSource source, float amount) {
         if (amount > 2) {
@@ -195,15 +190,11 @@ public class SmallRod extends FlyingMob implements GeoAnimatable, ActingEntity<S
     @Override
     public void readAdditionalSaveData(CompoundTag p_32733_) {
         super.readAdditionalSaveData(p_32733_);
-        if (p_32733_.contains("ExplosionPower", 99)) {
-            this.explosionPower = p_32733_.getByte("ExplosionPower");
-        }
     }
 
     @Override
     public void addAdditionalSaveData(CompoundTag p_32744_) {
         super.addAdditionalSaveData(p_32744_);
-        p_32744_.putByte("ExplosionPower", (byte)this.explosionPower);
     }
 
     public void resetBodyRotation() {
@@ -306,7 +297,7 @@ public class SmallRod extends FlyingMob implements GeoAnimatable, ActingEntity<S
                         if (!this.smallRod.isSilent()) {
                             level.levelEvent(null, 1016, this.smallRod.blockPosition(), 0);
                         }
-                        SmallMagmaticFireball fireball = new SmallMagmaticFireball(level, this.smallRod, vec3.normalize(), this.smallRod.getExplosionPower());
+                        SmallMagmaticFireball fireball = new SmallMagmaticFireball(level, this.smallRod, new Vec3(vec3.x, vec3.y, vec3.z));
                         fireball.setPos(this.smallRod.getX(), this.smallRod.getY(), fireball.getZ() + vec3.z);
                         level.addFreshEntity(fireball);
                         this.smallRod.chargeTime = -120;
