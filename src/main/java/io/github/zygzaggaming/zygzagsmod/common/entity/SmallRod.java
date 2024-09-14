@@ -6,6 +6,7 @@ import io.github.zygzaggaming.zygzagsmod.common.entity.animation.Actor;
 import io.github.zygzaggaming.zygzagsmod.common.registry.ActionRegistry;
 import io.github.zygzaggaming.zygzagsmod.common.registry.EntityDataSerializerRegistry;
 import io.github.zygzaggaming.zygzagsmod.common.registry.EntityTypeRegistry;
+import io.github.zygzaggaming.zygzagsmod.common.registry.ParticleTypeRegistry;
 import io.github.zygzaggaming.zygzagsmod.common.util.*;
 import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.MethodsReturnNonnullByDefault;
@@ -24,7 +25,6 @@ import net.minecraft.world.entity.ai.control.MoveControl;
 import net.minecraft.world.entity.ai.goal.Goal;
 import net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal;
 import net.minecraft.world.entity.animal.AbstractGolem;
-import net.minecraft.world.entity.monster.Ghast;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.LargeFireball;
 import net.minecraft.world.level.Level;
@@ -41,20 +41,17 @@ import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.*;
 import java.util.function.Predicate;
 
-import static java.lang.Math.atan2;
-
 @ParametersAreNonnullByDefault
 @MethodsReturnNonnullByDefault
 public class SmallRod extends FlyingMob implements GeoAnimatable, ActingEntity<SmallRod> {
     private static final EntityDataAccessor<Boolean> DATA_IS_CHARGING = SynchedEntityData.defineId(SmallRod.class, EntityDataSerializers.BOOLEAN);
     protected static final EntityDataAccessor<Actor.State> DATA_ANIMATOR_STATE = SynchedEntityData.defineId(SmallRod.class, EntityDataSerializerRegistry.ACTOR_STATE.get());
     private final AnimatableInstanceCache instanceCache = GeckoLibUtil.createInstanceCache(this);
-    private final Action SPIN_BASE = (Math.random() <= 0.5) ? ActionRegistry.SmallRod.SPIN_BASE_0.get() : ActionRegistry.SmallRod.SPIN_BASE_1.get();
+    private final Actor<SmallRod> actor = new Actor<>(this, ActionRegistry.SmallRod.RANDOM_SPIN_BASE.get());
     public static float[] maxRotationPerTick = {(float) (0.03125 * Math.PI), (float) (0.0166666667 * Math.PI)};
     public RotationArray rotations = new RotationArray(new Rotation[]{
             new LimitedRotation(0, 0, 0, 0, maxRotationPerTick[0])
     });
-    private final Actor<SmallRod> actor = new Actor<>(this, SPIN_BASE);
     protected static final EntityDataAccessor<Optional<UUID>> DATA_TARGET = SynchedEntityData.defineId(SmallRod.class, EntityDataSerializers.OPTIONAL_UUID);
     private @Nullable Player target = null;
     //private @Nullable LivingEntity target = null;
@@ -89,8 +86,8 @@ public class SmallRod extends FlyingMob implements GeoAnimatable, ActingEntity<S
     protected void defineSynchedData(SynchedEntityData.Builder builder) {
         super.defineSynchedData(builder);
         builder.define(DATA_ANIMATOR_STATE, new Actor.State(
-                SPIN_BASE,
-                SPIN_BASE,
+                ActionRegistry.SmallRod.RANDOM_SPIN_BASE.get(),
+                ActionRegistry.SmallRod.RANDOM_SPIN_BASE.get(),
                 null,
                 99999999,
                 40,
@@ -112,7 +109,7 @@ public class SmallRod extends FlyingMob implements GeoAnimatable, ActingEntity<S
 
     @Override
     public @Nullable Action getActionChange() {
-        if (getTarget() == null) return SPIN_BASE;
+        if (getTarget() == null) return ActionRegistry.SmallRod.RANDOM_SPIN_BASE.get();
         else return null;
     }
 
@@ -229,25 +226,21 @@ public class SmallRod extends FlyingMob implements GeoAnimatable, ActingEntity<S
 
     @Override
     public void tick() {
-
-        var livingEntity = getTarget();
-        if (livingEntity != null ) {
-            if (chargeTime > 60 && chargeTime < 110) {
-                this.lookAt(livingEntity);
-                if (actor.getCurrentAction().is(SPIN_BASE))
-                    actor.setNextAction(ActionRegistry.SmallRod.IDLE_BASE.get());
-            }
-            else {
-                resetBodyRotation();
-                if (actor.getCurrentAction().is(ActionRegistry.SmallRod.IDLE_BASE.get()))
-                    actor.setNextAction(SPIN_BASE);
-            }
-        }
-        else {
-                resetBodyRotation();
+        var target = getTarget();
+        if (target == null /*|| chargeTime < 60 || chargeTime > 110 : breaks lookAT method for some reason*/) {
+            resetBodyRotation();
+            actor.setNextAction(ActionRegistry.SmallRod.RANDOM_SPIN_BASE.get());
+        } else {
+            lookAt(target);
+            if (actor.getCurrentAction().is(ActionRegistry.SmallRod.RANDOM_SPIN_BASE)) actor.setNextAction(ActionRegistry.SmallRod.IDLE_BASE.get());
         }
 
         rotations.tick();
+
+        setRot(0, 0);
+        setYHeadRot(0);
+        setYBodyRot(0);
+        setNoGravity(true);
         super.tick();
         actor.tick();
     }
@@ -278,13 +271,13 @@ public class SmallRod extends FlyingMob implements GeoAnimatable, ActingEntity<S
         @Override
         public void start() {
             this.smallRod.chargeTime = 0;
-            this.smallRod.actor.setNextAction(this.smallRod.SPIN_BASE);
+            this.smallRod.actor.setNextAction(ActionRegistry.SmallRod.RANDOM_SPIN_BASE.get());
         }
 
         @Override
         public void stop() {
             this.smallRod.setCharging(false);
-            this.smallRod.actor.setNextAction(this.smallRod.SPIN_BASE);
+            this.smallRod.actor.setNextAction(ActionRegistry.SmallRod.RANDOM_SPIN_BASE.get());
         }
 
         @Override
@@ -317,7 +310,6 @@ public class SmallRod extends FlyingMob implements GeoAnimatable, ActingEntity<S
                         fireball.setPos(this.smallRod.getX(), this.smallRod.getY(), fireball.getZ() + vec3.z);
                         level.addFreshEntity(fireball);
                         this.smallRod.chargeTime = -120;
-//                        this.smallRod.resetBodyRotation();
                     }
                 } else if (this.smallRod.chargeTime > 0) {
                     this.smallRod.chargeTime--;
@@ -357,11 +349,13 @@ public class SmallRod extends FlyingMob implements GeoAnimatable, ActingEntity<S
 
         @Override
         public void start() {
-            RandomSource randomsource = this.smallRod.getRandom();
-            double d0 = this.smallRod.getX() + (double)((randomsource.nextFloat() * 2.0F - 1.0F) * 4.0F);
-            double d1 = this.smallRod.getY() + (double)((randomsource.nextFloat() * 2.0F - 1.0F) * 1.05F);
-            double d2 = this.smallRod.getZ() + (double)((randomsource.nextFloat() * 2.0F - 1.0F) * 4.0F);
-            this.smallRod.getMoveControl().setWantedPosition(d0, d1, d2, 0.01); //minimum speed set
+            if (this.smallRod.getTarget() != null) {
+                RandomSource randomsource = this.smallRod.getRandom();
+                double d0 = this.smallRod.getX() + (double) ((randomsource.nextFloat() * 2.0F - 1.0F) * 4.0F);
+                double d1 = this.smallRod.getY() + (double) ((randomsource.nextFloat() * 2.0F - 1.0F) * 1.05F);
+                double d2 = this.smallRod.getZ() + (double) ((randomsource.nextFloat() * 2.0F - 1.0F) * 4.0F);
+                this.smallRod.getMoveControl().setWantedPosition(d0, d1, d2, 0.01); //minimum speed set
+            }
         }
     }
 
