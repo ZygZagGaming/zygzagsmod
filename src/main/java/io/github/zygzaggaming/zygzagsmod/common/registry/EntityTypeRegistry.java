@@ -1,6 +1,7 @@
 package io.github.zygzaggaming.zygzagsmod.common.registry;
 
 import io.github.zygzaggaming.zygzagsmod.common.entity.*;
+import io.github.zygzaggaming.zygzagsmod.common.entity.assembly.BigShurikenAssembly;
 import io.github.zygzaggaming.zygzagsmod.common.entity.assembly.ShurikenAssembly;
 import io.github.zygzaggaming.zygzagsmod.common.registry.base.AkomiRegistry;
 import net.minecraft.core.registries.Registries;
@@ -117,11 +118,11 @@ public class EntityTypeRegistry extends AkomiRegistry<EntityType<?>> {
                     .sized(1.7f, 2f)
                     .build("shuriken_assembly_b")
     );
-    public static final Supplier<EntityType<ShurikenAssembly>> SHURIKEN_ASSEMBLY_C = INSTANCE.register(
+    public static final Supplier<EntityType<BigShurikenAssembly>> SHURIKEN_ASSEMBLY_C = INSTANCE.register(
             "shuriken_assembly_c",
-            () -> EntityType.Builder.<ShurikenAssembly>of((type, level) -> new ShurikenAssembly(type, level, false, 4), MobCategory.MISC)
+            () -> EntityType.Builder.<BigShurikenAssembly>of((type, level) -> new BigShurikenAssembly(type, level, false, false, 10, 6), MobCategory.MISC)
                     .fireImmune()
-                    .sized(2.3f, 0.25f)
+                    .sized(3f, 1.8f)
                     .build("shuriken_assembly_c")
     );
     public EntityTypeRegistry(DeferredRegister<EntityType<?>> register) {

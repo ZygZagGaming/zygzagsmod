@@ -46,7 +46,6 @@ public class ModEventHandler {
         event.put(EntityTypeRegistry.SMALL_ROD.get(), SmallRod.createAttributes().build());
             event.put(EntityTypeRegistry.SHURIKEN_ASSEMBLY_A.get(), ShurikenAssembly.createAttributes().build());
             event.put(EntityTypeRegistry.SHURIKEN_ASSEMBLY_B.get(), ShurikenAssembly.createAttributes().build());
-            event.put(EntityTypeRegistry.SHURIKEN_ASSEMBLY_C.get(), ShurikenAssembly.createAttributes().build());
     }
 
     @SubscribeEvent

@@ -1,0 +1,173 @@
+{
+	"format_version": "1.12.0",
+	"minecraft:geometry": [
+		{
+			"description": {
+				"identifier": "geometry.unknown",
+				"texture_width": 32,
+				"texture_height": 32,
+				"visible_bounds_width": 5,
+				"visible_bounds_height": 2.5,
+				"visible_bounds_offset": [0, 0.75, 0]
+			},
+			"bones": [
+				{
+					"name": "body",
+					"pivot": [0, 0, 0]
+				},
+				{
+					"name": "Rod_Set1",
+					"parent": "body",
+					"pivot": [0, 0, 0],
+					"rotation": [0, 90, 0]
+				},
+				{
+					"name": "r5",
+					"parent": "Rod_Set1",
+					"pivot": [0, 21.36649, -15.03354],
+					"cubes": [
+						{"origin": [-2, -24, -26], "size": [4, 16, 4], "pivot": [0, -2, 0], "rotation": [-87.5, 0, 0], "uv": [0, 0]}
+					]
+				},
+				{
+					"name": "r7",
+					"parent": "Rod_Set1",
+					"pivot": [0, 21.36649, 15.03354],
+					"cubes": [
+						{"origin": [-2, -24, 22], "size": [4, 16, 4], "pivot": [0, -2, 0], "rotation": [87.5, 0, 0], "uv": [0, 0]}
+					]
+				},
+				{
+					"name": "chain1",
+					"parent": "Rod_Set1",
+					"pivot": [0, 22, 5],
+					"rotation": [90, 0, -90],
+					"cubes": [
+						{"origin": [0, 27, 3.5], "size": [0, 10, 3], "uv": [26, -3]}
+					]
+				},
+				{
+					"name": "chain2",
+					"parent": "Rod_Set1",
+					"pivot": [-1, 23, -5],
+					"rotation": [-90, 0, -90],
+					"cubes": [
+						{"origin": [-2, 28, -5.5], "size": [0, 10, 3], "uv": [26, -3]}
+					]
+				},
+				{
+					"name": "Rod_Set2",
+					"parent": "body",
+					"pivot": [0, 0, 0]
+				},
+				{
+					"name": "r4",
+					"parent": "Rod_Set2",
+					"pivot": [16.97056, 15, -16.97056],
+					"cubes": [
+						{"origin": [-2, -40, -25], "size": [4, 16, 4], "pivot": [0, -8, 0], "rotation": [-90, -45, 0], "uv": [0, 0]}
+					]
+				},
+				{
+					"name": "r3",
+					"parent": "Rod_Set2",
+					"pivot": [16.97056, 15, 16.97056],
+					"cubes": [
+						{"origin": [21, -40, -2], "size": [4, 16, 4], "pivot": [0, -8, 0], "rotation": [45, 0, -90], "uv": [0, 0]}
+					]
+				},
+				{
+					"name": "r2",
+					"parent": "Rod_Set2",
+					"pivot": [-16.97056, 16, 16.97056],
+					"cubes": [
+						{"origin": [-2, -40, 22], "size": [4, 16, 4], "pivot": [0, -8, 0], "rotation": [90, -45, 0], "uv": [0, 0]}
+					]
+				},
+				{
+					"name": "r1",
+					"parent": "Rod_Set2",
+					"pivot": [-16.97056, 15, -16.97056],
+					"cubes": [
+						{"origin": [-25, -40, -2], "size": [4, 16, 4], "pivot": [0, -8, 0], "rotation": [-45, 0, 90], "uv": [0, 0]}
+					]
+				},
+				{
+					"name": "chain5",
+					"parent": "Rod_Set2",
+					"pivot": [-1, 15, -1],
+					"rotation": [45, 0, -90],
+					"cubes": [
+						{"origin": [-1, 14, -2.5], "size": [0, 16, 3], "uv": [26, -3]}
+					]
+				},
+				{
+					"name": "chain6",
+					"parent": "Rod_Set2",
+					"pivot": [1, 15, 1],
+					"rotation": [-135, 0, -90],
+					"cubes": [
+						{"origin": [1, 14, -0.5], "size": [0, 16, 3], "uv": [26, -3]}
+					]
+				},
+				{
+					"name": "chain7",
+					"parent": "Rod_Set2",
+					"pivot": [-1, 15, 1],
+					"rotation": [-45, 0, -90],
+					"cubes": [
+						{"origin": [-1, 14, -0.5], "size": [0, 16, 3], "uv": [26, -3]}
+					]
+				},
+				{
+					"name": "chain8",
+					"parent": "Rod_Set2",
+					"pivot": [1, 15, -1],
+					"rotation": [135, 0, -90],
+					"cubes": [
+						{"origin": [1, 15, -2.5], "size": [0, 15, 3], "uv": [26, -3]}
+					]
+				},
+				{
+					"name": "Rod_Set3",
+					"parent": "body",
+					"pivot": [0, 0, 0]
+				},
+				{
+					"name": "r6",
+					"parent": "Rod_Set3",
+					"pivot": [15.03354, 9.36649, 0],
+					"cubes": [
+						{"origin": [22, -36, -2], "size": [4, 16, 4], "pivot": [0, -14, 0], "rotation": [0, 0, -87.5], "uv": [0, 0]}
+					]
+				},
+				{
+					"name": "r8",
+					"parent": "Rod_Set3",
+					"pivot": [-15.03354, 9.36649, 0],
+					"cubes": [
+						{"origin": [-26, -36, -2], "size": [4, 16, 4], "pivot": [0, -14, 0], "rotation": [0, 0, 87.5], "uv": [0, 0]}
+					]
+				},
+				{
+					"name": "chain3",
+					"parent": "Rod_Set3",
+					"pivot": [-5, 11, 1],
+					"rotation": [180, 0, -90],
+					"cubes": [
+						{"origin": [-6, 16, 0.5], "size": [0, 10, 3], "uv": [26, -3]}
+					]
+				},
+				{
+					"name": "chain4",
+					"parent": "Rod_Set3",
+					"pivot": [5, 10, 0],
+					"rotation": [0, 0, -90],
+					"cubes": [
+						{"origin": [5, 15, -1.5], "size": [0, 10, 3], "uv": [26, -3]}
+					]
+				}
+			]
+		}
+	]
+}

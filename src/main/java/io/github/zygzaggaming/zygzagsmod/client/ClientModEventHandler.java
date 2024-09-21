@@ -35,7 +35,7 @@ public class ClientModEventHandler {
         event.registerEntityRenderer(EntityTypeRegistry.SMALL_ROD.get(), SmallRodRenderer::new);
         event.registerEntityRenderer(EntityTypeRegistry.SHURIKEN_ASSEMBLY_A.get(), ShurikenAssemblyRenderer::new);
         event.registerEntityRenderer(EntityTypeRegistry.SHURIKEN_ASSEMBLY_B.get(), ShurikenAssemblyRenderer::new);
-        event.registerEntityRenderer(EntityTypeRegistry.SHURIKEN_ASSEMBLY_C.get(), ShurikenAssemblyRenderer::new);
+        event.registerEntityRenderer(EntityTypeRegistry.SHURIKEN_ASSEMBLY_C.get(), BigShurikenAssemblyRenderer::new);
         event.registerBlockEntityRenderer(BlockItemEntityRegistry.SUSPICIOUS_END_SAND.getBlockEntityType(), CustomBrushableBlockRenderer::new);
         event.registerBlockEntityRenderer(BlockItemEntityRegistry.RED_NETHER_BRICK_CACHE.getBlockEntityType(), CacheRenderer::new);
     }
