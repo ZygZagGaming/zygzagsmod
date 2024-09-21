@@ -20,6 +20,7 @@ public class ActionRegistry extends CustomAkomiRegistry<Action> {
         IridiumGolem.init(); // make the IridiumGolem class load, subclasses don't load unless they're used
         BlazeSentry.init();
         SmallRod.init();
+        ShurikenAssembly.init();
         super.registerTo(bus);
     }
 
@@ -57,6 +58,15 @@ public class ActionRegistry extends CustomAkomiRegistry<Action> {
         public static final Supplier<Action> IDLE_BASE = INSTANCE.register("small_rod_idle", () -> new Action(RawAnimation.begin().thenPlay("animation.small_rod.idle"), 20, true));
 
         public static void init() {
+        }
+    }
+
+    public static class ShurikenAssembly {
+        //public static final Supplier<Action> RANDOM_SPIN_BASE = (Math.random() <= 0.5) ?
+        public static final Supplier<Action> SPIN_UP = INSTANCE.register("shuriken_assembly_spin_base", () -> new Action(RawAnimation.begin().thenPlay("animation.four_rod.Shuriken_A_0"), 20, false));
+
+        public static void init() {
+
         }
     }
 

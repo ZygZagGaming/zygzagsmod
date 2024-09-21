@@ -1,85 +1,258 @@
 package io.github.zygzaggaming.zygzagsmod.common.entity.assembly;
 
-import io.github.zygzaggaming.zygzagsmod.common.Main;
-import net.minecraft.MethodsReturnNonnullByDefault;
+import java.util.*;
+import javax.annotation.Nullable;
+
+import io.github.zygzaggaming.zygzagsmod.common.entity.SmallRod;
+import io.github.zygzaggaming.zygzagsmod.common.entity.animation.ActingEntity;
+import io.github.zygzaggaming.zygzagsmod.common.entity.animation.Action;
+import io.github.zygzaggaming.zygzagsmod.common.entity.animation.Actor;
+import io.github.zygzaggaming.zygzagsmod.common.registry.ActionRegistry;
+import io.github.zygzaggaming.zygzagsmod.common.registry.EntityDataSerializerRegistry;
+import io.github.zygzaggaming.zygzagsmod.common.util.GeneralUtil;
+import io.github.zygzaggaming.zygzagsmod.common.util.LimitedRotation;
+import io.github.zygzaggaming.zygzagsmod.common.util.Rotation;
+import io.github.zygzaggaming.zygzagsmod.common.util.RotationArray;
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.RegistryAccess;
-import net.minecraft.core.Vec3i;
 import net.minecraft.core.particles.ParticleTypes;
-import net.minecraft.core.registries.Registries;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.syncher.EntityDataAccessor;
+import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
-import net.minecraft.resources.ResourceKey;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.sounds.SoundEvent;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.sounds.SoundSource;
+import net.minecraft.tags.DamageTypeTags;
 import net.minecraft.util.Mth;
+import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.damagesource.DamageSource;
-import net.minecraft.world.damagesource.DamageType;
 import net.minecraft.world.damagesource.DamageTypes;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.FlyingMob;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.MoverType;
+import net.minecraft.world.entity.Mob;
+import net.minecraft.world.entity.MobSpawnType;
+import net.minecraft.world.entity.SpawnGroupData;
+import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
+import net.minecraft.world.entity.ai.attributes.Attributes;
+import net.minecraft.world.entity.ai.control.BodyRotationControl;
+import net.minecraft.world.entity.ai.control.LookControl;
+import net.minecraft.world.entity.ai.control.MoveControl;
+import net.minecraft.world.entity.ai.goal.Goal;
+import net.minecraft.world.entity.ai.targeting.TargetingConditions;
+import net.minecraft.world.entity.monster.Phantom;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.level.ClipContext;
+import net.minecraft.world.entity.projectile.LargeFireball;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.phys.BlockHitResult;
-import net.minecraft.world.phys.HitResult;
+import net.minecraft.world.level.ServerLevelAccessor;
+import net.minecraft.world.level.levelgen.Heightmap;
+import net.minecraft.world.level.pathfinder.PathType;
 import net.minecraft.world.phys.Vec3;
-import org.jetbrains.annotations.Nullable;
-import software.bernie.geckolib.animatable.GeoEntity;
+import software.bernie.geckolib.animatable.GeoAnimatable;
 import software.bernie.geckolib.animatable.instance.AnimatableInstanceCache;
 import software.bernie.geckolib.animation.AnimatableManager;
-import software.bernie.geckolib.animation.AnimationController;
-import software.bernie.geckolib.animation.RawAnimation;
 import software.bernie.geckolib.util.GeckoLibUtil;
 
-import javax.annotation.ParametersAreNonnullByDefault;
-import java.util.List;
+public class ShurikenAssembly extends FlyingMob implements GeoAnimatable, ActingEntity<ShurikenAssembly> {
+    Vec3 moveTargetPoint = Vec3.ZERO;
+    BlockPos anchorPoint = BlockPos.ZERO;
+    ShurikenAssembly.AttackPhase attackPhase = ShurikenAssembly.AttackPhase.CIRCLE;
+    private @Nullable Player cachedTarget = null;
+    private boolean isFast = false;
+    private int health;
 
-@ParametersAreNonnullByDefault
-@MethodsReturnNonnullByDefault
-public class ShurikenAssembly extends Entity implements GeoEntity {
-    public static final RawAnimation IDLE = RawAnimation.begin().thenLoop("animation.shuriken_assembly.idle"),
-            SPIN_UP = RawAnimation.begin().thenPlay("animation.shuriken_assembly.spin_up").thenLoop("animation.shuriken_assembly.fast");
-    public static final ResourceKey<DamageType> DAMAGE_TYPE = ResourceKey.create(Registries.DAMAGE_TYPE, ResourceLocation.fromNamespaceAndPath(Main.MODID,  "shuriken_assembly"));
-    private @Nullable Player target = null;
-    private final AnimationController<ShurikenAssembly> controller = new AnimationController<>(this, "main", 0, (animState) -> animState.setAndContinue(target == null ? IDLE : SPIN_UP));
+    private final Actor<ShurikenAssembly> actor = new Actor<>(this, ActionRegistry.ShurikenAssembly.SPIN_UP.get());
+    protected static final EntityDataAccessor<Actor.State> DATA_ANIMATOR_STATE = SynchedEntityData.defineId(ShurikenAssembly.class, EntityDataSerializerRegistry.ACTOR_STATE.get());
+    protected static final EntityDataAccessor<Optional<UUID>> DATA_TARGET = SynchedEntityData.defineId(ShurikenAssembly.class, EntityDataSerializers.OPTIONAL_UUID);
     private final AnimatableInstanceCache instanceCache = GeckoLibUtil.createInstanceCache(this);
-    private final boolean isFast, breaksOnHittingABlock;
-    private int health, damage;
+    public static float[] maxRotationPerTick = {(float) (0.03125 * Math.PI), (float) (0.0166666667 * Math.PI)};
+    public RotationArray rotations = new RotationArray(new Rotation[]{
+            new LimitedRotation(0, 0, 0, 0, maxRotationPerTick[0])
+    });
 
-    public ShurikenAssembly(EntityType<? extends ShurikenAssembly> type, Level world) {
-        this(type, world, false, false, 3, 4);
-    }
 
-    public ShurikenAssembly(EntityType<? extends ShurikenAssembly> type, Level world, boolean isFast, boolean breaksOnHittingABlock, int health, int damage) {
+    public ShurikenAssembly(EntityType<? extends ShurikenAssembly> type, Level world, boolean isFast, int health) {
         super(type, world);
         this.isFast = isFast;
-        this.breaksOnHittingABlock = breaksOnHittingABlock;
         this.health = health;
-        this.damage = damage;
+        this.moveControl = new ShurikenAssembly.RodMoveControl(this);
+        this.lookControl = new ShurikenAssembly.RodLookControl(this);
+        setPathfindingMalus(PathType.WATER, -1);
+        setPathfindingMalus(PathType.LAVA, 8);
+    }
+
+    @Override
+    protected BodyRotationControl createBodyControl() {
+        return new ShurikenAssembly.RodBodyRotationControl(this);
+    }
+
+    @Override
+    protected void registerGoals() {
+        this.goalSelector.addGoal(1, new ShurikenAssembly.RodAttackStrategyGoal());
+        this.goalSelector.addGoal(2, new ShurikenAssembly.RodSweepAttackGoal());
+        this.goalSelector.addGoal(3, new ShurikenAssembly.RodCircleAroundAnchorGoal());
+        this.targetSelector.addGoal(1, new ShurikenAssembly.RodAttackPlayerTargetGoal());
     }
 
     @Override
     protected void defineSynchedData(SynchedEntityData.Builder builder) {
-
+        super.defineSynchedData(builder);
+        builder.define(DATA_ANIMATOR_STATE, new Actor.State(
+                ActionRegistry.ShurikenAssembly.SPIN_UP.get(),
+                ActionRegistry.ShurikenAssembly.SPIN_UP.get(),
+                null,
+                99999999,
+                40,
+                new LinkedList<>()
+        ));
+        builder.define(DATA_TARGET, Optional.empty());
     }
 
     @Override
-    protected void readAdditionalSaveData(CompoundTag tag) {
+    public void onSyncedDataUpdated(EntityDataAccessor<?> accessor) {
+        super.onSyncedDataUpdated(accessor);
+    }
 
+    public static AttributeSupplier.Builder createAttributes() {
+        return Mob.createMobAttributes().add(Attributes.ATTACK_DAMAGE, 6.0D).add(Attributes.FOLLOW_RANGE, 48.0D).add(Attributes.KNOCKBACK_RESISTANCE, 0.4);
     }
 
     @Override
-    protected void addAdditionalSaveData(CompoundTag tag) {
+    protected boolean shouldDespawnInPeaceful() {
+        return true;
+    }
 
+    public boolean canTarget(Player player) {
+        return !player.isSpectator() && !player.getAbilities().instabuild && player.isAlive();
+    }
+
+    public void resetBodyRotation() {
+        rotations.get(0).set(0, 0);
+    }
+
+    public void lookAt(LivingEntity target) {
+        rotations.get(0).set(GeneralUtil.rectangularToXYRot(target.getEyePosition().subtract(getEyePosition()))); // rotate body towards target
     }
 
     @Override
-    public void registerControllers(AnimatableManager.ControllerRegistrar registrar) {
-        registrar.add(controller);
+    public void tick() {
+        var target = getTarget();
+        if (target == null /*|| chargeTime < 60 || chargeTime > 110 : breaks lookAT method for some reason*/) {
+            //resetBodyRotation();
+        } else {
+            //lookAt(target);
+        }
+        actor.setNextAction(ActionRegistry.ShurikenAssembly.SPIN_UP.get());
+
+        //rotations.tick();
+
+        super.tick();
+        actor.tick();
+    }
+
+    @org.jetbrains.annotations.Nullable
+    @Override
+    public LivingEntity getTarget() {
+        Optional<UUID> targetUUID = entityData.get(DATA_TARGET);
+        if (!((cachedTarget == null && targetUUID.isEmpty()) || (cachedTarget != null && targetUUID.isPresent() && cachedTarget.getUUID().equals(targetUUID.get()))))
+            cachedTarget = (Player) targetUUID.flatMap((uuid) -> level().getEntities(this, getBoundingBox().inflate(50), (it) -> it.getUUID().equals(uuid)).stream().findFirst()).flatMap((it) -> it instanceof LivingEntity living ? Optional.of(living) : Optional.empty()).orElse(null);
+        return cachedTarget;
+    }
+
+    @Override
+    public void setTarget(@org.jetbrains.annotations.Nullable LivingEntity entity) {
+        LivingEntity currentTarget = getTarget();
+        if ((entity == null && currentTarget == null) || (entity != null && currentTarget != null && entity.is(currentTarget))) return;
+        super.setTarget(entity);
+        if (!level().isClientSide()) {
+            entityData.set(DATA_TARGET, Optional.ofNullable(entity).map(Entity::getUUID));
+        }
+    }
+
+    @Override
+    public SpawnGroupData finalizeSpawn(ServerLevelAccessor p_33126_, DifficultyInstance p_33127_, MobSpawnType p_33128_, @Nullable SpawnGroupData p_33129_) {
+        this.anchorPoint = this.blockPosition().above(2);
+        return super.finalizeSpawn(p_33126_, p_33127_, p_33128_, p_33129_);
+    }
+
+    @Override
+    public void readAdditionalSaveData(CompoundTag p_33132_) {
+        super.readAdditionalSaveData(p_33132_);
+        if (p_33132_.contains("AX")) {
+            this.anchorPoint = new BlockPos(p_33132_.getInt("AX"), p_33132_.getInt("AY"), p_33132_.getInt("AZ"));
+        }
+    }
+
+    @Override
+    public void addAdditionalSaveData(CompoundTag p_33141_) {
+        super.addAdditionalSaveData(p_33141_);
+        p_33141_.putInt("AX", this.anchorPoint.getX());
+        p_33141_.putInt("AY", this.anchorPoint.getY());
+        p_33141_.putInt("AZ", this.anchorPoint.getZ());
+    }
+
+    @Override
+    public boolean hurt(DamageSource source, float amount) {
+        if (amount > 2) {
+            super.hurt(source, 1);
+            if (source.is(DamageTypes.ARROW)) health -= 2;
+            else if (source.is(DamageTypes.FIREWORKS)) health -= 3;
+            else if (isReflectedFireball(source)) health -=3;
+            else health--;
+
+            if (health <= 0) super.hurt(source, 1000);
+        }
+        return amount > 2;
+    }
+
+    @Override
+    public boolean shouldRenderAtSqrDistance(double p_33107_) {
+        return true;
+    }
+
+    @Override
+    public boolean canAttackType(EntityType<?> p_33111_) {
+        return true;
+    }
+
+    @Override
+    public boolean isIdle() {
+        return getTarget() == null;
+    }
+
+    @Override
+    public Actor<ShurikenAssembly> getActor() {
+        return actor;
+    }
+
+    @Override
+    public @org.jetbrains.annotations.Nullable Action getActionChange() {
+        if (getTarget() == null) return ActionRegistry.ShurikenAssembly.SPIN_UP.get();
+        else return null;
+    }
+
+    @Override
+    public List<Action> idleActions() {
+        return List.of();
+    }
+
+    @Override
+    public EntityDataAccessor<Actor.State> actionStateAccessor() {
+        return DATA_ANIMATOR_STATE;
+    }
+
+    private static boolean isReflectedFireball(DamageSource entity) {
+        return entity.getDirectEntity() instanceof LargeFireball && entity.getEntity() instanceof Player;
+    }
+    @Override
+    public boolean isInvulnerableTo(DamageSource fireball) {
+        return this.isInvulnerable() && !fireball.is(DamageTypeTags.BYPASSES_INVULNERABILITY) || !isReflectedFireball(fireball) && super.isInvulnerableTo(fireball);
+    }
+
+    @Override
+    public void registerControllers(AnimatableManager.ControllerRegistrar controllers) {
+            actor.register(controllers);
     }
 
     @Override
@@ -87,147 +260,290 @@ public class ShurikenAssembly extends Entity implements GeoEntity {
         return instanceCache;
     }
 
-    public boolean canTarget(Player player) {
-        return !player.isSpectator() && !player.getAbilities().instabuild && player.isAlive();
-    }
-
-    public DamageSource damageSource(RegistryAccess registryAccess) {
-        return new DamageSource(registryAccess.registryOrThrow(Registries.DAMAGE_TYPE).getHolderOrThrow(DAMAGE_TYPE), this/*, queen*/);
-    }
-
     @Override
-    public void tick() {
-        super.tick();
-        if (target == null) {
-            List<Player> players = level().getEntitiesOfClass(Player.class, getBoundingBox().inflate(20), this::canTarget);
-            if (!players.isEmpty()) target = players.get(level().random.nextInt(players.size()));
-        } else {
-            if (!canTarget(target)) target = null;
-            else {
-                Vec3 diff = target.position().add(0, 0.5, 0).subtract(position());
-                if (diff.lengthSqr() >= 0.05) {
-                    if (isFast) {
-                        diff = diff.normalize().scale(0.1);
-                        move(MoverType.SELF, getDeltaMovement());
-                        setDeltaMovement(getDeltaMovement().add(diff).scale(0.95));
-                    } else {
-                        diff = diff.multiply(1, 0, 1).normalize().scale(0.15).add(diff.multiply(0, 0.25, 0));
-                        move(MoverType.SELF, diff);
-                        setDeltaMovement(getDeltaMovement().add(diff).scale(0.95));
+    public double getTick(Object object) {
+        return tickCount;
+    }
+
+    static enum AttackPhase {
+        CIRCLE,
+        SWOOP;
+    }
+
+    class RodAttackPlayerTargetGoal extends Goal {
+        private final TargetingConditions attackTargeting = TargetingConditions.forCombat().range(64.0);
+        private int nextScanTick = reducedTickDelay(20);
+
+        @Override
+        public boolean canUse() {
+            if (this.nextScanTick > 0) {
+                this.nextScanTick--;
+                return false;
+            } else {
+                this.nextScanTick = reducedTickDelay(60);
+                List<Player> list = ShurikenAssembly.this.level()
+                        .getNearbyPlayers(this.attackTargeting, ShurikenAssembly.this, ShurikenAssembly.this.getBoundingBox().inflate(16.0, 64.0, 16.0));
+                if (!list.isEmpty()) {
+                    list.sort(Comparator.<Player, Double>comparing(Entity::getY).reversed());
+
+                    for (Player player : list) {
+                        if (ShurikenAssembly.this.canAttack(player, TargetingConditions.DEFAULT)) {
+                            ShurikenAssembly.this.setTarget(player);
+                            return true;
+                        }
                     }
                 }
+
+                return false;
             }
         }
 
-        DamageSource source = damageSource(level().registryAccess());
-        List<LivingEntity> entitiesToHit = level().getEntitiesOfClass(LivingEntity.class, getBoundingBox().inflate(3), (entity) -> entity.getBoundingBox().intersects(getBoundingBox()));
-        for (LivingEntity entity : entitiesToHit) entity.hurt(source, damage);
-
-        if (level().isClientSide) level().addParticle(ParticleTypes.SMOKE, getX() + 2 * Math.random() - 1, getY() + 0.4, getZ() + 2 * Math.random() - 1, 0, 0, 0);
+        @Override
+        public boolean canContinueToUse() {
+            LivingEntity livingentity = ShurikenAssembly.this.getTarget();
+            return livingentity != null ? ShurikenAssembly.this.canAttack(livingentity, TargetingConditions.DEFAULT) : false;
+        }
     }
 
-    @Override
-    public void move(MoverType type, Vec3 delta) {
-        if (noPhysics) setPos(getX() + delta.x, getY() + delta.y, getZ() + delta.z);
-        else {
-            wasOnFire = isOnFire();
+    class RodAttackStrategyGoal extends Goal {
+        private int nextSweepTick;
 
-            level().getProfiler().push("move");
-            double length = delta.length();
-            if (stuckSpeedMultiplier.lengthSqr() > 1.0E-7) {
-                delta = delta.multiply(stuckSpeedMultiplier);
-                stuckSpeedMultiplier = Vec3.ZERO;
-                setDeltaMovement(Vec3.ZERO);
-            }
+        @Override
+        public boolean canUse() {
+            LivingEntity livingentity = ShurikenAssembly.this.getTarget();
+            return livingentity != null ? ShurikenAssembly.this.canAttack(livingentity, TargetingConditions.DEFAULT) : false;
+        }
 
-            BlockHitResult result = level().clip(new ClipContext(position(), position().add(delta), ClipContext.Block.COLLIDER, ClipContext.Fluid.NONE, this));
+        @Override
+        public void start() {
+            this.nextSweepTick = this.adjustedTickDelay(10);
+            ShurikenAssembly.this.attackPhase = ShurikenAssembly.AttackPhase.CIRCLE;
+            this.setAnchorAboveTarget();
+        }
 
-            if (result.getType() != HitResult.Type.MISS && breaksOnHittingABlock) {
-                kill();
-                return;
-            }
-            while (result.getType() != HitResult.Type.MISS) {
-                length -= result.getLocation().distanceTo(position());
-                setPos(result.getLocation());
-                Vec3i normali = result.getDirection().getNormal();
-                Vec3 normal = new Vec3(normali.getX(), normali.getY(), normali.getZ());
-                delta = delta.subtract(normal.scale(2 * delta.dot(normal))).normalize().scale(length);
-                result = level().clip(new ClipContext(position(), position().add(delta), ClipContext.Block.COLLIDER, ClipContext.Fluid.NONE, this));
-            }
+        @Override
+        public void stop() {
+            ShurikenAssembly.this.anchorPoint = ShurikenAssembly.this.level()
+                    .getHeightmapPos(Heightmap.Types.MOTION_BLOCKING, ShurikenAssembly.this.anchorPoint)
+                    .above(ShurikenAssembly.this.random.nextInt(5));
+        }
 
-            double lengthSqr = delta.lengthSqr();
-            if (lengthSqr > 1e-7) {
-                if (fallDistance != 0f && lengthSqr >= 1) {
-                    BlockHitResult hitResult = level().clip(new ClipContext(position(), position().add(delta), ClipContext.Block.FALLDAMAGE_RESETTING, ClipContext.Fluid.WATER, this));
-                    if (hitResult.getType() != HitResult.Type.MISS) resetFallDistance();
+        @Override
+        public void tick() {
+            if (ShurikenAssembly.this.attackPhase == ShurikenAssembly.AttackPhase.CIRCLE) {
+                this.nextSweepTick--;
+                if (this.nextSweepTick <= 0) {
+                    ShurikenAssembly.this.attackPhase = ShurikenAssembly.AttackPhase.SWOOP;
+                    this.setAnchorAboveTarget();
+                    this.nextSweepTick = this.adjustedTickDelay((20 + ShurikenAssembly.this.random.nextInt(4)) * 20);
                 }
-
-                setPos(getX() + delta.x, getY() + delta.y, getZ() + delta.z);
-                setDeltaMovement(delta);
             }
+        }
 
-            level().getProfiler().pop();
-            level().getProfiler().push("rest");
-            boolean xCollision = !Mth.equal(delta.x, delta.x);
-            boolean zCollision = !Mth.equal(delta.z, delta.z);
-            horizontalCollision = xCollision || zCollision;
-            verticalCollision = delta.y != delta.y;
-            verticalCollisionBelow = verticalCollision && delta.y < 0;
-            minorHorizontalCollision = horizontalCollision && isHorizontalCollisionMinor(delta);
-
-            setOnGroundWithMovement(verticalCollisionBelow, delta);
-            BlockPos onPos = getOnPos();
-            BlockState onState = level().getBlockState(onPos);
-            checkFallDamage(delta.y, onGround(), onState, onPos);
-            if (isRemoved()) level().getProfiler().pop();
-            else {
-                if (horizontalCollision) {
-                    Vec3 delta3 = getDeltaMovement();
-                    setDeltaMovement(xCollision ? 0 : delta3.x, delta3.y, zCollision ? 0 : delta3.z);
-                }
-
-                Block block = onState.getBlock();
-                if (delta.y != delta.y) block.updateEntityAfterFallOn(level(), this);
-                if (onGround()) block.stepOn(level(), onPos, onState, this);
-
-                Entity.MovementEmission movementEmission = getMovementEmission();
-                if (movementEmission.emitsAnything() && !isPassenger()) {
-                    double dx = delta.x, dy = delta.y, dz = delta.z;
-                    flyDist = (float) (flyDist + delta.length() * 0.6);
-
-                    walkDist += (float) delta.horizontalDistance() * 0.6f;
-                    moveDist += (float) Math.sqrt(dx * dx + dy * dy + dz * dz) * 0.6f;
-                }
-
-                tryCheckInsideBlocks();
-
-                level().getProfiler().pop();
+        private void setAnchorAboveTarget() {
+            ShurikenAssembly.this.anchorPoint = ShurikenAssembly.this.getTarget().blockPosition().above(2 + ShurikenAssembly.this.random.nextInt(20));
+            if (ShurikenAssembly.this.anchorPoint.getY() < ShurikenAssembly.this.level().getSeaLevel()) {
+                ShurikenAssembly.this.anchorPoint = new BlockPos(
+                        ShurikenAssembly.this.anchorPoint.getX(), ShurikenAssembly.this.level().getSeaLevel() + 1, ShurikenAssembly.this.anchorPoint.getZ()
+                );
             }
         }
     }
 
-    @Override
-    public boolean isPickable() {
-        return true;
-    }
-
-    @Override
-    public boolean hurt(DamageSource source, float amount) {
-        if (amount > 2) {
-            if (source.is(DamageTypes.ARROW)) health -= 2;
-            else if (source.is(DamageTypes.FIREWORKS)) health -= 3;
-            else health--;
-
-            if (health <= 0) kill();
+    class RodBodyRotationControl extends BodyRotationControl {
+        public RodBodyRotationControl(Mob p_33216_) {
+            super(p_33216_);
         }
-        return amount > 2;
+
+        @Override
+        public void clientTick() {
+            ShurikenAssembly.this.yHeadRot = ShurikenAssembly.this.yBodyRot;
+            ShurikenAssembly.this.yBodyRot = ShurikenAssembly.this.getYRot();
+        }
+    }
+    class RodCircleAroundAnchorGoal extends ShurikenAssembly.RodMoveTargetGoal {
+        private float angle;
+        private float distance;
+        private float height;
+        private float clockwise;
+
+        @Override
+        public boolean canUse() {
+            return ShurikenAssembly.this.getTarget() == null || ShurikenAssembly.this.attackPhase == ShurikenAssembly.AttackPhase.CIRCLE;
+        }
+
+        @Override
+        public void start() {
+            this.distance = ShurikenAssembly.this.random.nextFloat() * 10.0F;
+            this.height = -4.0F + ShurikenAssembly.this.random.nextFloat() * 5F;
+            this.clockwise = ShurikenAssembly.this.random.nextBoolean() ? 1.0F : -1.0F;
+            this.selectNext();
+        }
+
+        @Override
+        public void tick() {
+            if (ShurikenAssembly.this.random.nextInt(this.adjustedTickDelay(350)) == 0) {
+                this.height = -4.0F + ShurikenAssembly.this.random.nextFloat() * 5F;
+            }
+
+            if (ShurikenAssembly.this.random.nextInt(this.adjustedTickDelay(250)) == 0) {
+                this.distance++;
+                if (this.distance > 10.0F) {
+                    this.distance = 5.0F;
+                    this.clockwise = -this.clockwise;
+                }
+            }
+
+            if (ShurikenAssembly.this.random.nextInt(this.adjustedTickDelay(450)) == 0) {
+                this.angle = ShurikenAssembly.this.random.nextFloat() * 2.0F * (float) Math.PI;
+                this.selectNext();
+            }
+
+            if (this.touchingTarget()) {
+                this.selectNext();
+            }
+
+            if (ShurikenAssembly.this.moveTargetPoint.y < ShurikenAssembly.this.getY() && !ShurikenAssembly.this.level().isEmptyBlock(ShurikenAssembly.this.blockPosition().below(1))) {
+                this.height = Math.max(1.0F, this.height);
+                this.selectNext();
+            }
+
+            if (ShurikenAssembly.this.moveTargetPoint.y > ShurikenAssembly.this.getY() && !ShurikenAssembly.this.level().isEmptyBlock(ShurikenAssembly.this.blockPosition().above(1))) {
+                this.height = Math.min(-1.0F, this.height);
+                this.selectNext();
+            }
+        }
+
+        private void selectNext() {
+            if (BlockPos.ZERO.equals(ShurikenAssembly.this.anchorPoint)) {
+                ShurikenAssembly.this.anchorPoint = ShurikenAssembly.this.blockPosition();
+            }
+
+            this.angle = this.angle + this.clockwise * 15.0F * (float) (Math.PI / 180.0);
+            ShurikenAssembly.this.moveTargetPoint = Vec3.atLowerCornerOf(ShurikenAssembly.this.anchorPoint)
+                    .add((double)(this.distance * Mth.cos(this.angle)), (double)(this.height), (double)(this.distance * Mth.sin(this.angle)));
+        }
     }
 
-//    @Override
-//    public void remove(RemovalReason reason) {
-//        super.remove(reason);
-//        //if (reason == RemovalReason.KILLED && level().isClientSide) for (int i = 0; i < 10; i++) level().addParticle(ParticleTypes.SMOKE, getX() + 2 * Math.random() - 1, getY() + 0.4, getZ() + 2 * Math.random() - 1, 0, 0, 0);
-//    }
+    class RodLookControl extends LookControl {
+        public RodLookControl(Mob p_33235_) {
+            super(p_33235_);
+        }
 
+        @Override
+        public void tick() {
+        }
+    }
 
+    class RodMoveControl extends MoveControl {
+        private float speed = 0.1F;
+
+        public RodMoveControl(Mob p_33241_) {
+            super(p_33241_);
+        }
+
+        @Override
+        public void tick() {
+            if (ShurikenAssembly.this.horizontalCollision) {
+                ShurikenAssembly.this.setYRot(ShurikenAssembly.this.getYRot() + 180.0F);
+                this.speed = 0.1F;
+            }
+
+            double d0 = ShurikenAssembly.this.moveTargetPoint.x - ShurikenAssembly.this.getX();
+            double d1 = ShurikenAssembly.this.moveTargetPoint.y - ShurikenAssembly.this.getY();
+            double d2 = ShurikenAssembly.this.moveTargetPoint.z - ShurikenAssembly.this.getZ();
+            double d3 = Math.sqrt(d0 * d0 + d2 * d2);
+            if (Math.abs(d3) > 1.0E-5F) {
+                double d4 = 1.0 - Math.abs(d1 * 0.7F) / d3;
+                d0 *= d4;
+                d2 *= d4;
+                d3 = Math.sqrt(d0 * d0 + d2 * d2);
+                double d5 = Math.sqrt(d0 * d0 + d2 * d2 + d1 * d1);
+                float f = ShurikenAssembly.this.getYRot();
+                float f1 = (float)Mth.atan2(d2, d0);
+                float f2 = Mth.wrapDegrees(ShurikenAssembly.this.getYRot() + 90.0F);
+                float f3 = Mth.wrapDegrees(f1 * (180.0F / (float)Math.PI));
+                ShurikenAssembly.this.setYRot(Mth.approachDegrees(f2, f3, 4.0F) - 90.0F);
+                ShurikenAssembly.this.yBodyRot = ShurikenAssembly.this.getYRot();
+                if (Mth.degreesDifferenceAbs(f, ShurikenAssembly.this.getYRot()) < 3.0F) {
+                    this.speed = Mth.approach(this.speed, 1.8F, 0.005F * (1.8F / this.speed));
+                } else {
+                    if (ShurikenAssembly.this.attackPhase == AttackPhase.CIRCLE) Mth.approach(this.speed, 0.05F, 0.025F);
+                    else this.speed = ShurikenAssembly.this.isFast ? Mth.approach(this.speed, 1F, 0.025F) : Mth.approach(this.speed, 0.2F, 0.025F);
+                }
+
+                float f4 = (float)(-(Mth.atan2(-d1, d3) * 180.0F / (float)Math.PI));
+                ShurikenAssembly.this.setXRot(f4);
+                float f5 = ShurikenAssembly.this.getYRot() + 90.0F;
+                double d6 = (double)(this.speed * Mth.cos(f5 * (float) (Math.PI / 180.0))) * Math.abs(d0 / d5);
+                double d7 = (double)(this.speed * Mth.sin(f5 * (float) (Math.PI / 180.0))) * Math.abs(d2 / d5);
+                double d8 = (double)(this.speed * Mth.sin(f4 * (float) (Math.PI / 180.0))) * Math.abs(d1 / d5);
+                Vec3 vec3 = ShurikenAssembly.this.getDeltaMovement();
+                ShurikenAssembly.this.setDeltaMovement(vec3.add(new Vec3(d6, d8, d7).subtract(vec3).scale(0.2)));
+            }
+        }
+    }
+
+    abstract class RodMoveTargetGoal extends Goal {
+        public RodMoveTargetGoal() {
+            this.setFlags(EnumSet.of(Goal.Flag.MOVE));
+        }
+
+        protected boolean touchingTarget() {
+            return ShurikenAssembly.this.moveTargetPoint.distanceToSqr(ShurikenAssembly.this.getX(), ShurikenAssembly.this.getY(), ShurikenAssembly.this.getZ()) < 4.0;
+        }
+    }
+
+    class RodSweepAttackGoal extends ShurikenAssembly.RodMoveTargetGoal {
+        @Override
+        public boolean canUse() {
+            return ShurikenAssembly.this.getTarget() != null && ShurikenAssembly.this.attackPhase == ShurikenAssembly.AttackPhase.SWOOP;
+        }
+
+        @Override
+        public boolean canContinueToUse() {
+            LivingEntity livingentity = ShurikenAssembly.this.getTarget();
+
+            if (livingentity == null) {
+                return false;
+            } else if (!livingentity.isAlive()) {
+                return false;
+            } else {
+                if (livingentity instanceof Player player && (livingentity.isSpectator() || player.isCreative())) {
+                    return false;
+                }
+                if (!this.canUse()) {
+                    return false;
+                }
+                return true;
+            }
+        }
+
+        @Override
+        public void start() {
+        }
+
+        @Override
+        public void stop() {
+            ShurikenAssembly.this.setTarget(null);
+            ShurikenAssembly.this.attackPhase = ShurikenAssembly.AttackPhase.CIRCLE;
+        }
+
+        @Override
+        public void tick() {
+            LivingEntity livingentity = ShurikenAssembly.this.getTarget();
+            if (livingentity != null) {
+                ShurikenAssembly.this.moveTargetPoint = new Vec3(livingentity.getX(), livingentity.getY(0.5), livingentity.getZ());
+                if (ShurikenAssembly.this.getBoundingBox().inflate(0.2F).intersects(livingentity.getBoundingBox())) {
+                    ShurikenAssembly.this.doHurtTarget(livingentity);
+                    //ShurikenAssembly.this.attackPhase = ShurikenAssembly.AttackPhase.CIRCLE;
+                    if (!ShurikenAssembly.this.isSilent()) {
+                        ShurikenAssembly.this.level().levelEvent(1039, ShurikenAssembly.this.blockPosition(), 0);
+                    }
+                } else if (ShurikenAssembly.this.hurtTime > 0) {
+                    ShurikenAssembly.this.attackPhase = ShurikenAssembly.AttackPhase.CIRCLE;
+                }
+            }
+        }
+    }
 }

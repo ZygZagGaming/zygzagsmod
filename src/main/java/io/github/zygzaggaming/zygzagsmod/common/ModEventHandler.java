@@ -7,6 +7,7 @@ import io.github.zygzaggaming.zygzagsmod.common.datagen.AkomiRecipeProvider;
 import io.github.zygzaggaming.zygzagsmod.common.entity.BlazeSentry;
 import io.github.zygzaggaming.zygzagsmod.common.entity.IridiumGolem;
 import io.github.zygzaggaming.zygzagsmod.common.entity.SmallRod;
+import io.github.zygzaggaming.zygzagsmod.common.entity.assembly.ShurikenAssembly;
 import io.github.zygzaggaming.zygzagsmod.common.item.iridium.ISocketable;
 import io.github.zygzaggaming.zygzagsmod.common.networking.handler.*;
 import io.github.zygzaggaming.zygzagsmod.common.networking.packet.*;
@@ -43,6 +44,9 @@ public class ModEventHandler {
         event.put(EntityTypeRegistry.IRIDIUM_GOLEM.get(), IridiumGolem.createAttributes().build());
         event.put(EntityTypeRegistry.BLAZE_SENTRY.get(), BlazeSentry.createAttributes().build());
         event.put(EntityTypeRegistry.SMALL_ROD.get(), SmallRod.createAttributes().build());
+            event.put(EntityTypeRegistry.SHURIKEN_ASSEMBLY_A.get(), ShurikenAssembly.createAttributes().build());
+            event.put(EntityTypeRegistry.SHURIKEN_ASSEMBLY_B.get(), ShurikenAssembly.createAttributes().build());
+            event.put(EntityTypeRegistry.SHURIKEN_ASSEMBLY_C.get(), ShurikenAssembly.createAttributes().build());
     }
 
     @SubscribeEvent

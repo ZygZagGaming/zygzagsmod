@@ -137,6 +137,7 @@ public class SmallRod extends FlyingMob implements GeoAnimatable, ActingEntity<S
     @Override
     public boolean hurt(DamageSource source, float amount) {
         if (amount > 2) {
+            super.hurt(source, 0);
             if (source.is(DamageTypes.ARROW)) health -= 2;
             else if (source.is(DamageTypes.FIREWORKS)) health -= 3;
             else if (isReflectedFireball(source)) health -=3;

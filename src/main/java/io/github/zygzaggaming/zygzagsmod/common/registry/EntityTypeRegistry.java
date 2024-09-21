@@ -105,21 +105,21 @@ public class EntityTypeRegistry extends AkomiRegistry<EntityType<?>> {
     );
     public static final Supplier<EntityType<ShurikenAssembly>> SHURIKEN_ASSEMBLY_A = INSTANCE.register(
             "shuriken_assembly_a",
-            () -> EntityType.Builder.<ShurikenAssembly>of((type, level) -> new ShurikenAssembly(type, level, false, false, 3, 4), MobCategory.MISC)
+            () -> EntityType.Builder.<ShurikenAssembly>of((type, level) -> new ShurikenAssembly(type, level, false, 4), MobCategory.MISC)
                     .fireImmune()
-                    .sized(2.3f, 0.25f)
+                    .sized(1.7f, 1.5f)
                     .build("shuriken_assembly_a")
     );
     public static final Supplier<EntityType<ShurikenAssembly>> SHURIKEN_ASSEMBLY_B = INSTANCE.register(
             "shuriken_assembly_b",
-            () -> EntityType.Builder.<ShurikenAssembly>of((type, level) -> new ShurikenAssembly(type, level, true, true, 3, 4), MobCategory.MISC)
+            () -> EntityType.Builder.<ShurikenAssembly>of((type, level) -> new ShurikenAssembly(type, level, true, 4), MobCategory.MISC)
                     .fireImmune()
-                    .sized(2.3f, 0.25f)
+                    .sized(1.7f, 2f)
                     .build("shuriken_assembly_b")
     );
     public static final Supplier<EntityType<ShurikenAssembly>> SHURIKEN_ASSEMBLY_C = INSTANCE.register(
             "shuriken_assembly_c",
-            () -> EntityType.Builder.<ShurikenAssembly>of((type, level) -> new ShurikenAssembly(type, level, true, false, 5, 4), MobCategory.MISC)
+            () -> EntityType.Builder.<ShurikenAssembly>of((type, level) -> new ShurikenAssembly(type, level, false, 4), MobCategory.MISC)
                     .fireImmune()
                     .sized(2.3f, 0.25f)
                     .build("shuriken_assembly_c")

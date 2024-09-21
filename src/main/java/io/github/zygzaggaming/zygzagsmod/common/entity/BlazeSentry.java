@@ -178,7 +178,7 @@ public class BlazeSentry extends Monster implements GeoAnimatable, ActingEntity<
     @Override
     protected SoundEvent getDeathSound() {
         return SoundEvents.BLAZE_DEATH;
-    }
+    } //change
 
     @Override
     public AnimatableInstanceCache getAnimatableInstanceCache() {

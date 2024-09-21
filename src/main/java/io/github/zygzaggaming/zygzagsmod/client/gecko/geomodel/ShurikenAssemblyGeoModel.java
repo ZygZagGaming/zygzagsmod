@@ -7,9 +7,9 @@ import net.minecraft.resources.ResourceLocation;
 import software.bernie.geckolib.model.GeoModel;
 
 public class ShurikenAssemblyGeoModel extends GeoModel<ShurikenAssembly> {
-    private static final ResourceLocation modelResource = ResourceLocation.fromNamespaceAndPath(Main.MODID,  "geo/shuriken_assembly.geo.json");
-    private static final ResourceLocation textureResource = ResourceLocation.fromNamespaceAndPath(Main.MODID,  "textures/entity/blaze_rod.png");
-    private static final ResourceLocation animationResource = ResourceLocation.fromNamespaceAndPath(Main.MODID,  "animations/shuriken_assembly.animation.json");
+    private static final ResourceLocation modelResource = ResourceLocation.fromNamespaceAndPath(Main.MODID,  "geo/four_rod_a.geo.json");
+    private static final ResourceLocation textureResource = ResourceLocation.fromNamespaceAndPath(Main.MODID,  "textures/entity/small_rod.png");
+    private static final ResourceLocation animationResource = ResourceLocation.fromNamespaceAndPath(Main.MODID,  "animations/shuriken_ab.animation.json");
 
     @Override
     public ResourceLocation getModelResource(ShurikenAssembly animatable) {
