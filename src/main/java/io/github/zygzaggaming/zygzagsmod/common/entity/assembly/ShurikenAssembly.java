@@ -115,7 +115,7 @@ public class ShurikenAssembly extends FlyingMob implements GeoAnimatable, Acting
     }
 
     public static AttributeSupplier.Builder createAttributes() {
-        return Mob.createMobAttributes().add(Attributes.ATTACK_DAMAGE, 6.0D).add(Attributes.FOLLOW_RANGE, 48.0D).add(Attributes.KNOCKBACK_RESISTANCE, 0.4);
+        return Mob.createMobAttributes().add(Attributes.ATTACK_DAMAGE, 6.0D).add(Attributes.FOLLOW_RANGE, 48.0D).add(Attributes.MAX_HEALTH, 100);
     }
 
     @Override
