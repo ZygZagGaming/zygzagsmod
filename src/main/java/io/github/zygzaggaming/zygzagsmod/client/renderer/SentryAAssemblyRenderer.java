@@ -31,11 +31,11 @@ public class SentryAAssemblyRenderer extends GeoEntityRenderer<SentryAAssembly> 
     public void preRender(PoseStack poseStack, SentryAAssembly rod, BakedGeoModel model, @Nullable MultiBufferSource bufferSource, @Nullable VertexConsumer buffer, boolean isReRender, float partialTick, int packedLight, int packedOverlay, int color) {
         super.preRender(poseStack, rod, model, bufferSource, buffer, isReRender, partialTick, packedLight, packedOverlay, color);
         RotationArray rotations = rod.rotations;
-        Rotation head = rotations.get(0);
+        Rotation body = rotations.get(0);
         final float p = partialTick;
-        model.getBone("body").ifPresent((headBone) -> {
+        model.getBone("rods").ifPresent((headBone) -> {
             //System.out.println("rod rot is " + GeneralUtil.radiansToDegrees(head.getXRot(partialTick)) + ", " + GeneralUtil.radiansToDegrees(head.getYRot(partialTick)));
-            headBone.updateRotation(head.getXRot(p), head.getYRot(p), 0);
+            headBone.updateRotation(body.getXRot(p), body.getYRot(p), 0);
         });
     }
 

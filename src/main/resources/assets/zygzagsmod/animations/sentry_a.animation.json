@@ -5,7 +5,7 @@
 			"loop": true,
 			"animation_length": 1,
 			"bones": {
-				"Rods": {
+				"body": {
 					"rotation": {
 						"0.0": {
 							"vector": [0, 0, 0]
@@ -117,7 +117,7 @@
 		"animation.sentry_a.assembly": {
 			"animation_length": 1,
 			"bones": {
-				"Rods": {
+				"body": {
 					"rotation": {
 						"0.0": {
 							"vector": [0, 0, 0]
@@ -349,16 +349,6 @@
 			"animation_length": 0.5,
 			"bones": {
 				"body": {
-					"rotation": {
-						"0.0": {
-							"vector": [0, 0, 0]
-						},
-						"0.5": {
-							"vector": [0, 0, 0]
-						}
-					}
-				},
-				"Rods": {
 					"rotation": {
 						"vector": [0, 0, 0]
 					},
