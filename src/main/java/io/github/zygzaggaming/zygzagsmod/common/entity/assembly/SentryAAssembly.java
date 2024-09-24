@@ -77,7 +77,7 @@ public class SentryAAssembly extends Monster implements GeoAnimatable, ActingEnt
     }
 
     public static AttributeSupplier.Builder createAttributes() {
-        return Monster.createMonsterAttributes().add(Attributes.ATTACK_DAMAGE, 1.0).add(Attributes.MOVEMENT_SPEED, 0.23F).add(Attributes.FOLLOW_RANGE, 48.0).add(Attributes.MAX_HEALTH, 100);
+        return Monster.createMonsterAttributes().add(Attributes.ATTACK_DAMAGE, 1.0).add(Attributes.MOVEMENT_SPEED, 0.23F).add(Attributes.FOLLOW_RANGE, 48.0).add(Attributes.MAX_HEALTH, 500);
     }
 
     @Nullable

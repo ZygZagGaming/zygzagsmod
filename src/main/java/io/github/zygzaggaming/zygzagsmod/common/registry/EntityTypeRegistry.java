@@ -1,9 +1,7 @@
 package io.github.zygzaggaming.zygzagsmod.common.registry;
 
 import io.github.zygzaggaming.zygzagsmod.common.entity.*;
-import io.github.zygzaggaming.zygzagsmod.common.entity.assembly.BigShurikenAssembly;
-import io.github.zygzaggaming.zygzagsmod.common.entity.assembly.SentryAAssembly;
-import io.github.zygzaggaming.zygzagsmod.common.entity.assembly.ShurikenAssembly;
+import io.github.zygzaggaming.zygzagsmod.common.entity.assembly.*;
 import io.github.zygzaggaming.zygzagsmod.common.registry.base.AkomiRegistry;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.world.entity.EntityType;
@@ -132,6 +130,20 @@ public class EntityTypeRegistry extends AkomiRegistry<EntityType<?>> {
                     .fireImmune()
                     .sized(0.7f, 1.2f)
                     .build("sentry_assembly_a")
+    );
+    public static final Supplier<EntityType<HelixAAssembly>> HELIX_ASSEMBLY_A = INSTANCE.register(
+            "helix_assembly_a",
+            () -> EntityType.Builder.<HelixAAssembly>of((type, level) -> new HelixAAssembly(type, level, 4), MobCategory.MISC)
+                    .fireImmune()
+                    .sized(1f, 3.5f)
+                    .build("helix_assembly_a")
+    );
+    public static final Supplier<EntityType<HelixBAssembly>> HELIX_ASSEMBLY_B = INSTANCE.register(
+            "helix_assembly_b",
+            () -> EntityType.Builder.<HelixBAssembly>of((type, level) -> new HelixBAssembly(type, level, 12), MobCategory.MISC)
+                    .fireImmune()
+                    .sized(1.3f, 6f)
+                    .build("helix_assembly_b")
     );
     public EntityTypeRegistry(DeferredRegister<EntityType<?>> register) {
         super(register);
