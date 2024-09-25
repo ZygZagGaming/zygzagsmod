@@ -74,8 +74,8 @@ public class ActionRegistry extends CustomAkomiRegistry<Action> {
     }
 
     public static class SentryAAssembly {
-        public static final Supplier<Action> SPIN_BASE = INSTANCE.register("sentry_a_spin_base", () -> new Action(RawAnimation.begin().thenPlay("animation.sentry_a.spin"), 20, true));
-        public static final Supplier<Action> ASSEMBLY = INSTANCE.register("sentry_a_assembly", () -> new Action(RawAnimation.begin().thenPlay("animation.sentry_a.assembly"), 20, false));
+        public static final Supplier<Action> SPIN_BASE = INSTANCE.register("sentry_a_spin_base", () -> new Action(RawAnimation.begin().thenPlay("animation.sentry_a.spin"), 20, false));
+        public static final Supplier<Action> ASSEMBLY = INSTANCE.register("sentry_a_assembly", () -> new Action(RawAnimation.begin().thenPlay("animation.sentry_a.assembly"), 20, true));
         public static final Supplier<Action> IDLE_BASE = INSTANCE.register("sentry_a_assembly_idle", () -> new Action(RawAnimation.begin().thenPlay("animation.sentry_a.idle"), 10, true));
 
         public static void init() {
@@ -83,15 +83,15 @@ public class ActionRegistry extends CustomAkomiRegistry<Action> {
     }
 
     public static class HelixAAssembly {
-        public static final Supplier<Action> SPIN_BASE = INSTANCE.register("helix_a_spin_base", () -> new Action(RawAnimation.begin().thenPlay("animation.Helix_A_spin"), 20, true));
-        public static final Supplier<Action> ASSEMBLY = INSTANCE.register("helix_a_assembly", () -> new Action(RawAnimation.begin().thenPlay("animation.Helix_A_assembly"), 20, false));
+        public static final Supplier<Action> SPIN_BASE = INSTANCE.register("helix_a_spin_base", () -> new Action(RawAnimation.begin().thenPlay("animation.Helix_A_spin"), 20, false));
+        public static final Supplier<Action> ASSEMBLY = INSTANCE.register("helix_a_assembly", () -> new Action(RawAnimation.begin().thenPlay("animation.Helix_A_assembly"), 20, true));
 
         public static void init() {
         }
     }
 
     public static class HelixBAssembly {
-        public static final Supplier<Action> SPIN_BASE = INSTANCE.register("helix_b_spin_base", () -> new Action(RawAnimation.begin().thenPlay("animation.Helix_B_spin"), 20, true));
+        public static final Supplier<Action> SPIN_BASE = INSTANCE.register("helix_b_spin_base", () -> new Action(RawAnimation.begin().thenPlay("animation.Helix_B_spin"), 20, false));
         public static final Supplier<Action> ASSEMBLY = INSTANCE.register("helix_b_assembly", () -> new Action(RawAnimation.begin().thenPlay("animation.Helix_B_assembly"), 20, false));
 
         public static void init() {

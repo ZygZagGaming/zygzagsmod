@@ -3,7 +3,6 @@ package io.github.zygzaggaming.zygzagsmod.common.entity.assembly;
 import java.util.*;
 import javax.annotation.Nullable;
 
-import io.github.zygzaggaming.zygzagsmod.common.entity.SmallRod;
 import io.github.zygzaggaming.zygzagsmod.common.entity.animation.ActingEntity;
 import io.github.zygzaggaming.zygzagsmod.common.entity.animation.Action;
 import io.github.zygzaggaming.zygzagsmod.common.entity.animation.Actor;
@@ -103,7 +102,7 @@ public class ShurikenAssembly extends FlyingMob implements GeoAnimatable, Acting
                 ActionRegistry.ShurikenAssembly.SPIN_UP.get(),
                 null,
                 99999999,
-                40,
+                20,
                 new LinkedList<>()
         ));
         builder.define(DATA_TARGET, Optional.empty());

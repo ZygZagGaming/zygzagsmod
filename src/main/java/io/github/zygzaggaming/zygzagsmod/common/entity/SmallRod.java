@@ -88,7 +88,7 @@ public class SmallRod extends FlyingMob implements GeoAnimatable, ActingEntity<S
                 ActionRegistry.SmallRod.RANDOM_SPIN_BASE.get(),
                 null,
                 99999999,
-                40,
+                20,
                 new LinkedList<>()
         ));
         builder.define(DATA_IS_CHARGING, false);

@@ -115,6 +115,8 @@
 			}
 		},
 		"animation.sentry_a.assembly": {
+			"loop": true,
+			"loop": "hold_on_last_frame",
 			"animation_length": 1,
 			"bones": {
 				"body": {

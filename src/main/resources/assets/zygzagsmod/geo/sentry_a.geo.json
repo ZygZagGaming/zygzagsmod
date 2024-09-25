@@ -18,8 +18,7 @@
 				{
 					"name": "rod_wrapper",
 					"parent": "body",
-					"pivot": [0, 8, 0],
-					"rotation": [-90, 0, 0]
+					"pivot": [0, 8, 0]
 				},
 				{
 					"name": "rods",

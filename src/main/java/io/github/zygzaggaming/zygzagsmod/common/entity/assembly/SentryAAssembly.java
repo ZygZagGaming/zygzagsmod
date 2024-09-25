@@ -52,7 +52,7 @@ public class SentryAAssembly extends Monster implements GeoAnimatable, ActingEnt
     private static final EntityDataAccessor<Byte> DATA_FLAGS_ID = SynchedEntityData.defineId(SentryAAssembly.class, EntityDataSerializers.BYTE);
     protected static final EntityDataAccessor<Actor.State> DATA_ANIMATOR_STATE = SynchedEntityData.defineId(SentryAAssembly.class, EntityDataSerializerRegistry.ACTOR_STATE.get());
     private final AnimatableInstanceCache instanceCache = GeckoLibUtil.createInstanceCache(this);
-    private final Actor<SentryAAssembly> actor = new Actor<>(this, ActionRegistry.SentryAAssembly.SPIN_BASE.get());
+    private final Actor<SentryAAssembly> actor = new Actor<>(this, ActionRegistry.SentryAAssembly.ASSEMBLY.get());
     public static float[] maxRotationPerTick = {(float) (0.03125 * Math.PI), (float) (0.0166666667 * Math.PI)};
     public RotationArray rotations = new RotationArray(new Rotation[]{
             new LimitedRotation(0, 0, 0, 0, maxRotationPerTick[0])
@@ -125,11 +125,11 @@ public class SentryAAssembly extends Monster implements GeoAnimatable, ActingEnt
     protected void defineSynchedData(SynchedEntityData.Builder builder) {
         super.defineSynchedData(builder);
         builder.define(DATA_ANIMATOR_STATE, new Actor.State(
-                ActionRegistry.SentryAAssembly.SPIN_BASE.get(),
-                ActionRegistry.SentryAAssembly.SPIN_BASE.get(),
+                ActionRegistry.SentryAAssembly.ASSEMBLY.get(),
+                ActionRegistry.SentryAAssembly.ASSEMBLY.get(),
                 null,
                 99999999,
-                40,
+                20,
                 new LinkedList<>()
         ));
         builder.define(DATA_TARGET, Optional.empty());
@@ -148,7 +148,7 @@ public class SentryAAssembly extends Monster implements GeoAnimatable, ActingEnt
 
     @Override
     public @Nullable Action getActionChange() {
-        if (getTarget() == null) return ActionRegistry.SentryAAssembly.SPIN_BASE.get();
+        if (getTarget() == null) return ActionRegistry.SentryAAssembly.ASSEMBLY.get();
         else return null;
     }
 
@@ -183,7 +183,7 @@ public class SentryAAssembly extends Monster implements GeoAnimatable, ActingEnt
     }
 
     public void resetBodyRotation() {
-        rotations.get(0).set(-0.5f * (float) Math.PI, 0);
+        rotations.get(0).set(0, 0);
     }
 
     public void lookAt(LivingEntity target) {
@@ -226,21 +226,27 @@ public class SentryAAssembly extends Monster implements GeoAnimatable, ActingEnt
         super.customServerAiStep();
     }
 
+    private int actorTickCount = 0;
     public void tick() {
-        var target = getTarget();
-        if (target == null/* || !target.isAlive()*/) {
-            resetBodyRotation();
-            actor.setNextAction(ActionRegistry.SentryAAssembly.IDLE_BASE.get());
-        } else {
-            lookAt(target);
-            if (actor.getCurrentAction().is(ActionRegistry.SentryAAssembly.IDLE_BASE)) actor.setNextAction(ActionRegistry.SentryAAssembly.SPIN_BASE.get());
+        if (actorTickCount <= 18) {
+            actor.setNextAction(ActionRegistry.SentryAAssembly.ASSEMBLY.get());
+            actorTickCount++;
         }
+        else {
+            var target = getTarget();
+            if (target == null/* || !target.isAlive()*/) {
+                resetBodyRotation();
+            } else {
+                lookAt(target);
+            }
 
-        rotations.tick();
+            actor.setNextAction(ActionRegistry.SentryAAssembly.SPIN_BASE.get());
+            rotations.tick();
 
-        setRot(0, 0);
-        setYHeadRot(0);
-        setYBodyRot(0);
+            setRot(0, 0);
+            setYHeadRot(0);
+            setYBodyRot(0);
+        }
         super.tick();
         actor.tick();
     }

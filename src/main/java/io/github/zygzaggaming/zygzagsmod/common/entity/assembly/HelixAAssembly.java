@@ -28,7 +28,6 @@ import net.minecraft.world.entity.ai.goal.AvoidEntityGoal;
 import net.minecraft.world.entity.ai.goal.Goal;
 import net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal;
 import net.minecraft.world.entity.animal.AbstractGolem;
-import net.minecraft.world.entity.animal.Wolf;
 import net.minecraft.world.entity.monster.Monster;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.LargeFireball;
@@ -52,7 +51,7 @@ public class HelixAAssembly extends Monster implements GeoAnimatable, ActingEnti
     private static final EntityDataAccessor<Boolean> DATA_IS_CHARGING = SynchedEntityData.defineId(HelixAAssembly.class, EntityDataSerializers.BOOLEAN);
     protected static final EntityDataAccessor<Actor.State> DATA_ANIMATOR_STATE = SynchedEntityData.defineId(HelixAAssembly.class, EntityDataSerializerRegistry.ACTOR_STATE.get());
     private final AnimatableInstanceCache instanceCache = GeckoLibUtil.createInstanceCache(this);
-    private final Actor<HelixAAssembly> actor = new Actor<>(this, ActionRegistry.HelixAAssembly.SPIN_BASE.get());
+    private final Actor<HelixAAssembly> actor = new Actor<>(this, ActionRegistry.HelixAAssembly.ASSEMBLY.get());
     public static float[] maxRotationPerTick = {(float) (0.03125 * Math.PI), (float) (0.0166666667 * Math.PI)};
     public RotationArray rotations = new RotationArray(new Rotation[]{
             new LimitedRotation(0, 0, 0, 0, maxRotationPerTick[0])
@@ -90,11 +89,11 @@ public class HelixAAssembly extends Monster implements GeoAnimatable, ActingEnti
     protected void defineSynchedData(SynchedEntityData.Builder builder) {
         super.defineSynchedData(builder);
         builder.define(DATA_ANIMATOR_STATE, new Actor.State(
-                ActionRegistry.HelixAAssembly.SPIN_BASE.get(),
-                ActionRegistry.HelixAAssembly.SPIN_BASE.get(),
+                ActionRegistry.HelixAAssembly.ASSEMBLY.get(),
+                ActionRegistry.HelixAAssembly.ASSEMBLY.get(),
                 null,
                 99999999,
-                40,
+                20,
                 new LinkedList<>()
         ));
         builder.define(DATA_IS_CHARGING, false);
@@ -113,7 +112,7 @@ public class HelixAAssembly extends Monster implements GeoAnimatable, ActingEnti
 
     @Override
     public @Nullable Action getActionChange() {
-        if (getTarget() == null) return ActionRegistry.HelixAAssembly.SPIN_BASE.get();
+        if (getTarget() == null) return ActionRegistry.HelixAAssembly.ASSEMBLY.get();
         else return null;
     }
 
@@ -214,9 +213,14 @@ public class HelixAAssembly extends Monster implements GeoAnimatable, ActingEnti
         return false;
     }
 
+    private int actorTickCount = 0;
     @Override
     public void tick() {
-        actor.setNextAction(ActionRegistry.HelixAAssembly.SPIN_BASE.get());
+        if (actorTickCount <= 17) {
+            actor.setNextAction(ActionRegistry.HelixAAssembly.ASSEMBLY.get());
+            actorTickCount++;
+        }
+        else actor.setNextAction(ActionRegistry.HelixAAssembly.SPIN_BASE.get());
 
         setNoGravity(true);
         super.tick();

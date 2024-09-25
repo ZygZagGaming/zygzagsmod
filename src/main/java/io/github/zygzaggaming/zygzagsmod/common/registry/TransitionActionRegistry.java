@@ -19,6 +19,7 @@ public class TransitionActionRegistry extends CustomAkomiRegistry<TransitionActi
     public void registerTo(IEventBus bus) {
         IridiumGolem.init(); // make the IridiumGolem class load, subclasses don't load unless they're used
         BlazeSentry.init();
+        HelixBAssembly.init();
         super.registerTo(bus);
     }
 
@@ -55,6 +56,20 @@ public class TransitionActionRegistry extends CustomAkomiRegistry<TransitionActi
         public static final Supplier<TransitionAction> AGRO_BASE_TO_FLAMETHROW_BASE = INSTANCE.register("blaze_sentry_agro_base_to_flamethrow_base", () -> new TransitionAction(ActionRegistry.BlazeSentry.AGRO_BASE.get(), ActionRegistry.BlazeSentry.FLAMETHROW_BASE.get(), RawAnimation.begin().thenPlay("animation.blaze_sentry.agro_to_flamethrow"), 60, (ticks) -> 1f));
 
         public static void init() {
+        }
+    }
+
+    public static class HelixBAssembly {
+        public static final Supplier<TransitionAction> ASSEMBLY_TO_SPIN_BASE = INSTANCE.register("helix_b_assembly_to_spin_base", () -> new TransitionAction(ActionRegistry.HelixBAssembly.ASSEMBLY.get(), ActionRegistry.HelixBAssembly.SPIN_BASE.get(), RawAnimation.begin().thenPlay("animation.Helix_B_spin"), 20, (ticks) -> 1f));
+
+        public static void init(){
+        }
+    }
+
+    public static class HelixAAssembly {
+        public static final Supplier<TransitionAction> ASSEMBLY_TO_SPIN_BASE = INSTANCE.register("helix_a_assembly_to_spin_base", () -> new TransitionAction(ActionRegistry.HelixAAssembly.ASSEMBLY.get(), ActionRegistry.HelixAAssembly.SPIN_BASE.get(), RawAnimation.begin().thenPlay("animation.Helix_A_spin"), 20, (ticks) -> 1f));
+
+        public static void init(){
         }
     }
 

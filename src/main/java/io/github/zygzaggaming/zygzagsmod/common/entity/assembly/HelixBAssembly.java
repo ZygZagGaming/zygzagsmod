@@ -51,7 +51,7 @@ public class HelixBAssembly extends Monster implements GeoAnimatable, ActingEnti
     private static final EntityDataAccessor<Boolean> DATA_IS_CHARGING = SynchedEntityData.defineId(HelixBAssembly.class, EntityDataSerializers.BOOLEAN);
     protected static final EntityDataAccessor<Actor.State> DATA_ANIMATOR_STATE = SynchedEntityData.defineId(HelixBAssembly.class, EntityDataSerializerRegistry.ACTOR_STATE.get());
     private final AnimatableInstanceCache instanceCache = GeckoLibUtil.createInstanceCache(this);
-    private final Actor<HelixBAssembly> actor = new Actor<>(this, ActionRegistry.HelixBAssembly.SPIN_BASE.get());
+    private final Actor<HelixBAssembly> actor = new Actor<>(this, ActionRegistry.HelixBAssembly.ASSEMBLY.get());
     public static float[] maxRotationPerTick = {(float) (0.03125 * Math.PI), (float) (0.0166666667 * Math.PI)};
     public RotationArray rotations = new RotationArray(new Rotation[]{
             new LimitedRotation(0, 0, 0, 0, maxRotationPerTick[0])
@@ -89,11 +89,11 @@ public class HelixBAssembly extends Monster implements GeoAnimatable, ActingEnti
     protected void defineSynchedData(SynchedEntityData.Builder builder) {
         super.defineSynchedData(builder);
         builder.define(DATA_ANIMATOR_STATE, new Actor.State(
-                ActionRegistry.HelixBAssembly.SPIN_BASE.get(),
-                ActionRegistry.HelixBAssembly.SPIN_BASE.get(),
+                ActionRegistry.HelixBAssembly.ASSEMBLY.get(),
+                ActionRegistry.HelixBAssembly.ASSEMBLY.get(),
                 null,
                 99999999,
-                40,
+                20,
                 new LinkedList<>()
         ));
         builder.define(DATA_IS_CHARGING, false);
@@ -112,7 +112,7 @@ public class HelixBAssembly extends Monster implements GeoAnimatable, ActingEnti
 
     @Override
     public @Nullable Action getActionChange() {
-        if (getTarget() == null) return ActionRegistry.HelixBAssembly.SPIN_BASE.get();
+        if (getTarget() == null) return ActionRegistry.HelixBAssembly.ASSEMBLY.get();
         else return null;
     }
 
@@ -208,19 +208,18 @@ public class HelixBAssembly extends Monster implements GeoAnimatable, ActingEnti
         return true;
     }
 
-    @Override
-    public boolean doesIdleActions() {
-        return false;
-    }
-
+    private int actorTickCount = 0;
     @Override
     public void tick() {
-        actor.setNextAction(ActionRegistry.HelixBAssembly.SPIN_BASE.get());
+        if (actorTickCount <= 10) {
+            actor.setNextAction(ActionRegistry.HelixBAssembly.ASSEMBLY.get());
+            actorTickCount++;
+        }
+        else actor.setNextAction(ActionRegistry.HelixBAssembly.SPIN_BASE.get());
 
-
-        setNoGravity(true);
-        super.tick();
-        actor.tick();
+            setNoGravity(true);
+            super.tick();
+            actor.tick();
     }
 
     static class RandomFloatAroundGoal extends Goal {
