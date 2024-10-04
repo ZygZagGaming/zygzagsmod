@@ -1,5 +1,6 @@
 package io.github.zygzaggaming.zygzagsmod.common.entity.assembly;
 
+import io.github.zygzaggaming.zygzagsmod.common.entity.SmallRod;
 import io.github.zygzaggaming.zygzagsmod.common.entity.animation.ActingEntity;
 import io.github.zygzaggaming.zygzagsmod.common.entity.animation.Action;
 import io.github.zygzaggaming.zygzagsmod.common.entity.animation.Actor;
@@ -20,7 +21,10 @@ import net.minecraft.util.Mth;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.damagesource.DamageTypes;
-import net.minecraft.world.entity.*;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.control.MoveControl;
@@ -48,50 +52,51 @@ import java.util.function.Predicate;
 
 @ParametersAreNonnullByDefault
 @MethodsReturnNonnullByDefault
-public class HelixAAssembly extends Monster implements GeoAnimatable, ActingEntity<HelixAAssembly> {
-    private static final EntityDataAccessor<Boolean> DATA_IS_CHARGING = SynchedEntityData.defineId(HelixAAssembly.class, EntityDataSerializers.BOOLEAN);
-    protected static final EntityDataAccessor<Actor.State> DATA_ANIMATOR_STATE = SynchedEntityData.defineId(HelixAAssembly.class, EntityDataSerializerRegistry.ACTOR_STATE.get());
+public class SpawnerAAssembly extends Monster implements GeoAnimatable, ActingEntity<SpawnerAAssembly> {
+    private static final EntityDataAccessor<Boolean> DATA_IS_CHARGING = SynchedEntityData.defineId(SpawnerAAssembly.class, EntityDataSerializers.BOOLEAN);
+    protected static final EntityDataAccessor<Actor.State> DATA_ANIMATOR_STATE = SynchedEntityData.defineId(SpawnerAAssembly.class, EntityDataSerializerRegistry.ACTOR_STATE.get());
     private final AnimatableInstanceCache instanceCache = GeckoLibUtil.createInstanceCache(this);
-    private final Actor<HelixAAssembly> actor = new Actor<>(this, ActionRegistry.HelixAAssembly.ASSEMBLY.get());
+    private final Actor<SpawnerAAssembly> actor = new Actor<>(this, ActionRegistry.SpawnerAAssembly.ASSEMBLY.get());
     public static float[] maxRotationPerTick = {(float) (0.03125 * Math.PI), (float) (0.0166666667 * Math.PI)};
     public RotationArray rotations = new RotationArray(new Rotation[]{
             new LimitedRotation(0, 0, 0, 0, maxRotationPerTick[0])
     });
-    protected static final EntityDataAccessor<Optional<UUID>> DATA_TARGET = SynchedEntityData.defineId(HelixAAssembly.class, EntityDataSerializers.OPTIONAL_UUID);
+    protected static final EntityDataAccessor<Optional<UUID>> DATA_TARGET = SynchedEntityData.defineId(SpawnerAAssembly.class, EntityDataSerializers.OPTIONAL_UUID);
     private @Nullable Player target = null;
     //private @Nullable LivingEntity target = null;
     private int health;
-    private int chargeTime;
+    private int spawnTime;
 
-    public HelixAAssembly(Level world) {
-        this(EntityTypeRegistry.HELIX_ASSEMBLY_A.get(), world, 3);
+    public SpawnerAAssembly(Level world) {
+        this(EntityTypeRegistry.SPAWNER_ASSEMBLY_A.get(), world, 12, 10);
     }
 
-    public HelixAAssembly(EntityType<? extends HelixAAssembly> type, Level world, int health) {
+    public SpawnerAAssembly(EntityType<? extends SpawnerAAssembly> type, Level world, int health, int spawnTime) {
         super(type, world);
         this.health = health;
+        this.spawnTime = spawnTime * 20;
         setPathfindingMalus(PathType.WATER, -1);
         setPathfindingMalus(PathType.LAVA, 8);
-        this.moveControl = new HelixAAssembly.RodMoveControl(this);
+        this.moveControl = new SpawnerAAssembly.RodMoveControl(this);
     }
 
     @Override
     protected void registerGoals() {
-        this.goalSelector.addGoal(5, new HelixAAssembly.RandomFloatAroundGoal(this));
+        this.goalSelector.addGoal(5, new SpawnerAAssembly.RandomFloatAroundGoal(this));
         this.goalSelector.addGoal(3, new AvoidEntityGoal<>(this, Player.class, 6.0F, 1.0, 1.2));
         this.goalSelector.addGoal(3, new AvoidEntityGoal<>(this, AbstractGolem.class, 6.0F, 1.0, 1.2));
-        targetSelector.addGoal(3, new HelixAAssembly.OsuNATGoal<>(this, LivingEntity.class, 1, true, false, (entity) -> (entity instanceof Player player && !player.isCreative() && !player.isSpectator()) || entity instanceof AbstractGolem));    }
+        targetSelector.addGoal(3, new SpawnerAAssembly.OsuNATGoal<>(this, LivingEntity.class, 1, true, false, (entity) -> (entity instanceof Player player && !player.isCreative() && !player.isSpectator()) || entity instanceof AbstractGolem));    }
 
     public static AttributeSupplier.Builder createAttributes() {
-        return Mob.createMobAttributes().add(Attributes.FOLLOW_RANGE, 48.0D).add(Attributes.KNOCKBACK_RESISTANCE, 1.0D).add(Attributes.MAX_HEALTH, 1000);
+        return Mob.createMobAttributes().add(Attributes.FOLLOW_RANGE, 48.0D).add(Attributes.KNOCKBACK_RESISTANCE, 1.0D).add(Attributes.MAX_HEALTH, 1000).add(Attributes.MOVEMENT_SPEED, 0.01).add(Attributes.ATTACK_DAMAGE, 5.0);
     }
 
     @Override
     protected void defineSynchedData(SynchedEntityData.Builder builder) {
         super.defineSynchedData(builder);
         builder.define(DATA_ANIMATOR_STATE, new Actor.State(
-                ActionRegistry.HelixAAssembly.ASSEMBLY.get(),
-                ActionRegistry.HelixAAssembly.ASSEMBLY.get(),
+                ActionRegistry.SpawnerAAssembly.ASSEMBLY.get(),
+                ActionRegistry.SpawnerAAssembly.ASSEMBLY.get(),
                 null,
                 99999999,
                 20,
@@ -107,13 +112,13 @@ public class HelixAAssembly extends Monster implements GeoAnimatable, ActingEnti
     }
 
     @Override
-    public Actor<HelixAAssembly> getActor() {
+    public Actor<SpawnerAAssembly> getActor() {
         return actor;
     }
 
     @Override
     public @Nullable Action getActionChange() {
-        if (getTarget() == null) return ActionRegistry.HelixAAssembly.ASSEMBLY.get();
+        if (getTarget() == null) return ActionRegistry.SpawnerAAssembly.ASSEMBLY.get();
         else return null;
     }
 
@@ -209,42 +214,115 @@ public class HelixAAssembly extends Monster implements GeoAnimatable, ActingEnti
         return true;
     }
 
-    @Override
-    public boolean doesIdleActions() {
-        return false;
-    }
-
-    private int actorTickCount = 0;
+    private int assemblyTickCount = 0;
+    private boolean openedFirst = false;
+    private int closeTime = 0;
+    private int spawning = 180;
+    private int oldHealth = health;
+    private boolean setHighHealth = false;
+    private boolean setLowHealth = false;
     @Override
     public void tick() {
-        if (actorTickCount <= 17) {
-            actor.setNextAction(ActionRegistry.HelixAAssembly.ASSEMBLY.get());
-            actorTickCount++;
-        }
-        else actor.setNextAction(ActionRegistry.HelixAAssembly.SPIN_BASE.get());
 
-        setNoGravity(true);
-        super.tick();
-        actor.tick();
+        if (assemblyTickCount <= 8) {
+            actor.setNextAction(ActionRegistry.SpawnerAAssembly.ASSEMBLY.get());
+            assemblyTickCount++;
+        }
+        else {
+            if (getTarget() != null) {
+                double a0 = this.distanceToSqr(getTarget().position());
+                spawnTime--;
+                if (spawnTime >= 0){
+                    if (!actor.isTransitioning() && a0 >= 40) {
+                        if (closeTime > 0) {
+                            actor.setNextAction(ActionRegistry.SpawnerAAssembly.CLOSED_BASE.get());
+                            closeTime--;
+                        }
+                        else actor.setNextAction(ActionRegistry.SpawnerAAssembly.OPENED_BASE.get());
+                    }
+                    else if (!actor.isTransitioning() && a0 < 40) {
+                        actor.setNextAction(ActionRegistry.SpawnerAAssembly.CLOSED_BASE.get());
+                        closeTime = 60;
+                        spawnTime++;
+                    }
+                }
+                else {
+                        if (!openedFirst && !actor.isTransitioning()){
+                            actor.setNextAction(ActionRegistry.SpawnerAAssembly.OPENED_BASE.get());
+                            openedFirst = true;
+                        }
+                        else if (openedFirst && !actor.isTransitioning()){
+                            spawning--;
+                            if (spawning >= 0) {
+                                actor.setNextAction(ActionRegistry.SpawnerAAssembly.SPAWNING_BASE.get());
+                                if (spawning == 20) {
+                                    SmallRod spawnedRod = new SmallRod(EntityTypeRegistry.SMALL_ROD.get(), level(), 3);
+                                    spawnedRod.moveTo(getEyePosition());
+                                    level().addFreshEntity(spawnedRod);
+                                }
+                            }
+                            else {
+                                openedFirst = false;
+                                actor.setNextAction(ActionRegistry.SpawnerAAssembly.OPENED_BASE.get());
+                                spawning = 180;
+                                spawnTime = 240;
+                            }
+                        }
+                }
+            }
+            else actor.setNextAction(ActionRegistry.SpawnerAAssembly.OPENED_BASE.get());
+
+            if (actor.getCurrentAction() == ActionRegistry.SpawnerAAssembly.CLOSED_BASE.get()) {
+                if (!setHighHealth){
+                    if (oldHealth <= health) {
+                        oldHealth = health;
+                        health = health + 6;
+                        setHighHealth = true;
+                    }
+                }
+            }
+            else if (actor.getCurrentAction() == ActionRegistry.SpawnerAAssembly.OPENED_BASE.get()) {
+                if (setHighHealth && health > oldHealth) {
+                    health = oldHealth;
+                    setHighHealth = false;
+                }
+                if (setLowHealth) {
+                    health = oldHealth;
+                    setLowHealth = false;
+                }
+            }
+            else if (actor.getCurrentAction() == ActionRegistry.SpawnerAAssembly.SPAWNING_BASE.get()) {
+                if (!setLowHealth && health > 3) {
+                    oldHealth = health;
+                    health = 3;
+                    setLowHealth = true;
+                }
+            }
+        }
+        System.out.println("Health:" + health);
+
+            setNoGravity(true);
+            super.tick();
+            actor.tick();
     }
 
     static class RandomFloatAroundGoal extends Goal {
-        private final HelixAAssembly helixAAssembly;
+        private final SpawnerAAssembly spawnerAAssembly;
 
-        public RandomFloatAroundGoal(HelixAAssembly p_32783_) {
-            this.helixAAssembly = p_32783_;
+        public RandomFloatAroundGoal(SpawnerAAssembly p_32783_) {
+            this.spawnerAAssembly = p_32783_;
             this.setFlags(EnumSet.of(Flag.MOVE));
         }
 
         @Override
         public boolean canUse() {
-            MoveControl movecontrol = this.helixAAssembly.getMoveControl();
+            MoveControl movecontrol = this.spawnerAAssembly.getMoveControl();
             if (!movecontrol.hasWanted()) {
                 return true;
             } else {
-                double d0 = movecontrol.getWantedX() - this.helixAAssembly.getX();
-                double d1 = movecontrol.getWantedY() - this.helixAAssembly.getY();
-                double d2 = movecontrol.getWantedZ() - this.helixAAssembly.getZ();
+                double d0 = movecontrol.getWantedX() - this.spawnerAAssembly.getX();
+                double d1 = movecontrol.getWantedY() - this.spawnerAAssembly.getY();
+                double d2 = movecontrol.getWantedZ() - this.spawnerAAssembly.getZ();
                 double d3 = d0 * d0 + d1 * d1 + d2 * d2;
                 return d3 < 1.0 || d3 > 3600.0;
             }
@@ -257,18 +335,18 @@ public class HelixAAssembly extends Monster implements GeoAnimatable, ActingEnti
 
         @Override
         public void start() {
-            if (this.helixAAssembly.getTarget() != null) {
-                double a0 = this.helixAAssembly.distanceToSqr(this.helixAAssembly.getTarget());
-                Vec3 vec3 = DefaultRandomPos.getPosAway(this.helixAAssembly, 16, 7, this.helixAAssembly.getTarget().position());
+            if (this.spawnerAAssembly.getTarget() != null) {
+                double a0 = this.spawnerAAssembly.distanceToSqr(this.spawnerAAssembly.getTarget());
+                Vec3 vec3 = DefaultRandomPos.getPosAway(this.spawnerAAssembly, 16, 7, this.spawnerAAssembly.getTarget().position());
                 if (a0 >= 30 || vec3 == null) {
-                    RandomSource randomsource = this.helixAAssembly.getRandom();
-                    double d0 = this.helixAAssembly.getX() + (double) ((randomsource.nextFloat() * 2.0F - 1.0F) * 4.0F);
-                    double d1 = this.helixAAssembly.getY();
-                    double d2 = this.helixAAssembly.getZ() + (double) ((randomsource.nextFloat() * 2.0F - 1.0F) * 4.0F);
-                    this.helixAAssembly.getMoveControl().setWantedPosition(d0, d1, d2, 0.01); //minimum speed set
+                    RandomSource randomsource = this.spawnerAAssembly.getRandom();
+                    double d0 = this.spawnerAAssembly.getX() + (double) ((randomsource.nextFloat() * 2.0F - 1.0F) * 4.0F);
+                    double d1 = this.spawnerAAssembly.getY() + (double) ((randomsource.nextFloat() * 2.0F - 1.0F) * 1.05F);
+                    double d2 = this.spawnerAAssembly.getZ() + (double) ((randomsource.nextFloat() * 2.0F - 1.0F) * 4.0F);
+                    this.spawnerAAssembly.getMoveControl().setWantedPosition(d0, d1, d2, 0.01); //minimum speed set
                 }
                 else {
-                    this.helixAAssembly.getMoveControl().setWantedPosition(vec3.x, vec3.y, vec3.z, 0.01); //minimum speed set
+                    this.spawnerAAssembly.getMoveControl().setWantedPosition(vec3.x, vec3.y, vec3.z, 0.01); //minimum speed set
                 }
             }
         }
@@ -303,24 +381,24 @@ public class HelixAAssembly extends Monster implements GeoAnimatable, ActingEnti
     }
 
     static class RodMoveControl extends MoveControl {
-        private final HelixAAssembly helixAAssembly;
+        private final SpawnerAAssembly spawnerAAssembly;
         private int floatDuration;
 
-        public RodMoveControl(HelixAAssembly p_32768_) {
+        public RodMoveControl(SpawnerAAssembly p_32768_) {
             super(p_32768_);
-            this.helixAAssembly = p_32768_;
+            this.spawnerAAssembly = p_32768_;
         }
 
         @Override
         public void tick() {
             if (this.operation == Operation.MOVE_TO) {
                 if (this.floatDuration-- <= 0) {
-                    this.floatDuration = this.floatDuration + this.helixAAssembly.getRandom().nextInt(5) + 2;
-                    Vec3 vec3 = new Vec3(this.wantedX - this.helixAAssembly.getX(), this.wantedY - this.helixAAssembly.getY(), this.wantedZ - this.helixAAssembly.getZ());
+                    this.floatDuration = this.floatDuration + this.spawnerAAssembly.getRandom().nextInt(5) + 2;
+                    Vec3 vec3 = new Vec3(this.wantedX - this.spawnerAAssembly.getX(), this.wantedY - this.spawnerAAssembly.getY(), this.wantedZ - this.spawnerAAssembly.getZ());
                     double d0 = vec3.length();
                     vec3 = vec3.normalize();
                     if (this.canReach(vec3, Mth.ceil(d0))) {
-                        this.helixAAssembly.setDeltaMovement(this.helixAAssembly.getDeltaMovement().add(vec3.scale(0.1)));
+                        this.spawnerAAssembly.setDeltaMovement(this.spawnerAAssembly.getDeltaMovement().add(vec3.scale(0.1)));
                     } else {
                         this.operation = Operation.WAIT;
                     }
@@ -329,11 +407,11 @@ public class HelixAAssembly extends Monster implements GeoAnimatable, ActingEnti
         }
 
         private boolean canReach(Vec3 p_32771_, int p_32772_) {
-            AABB aabb = this.helixAAssembly.getBoundingBox();
+            AABB aabb = this.spawnerAAssembly.getBoundingBox();
 
             for (int i = 1; i < p_32772_; i++) {
                 aabb = aabb.move(p_32771_);
-                if (!this.helixAAssembly.level().noCollision(this.helixAAssembly, aabb)) {
+                if (!this.spawnerAAssembly.level().noCollision(this.spawnerAAssembly, aabb)) {
                     return false;
                 }
             }

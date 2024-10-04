@@ -145,6 +145,13 @@ public class EntityTypeRegistry extends AkomiRegistry<EntityType<?>> {
                     .sized(1.3f, 6f)
                     .build("helix_assembly_b")
     );
+    public static final Supplier<EntityType<SpawnerAAssembly>> SPAWNER_ASSEMBLY_A = INSTANCE.register(
+            "spawner_assembly_a",
+            () -> EntityType.Builder.<SpawnerAAssembly>of((type, level) -> new SpawnerAAssembly(type, level, 8, 24), MobCategory.MISC)
+                    .fireImmune()
+                    .sized(1.3f, 4f)
+                    .build("spawner_assembly_a")
+    );
     public EntityTypeRegistry(DeferredRegister<EntityType<?>> register) {
         super(register);
     }

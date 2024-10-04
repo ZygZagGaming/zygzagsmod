@@ -20,6 +20,7 @@ public class TransitionActionRegistry extends CustomAkomiRegistry<TransitionActi
         IridiumGolem.init(); // make the IridiumGolem class load, subclasses don't load unless they're used
         BlazeSentry.init();
         HelixBAssembly.init();
+        SpawnerAAssembly.init();
         super.registerTo(bus);
     }
 
@@ -68,6 +69,16 @@ public class TransitionActionRegistry extends CustomAkomiRegistry<TransitionActi
 
     public static class HelixAAssembly {
         public static final Supplier<TransitionAction> ASSEMBLY_TO_SPIN_BASE = INSTANCE.register("helix_a_assembly_to_spin_base", () -> new TransitionAction(ActionRegistry.HelixAAssembly.ASSEMBLY.get(), ActionRegistry.HelixAAssembly.SPIN_BASE.get(), RawAnimation.begin().thenPlay("animation.Helix_A_spin"), 20, (ticks) -> 1f));
+
+        public static void init(){
+        }
+    }
+
+    public static class SpawnerAAssembly {
+        public static final Supplier<TransitionAction> OPENED_BASE_TO_CLOSED_BASE = INSTANCE.register("spawner_a_opened_to_close_base", () -> new TransitionAction(ActionRegistry.SpawnerAAssembly.OPENED_BASE.get(), ActionRegistry.SpawnerAAssembly.CLOSED_BASE.get(), RawAnimation.begin().thenPlay("animation.spawner_a_opened_to_closed"), 20, (ticks) -> 1f));
+        public static final Supplier<TransitionAction> CLOSED_BASE_TO_OPENED_BASE = INSTANCE.register("spawner_a_closed_to_opened_base", () -> new TransitionAction(ActionRegistry.SpawnerAAssembly.CLOSED_BASE.get(), ActionRegistry.SpawnerAAssembly.OPENED_BASE.get(), RawAnimation.begin().thenPlay("animation.spawner_a_closed_to_opened"), 10, (ticks) -> 1f));
+        public static final Supplier<TransitionAction> OPENED_BASE_TO_SPAWNING_BASE = INSTANCE.register("spawner_a_opened_to_spawning_base", () -> new TransitionAction(ActionRegistry.SpawnerAAssembly.OPENED_BASE.get(), ActionRegistry.SpawnerAAssembly.SPAWNING_BASE.get(), RawAnimation.begin().thenPlay("animation.spawner_a_opened_to_spawning"), 20, (ticks) -> 1f));
+        public static final Supplier<TransitionAction> SPAWNING_BASE_TO_OPENED_BASE = INSTANCE.register("spawner_a_spawning_to_opened_base", () -> new TransitionAction(ActionRegistry.SpawnerAAssembly.SPAWNING_BASE.get(), ActionRegistry.SpawnerAAssembly.OPENED_BASE.get(), RawAnimation.begin().thenPlay("animation.spawner_a_spawning_to_opened"), 20, (ticks) -> 1f));
 
         public static void init(){
         }

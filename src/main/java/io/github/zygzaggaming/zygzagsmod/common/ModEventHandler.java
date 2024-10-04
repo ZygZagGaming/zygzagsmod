@@ -50,6 +50,7 @@ public class ModEventHandler {
         event.put(EntityTypeRegistry.SENTRY_ASSEMBLY_A.get(), SentryAAssembly.createAttributes().build());
         event.put(EntityTypeRegistry.HELIX_ASSEMBLY_A.get(), HelixAAssembly.createAttributes().build());
         event.put(EntityTypeRegistry.HELIX_ASSEMBLY_B.get(), HelixBAssembly.createAttributes().build());
+        event.put(EntityTypeRegistry.SPAWNER_ASSEMBLY_A.get(), SpawnerAAssembly.createAttributes().build());
     }
 
     @SubscribeEvent

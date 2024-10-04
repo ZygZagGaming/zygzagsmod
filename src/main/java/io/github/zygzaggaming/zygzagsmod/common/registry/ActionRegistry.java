@@ -25,6 +25,7 @@ public class ActionRegistry extends CustomAkomiRegistry<Action> {
         SentryAAssembly.init();
         HelixAAssembly.init();
         HelixBAssembly.init();
+        SpawnerAAssembly.init();
         super.registerTo(bus);
     }
 
@@ -93,6 +94,16 @@ public class ActionRegistry extends CustomAkomiRegistry<Action> {
     public static class HelixBAssembly {
         public static final Supplier<Action> SPIN_BASE = INSTANCE.register("helix_b_spin_base", () -> new Action(RawAnimation.begin().thenPlay("animation.Helix_B_spin"), 20, false));
         public static final Supplier<Action> ASSEMBLY = INSTANCE.register("helix_b_assembly", () -> new Action(RawAnimation.begin().thenPlay("animation.Helix_B_assembly"), 20, false));
+
+        public static void init() {
+        }
+    }
+
+    public static class SpawnerAAssembly {
+        public static final Supplier<Action> OPENED_BASE = INSTANCE.register("spawner_a_opened_base", () -> new Action(RawAnimation.begin().thenPlay("animation.spawner_a_opened"), 80, false));
+        public static final Supplier<Action> CLOSED_BASE = INSTANCE.register("spawner_a_closed_base", () -> new Action(RawAnimation.begin().thenPlay("animation.spawner_a_closed"), 10, false));
+        public static final Supplier<Action> SPAWNING_BASE = INSTANCE.register("spawner_a_spawning_base", () -> new Action(RawAnimation.begin().thenPlay("animation.spawner_a_spawning"), 10, false));
+        public static final Supplier<Action> ASSEMBLY = INSTANCE.register("spawner_a_assembly", () -> new Action(RawAnimation.begin().thenPlay("animation.spawner_a_assembly"), 40, false));
 
         public static void init() {
         }

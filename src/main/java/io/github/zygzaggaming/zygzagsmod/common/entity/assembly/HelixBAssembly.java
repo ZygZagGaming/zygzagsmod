@@ -27,6 +27,7 @@ import net.minecraft.world.entity.ai.control.MoveControl;
 import net.minecraft.world.entity.ai.goal.AvoidEntityGoal;
 import net.minecraft.world.entity.ai.goal.Goal;
 import net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal;
+import net.minecraft.world.entity.ai.util.DefaultRandomPos;
 import net.minecraft.world.entity.animal.AbstractGolem;
 import net.minecraft.world.entity.monster.Monster;
 import net.minecraft.world.entity.player.Player;
@@ -252,11 +253,18 @@ public class HelixBAssembly extends Monster implements GeoAnimatable, ActingEnti
         @Override
         public void start() {
             if (this.helixBAssembly.getTarget() != null) {
-                RandomSource randomsource = this.helixBAssembly.getRandom();
-                double d0 = this.helixBAssembly.getX() + (double) ((randomsource.nextFloat() * 2.0F - 1.0F) * 4.0F);
-                double d1 = this.helixBAssembly.getY();
-                double d2 = this.helixBAssembly.getZ() + (double) ((randomsource.nextFloat() * 2.0F - 1.0F) * 4.0F);
-                this.helixBAssembly.getMoveControl().setWantedPosition(d0, d1, d2, 0.01); //minimum speed set
+                double a0 = this.helixBAssembly.distanceToSqr(this.helixBAssembly.getTarget());
+                Vec3 vec3 = DefaultRandomPos.getPosAway(this.helixBAssembly, 16, 7, this.helixBAssembly.getTarget().position());
+                if (a0 >= 30 || vec3 == null) {
+                    RandomSource randomsource = this.helixBAssembly.getRandom();
+                    double d0 = this.helixBAssembly.getX() + (double) ((randomsource.nextFloat() * 2.0F - 1.0F) * 4.0F);
+                    double d1 = this.helixBAssembly.getY();
+                    double d2 = this.helixBAssembly.getZ() + (double) ((randomsource.nextFloat() * 2.0F - 1.0F) * 4.0F);
+                    this.helixBAssembly.getMoveControl().setWantedPosition(d0, d1, d2, 0.01); //minimum speed set
+                }
+                else {
+                    this.helixBAssembly.getMoveControl().setWantedPosition(vec3.x, vec3.y, vec3.z, 0.01); //minimum speed set
+                }
             }
         }
     }
