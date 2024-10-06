@@ -1,5 +1,7 @@
 package io.github.zygzaggaming.zygzagsmod.common.util;
 
+import com.mojang.serialization.Codec;
+import com.mojang.serialization.DataResult;
 import io.github.zygzaggaming.zygzagsmod.common.Config;
 import io.github.zygzaggaming.zygzagsmod.common.Main;
 import io.github.zygzaggaming.zygzagsmod.common.entity.animation.Action;
@@ -30,14 +32,20 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
+import java.util.UUID;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Consumer;
 import java.util.function.Function;
+import java.util.function.Supplier;
+import java.util.stream.Collectors;
 
 import static java.lang.Math.*;
 
 @SuppressWarnings("unused")
 public class GeneralUtil {
+    public static final Codec<UUID> UUID_CODEC = Codec.LONG.listOf(2, 2).comapFlatMap(list -> list.size() == 2 ? DataResult.success(new UUID(list.get(0), list.get(1))) : DataResult.error(() -> "incorrect size for a UUID"), uuid -> List.of(uuid.getMostSignificantBits(), uuid.getLeastSignificantBits()));
+
     public static int getColor(BlockState state) {
         if (state.is(Tags.Blocks.ORES_COPPER)) return Config.copperOreColor;
         else if (state.is(Tags.Blocks.ORES_COAL)) return Config.coalOreColor;
@@ -451,6 +459,20 @@ public class GeneralUtil {
         return new float[]{(float) atan2(y, r), (float) atan2(x, z)};
     }
 
+    public static double[] rectangularToXYRotD(Vec3 xyz) {
+        double x = xyz.x, y = xyz.y, z = xyz.z, r = Math.sqrt(x * x + z * z);
+        if (Math.abs(atan2(y, r)) > Math.PI * 0.5) System.out.println("PROBLEM: xRot " + atan2(y, r) + " is not in in [-pi/2,pi/2] for input " + xyz);
+        return new double[]{atan2(y, r), atan2(x, z)};
+    }
+
+    public static Vec3 xYRotToRectangular(float[] xy) {
+        return new Vec3(sin(xy[0]), 0, cos(xy[0])).scale(cos(xy[1])).add(0, sin(xy[1]), 0);
+    }
+
+    public static Vec3 xYRotToRectangular(double[] xy) {
+        return new Vec3(sin(xy[0]), 0, cos(xy[0])).scale(cos(xy[1])).add(0, sin(xy[1]), 0);
+    }
+
     public static float[] sphericalToRectangular(float rho, float phi, float theta) {
         return new float[]{(float) (rho * cos(theta) * cos(phi)), (float) (rho * sin(theta) * cos(phi)), (float) (rho * sin(phi))};
     }
@@ -654,5 +676,31 @@ public class GeneralUtil {
         return k;
     }
 
+    public static <A, B> Codec<B> mapDefinedCodec(Codec<A> aCodec, Map<A, B> map) {
+        Map<B, A> reverseMap = map.entrySet().stream().collect(Collectors.toMap(Map.Entry::getValue, Map.Entry::getKey));
+        return aCodec.flatXmap(
+                a -> Optional.ofNullable(map.get(a)).map(DataResult::success).orElse(DataResult.error(() -> "Not a possible choice for field")),
+                b -> Optional.ofNullable(reverseMap.get(b)).map(DataResult::success).orElse(DataResult.error(() -> "Not a possible choice for field"))
+        );
+    }
 
+    public static <E extends Enum<E>> Codec<E> enumCodec(Class<E> clazz) {
+        return Codec.STRING.comapFlatMap(name -> optionalToDataResult(catchOptional(() -> Enum.valueOf(clazz, name))), Enum::name);
+    }
+
+    public static <T> Optional<T> catchOptional(Supplier<T> supplier) {
+        try {
+            return Optional.of(supplier.get());
+        } catch (Exception e) {
+            return Optional.empty();
+        }
+    }
+
+    public static <T> DataResult<T> optionalToDataResult(Optional<T> optional) {
+        return optional.map(DataResult::success).orElse(DataResult.error(() -> ""));
+    }
+
+    public static <T> DataResult<T> optionalToDataResult(Optional<T> optional, Supplier<String> msg) {
+        return optional.map(DataResult::success).orElse(DataResult.error(msg));
+    }
 }

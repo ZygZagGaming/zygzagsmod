@@ -1,16 +1,23 @@
 package io.github.zygzaggaming.zygzagsmod.common.entity;
 
+import com.mojang.serialization.DataResult;
 import io.github.zygzaggaming.zygzagsmod.common.entity.animation.ActingEntity;
 import io.github.zygzaggaming.zygzagsmod.common.entity.animation.Action;
 import io.github.zygzaggaming.zygzagsmod.common.entity.animation.Actor;
 import io.github.zygzaggaming.zygzagsmod.common.networking.packet.ClientboundBlazeSentryRotationPacket;
+import io.github.zygzaggaming.zygzagsmod.common.networking.packet.ClientboundRotationSetPacket;
 import io.github.zygzaggaming.zygzagsmod.common.registry.*;
 import io.github.zygzaggaming.zygzagsmod.common.util.*;
 import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.core.BlockPos;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.ListTag;
+import net.minecraft.nbt.NbtOps;
+import net.minecraft.nbt.Tag;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
@@ -24,7 +31,6 @@ import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.goal.Goal;
 import net.minecraft.world.entity.ai.goal.target.HurtByTargetGoal;
 import net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal;
-import net.minecraft.world.entity.animal.AbstractGolem;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.monster.Monster;
 import net.minecraft.world.entity.player.Player;
@@ -32,7 +38,6 @@ import net.minecraft.world.entity.projectile.LargeFireball;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
-import net.minecraft.world.level.pathfinder.PathType;
 import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.Nullable;
 import software.bernie.geckolib.animatable.GeoAnimatable;
@@ -46,7 +51,7 @@ import java.util.function.Predicate;
 
 @ParametersAreNonnullByDefault
 @MethodsReturnNonnullByDefault
-public class BlazeSentry extends Monster implements GeoAnimatable, ActingEntity<BlazeSentry> {
+public class BlazeSentry extends Monster implements GeoAnimatable, ActingEntity<BlazeSentry>, HasRotations<BlazeSentry> {
     protected static final EntityDataAccessor<Actor.State> DATA_ANIMATOR_STATE = SynchedEntityData.defineId(BlazeSentry.class, EntityDataSerializerRegistry.ACTOR_STATE.get());
     protected static final EntityDataAccessor<Optional<UUID>> DATA_TARGET = SynchedEntityData.defineId(BlazeSentry.class, EntityDataSerializers.OPTIONAL_UUID);
     //protected static final EntityDataAccessor<SimplEntityRotation> DATA_ROTATION = SynchedEntityData.defineId(BlazeSentry.class, EntityDataSerializerRegistry.ENTITY_ROTATION.get());
@@ -57,16 +62,18 @@ public class BlazeSentry extends Monster implements GeoAnimatable, ActingEntity<
             new LimitedRotation(0, 0, 0, 0, maxRotationPerTick[0]),
             new LimitedRotation(-0.5f * (float) Math.PI, 0, -0.5f * (float) Math.PI, 0, maxRotationPerTick[1]),
     });
+
+    public WorldlyRotation[] newRotations = {
+            new WorldlyRotation.Static(new StaticRotation.XYZAngles(Angle.ZERO, Angle.ZERO, Angle.ZERO)),
+            new WorldlyRotation.Static(new StaticRotation.XYZAngles(Angle.RIGHT.inverse(), Angle.ZERO, Angle.ZERO))
+    };
+
     int windDownTicks = 0;
     @Nullable
     private LivingEntity cachedTarget;
 
     public BlazeSentry(EntityType<? extends BlazeSentry> type, Level world) {
         super(type, world);
-        setPathfindingMalus(PathType.WATER, -1);
-        setPathfindingMalus(PathType.LAVA, 8);
-        setPathfindingMalus(PathType.DANGER_FIRE, 0);
-        setPathfindingMalus(PathType.DAMAGE_FIRE, 0);
         xpReward = 10;
         setPersistenceRequired();
     }
@@ -118,6 +125,51 @@ public class BlazeSentry extends Monster implements GeoAnimatable, ActingEntity<
             entityData.set(DATA_TARGET, Optional.ofNullable(entity).map(Entity::getUUID));
             windDownTicks = 100;
         }
+
+        if (entity != null) {
+            setRotation(
+                    0,
+                    //new WorldlyRotation.Track(
+                            //getRotation(0).apply(level(), 0),
+                            new WorldlyRotation.Anchored(
+                                    new PositionAnchor.EntityAnchor(
+                                            uuid,
+                                            position(),
+                                            PositionAnchor.EntityAnchor.AnchorPosition.EYES
+                                    ),
+                                    new PositionAnchor.EntityAnchor(
+                                            entity.getUUID(),
+                                            entity.position(),
+                                            PositionAnchor.EntityAnchor.AnchorPosition.EYES
+                                    ),
+                                    Angle.ZERO
+                            )//,
+                            //Angle.RIGHT.scaled(/*0.0625*/1),
+                            //1
+                    //)
+            );
+        }
+    }
+
+    @Override
+    public void addAdditionalSaveData(CompoundTag tag) {
+        super.addAdditionalSaveData(tag);
+        ListTag list = new ListTag();
+        for (int i = 0; i < 2; i++) {
+            DataResult<Tag> result = WorldlyRotation.CODEC.encodeStart(NbtOps.INSTANCE, getRotation(i));
+            if (result.isSuccess()) list.add(result.getOrThrow());
+        }
+        tag.put("rotations", list);
+    }
+
+    @Override
+    public void readAdditionalSaveData(CompoundTag tag) {
+        ListTag list = tag.getList("rotations", 10);
+        for (int i = 0; i < 2; i++) {
+            DataResult<WorldlyRotation> result = WorldlyRotation.CODEC.parse(NbtOps.INSTANCE, list.get(i));
+            if (result.isSuccess()) setRotation(i, result.getOrThrow());
+        }
+        super.readAdditionalSaveData(tag);
     }
 
     private static boolean isReflectedFireball(DamageSource entity) {
@@ -221,13 +273,15 @@ public class BlazeSentry extends Monster implements GeoAnimatable, ActingEntity<
         var target = getTarget();
         //if (target != null && !target.isAlive()) setTarget(null);
         if (windDownTicks > 0) windDownTicks--;
-        if (target == null/* || !target.isAlive()*/) {
-            resetBodyRotation();
-            actor.setNextAction(ActionRegistry.BlazeSentry.IDLE_BASE.get());
-        } else {
-            lookAt(target);
-            if (actor.getCurrentAction().is(ActionRegistry.BlazeSentry.IDLE_BASE)) actor.setNextAction(ActionRegistry.BlazeSentry.AGRO_BASE.get());
-        }
+//        if (target == null/* || !target.isAlive()*/) {
+//            resetBodyRotation();
+//            actor.setNextAction(ActionRegistry.BlazeSentry.IDLE_BASE.get());
+//        } else {
+//            lookAt(target);
+//            if (actor.getCurrentAction().is(ActionRegistry.BlazeSentry.IDLE_BASE)) actor.setNextAction(ActionRegistry.BlazeSentry.AGRO_BASE.get());
+//        }
+
+        for (var rotation : newRotations) rotation.tick(level());
 
         if (level().isClientSide && actor.getTopLevelAction().is(ActionRegistry.BlazeSentry.FLAMETHROW_BASE.get())) {
             Vec3 delta = rotations.get(1).directionVector();
@@ -239,7 +293,7 @@ public class BlazeSentry extends Monster implements GeoAnimatable, ActingEntity<
                 level().addAlwaysVisibleParticle(ParticleTypeRegistry.FLAMETHROW_PARTICLES.get(), x, y, z, delta.x(), delta.y(), delta.z());
             }
         }
-        rotations.tick();
+//        rotations.tick();
 
         setRot(0, 0);
         setYHeadRot(0);
@@ -256,11 +310,11 @@ public class BlazeSentry extends Monster implements GeoAnimatable, ActingEntity<
 
     @Override
     protected void registerGoals() {
-        targetSelector.addGoal(2, new OsuNATGoal<>(this, LivingEntity.class, 1, true, false, (entity) -> (entity instanceof Player player && !player.isCreative() && !player.isSpectator()) || entity instanceof AbstractGolem));
+//        targetSelector.addGoal(2, new OsuNATGoal<>(this, LivingEntity.class, 1, true, false, (entity) -> (entity instanceof Player player && !player.isCreative() && !player.isSpectator()) || entity instanceof AbstractGolem));
         targetSelector.addGoal(3, new HurtByTargetGoal(this));
-        goalSelector.addGoal(1, new FlamethrowGoal());
-        goalSelector.addGoal(2, new FireGoal());
-        goalSelector.addGoal(2, new FireBigGoal());
+//        goalSelector.addGoal(1, new FlamethrowGoal());
+//        goalSelector.addGoal(2, new FireGoal());
+//        goalSelector.addGoal(2, new FireBigGoal());
         //goalSelector.addGoal(3, new RandomLookAroundGoal());
     }
 
@@ -273,6 +327,27 @@ public class BlazeSentry extends Monster implements GeoAnimatable, ActingEntity<
     @Override
     public ItemStack getPickResult() {
         return ItemRegistry.BLAZE_SENTRY_SPAWN_EGG.get().getDefaultInstance();
+    }
+
+    @Override
+    public WorldlyRotation[] getRotations() {
+        return newRotations;
+    }
+
+    @Override
+    @Nullable
+    public WorldlyRotation getRotation(int index) {
+        return index >= 0 && index < newRotations.length ? newRotations[index] : null;
+    }
+
+    @Override
+    public void setRotation(int index, WorldlyRotation rotation) {
+        newRotations[index] = rotation;
+        if (level() instanceof ServerLevel serverLevel) {
+            for (var player : serverLevel.getServer().getPlayerList().getPlayers()) {
+                player.connection.send(new ClientboundRotationSetPacket(uuid, index, rotation));
+            }
+        }
     }
 
     public class FireGoal extends Goal {

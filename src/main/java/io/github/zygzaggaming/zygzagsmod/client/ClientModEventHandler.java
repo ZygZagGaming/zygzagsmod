@@ -1,10 +1,8 @@
 package io.github.zygzaggaming.zygzagsmod.client;
 
-import com.ibm.icu.util.CodePointTrie;
 import io.github.zygzaggaming.zygzagsmod.client.particle.*;
 import io.github.zygzaggaming.zygzagsmod.client.renderer.*;
 import io.github.zygzaggaming.zygzagsmod.common.Main;
-import io.github.zygzaggaming.zygzagsmod.common.particle.SocketParticleOption;
 import io.github.zygzaggaming.zygzagsmod.common.registry.BlockItemEntityRegistry;
 import io.github.zygzaggaming.zygzagsmod.common.registry.EntityTypeRegistry;
 import io.github.zygzaggaming.zygzagsmod.common.registry.ParticleTypeRegistry;
@@ -14,7 +12,6 @@ import net.minecraft.client.renderer.entity.WitherSkeletonRenderer;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
-import net.neoforged.fml.common.Mod;
 import net.neoforged.neoforge.client.event.EntityRenderersEvent;
 import net.neoforged.neoforge.client.event.RegisterParticleProvidersEvent;
 

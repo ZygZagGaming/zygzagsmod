@@ -96,6 +96,7 @@ public class ModEventHandler {
     public static void registerPayloadHandlers(final RegisterPayloadHandlersEvent event) {
         final PayloadRegistrar registrar = event.registrar(Main.MODID);
         registrar.playToClient(ClientboundBlazeSentryRotationPacket.TYPE, ClientboundBlazeSentryRotationPacket.STREAM_CODEC, ClientboundBlazeSentryRotationPacketHandler.getInstance()::handleData);
+        registrar.playToClient(ClientboundRotationSetPacket.TYPE, ClientboundRotationSetPacket.STREAM_CODEC, ClientboundRotationSetPacketHandler.getInstance()::handleData);
         registrar.playToClient(ClientboundSmallRodRotationPacket.TYPE, ClientboundSmallRodRotationPacket.STREAM_CODEC, ClientboundSmallRodRotationPacketHandler.getInstance()::handleData);
         registrar.playToClient(ClientboundSelfOverheatUpdatePacket.TYPE, ClientboundSelfOverheatUpdatePacket.STREAM_CODEC, ClientboundSelfOverheatUpdatePacketHandler.getInstance()::handleData);
         registrar.playToClient(ClientboundSocketHitPacket.TYPE, ClientboundSocketHitPacket.STREAM_CODEC, ClientboundSocketHitPacketHandler.getInstance()::handleData);
