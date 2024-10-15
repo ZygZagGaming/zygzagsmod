@@ -20,14 +20,26 @@ public class Angle {
         return new Angle(value * 2 * PI);
     }
 
+    public static Angle atan2(double y, double x) {
+        return radians(Math.atan2(y, x));
+    }
+    public static Angle acos(double x) {
+        return radians(Math.acos(x));
+    }
+
     private final double radians;
     private Angle(double radians) {
         this.radians = radians;
     }
 
-    public static Angle arccos(double dot) {
-        return radians(acos(dot));
+    public static Angle random() {
+        return random(STRAIGHT.inverse(), STRAIGHT);
     }
+
+    public static Angle random(Angle lowerBound, Angle upperBound) {
+        return lowerBound.plus(upperBound.minus(lowerBound).scaled(Math.random()));
+    }
+
     public double inRadians() {
         return radians;
     }

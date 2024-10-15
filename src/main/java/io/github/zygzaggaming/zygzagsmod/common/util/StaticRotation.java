@@ -8,6 +8,8 @@ import net.minecraft.world.phys.Vec3;
 import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.List;
 
+import static io.github.zygzaggaming.zygzagsmod.common.util.GeneralUtil.quaternionToXYZTaitBryanAngles;
+import static io.github.zygzaggaming.zygzagsmod.common.util.GeneralUtil.sqr;
 import static java.lang.Math.*;
 
 @ParametersAreNonnullByDefault
@@ -46,35 +48,23 @@ public sealed interface StaticRotation permits StaticRotation.XYZAngles, StaticR
     record QuaternionBacked(Quaternion backing) implements StaticRotation {
         static MapCodec<QuaternionBacked> MAP_CODEC = Quaternion.CODEC.xmap(QuaternionBacked::new, QuaternionBacked::backing).fieldOf("value");
 
+        public Angle[] getXYZTaitBryanAngles() {
+            return quaternionToXYZTaitBryanAngles(backing);
+        }
+
         @Override
         public Angle getYRot() { // yRot
-            double a = backing.a(), b = backing.b(), c = backing.c(), d = backing.d();
-            double ap = a - c, bp = b + d, cp = c + a, dp = d - b;
-
-            return Angle.radians(acos(2 * (ap * ap + bp * bp) / (ap * ap + bp * bp + cp * cp + dp * dp) - 1)).minus(Angle.RIGHT);
+            return getXYZTaitBryanAngles()[1];
         }
 
         @Override
         public Angle getZRot() { // zRot
-            double a = backing.a(), b = backing.b(), c = backing.c(), d = backing.d();
-            double ap = a - c, bp = b + d, cp = c + a, dp = d - b;
-
-            Angle angle2p = Angle.radians(acos(2 * (ap * ap + bp * bp) / (ap * ap + bp * bp + cp * cp + dp * dp) - 1));
-            Angle thetaPlus = Angle.radians(atan2(bp, ap)), thetaMinus = Angle.radians(atan2(dp, cp));
-
-            if (abs(angle2p.inRadians()) <= 1e-6 || abs(angle2p.minus(Angle.HALF_RIGHT).inRadians()) <= 1e-6) return thetaPlus.scaled(2);
-            return thetaPlus.plus(thetaMinus);
+            return getXYZTaitBryanAngles()[2];
         }
 
         @Override
         public Angle getXRot() { // xRot
-            double a = backing.a(), b = backing.b(), c = backing.c(), d = backing.d();
-            double ap = a - c, bp = b + d, cp = c + a, dp = d - b;
-
-            Angle angle2p = Angle.radians(acos(2 * (ap * ap + bp * bp) / (ap * ap + bp * bp + cp * cp + dp * dp) - 1));
-            if (abs(angle2p.inRadians()) <= 1e-6 || abs(angle2p.minus(Angle.HALF_RIGHT).inRadians()) <= 1e-6) return Angle.ZERO;
-            Angle thetaPlus = Angle.radians(atan2(bp, ap)), thetaMinus = Angle.radians(atan2(dp, cp));
-            return thetaPlus.minus(thetaMinus);
+            return getXYZTaitBryanAngles()[0];
         }
 
         @Override
@@ -130,25 +120,28 @@ public sealed interface StaticRotation permits StaticRotation.XYZAngles, StaticR
         }
     }
 
-    public static void main(String[] args) {
-        // TESTING
-        Angle xRot = Angle.revolutions(-3 / 32.0).clampRevolutions(-0.25, 0.25), yRot = Angle.revolutions(14 / 32.0).normalized(), zRot = Angle.revolutions(-5 / 32.0).normalizedRevolutions(-0.5, 0.5);
-        Quaternion quaternion = Quaternion.yxz(xRot, yRot, zRot);
-        //ZXY
-        // e'' = z, e' = y, e = x, eps = 1
-        double a = quaternion.a(), b = quaternion.b(), c = quaternion.c(), d = quaternion.d();
-        double ap = a - c, bp = b + d, cp = c + a, dp = d - b;
-
-        Angle angle2p = Angle.radians(acos(2 * (ap * ap + bp * bp) / (ap * ap + bp * bp + cp * cp + dp * dp) - 1));
-        Angle thetaPlus = Angle.radians(atan2(bp, ap)), thetaMinus = Angle.radians(atan2(dp, cp));
-
-        Angle angle1 = thetaPlus.minus(thetaMinus), angle3 = thetaPlus.plus(thetaMinus);
-        Angle angle2 = angle2p.minus(Angle.RIGHT)/*, angle3 = angle3p.inverse()*/;
-
-        System.out.println(angle1 + ", " + angle2 + ", " + angle3);
-        System.out.println(zRot + ", " + xRot + ", " + yRot);
-
-        System.out.println(quaternion);
-        System.out.println(Quaternion.zyx(angle1, angle2, angle3));
-    }
+//    public static void main(String[] args) {
+//        // TESTING
+////        Angle zRot = Angle.random(), yRot = Angle.random(Angle.RIGHT.inverse(), Angle.RIGHT), xRot = Angle.random();
+//        Angle zRot = Angle.radians(-3.1277), yRot = Angle.radians(-0.68417), xRot = Angle.radians(-2.54621);
+//        Quaternion quaternion = Quaternion.zyx(xRot, yRot, zRot);
+//        System.out.println("zRot: " + zRot + ", yRot: " + yRot + ", xRot: " + xRot);
+//        System.out.println(quaternion);
+//
+//        // algorithm used was found at https://www.ncbi.nlm.nih.gov/pmc/articles/PMC9648712/
+//        // e = z, e' = y, e'' = x, eps = -1
+//        // a = q.a, b = q.d, c = q.c, d = -q.b
+//        // a' = a - c, b' = b + d, c' = c + a, d' = d - b
+//        // theta2 = acos(2 * (a'^2 + b'^2) - 1) - pi/2
+//        Angle theta2 = Angle.acos(sqr(quaternion.a() - quaternion.c()) + sqr(quaternion.d() - quaternion.b()) - 1).minus(Angle.RIGHT);
+//        System.out.println(theta2);
+//
+//        // theta1 = atan2(b', a') - atan2(d', c')
+//        Angle theta1 = Angle.atan2(quaternion.d() - quaternion.b(), quaternion.a() - quaternion.c()).minus(Angle.atan2( -quaternion.b() - quaternion.d(), quaternion.c() + quaternion.a()));
+//        System.out.println(theta1);
+//
+//        // theta3 = eps * (atan2(b', a') + atan2(d', c'))
+//        Angle theta3 = Angle.atan2(quaternion.d() - quaternion.b(), quaternion.a() - quaternion.c()).plus(Angle.atan2(-quaternion.b() - quaternion.d(), quaternion.c() + quaternion.a())).inverse();
+//        System.out.println(theta3);
+//    }
 }

@@ -16,6 +16,7 @@ public sealed interface WorldlyRotation permits WorldlyRotation.Anchored, Worldl
 
     enum WorldlyRotationType {
         STATIC(c -> Static.MAP_CODEC),
+
         LERPED(Lerped::mapCodec),
         ANCHORED(c -> Anchored.MAP_CODEC),
         TRACK(Track::mapCodec),

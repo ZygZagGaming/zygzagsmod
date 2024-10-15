@@ -703,4 +703,31 @@ public class GeneralUtil {
     public static <T> DataResult<T> optionalToDataResult(Optional<T> optional, Supplier<String> msg) {
         return optional.map(DataResult::success).orElse(DataResult.error(msg));
     }
+
+    public static double sqr(double d) {
+        return d * d;
+    }
+
+    public static Angle[] quaternionToXYZTaitBryanAngles(Quaternion quaternion) {
+        // algorithm used was found at https://www.ncbi.nlm.nih.gov/pmc/articles/PMC9648712/
+
+        // e = z, e' = y, e'' = x, eps = -1
+        // a = q.a, b = q.d, c = q.c, d = -q.b
+        double a = quaternion.a(), b = quaternion.d(), c = quaternion.c(), d = -quaternion.b();
+
+        // a' = a - c, b' = b + d, c' = c + a, d' = d - b
+        double aP = a - c, bP = b + d, cP = c + a, dP = d - b;
+
+        // theta2 = acos(a'^2 + b'^2 - 1) - pi/2
+        Angle theta2 = Angle.acos(sqr(aP) + sqr(bP) - 1).minus(Angle.RIGHT);
+        if (abs((theta2.inRadians() - PI) % (2 * PI) + PI) < 1e-5) return new Angle[]{Angle.ZERO, theta2, Angle.ZERO};
+
+        // theta1 = atan2(b', a') - atan2(d', c')
+        Angle theta1 = Angle.atan2(bP, aP).minus(Angle.atan2(dP, cP));
+
+        // theta3 = eps * (atan2(b', a') + atan2(d', c'))
+        Angle theta3 = Angle.atan2(bP, aP).plus(Angle.atan2(dP, cP)).inverse();
+
+        return new Angle[]{theta1, theta2, theta3};
+    }
 }
