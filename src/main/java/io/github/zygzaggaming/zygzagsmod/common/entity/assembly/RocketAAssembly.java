@@ -1,4 +1,4 @@
-package io.github.zygzaggaming.zygzagsmod.common.entity;
+package io.github.zygzaggaming.zygzagsmod.common.entity.assembly;
 
 import io.github.zygzaggaming.zygzagsmod.common.entity.animation.ActingEntity;
 import io.github.zygzaggaming.zygzagsmod.common.entity.animation.Action;
@@ -6,13 +6,15 @@ import io.github.zygzaggaming.zygzagsmod.common.entity.animation.Actor;
 import io.github.zygzaggaming.zygzagsmod.common.registry.ActionRegistry;
 import io.github.zygzaggaming.zygzagsmod.common.registry.EntityDataSerializerRegistry;
 import io.github.zygzaggaming.zygzagsmod.common.registry.EntityTypeRegistry;
-import io.github.zygzaggaming.zygzagsmod.common.registry.ParticleTypeRegistry;
-import io.github.zygzaggaming.zygzagsmod.common.util.*;
-import net.minecraft.network.syncher.SynchedEntityData;
+import io.github.zygzaggaming.zygzagsmod.common.util.GeneralUtil;
+import io.github.zygzaggaming.zygzagsmod.common.util.LimitedRotation;
+import io.github.zygzaggaming.zygzagsmod.common.util.Rotation;
+import io.github.zygzaggaming.zygzagsmod.common.util.RotationArray;
 import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
+import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.tags.DamageTypeTags;
 import net.minecraft.util.Mth;
 import net.minecraft.util.RandomSource;
@@ -43,49 +45,49 @@ import java.util.function.Predicate;
 
 @ParametersAreNonnullByDefault
 @MethodsReturnNonnullByDefault
-public class SmallRod extends FlyingMob implements GeoAnimatable, ActingEntity<SmallRod> {
-    private static final EntityDataAccessor<Boolean> DATA_IS_CHARGING = SynchedEntityData.defineId(SmallRod.class, EntityDataSerializers.BOOLEAN);
-    protected static final EntityDataAccessor<Actor.State> DATA_ANIMATOR_STATE = SynchedEntityData.defineId(SmallRod.class, EntityDataSerializerRegistry.ACTOR_STATE.get());
+public class RocketAAssembly extends FlyingMob implements GeoAnimatable, ActingEntity<RocketAAssembly> {
+    private static final EntityDataAccessor<Boolean> DATA_IS_CHARGING = SynchedEntityData.defineId(RocketAAssembly.class, EntityDataSerializers.BOOLEAN);
+    protected static final EntityDataAccessor<Actor.State> DATA_ANIMATOR_STATE = SynchedEntityData.defineId(RocketAAssembly.class, EntityDataSerializerRegistry.ACTOR_STATE.get());
     private final AnimatableInstanceCache instanceCache = GeckoLibUtil.createInstanceCache(this);
-    private final Actor<SmallRod> actor = new Actor<>(this, ActionRegistry.SmallRod.RANDOM_SPIN_BASE.get());
+    private final Actor<RocketAAssembly> actor = new Actor<>(this, ActionRegistry.RocketAAssembly.ASSEMBLY.get());
     public static float[] maxRotationPerTick = {(float) (0.03125 * Math.PI), (float) (0.0166666667 * Math.PI)};
     public RotationArray rotations = new RotationArray(new Rotation[]{
-            new LimitedRotation(0, 0, 0, 0, maxRotationPerTick[0])
+            new LimitedRotation(-0.5f * (float) Math.PI, 0, -0.5f * (float) Math.PI, 0, maxRotationPerTick[1]),
     });
-    protected static final EntityDataAccessor<Optional<UUID>> DATA_TARGET = SynchedEntityData.defineId(SmallRod.class, EntityDataSerializers.OPTIONAL_UUID);
+    protected static final EntityDataAccessor<Optional<UUID>> DATA_TARGET = SynchedEntityData.defineId(RocketAAssembly.class, EntityDataSerializers.OPTIONAL_UUID);
     private @Nullable Player target = null;
     //private @Nullable LivingEntity target = null;
     private int health;
-    private int chargeTime;
+    private int waitTime;
 
-    public SmallRod(Level world) {
-        this(EntityTypeRegistry.SMALL_ROD.get(), world, 3);
+    public RocketAAssembly(Level world) {
+        this(EntityTypeRegistry.ROCKET_ASSEMBLY_A.get(), world, 3, 30);
     }
 
-    public SmallRod(EntityType<? extends SmallRod> type, Level world, int health) {
+    public RocketAAssembly(EntityType<? extends RocketAAssembly> type, Level world, int health, int waitTime) {
         super(type, world);
         this.health = health;
+        this.waitTime = waitTime * 20;
         setPathfindingMalus(PathType.WATER, -1);
         setPathfindingMalus(PathType.LAVA, 8);
-        this.moveControl = new SmallRod.RodMoveControl(this);
+        this.moveControl = new RocketAAssembly.RodMoveControl(this);
     }
 
     @Override
     protected void registerGoals() {
-        this.goalSelector.addGoal(5, new SmallRod.RandomFloatAroundGoal(this));
-        this.goalSelector.addGoal(7, new SmallRod.RodShootFireballGoal(this));
-        targetSelector.addGoal(3, new SmallRod.OsuNATGoal<>(this, LivingEntity.class, 1, true, false, (entity) -> (entity instanceof Player player && !player.isCreative() && !player.isSpectator()) || entity instanceof AbstractGolem));    }
+        this.goalSelector.addGoal(5, new RocketAAssembly.RandomFloatAroundGoal(this));
+        targetSelector.addGoal(3, new RocketAAssembly.OsuNATGoal<>(this, LivingEntity.class, 1, true, false, (entity) -> (entity instanceof Player player && !player.isCreative() && !player.isSpectator()) || entity instanceof AbstractGolem));    }
 
     public static AttributeSupplier.Builder createAttributes() {
-        return Mob.createMobAttributes().add(Attributes.FOLLOW_RANGE, 60.0D).add(Attributes.KNOCKBACK_RESISTANCE, 1.0D).add(Attributes.MAX_HEALTH, 100);
+        return Mob.createMobAttributes().add(Attributes.FOLLOW_RANGE, 80.0D).add(Attributes.KNOCKBACK_RESISTANCE, 1.0D).add(Attributes.MAX_HEALTH, 1500).add(Attributes.MOVEMENT_SPEED, 1.5).add(Attributes.ATTACK_DAMAGE, 5.0);
     }
 
     @Override
     protected void defineSynchedData(SynchedEntityData.Builder builder) {
         super.defineSynchedData(builder);
         builder.define(DATA_ANIMATOR_STATE, new Actor.State(
-                ActionRegistry.SmallRod.RANDOM_SPIN_BASE.get(),
-                ActionRegistry.SmallRod.RANDOM_SPIN_BASE.get(),
+                ActionRegistry.RocketAAssembly.ASSEMBLY.get(),
+                ActionRegistry.RocketAAssembly.ASSEMBLY.get(),
                 null,
                 99999999,
                 20,
@@ -96,18 +98,23 @@ public class SmallRod extends FlyingMob implements GeoAnimatable, ActingEntity<S
     }
 
     @Override
+    protected boolean shouldDespawnInPeaceful() {
+        return true;
+    }
+
+    @Override
     public boolean isIdle() {
         return getTarget() == null;
     }
 
     @Override
-    public Actor<SmallRod> getActor() {
+    public Actor<RocketAAssembly> getActor() {
         return actor;
     }
 
     @Override
     public @Nullable Action getActionChange() {
-        if (getTarget() == null) return ActionRegistry.SmallRod.RANDOM_SPIN_BASE.get();
+        if (getTarget() == null) return ActionRegistry.RocketAAssembly.ASSEMBLY.get();
         else return null;
     }
 
@@ -143,7 +150,7 @@ public class SmallRod extends FlyingMob implements GeoAnimatable, ActingEntity<S
             else if (isReflectedFireball(source)) health -=3;
             else health--;
 
-            if (health <= 0) super.hurt(source, 1000);
+            if (health <= 0) super.hurt(source, 1500);
         }
         return amount > 2;
     }
@@ -158,9 +165,14 @@ public class SmallRod extends FlyingMob implements GeoAnimatable, ActingEntity<S
         return instanceCache;
     }
 
-    public void setCharging(boolean p_32759_) {
-        this.entityData.set(DATA_IS_CHARGING, p_32759_);
+    public void resetBodyRotation() {
+        rotations.get(0).set(-(float) Math.PI, 0);
     }
+
+    public void lookAt(LivingEntity target) {
+        rotations.get(0).set(GeneralUtil.rectangularToXYRot(target.getBoundingBox().getCenter().subtract(getEyePosition()))); // look towards target
+    }
+
 
     @Override
     public double getTick(Object o) {
@@ -198,137 +210,70 @@ public class SmallRod extends FlyingMob implements GeoAnimatable, ActingEntity<S
         super.addAdditionalSaveData(p_32744_);
     }
 
-    public void resetBodyRotation() {
-        rotations.get(0).set(0, 0);
-    }
-
-    public void lookAt(LivingEntity target) {
-        rotations.get(0).set(GeneralUtil.rectangularToXYRot(target.getEyePosition().subtract(getEyePosition()))); // rotate body towards target
-    }
-
     @Override
     public boolean isPickable() {
         return true;
     }
 
-    @Override
-    public boolean doesIdleActions() {
-        return false;
-    }
-
+    private int actorTickCount = 0;
+    private int fuseTimer = 30;
     @Override
     public void tick() {
         var target = getTarget();
-        if (target == null /*|| chargeTime < 60 || chargeTime > 110 : breaks lookAT method for some reason*/) {
+        if (target == null/* || !target.isAlive()*/) {
             resetBodyRotation();
-            actor.setNextAction(ActionRegistry.SmallRod.RANDOM_SPIN_BASE.get());
         } else {
             lookAt(target);
-            if (actor.getCurrentAction().is(ActionRegistry.SmallRod.RANDOM_SPIN_BASE)) actor.setNextAction(ActionRegistry.SmallRod.IDLE_BASE.get());
+        }
+
+        if (actorTickCount <= 9) {
+            actor.setNextAction(ActionRegistry.RocketAAssembly.ASSEMBLY.get());
+            actorTickCount++;
+        }
+        else {
+            if (getTarget() != null) waitTime--;
+            if (!actor.isTransitioning() && waitTime >= 0)
+                actor.setNextAction(ActionRegistry.RocketAAssembly.IDLE_BASE.get());
+            else if (!actor.isTransitioning() && waitTime <= 0) {
+                actor.setNextAction(ActionRegistry.RocketAAssembly.FLY_BASE.get());
+                fuseTimer--;
+                if (getBoundingBox().inflate(0.2).intersects(getTarget().getBoundingBox())) {
+                    level().explode(this,
+                            getX(), getY(), getZ(),
+                            5f, Level.ExplosionInteraction.MOB);
+                    discard();
+                }
+            }
+        }
+
+        if (actor.isTransitioning() && health > 5){
+            health = 5;
         }
 
         rotations.tick();
-
-        setRot(0, 0);
-        setYHeadRot(0);
-        setYBodyRot(0);
         setNoGravity(true);
         super.tick();
         actor.tick();
     }
 
-    @Override
-    protected boolean shouldDespawnInPeaceful() {
-        return true;
-    }
-
-    static class RodShootFireballGoal extends Goal {
-        public static final EnumSet<Goal.Flag> flags = EnumSet.of(Flag.LOOK, Flag.TARGET);
-        private final SmallRod smallRod;
-
-        public RodShootFireballGoal(SmallRod rod) {
-            this.smallRod = rod;
-        }
-
-        @Override
-        public boolean canUse() {
-            return this.smallRod.getTarget() != null;
-        }
-
-        @Override
-        public EnumSet<Flag> getFlags() {
-            return flags;
-        }
-
-        @Override
-        public void start() {
-            this.smallRod.chargeTime = 0;
-            this.smallRod.actor.setNextAction(ActionRegistry.SmallRod.RANDOM_SPIN_BASE.get());
-        }
-
-        @Override
-        public void stop() {
-            this.smallRod.setCharging(false);
-            this.smallRod.actor.setNextAction(ActionRegistry.SmallRod.RANDOM_SPIN_BASE.get());
-        }
-
-        @Override
-        public boolean requiresUpdateEveryTick() {
-            return true;
-        }
-
-        @Override
-        public void tick() {
-            LivingEntity livingentity = this.smallRod.getTarget();
-            if (livingentity != null) {
-                if (livingentity.distanceToSqr(this.smallRod) < 4096.0 && this.smallRod.getTarget() != null) {
-                    Level level = this.smallRod.level();
-                    this.smallRod.chargeTime++;
-                    if (this.smallRod.chargeTime == 10 && !this.smallRod.isSilent()) {
-                        level.levelEvent(null, 1015, this.smallRod.blockPosition(), 0);
-                    }
-
-//                    if (this.chargeTime == 60) {
-//                        this.smallRod.lookAt(livingentity);
-//                    }
-
-                    if (this.smallRod.chargeTime == 100) {
-                        double d1 = 4.0;
-                        Vec3 vec3 = this.smallRod.rotations.get(0).directionVector();
-                        if (!this.smallRod.isSilent()) {
-                            level.levelEvent(null, 1016, this.smallRod.blockPosition(), 0);
-                        }
-                        SmallMagmaticFireball fireball = new SmallMagmaticFireball(level, this.smallRod, new Vec3(vec3.x, vec3.y, vec3.z));
-                        fireball.setPos(this.smallRod.getX(), this.smallRod.getY(), fireball.getZ() + vec3.z);
-                        level.addFreshEntity(fireball);
-                        this.smallRod.chargeTime = -120;
-                    }
-                } else if (this.smallRod.chargeTime > 0) {
-                    this.smallRod.chargeTime--;
-                }
-
-                this.smallRod.setCharging(this.smallRod.chargeTime > 10);
-            }
-        }
-    }
-
     static class RandomFloatAroundGoal extends Goal {
-        private final SmallRod smallRod;
+        private final RocketAAssembly rocketAAssembly;
+        private boolean moved = false;
 
-        public RandomFloatAroundGoal(SmallRod p_32783_) {
-            this.smallRod = p_32783_;
-            this.setFlags(EnumSet.of(Goal.Flag.MOVE));
+        public RandomFloatAroundGoal(RocketAAssembly p_32783_) {
+            this.rocketAAssembly = p_32783_;
+            this.setFlags(EnumSet.of(Flag.MOVE));
         }
 
         @Override
         public boolean canUse() {
-            MoveControl movecontrol = this.smallRod.getMoveControl();
+            MoveControl movecontrol = this.rocketAAssembly.getMoveControl();
             if (!movecontrol.hasWanted()) {
                 return true;
             } else {
-                double d0 = movecontrol.getWantedX() - this.smallRod.getX();
-                double d1 = movecontrol.getWantedY() - this.smallRod.getY();
-                double d2 = movecontrol.getWantedZ() - this.smallRod.getZ();
+                double d0 = movecontrol.getWantedX() - this.rocketAAssembly.getX();
+                double d1 = movecontrol.getWantedY() - this.rocketAAssembly.getY();
+                double d2 = movecontrol.getWantedZ() - this.rocketAAssembly.getZ();
                 double d3 = d0 * d0 + d1 * d1 + d2 * d2;
                 return d3 < 1.0 || d3 > 3600.0;
             }
@@ -341,12 +286,19 @@ public class SmallRod extends FlyingMob implements GeoAnimatable, ActingEntity<S
 
         @Override
         public void start() {
-            if (this.smallRod.getTarget() != null) {
-                RandomSource randomsource = this.smallRod.getRandom();
-                double d0 = this.smallRod.getX() + (double) ((randomsource.nextFloat() * 2.0F - 1.0F) * 4.0F);
-                double d1 = this.smallRod.getY() + (double) ((randomsource.nextFloat() * 2.0F - 1.0F) * 1.05F);
-                double d2 = this.smallRod.getZ() + (double) ((randomsource.nextFloat() * 2.0F - 1.0F) * 4.0F);
-                this.smallRod.getMoveControl().setWantedPosition(d0, d1, d2, 0.01); //minimum speed set
+            if (this.rocketAAssembly.getTarget() != null && this.rocketAAssembly.waitTime > 0) {
+                    RandomSource randomsource = this.rocketAAssembly.getRandom();
+                    double d0 = this.rocketAAssembly.getX() + (double) ((randomsource.nextFloat() * 2.0F - 1.0F) * 4.0F);
+                    double d1 = this.rocketAAssembly.getY();
+                    double d2 = this.rocketAAssembly.getZ() + (double) ((randomsource.nextFloat() * 2.0F - 1.0F) * 4.0F);
+                    this.rocketAAssembly.getMoveControl().setWantedPosition(d0, d1, d2, 0.01); //minimum speed set
+            }
+            else if (this.rocketAAssembly.getTarget() != null && this.rocketAAssembly.waitTime < -25 && !this.rocketAAssembly.actor.isTransitioning())
+            {
+
+                Vec3 angle = this.rocketAAssembly.rotations.get(0).directionVector();
+                    this.rocketAAssembly.setDeltaMovement(angle.scale(2.5));
+                    this.rocketAAssembly.move(MoverType.SELF, this.rocketAAssembly.getDeltaMovement());
             }
         }
     }
@@ -380,37 +332,37 @@ public class SmallRod extends FlyingMob implements GeoAnimatable, ActingEntity<S
     }
 
     static class RodMoveControl extends MoveControl {
-        private final SmallRod smallRod;
+        private final RocketAAssembly rocketAAssembly;
         private int floatDuration;
 
-        public RodMoveControl(SmallRod p_32768_) {
+        public RodMoveControl(RocketAAssembly p_32768_) {
             super(p_32768_);
-            this.smallRod = p_32768_;
+            this.rocketAAssembly = p_32768_;
         }
 
         @Override
         public void tick() {
-            if (this.operation == MoveControl.Operation.MOVE_TO) {
+            if (this.operation == Operation.MOVE_TO) {
                 if (this.floatDuration-- <= 0) {
-                    this.floatDuration = this.floatDuration + this.smallRod.getRandom().nextInt(5) + 2;
-                    Vec3 vec3 = new Vec3(this.wantedX - this.smallRod.getX(), this.wantedY - this.smallRod.getY(), this.wantedZ - this.smallRod.getZ());
+                    this.floatDuration = this.floatDuration + this.rocketAAssembly.getRandom().nextInt(5) + 2;
+                    Vec3 vec3 = new Vec3(this.wantedX - this.rocketAAssembly.getX(), this.wantedY - this.rocketAAssembly.getY(), this.wantedZ - this.rocketAAssembly.getZ());
                     double d0 = vec3.length();
                     vec3 = vec3.normalize();
                     if (this.canReach(vec3, Mth.ceil(d0))) {
-                        this.smallRod.setDeltaMovement(this.smallRod.getDeltaMovement().add(vec3.scale(0.1)));
+                        this.rocketAAssembly.setDeltaMovement(this.rocketAAssembly.getDeltaMovement().add(vec3.scale(0.1)));
                     } else {
-                        this.operation = MoveControl.Operation.WAIT;
+                        this.operation = Operation.WAIT;
                     }
                 }
             }
         }
 
         private boolean canReach(Vec3 p_32771_, int p_32772_) {
-            AABB aabb = this.smallRod.getBoundingBox();
+            AABB aabb = this.rocketAAssembly.getBoundingBox();
 
             for (int i = 1; i < p_32772_; i++) {
                 aabb = aabb.move(p_32771_);
-                if (!this.smallRod.level().noCollision(this.smallRod, aabb)) {
+                if (!this.rocketAAssembly.level().noCollision(this.rocketAAssembly, aabb)) {
                     return false;
                 }
             }

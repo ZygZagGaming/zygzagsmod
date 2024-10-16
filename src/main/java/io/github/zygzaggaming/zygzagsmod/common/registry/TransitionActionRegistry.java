@@ -21,6 +21,7 @@ public class TransitionActionRegistry extends CustomAkomiRegistry<TransitionActi
         BlazeSentry.init();
         HelixBAssembly.init();
         SpawnerAAssembly.init();
+        RocketAAssembly.init();
         super.registerTo(bus);
     }
 
@@ -81,6 +82,13 @@ public class TransitionActionRegistry extends CustomAkomiRegistry<TransitionActi
         public static final Supplier<TransitionAction> SPAWNING_BASE_TO_OPENED_BASE = INSTANCE.register("spawner_a_spawning_to_opened_base", () -> new TransitionAction(ActionRegistry.SpawnerAAssembly.SPAWNING_BASE.get(), ActionRegistry.SpawnerAAssembly.OPENED_BASE.get(), RawAnimation.begin().thenPlay("animation.spawner_a_spawning_to_opened"), 20, (ticks) -> 1f));
 
         public static void init(){
+        }
+    }
+
+    public static class RocketAAssembly {
+        public static final Supplier<TransitionAction> IDLE_BASE_TO_FLY_BASE = INSTANCE.register("rocket_a_idle_to_fly_base", () -> new TransitionAction(ActionRegistry.RocketAAssembly.IDLE_BASE.get(), ActionRegistry.RocketAAssembly.FLY_BASE.get(), RawAnimation.begin().thenPlay("animation.rocket_a_idle_to_shooting"), 84, (ticks) -> 1f));
+
+        public static void init() {
         }
     }
 

@@ -61,7 +61,7 @@ public class ShurikenAssembly extends FlyingMob implements GeoAnimatable, Acting
     private boolean isFast = false;
     private int health;
 
-    private final Actor<ShurikenAssembly> actor = new Actor<>(this, ActionRegistry.ShurikenAssembly.SPIN_UP.get());
+    private final Actor<ShurikenAssembly> actor = new Actor<>(this, ActionRegistry.ShurikenAssembly.ASSEMBLY.get());
     protected static final EntityDataAccessor<Actor.State> DATA_ANIMATOR_STATE = SynchedEntityData.defineId(ShurikenAssembly.class, EntityDataSerializerRegistry.ACTOR_STATE.get());
     protected static final EntityDataAccessor<Optional<UUID>> DATA_TARGET = SynchedEntityData.defineId(ShurikenAssembly.class, EntityDataSerializers.OPTIONAL_UUID);
     private final AnimatableInstanceCache instanceCache = GeckoLibUtil.createInstanceCache(this);
@@ -98,11 +98,11 @@ public class ShurikenAssembly extends FlyingMob implements GeoAnimatable, Acting
     protected void defineSynchedData(SynchedEntityData.Builder builder) {
         super.defineSynchedData(builder);
         builder.define(DATA_ANIMATOR_STATE, new Actor.State(
-                ActionRegistry.ShurikenAssembly.SPIN_UP.get(),
-                ActionRegistry.ShurikenAssembly.SPIN_UP.get(),
+                ActionRegistry.ShurikenAssembly.ASSEMBLY.get(),
+                ActionRegistry.ShurikenAssembly.ASSEMBLY.get(),
                 null,
                 99999999,
-                20,
+                40,
                 new LinkedList<>()
         ));
         builder.define(DATA_TARGET, Optional.empty());
@@ -134,16 +134,22 @@ public class ShurikenAssembly extends FlyingMob implements GeoAnimatable, Acting
         rotations.get(0).set(GeneralUtil.rectangularToXYRot(target.getEyePosition().subtract(getEyePosition()))); // rotate body towards target
     }
 
+    private int actorTickCount = 0;
     @Override
     public void tick() {
         var target = getTarget();
+        if (actorTickCount <= 20) {
+            actor.setNextAction(ActionRegistry.ShurikenAssembly.ASSEMBLY.get());
+            actorTickCount++;
+        }
+        else
+            actor.setNextAction(ActionRegistry.ShurikenAssembly.SPIN_UP.get());
+
         if (target == null /*|| chargeTime < 60 || chargeTime > 110 : breaks lookAT method for some reason*/) {
             //resetBodyRotation();
         } else {
             //lookAt(target);
         }
-        actor.setNextAction(ActionRegistry.ShurikenAssembly.SPIN_UP.get());
-
         //rotations.tick();
 
         super.tick();
@@ -227,7 +233,7 @@ public class ShurikenAssembly extends FlyingMob implements GeoAnimatable, Acting
 
     @Override
     public @org.jetbrains.annotations.Nullable Action getActionChange() {
-        if (getTarget() == null) return ActionRegistry.ShurikenAssembly.SPIN_UP.get();
+        if (getTarget() == null) return ActionRegistry.ShurikenAssembly.ASSEMBLY.get();
         else return null;
     }
 

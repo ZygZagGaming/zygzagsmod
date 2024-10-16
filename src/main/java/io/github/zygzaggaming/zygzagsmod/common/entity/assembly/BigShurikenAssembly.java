@@ -43,7 +43,7 @@ import java.util.List;
 @ParametersAreNonnullByDefault
 @MethodsReturnNonnullByDefault
 public class BigShurikenAssembly extends Entity implements GeoEntity {
-    public static final RawAnimation IDLE = RawAnimation.begin().thenLoop("animation.shuriken_c.spin"),
+    public static final RawAnimation IDLE = RawAnimation.begin().thenPlay("animation.shuriken_c.assembly").thenLoop("animation.shuriken_c.spin"),
             SPIN_UP = RawAnimation.begin().thenLoop("animation.shuriken_c.spin");
     public static final ResourceKey<DamageType> DAMAGE_TYPE = ResourceKey.create(Registries.DAMAGE_TYPE, ResourceLocation.fromNamespaceAndPath(Main.MODID, "big_shuriken_assembly"));
 

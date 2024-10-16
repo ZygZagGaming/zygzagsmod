@@ -51,6 +51,7 @@ public class ModEventHandler {
         event.put(EntityTypeRegistry.HELIX_ASSEMBLY_A.get(), HelixAAssembly.createAttributes().build());
         event.put(EntityTypeRegistry.HELIX_ASSEMBLY_B.get(), HelixBAssembly.createAttributes().build());
         event.put(EntityTypeRegistry.SPAWNER_ASSEMBLY_A.get(), SpawnerAAssembly.createAttributes().build());
+        event.put(EntityTypeRegistry.ROCKET_ASSEMBLY_A.get(), RocketAAssembly.createAttributes().build());
     }
 
     @SubscribeEvent

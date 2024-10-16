@@ -1,0 +1,660 @@
+{
+	"format_version": "1.12.0",
+	"minecraft:geometry": [
+		{
+			"description": {
+				"identifier": "geometry.unknown",
+				"texture_width": 32,
+				"texture_height": 32,
+				"visible_bounds_width": 4,
+				"visible_bounds_height": 7,
+				"visible_bounds_offset": [0, 2.5, 0]
+			},
+			"bones": [
+				{
+					"name": "body2",
+					"pivot": [0, 25, 0],
+					"rotation": [180, 0, 0]
+				},
+				{
+					"name": "body",
+					"parent": "body2",
+					"pivot": [0, 25, 0],
+					"rotation": [180, 0, 0]
+				},
+				{
+					"name": "Rod_Tip",
+					"parent": "body",
+					"pivot": [0, -20, 0]
+				},
+				{
+					"name": "Rod_T_2",
+					"parent": "Rod_Tip",
+					"pivot": [0, -20, 0],
+					"rotation": [0, 180, 0]
+				},
+				{
+					"name": "r1",
+					"parent": "Rod_T_2",
+					"pivot": [-4.88565, 60.08503, 0.9763],
+					"cubes": [
+						{"origin": [-7, 51, -1], "size": [4, 16, 4], "pivot": [0, 59, 0], "rotation": [-12.5, 0, 15], "uv": [0, 0], "mirror": true}
+					]
+				},
+				{
+					"name": "r2",
+					"parent": "Rod_T_2",
+					"pivot": [-11.63411, 40.78464, -3.90518],
+					"cubes": [
+						{"origin": [-13.63411, 32.78464, -7.90518], "size": [4, 16, 4], "pivot": [-11.63411, 40.78464, -3.90518], "rotation": [-24.91643, -2.11089, 20.46641], "uv": [0, 0], "mirror": true}
+					]
+				},
+				{
+					"name": "r3",
+					"parent": "Rod_T_2",
+					"pivot": [-17.15424, 23.00543, -13.49772],
+					"cubes": [
+						{"origin": [-19.15424, 15.00543, -18.49772], "size": [4, 16, 4], "pivot": [-17.15424, 23.00543, -13.49772], "rotation": [-37.78381, -14.24, 17.39545], "uv": [0, 0]}
+					]
+				},
+				{
+					"name": "vc1",
+					"parent": "Rod_T_2",
+					"pivot": [-7, 54, -1.5],
+					"rotation": [80, 65, -90],
+					"cubes": [
+						{"origin": [-10, 54, -1], "size": [3, 7, 0], "pivot": [-9, 55, 0], "rotation": [-12.5, 0, 0], "uv": [20, 9]}
+					]
+				},
+				{
+					"name": "vc2",
+					"parent": "Rod_T_2",
+					"pivot": [-13, 37, -9],
+					"rotation": [66.27436, 59.13402, -92.77122],
+					"cubes": [
+						{"origin": [-16, 37, -9], "size": [3, 7, 0], "uv": [23, 9]}
+					]
+				},
+				{
+					"name": "chain1",
+					"parent": "Rod_T_2",
+					"pivot": [0, 54, -1],
+					"rotation": [0, 0, 90],
+					"cubes": [
+						{"origin": [-2, 54, 0], "size": [3, 7, 0], "uv": [20, 2]}
+					]
+				},
+				{
+					"name": "chain3",
+					"parent": "Rod_T_2",
+					"pivot": [-11, 38, -8],
+					"rotation": [-30, 0, 90],
+					"cubes": [
+						{"origin": [-13, 39, -6.5], "size": [3, 13, 0], "uv": [26, 0]}
+					]
+				},
+				{
+					"name": "Rod_T_1",
+					"parent": "Rod_Tip",
+					"pivot": [0, -20, 0]
+				},
+				{
+					"name": "r4",
+					"parent": "Rod_T_1",
+					"pivot": [0, 59, 0],
+					"cubes": [
+						{"origin": [-7, 51, -1], "size": [4, 16, 4], "pivot": [0, 59, 0], "rotation": [-12.5, 0, 15], "uv": [0, 0], "mirror": true}
+					]
+				},
+				{
+					"name": "r6",
+					"parent": "Rod_T_1",
+					"pivot": [-17.15424, 23.00543, -13.49772],
+					"cubes": [
+						{"origin": [-19.15424, 15.00543, -18.49772], "size": [4, 16, 4], "pivot": [-17.15424, 23.00543, -13.49772], "rotation": [-37.78381, -14.24, 17.39545], "uv": [0, 0]}
+					]
+				},
+				{
+					"name": "r5",
+					"parent": "Rod_T_1",
+					"pivot": [-11.63411, 40.78464, -3.90518],
+					"cubes": [
+						{"origin": [-13.63411, 32.78464, -7.90518], "size": [4, 16, 4], "pivot": [-11.63411, 40.78464, -3.90518], "rotation": [-24.91643, -2.11089, 20.46641], "uv": [0, 0], "mirror": true}
+					]
+				},
+				{
+					"name": "vc3",
+					"parent": "Rod_T_1",
+					"pivot": [-7, 54, -1.5],
+					"rotation": [80, 65, -90],
+					"cubes": [
+						{"origin": [-10, 54, -1], "size": [3, 7, 0], "pivot": [-9, 55, 0], "rotation": [-12.5, 0, 0], "uv": [20, 9]}
+					]
+				},
+				{
+					"name": "vc4",
+					"parent": "Rod_T_1",
+					"pivot": [-13, 37, -9],
+					"rotation": [66.27436, 59.13402, -92.77122],
+					"cubes": [
+						{"origin": [-16, 37, -9], "size": [3, 7, 0], "uv": [20, 9]}
+					]
+				},
+				{
+					"name": "chain2",
+					"parent": "Rod_T_1",
+					"pivot": [0, 54, -1],
+					"rotation": [0, 0, 90],
+					"cubes": [
+						{"origin": [-2, 54, 0], "size": [3, 7, 0], "uv": [20, 2]}
+					]
+				},
+				{
+					"name": "chain4",
+					"parent": "Rod_T_1",
+					"pivot": [-11, 38, -8],
+					"rotation": [-30, 0, 90],
+					"cubes": [
+						{"origin": [-13, 39, -6.5], "size": [3, 13, 0], "uv": [26, 0]}
+					]
+				},
+				{
+					"name": "Rod_Helix",
+					"parent": "body",
+					"pivot": [0, -20, 0]
+				},
+				{
+					"name": "Rods_Mirror",
+					"parent": "Rod_Helix",
+					"pivot": [0, -20, 4],
+					"rotation": [0, 180, 0]
+				},
+				{
+					"name": "rod4",
+					"parent": "Rods_Mirror",
+					"pivot": [5.27853, 7.44868, 10.22151],
+					"cubes": [
+						{"origin": [-2, -2, 14], "size": [4, 16, 4], "pivot": [0, -20, 4], "rotation": [12.2127, 2.68507, 10.2873], "uv": [0, 0]}
+					]
+				},
+				{
+					"name": "rod6",
+					"parent": "Rods_Mirror",
+					"pivot": [3.49278, 25.62831, 2.03593],
+					"cubes": [
+						{"origin": [7, 16, 11], "size": [4, 16, 4], "pivot": [0, -20, 4], "rotation": [15.54845, -7.24305, -7.37647], "uv": [0, 0]}
+					]
+				},
+				{
+					"name": "rod1",
+					"parent": "Rods_Mirror",
+					"pivot": [-2.48181, -10.31286, 12],
+					"rotation": [0, 180, 0],
+					"cubes": [
+						{"origin": [-0.96362, -20, 10], "size": [4, 16, 4], "pivot": [-4.96362, -20, 20], "rotation": [0, 0, -22.5], "uv": [0, 0]}
+					]
+				},
+				{
+					"name": "vc7",
+					"parent": "Rods_Mirror",
+					"pivot": [0, 22, 0],
+					"rotation": [-180, 50, 0],
+					"cubes": [
+						{"origin": [-14, 24, -6], "size": [3, 9, 0], "pivot": [-12, 24, -7], "rotation": [-43.21336, 7.20661, 21.45706], "uv": [20, 9]}
+					]
+				},
+				{
+					"name": "vc8",
+					"parent": "Rods_Mirror",
+					"pivot": [-4, 3, 11],
+					"rotation": [147.05419, -72.03614, 34.26563],
+					"cubes": [
+						{"origin": [-12.5, 5, 11], "size": [3, 9, 0], "pivot": [-11, 5, 10], "rotation": [-43.21336, 7.20661, 21.45706], "uv": [20, 9]}
+					]
+				},
+				{
+					"name": "chain6",
+					"parent": "Rods_Mirror",
+					"pivot": [0, 6, 7],
+					"rotation": [-30, 0, 90],
+					"cubes": [
+						{"origin": [-2, 6, 7.75], "size": [3, 7, 0], "uv": [20, 2]}
+					]
+				},
+				{
+					"name": "Rods",
+					"parent": "Rod_Helix",
+					"pivot": [0, -20, -4]
+				},
+				{
+					"name": "rod3",
+					"parent": "Rods",
+					"pivot": [-2.48181, -10.31286, 4],
+					"rotation": [0, 180, 0],
+					"cubes": [
+						{"origin": [-0.96362, -20, 2], "size": [4, 16, 4], "pivot": [-4.96362, -20, 12], "rotation": [0, 0, -22.5], "uv": [0, 0]}
+					]
+				},
+				{
+					"name": "rod5",
+					"parent": "Rods",
+					"pivot": [3.49278, 25.62831, -5.96407],
+					"cubes": [
+						{"origin": [7, 16, 3], "size": [4, 16, 4], "pivot": [0, -20, -4], "rotation": [15.54845, -7.24305, -7.37647], "uv": [0, 0]}
+					]
+				},
+				{
+					"name": "rod2",
+					"parent": "Rods",
+					"pivot": [5.27853, 7.44868, 2.22151],
+					"cubes": [
+						{"origin": [-2, -2, 6], "size": [4, 16, 4], "pivot": [0, -20, -4], "rotation": [12.2127, 2.68507, 10.2873], "uv": [0, 0]}
+					]
+				},
+				{
+					"name": "vc5",
+					"parent": "Rods",
+					"pivot": [0, 22, 0],
+					"rotation": [-180, 50, 0],
+					"cubes": [
+						{"origin": [-8, 24, 0], "size": [3, 9, 0], "pivot": [-6, 24, -1], "rotation": [-43.21336, 7.20661, 21.45706], "uv": [20, 9]}
+					]
+				},
+				{
+					"name": "vc6",
+					"parent": "Rods",
+					"pivot": [-4, 3, 3],
+					"rotation": [147.05419, -72.03614, 34.26563],
+					"cubes": [
+						{"origin": [-12.5, 5, 3], "size": [3, 9, 0], "pivot": [-11, 5, 2], "rotation": [-43.21336, 7.20661, 21.45706], "uv": [20, 9]}
+					]
+				},
+				{
+					"name": "chain5",
+					"parent": "Rods",
+					"pivot": [0, 6, -1],
+					"rotation": [-30, 0, 90],
+					"cubes": [
+						{"origin": [-2, 6, 0], "size": [3, 7, 0], "uv": [20, 2]}
+					]
+				},
+				{
+					"name": "Ring1",
+					"parent": "body",
+					"pivot": [0, -1, 0]
+				},
+				{
+					"name": "Ring_Set_17",
+					"parent": "Ring1",
+					"pivot": [0, -1, 0],
+					"cubes": [
+						{"origin": [15, -1, 0], "size": [3, 0, 1], "pivot": [0, -1, 0], "rotation": [0, 3, 0], "uv": [25, 1]},
+						{"origin": [15, -1, 0], "size": [3, 0, 1], "pivot": [0, -1, 0], "rotation": [0, 6, 0], "uv": [25, 2]},
+						{"origin": [15, -1, 0], "size": [3, 0, 1], "pivot": [0, -1, 0], "rotation": [0, 9, 0], "uv": [25, 3]},
+						{"origin": [15, -1, 0], "size": [3, 0, 1], "pivot": [0, -1, 0], "rotation": [0, 12, 0], "uv": [25, 4]},
+						{"origin": [15, -1, 0], "size": [3, 0, 1], "pivot": [0, -1, 0], "rotation": [0, 15, 0], "uv": [25, 5]},
+						{"origin": [15, -1, 0], "size": [3, 0, 1], "pivot": [0, -1, 0], "rotation": [0, 18, 0], "uv": [25, 6]},
+						{"origin": [15, -1, 0], "size": [3, 0, 1], "pivot": [0, -1, 0], "rotation": [0, 21, 0], "uv": [25, 7]},
+						{"origin": [15, -1, 0], "size": [3, 0, 1], "pivot": [0, -1, 0], "rotation": [0, 24, 0], "uv": [25, 8]},
+						{"origin": [15, -1, 0], "size": [3, 0, 1], "pivot": [0, -1, 0], "rotation": [0, 27, 0], "uv": [25, 9]},
+						{"origin": [15, -1, 0], "size": [3, 0, 1], "pivot": [0, -1, 0], "rotation": [0, 30, 0], "uv": [25, 10]},
+						{"origin": [15, -1, 0], "size": [3, 0, 1], "pivot": [0, -1, 0], "rotation": [0, 33, 0], "uv": [25, 11]},
+						{"origin": [15, -1, 0], "size": [3, 0, 1], "pivot": [0, -1, 0], "rotation": [0, 36, 0], "uv": [25, 12]},
+						{"origin": [15, -1, 0], "size": [3, 0, 1], "pivot": [0, -1, 0], "rotation": [0, 39, 0], "uv": [25, 13]},
+						{"origin": [15, -1, 0], "size": [3, 0, 1], "pivot": [0, -1, 0], "rotation": [0, 42, 0], "uv": [25, 14]},
+						{"origin": [15, -1, 0], "size": [3, 0, 1], "pivot": [0, -1, 0], "rotation": [0, 45, 0], "uv": [25, 15]}
+					]
+				},
+				{
+					"name": "Ring_Set_18",
+					"parent": "Ring1",
+					"pivot": [0, -1, 0],
+					"rotation": [0, 90, -180],
+					"cubes": [
+						{"origin": [15, -1, 0], "size": [3, 0, 1], "pivot": [0, -1, 0], "rotation": [0, 3, 0], "uv": [25, 1]},
+						{"origin": [15, -1, 0], "size": [3, 0, 1], "pivot": [0, -1, 0], "rotation": [0, 6, 0], "uv": [25, 2]},
+						{"origin": [15, -1, 0], "size": [3, 0, 1], "pivot": [0, -1, 0], "rotation": [0, 9, 0], "uv": [25, 3]},
+						{"origin": [15, -1, 0], "size": [3, 0, 1], "pivot": [0, -1, 0], "rotation": [0, 12, 0], "uv": [25, 4]},
+						{"origin": [15, -1, 0], "size": [3, 0, 1], "pivot": [0, -1, 0], "rotation": [0, 15, 0], "uv": [25, 5]},
+						{"origin": [15, -1, 0], "size": [3, 0, 1], "pivot": [0, -1, 0], "rotation": [0, 18, 0], "uv": [25, 6]},
+						{"origin": [15, -1, 0], "size": [3, 0, 1], "pivot": [0, -1, 0], "rotation": [0, 21, 0], "uv": [25, 7]},
+						{"origin": [15, -1, 0], "size": [3, 0, 1], "pivot": [0, -1, 0], "rotation": [0, 24, 0], "uv": [25, 8]},
+						{"origin": [15, -1, 0], "size": [3, 0, 1], "pivot": [0, -1, 0], "rotation": [0, 27, 0], "uv": [25, 9]},
+						{"origin": [15, -1, 0], "size": [3, 0, 1], "pivot": [0, -1, 0], "rotation": [0, 30, 0], "uv": [25, 10]},
+						{"origin": [15, -1, 0], "size": [3, 0, 1], "pivot": [0, -1, 0], "rotation": [0, 33, 0], "uv": [25, 11]},
+						{"origin": [15, -1, 0], "size": [3, 0, 1], "pivot": [0, -1, 0], "rotation": [0, 36, 0], "uv": [25, 12]},
+						{"origin": [15, -1, 0], "size": [3, 0, 1], "pivot": [0, -1, 0], "rotation": [0, 39, 0], "uv": [25, 13]},
+						{"origin": [15, -1, 0], "size": [3, 0, 1], "pivot": [0, -1, 0], "rotation": [0, 42, 0], "uv": [25, 14]},
+						{"origin": [15, -1, 0], "size": [3, 0, 1], "pivot": [0, -1, 0], "rotation": [0, 45, 0], "uv": [25, 15]}
+					]
+				},
+				{
+					"name": "Ring_Set_19",
+					"parent": "Ring1",
+					"pivot": [0, -1, 0],
+					"rotation": [-180, 0, 0],
+					"cubes": [
+						{"origin": [15, -1, 0], "size": [3, 0, 1], "pivot": [0, -1, 0], "rotation": [0, 3, 0], "uv": [25, 1]},
+						{"origin": [15, -1, 0], "size": [3, 0, 1], "pivot": [0, -1, 0], "rotation": [0, 6, 0], "uv": [25, 2]},
+						{"origin": [15, -1, 0], "size": [3, 0, 1], "pivot": [0, -1, 0], "rotation": [0, 9, 0], "uv": [25, 3]},
+						{"origin": [15, -1, 0], "size": [3, 0, 1], "pivot": [0, -1, 0], "rotation": [0, 12, 0], "uv": [25, 4]},
+						{"origin": [15, -1, 0], "size": [3, 0, 1], "pivot": [0, -1, 0], "rotation": [0, 15, 0], "uv": [25, 5]},
+						{"origin": [15, -1, 0], "size": [3, 0, 1], "pivot": [0, -1, 0], "rotation": [0, 18, 0], "uv": [25, 6]},
+						{"origin": [15, -1, 0], "size": [3, 0, 1], "pivot": [0, -1, 0], "rotation": [0, 21, 0], "uv": [25, 7]},
+						{"origin": [15, -1, 0], "size": [3, 0, 1], "pivot": [0, -1, 0], "rotation": [0, 24, 0], "uv": [25, 8]},
+						{"origin": [15, -1, 0], "size": [3, 0, 1], "pivot": [0, -1, 0], "rotation": [0, 27, 0], "uv": [25, 9]},
+						{"origin": [15, -1, 0], "size": [3, 0, 1], "pivot": [0, -1, 0], "rotation": [0, 30, 0], "uv": [25, 10]},
+						{"origin": [15, -1, 0], "size": [3, 0, 1], "pivot": [0, -1, 0], "rotation": [0, 33, 0], "uv": [25, 11]},
+						{"origin": [15, -1, 0], "size": [3, 0, 1], "pivot": [0, -1, 0], "rotation": [0, 36, 0], "uv": [25, 12]},
+						{"origin": [15, -1, 0], "size": [3, 0, 1], "pivot": [0, -1, 0], "rotation": [0, 39, 0], "uv": [25, 13]},
+						{"origin": [15, -1, 0], "size": [3, 0, 1], "pivot": [0, -1, 0], "rotation": [0, 42, 0], "uv": [25, 14]},
+						{"origin": [15, -1, 0], "size": [3, 0, 1], "pivot": [0, -1, 0], "rotation": [0, 45, 0], "uv": [25, 15]}
+					]
+				},
+				{
+					"name": "Ring_Set_20",
+					"parent": "Ring1",
+					"pivot": [0, -1, 0],
+					"rotation": [0, 90, 0],
+					"cubes": [
+						{"origin": [15, -1, 0], "size": [3, 0, 1], "pivot": [0, -1, 0], "rotation": [0, 3, 0], "uv": [25, 1]},
+						{"origin": [15, -1, 0], "size": [3, 0, 1], "pivot": [0, -1, 0], "rotation": [0, 6, 0], "uv": [25, 2]},
+						{"origin": [15, -1, 0], "size": [3, 0, 1], "pivot": [0, -1, 0], "rotation": [0, 9, 0], "uv": [25, 3]},
+						{"origin": [15, -1, 0], "size": [3, 0, 1], "pivot": [0, -1, 0], "rotation": [0, 12, 0], "uv": [25, 4]},
+						{"origin": [15, -1, 0], "size": [3, 0, 1], "pivot": [0, -1, 0], "rotation": [0, 15, 0], "uv": [25, 5]},
+						{"origin": [15, -1, 0], "size": [3, 0, 1], "pivot": [0, -1, 0], "rotation": [0, 18, 0], "uv": [25, 6]},
+						{"origin": [15, -1, 0], "size": [3, 0, 1], "pivot": [0, -1, 0], "rotation": [0, 21, 0], "uv": [25, 7]},
+						{"origin": [15, -1, 0], "size": [3, 0, 1], "pivot": [0, -1, 0], "rotation": [0, 24, 0], "uv": [25, 8]},
+						{"origin": [15, -1, 0], "size": [3, 0, 1], "pivot": [0, -1, 0], "rotation": [0, 27, 0], "uv": [25, 9]},
+						{"origin": [15, -1, 0], "size": [3, 0, 1], "pivot": [0, -1, 0], "rotation": [0, 30, 0], "uv": [25, 10]},
+						{"origin": [15, -1, 0], "size": [3, 0, 1], "pivot": [0, -1, 0], "rotation": [0, 33, 0], "uv": [25, 11]},
+						{"origin": [15, -1, 0], "size": [3, 0, 1], "pivot": [0, -1, 0], "rotation": [0, 36, 0], "uv": [25, 12]},
+						{"origin": [15, -1, 0], "size": [3, 0, 1], "pivot": [0, -1, 0], "rotation": [0, 39, 0], "uv": [25, 13]},
+						{"origin": [15, -1, 0], "size": [3, 0, 1], "pivot": [0, -1, 0], "rotation": [0, 42, 0], "uv": [25, 14]},
+						{"origin": [15, -1, 0], "size": [3, 0, 1], "pivot": [0, -1, 0], "rotation": [0, 45, 0], "uv": [25, 15]}
+					]
+				},
+				{
+					"name": "Ring_Set_21",
+					"parent": "Ring1",
+					"pivot": [0, -1, 0],
+					"rotation": [0, -90, 0],
+					"cubes": [
+						{"origin": [15, -1, 0], "size": [3, 0, 1], "pivot": [0, -1, 0], "rotation": [0, 3, 0], "uv": [25, 1]},
+						{"origin": [15, -1, 0], "size": [3, 0, 1], "pivot": [0, -1, 0], "rotation": [0, 6, 0], "uv": [25, 2]},
+						{"origin": [15, -1, 0], "size": [3, 0, 1], "pivot": [0, -1, 0], "rotation": [0, 9, 0], "uv": [25, 3]},
+						{"origin": [15, -1, 0], "size": [3, 0, 1], "pivot": [0, -1, 0], "rotation": [0, 12, 0], "uv": [25, 4]},
+						{"origin": [15, -1, 0], "size": [3, 0, 1], "pivot": [0, -1, 0], "rotation": [0, 15, 0], "uv": [25, 5]},
+						{"origin": [15, -1, 0], "size": [3, 0, 1], "pivot": [0, -1, 0], "rotation": [0, 18, 0], "uv": [25, 6]},
+						{"origin": [15, -1, 0], "size": [3, 0, 1], "pivot": [0, -1, 0], "rotation": [0, 21, 0], "uv": [25, 7]},
+						{"origin": [15, -1, 0], "size": [3, 0, 1], "pivot": [0, -1, 0], "rotation": [0, 24, 0], "uv": [25, 8]},
+						{"origin": [15, -1, 0], "size": [3, 0, 1], "pivot": [0, -1, 0], "rotation": [0, 27, 0], "uv": [25, 9]},
+						{"origin": [15, -1, 0], "size": [3, 0, 1], "pivot": [0, -1, 0], "rotation": [0, 30, 0], "uv": [25, 10]},
+						{"origin": [15, -1, 0], "size": [3, 0, 1], "pivot": [0, -1, 0], "rotation": [0, 33, 0], "uv": [25, 11]},
+						{"origin": [15, -1, 0], "size": [3, 0, 1], "pivot": [0, -1, 0], "rotation": [0, 36, 0], "uv": [25, 12]},
+						{"origin": [15, -1, 0], "size": [3, 0, 1], "pivot": [0, -1, 0], "rotation": [0, 39, 0], "uv": [25, 13]},
+						{"origin": [15, -1, 0], "size": [3, 0, 1], "pivot": [0, -1, 0], "rotation": [0, 42, 0], "uv": [25, 14]},
+						{"origin": [15, -1, 0], "size": [3, 0, 1], "pivot": [0, -1, 0], "rotation": [0, 45, 0], "uv": [25, 15]}
+					]
+				},
+				{
+					"name": "Ring_Set_22",
+					"parent": "Ring1",
+					"pivot": [0, -1, 0],
+					"rotation": [0, 0, -180],
+					"cubes": [
+						{"origin": [15, -1, 0], "size": [3, 0, 1], "pivot": [0, -1, 0], "rotation": [0, 3, 0], "uv": [25, 1]},
+						{"origin": [15, -1, 0], "size": [3, 0, 1], "pivot": [0, -1, 0], "rotation": [0, 6, 0], "uv": [25, 2]},
+						{"origin": [15, -1, 0], "size": [3, 0, 1], "pivot": [0, -1, 0], "rotation": [0, 9, 0], "uv": [25, 3]},
+						{"origin": [15, -1, 0], "size": [3, 0, 1], "pivot": [0, -1, 0], "rotation": [0, 12, 0], "uv": [25, 4]},
+						{"origin": [15, -1, 0], "size": [3, 0, 1], "pivot": [0, -1, 0], "rotation": [0, 15, 0], "uv": [25, 5]},
+						{"origin": [15, -1, 0], "size": [3, 0, 1], "pivot": [0, -1, 0], "rotation": [0, 18, 0], "uv": [25, 6]},
+						{"origin": [15, -1, 0], "size": [3, 0, 1], "pivot": [0, -1, 0], "rotation": [0, 21, 0], "uv": [25, 7]},
+						{"origin": [15, -1, 0], "size": [3, 0, 1], "pivot": [0, -1, 0], "rotation": [0, 24, 0], "uv": [25, 8]},
+						{"origin": [15, -1, 0], "size": [3, 0, 1], "pivot": [0, -1, 0], "rotation": [0, 27, 0], "uv": [25, 9]},
+						{"origin": [15, -1, 0], "size": [3, 0, 1], "pivot": [0, -1, 0], "rotation": [0, 30, 0], "uv": [25, 10]},
+						{"origin": [15, -1, 0], "size": [3, 0, 1], "pivot": [0, -1, 0], "rotation": [0, 33, 0], "uv": [25, 11]},
+						{"origin": [15, -1, 0], "size": [3, 0, 1], "pivot": [0, -1, 0], "rotation": [0, 36, 0], "uv": [25, 12]},
+						{"origin": [15, -1, 0], "size": [3, 0, 1], "pivot": [0, -1, 0], "rotation": [0, 39, 0], "uv": [25, 13]},
+						{"origin": [15, -1, 0], "size": [3, 0, 1], "pivot": [0, -1, 0], "rotation": [0, 42, 0], "uv": [25, 14]},
+						{"origin": [15, -1, 0], "size": [3, 0, 1], "pivot": [0, -1, 0], "rotation": [0, 45, 0], "uv": [25, 15]}
+					]
+				},
+				{
+					"name": "Ring_Set_23",
+					"parent": "Ring1",
+					"pivot": [0, -1, 0],
+					"rotation": [0, 180, 0],
+					"cubes": [
+						{"origin": [15, -1, 0], "size": [3, 0, 1], "pivot": [0, -1, 0], "rotation": [0, 3, 0], "uv": [25, 1]},
+						{"origin": [15, -1, 0], "size": [3, 0, 1], "pivot": [0, -1, 0], "rotation": [0, 6, 0], "uv": [25, 2]},
+						{"origin": [15, -1, 0], "size": [3, 0, 1], "pivot": [0, -1, 0], "rotation": [0, 9, 0], "uv": [25, 3]},
+						{"origin": [15, -1, 0], "size": [3, 0, 1], "pivot": [0, -1, 0], "rotation": [0, 12, 0], "uv": [25, 4]},
+						{"origin": [15, -1, 0], "size": [3, 0, 1], "pivot": [0, -1, 0], "rotation": [0, 15, 0], "uv": [25, 5]},
+						{"origin": [15, -1, 0], "size": [3, 0, 1], "pivot": [0, -1, 0], "rotation": [0, 18, 0], "uv": [25, 6]},
+						{"origin": [15, -1, 0], "size": [3, 0, 1], "pivot": [0, -1, 0], "rotation": [0, 21, 0], "uv": [25, 7]},
+						{"origin": [15, -1, 0], "size": [3, 0, 1], "pivot": [0, -1, 0], "rotation": [0, 24, 0], "uv": [25, 8]},
+						{"origin": [15, -1, 0], "size": [3, 0, 1], "pivot": [0, -1, 0], "rotation": [0, 27, 0], "uv": [25, 9]},
+						{"origin": [15, -1, 0], "size": [3, 0, 1], "pivot": [0, -1, 0], "rotation": [0, 30, 0], "uv": [25, 10]},
+						{"origin": [15, -1, 0], "size": [3, 0, 1], "pivot": [0, -1, 0], "rotation": [0, 33, 0], "uv": [25, 11]},
+						{"origin": [15, -1, 0], "size": [3, 0, 1], "pivot": [0, -1, 0], "rotation": [0, 36, 0], "uv": [25, 12]},
+						{"origin": [15, -1, 0], "size": [3, 0, 1], "pivot": [0, -1, 0], "rotation": [0, 39, 0], "uv": [25, 13]},
+						{"origin": [15, -1, 0], "size": [3, 0, 1], "pivot": [0, -1, 0], "rotation": [0, 42, 0], "uv": [25, 14]},
+						{"origin": [15, -1, 0], "size": [3, 0, 1], "pivot": [0, -1, 0], "rotation": [0, 45, 0], "uv": [25, 15]}
+					]
+				},
+				{
+					"name": "Ring_Set_24",
+					"parent": "Ring1",
+					"pivot": [0, -1, 0],
+					"rotation": [0, -90, -180],
+					"cubes": [
+						{"origin": [15, -1, 0], "size": [3, 0, 1], "pivot": [0, -1, 0], "rotation": [0, 3, 0], "uv": [25, 1]},
+						{"origin": [15, -1, 0], "size": [3, 0, 1], "pivot": [0, -1, 0], "rotation": [0, 6, 0], "uv": [25, 2]},
+						{"origin": [15, -1, 0], "size": [3, 0, 1], "pivot": [0, -1, 0], "rotation": [0, 9, 0], "uv": [25, 3]},
+						{"origin": [15, -1, 0], "size": [3, 0, 1], "pivot": [0, -1, 0], "rotation": [0, 12, 0], "uv": [25, 4]},
+						{"origin": [15, -1, 0], "size": [3, 0, 1], "pivot": [0, -1, 0], "rotation": [0, 15, 0], "uv": [25, 5]},
+						{"origin": [15, -1, 0], "size": [3, 0, 1], "pivot": [0, -1, 0], "rotation": [0, 18, 0], "uv": [25, 6]},
+						{"origin": [15, -1, 0], "size": [3, 0, 1], "pivot": [0, -1, 0], "rotation": [0, 21, 0], "uv": [25, 7]},
+						{"origin": [15, -1, 0], "size": [3, 0, 1], "pivot": [0, -1, 0], "rotation": [0, 24, 0], "uv": [25, 8]},
+						{"origin": [15, -1, 0], "size": [3, 0, 1], "pivot": [0, -1, 0], "rotation": [0, 27, 0], "uv": [25, 9]},
+						{"origin": [15, -1, 0], "size": [3, 0, 1], "pivot": [0, -1, 0], "rotation": [0, 30, 0], "uv": [25, 10]},
+						{"origin": [15, -1, 0], "size": [3, 0, 1], "pivot": [0, -1, 0], "rotation": [0, 33, 0], "uv": [25, 11]},
+						{"origin": [15, -1, 0], "size": [3, 0, 1], "pivot": [0, -1, 0], "rotation": [0, 36, 0], "uv": [25, 12]},
+						{"origin": [15, -1, 0], "size": [3, 0, 1], "pivot": [0, -1, 0], "rotation": [0, 39, 0], "uv": [25, 13]},
+						{"origin": [15, -1, 0], "size": [3, 0, 1], "pivot": [0, -1, 0], "rotation": [0, 42, 0], "uv": [25, 14]},
+						{"origin": [15, -1, 0], "size": [3, 0, 1], "pivot": [0, -1, 0], "rotation": [0, 45, 0], "uv": [25, 15]}
+					]
+				},
+				{
+					"name": "Ring2",
+					"parent": "body",
+					"pivot": [0, 17, 0]
+				},
+				{
+					"name": "Ring_Set_2",
+					"parent": "Ring2",
+					"pivot": [0, 17, 0],
+					"cubes": [
+						{"origin": [15, 17, 0], "size": [3, 0, 1], "pivot": [0, 17, 0], "rotation": [0, 3, 0], "uv": [25, 1]},
+						{"origin": [15, 17, 0], "size": [3, 0, 1], "pivot": [0, 17, 0], "rotation": [0, 6, 0], "uv": [25, 2]},
+						{"origin": [15, 17, 0], "size": [3, 0, 1], "pivot": [0, 17, 0], "rotation": [0, 9, 0], "uv": [25, 3]},
+						{"origin": [15, 17, 0], "size": [3, 0, 1], "pivot": [0, 17, 0], "rotation": [0, 12, 0], "uv": [25, 4]},
+						{"origin": [15, 17, 0], "size": [3, 0, 1], "pivot": [0, 17, 0], "rotation": [0, 15, 0], "uv": [25, 5]},
+						{"origin": [15, 17, 0], "size": [3, 0, 1], "pivot": [0, 17, 0], "rotation": [0, 18, 0], "uv": [25, 6]},
+						{"origin": [15, 17, 0], "size": [3, 0, 1], "pivot": [0, 17, 0], "rotation": [0, 21, 0], "uv": [25, 7]},
+						{"origin": [15, 17, 0], "size": [3, 0, 1], "pivot": [0, 17, 0], "rotation": [0, 24, 0], "uv": [25, 8]},
+						{"origin": [15, 17, 0], "size": [3, 0, 1], "pivot": [0, 17, 0], "rotation": [0, 27, 0], "uv": [25, 9]},
+						{"origin": [15, 17, 0], "size": [3, 0, 1], "pivot": [0, 17, 0], "rotation": [0, 30, 0], "uv": [25, 10]},
+						{"origin": [15, 17, 0], "size": [3, 0, 1], "pivot": [0, 17, 0], "rotation": [0, 33, 0], "uv": [25, 11]},
+						{"origin": [15, 17, 0], "size": [3, 0, 1], "pivot": [0, 17, 0], "rotation": [0, 36, 0], "uv": [25, 12]},
+						{"origin": [15, 17, 0], "size": [3, 0, 1], "pivot": [0, 17, 0], "rotation": [0, 39, 0], "uv": [25, 13]},
+						{"origin": [15, 17, 0], "size": [3, 0, 1], "pivot": [0, 17, 0], "rotation": [0, 42, 0], "uv": [25, 14]},
+						{"origin": [15, 17, 0], "size": [3, 0, 1], "pivot": [0, 17, 0], "rotation": [0, 45, 0], "uv": [25, 15]}
+					]
+				},
+				{
+					"name": "Ring_Set_3",
+					"parent": "Ring2",
+					"pivot": [0, 17, 0],
+					"rotation": [0, 90, -180],
+					"cubes": [
+						{"origin": [15, 17, 0], "size": [3, 0, 1], "pivot": [0, 17, 0], "rotation": [0, 3, 0], "uv": [25, 1]},
+						{"origin": [15, 17, 0], "size": [3, 0, 1], "pivot": [0, 17, 0], "rotation": [0, 6, 0], "uv": [25, 2]},
+						{"origin": [15, 17, 0], "size": [3, 0, 1], "pivot": [0, 17, 0], "rotation": [0, 9, 0], "uv": [25, 3]},
+						{"origin": [15, 17, 0], "size": [3, 0, 1], "pivot": [0, 17, 0], "rotation": [0, 12, 0], "uv": [25, 4]},
+						{"origin": [15, 17, 0], "size": [3, 0, 1], "pivot": [0, 17, 0], "rotation": [0, 15, 0], "uv": [25, 5]},
+						{"origin": [15, 17, 0], "size": [3, 0, 1], "pivot": [0, 17, 0], "rotation": [0, 18, 0], "uv": [25, 6]},
+						{"origin": [15, 17, 0], "size": [3, 0, 1], "pivot": [0, 17, 0], "rotation": [0, 21, 0], "uv": [25, 7]},
+						{"origin": [15, 17, 0], "size": [3, 0, 1], "pivot": [0, 17, 0], "rotation": [0, 24, 0], "uv": [25, 8]},
+						{"origin": [15, 17, 0], "size": [3, 0, 1], "pivot": [0, 17, 0], "rotation": [0, 27, 0], "uv": [25, 9]},
+						{"origin": [15, 17, 0], "size": [3, 0, 1], "pivot": [0, 17, 0], "rotation": [0, 30, 0], "uv": [25, 10]},
+						{"origin": [15, 17, 0], "size": [3, 0, 1], "pivot": [0, 17, 0], "rotation": [0, 33, 0], "uv": [25, 11]},
+						{"origin": [15, 17, 0], "size": [3, 0, 1], "pivot": [0, 17, 0], "rotation": [0, 36, 0], "uv": [25, 12]},
+						{"origin": [15, 17, 0], "size": [3, 0, 1], "pivot": [0, 17, 0], "rotation": [0, 39, 0], "uv": [25, 13]},
+						{"origin": [15, 17, 0], "size": [3, 0, 1], "pivot": [0, 17, 0], "rotation": [0, 42, 0], "uv": [25, 14]},
+						{"origin": [15, 17, 0], "size": [3, 0, 1], "pivot": [0, 17, 0], "rotation": [0, 45, 0], "uv": [25, 15]}
+					]
+				},
+				{
+					"name": "Ring_Set_4",
+					"parent": "Ring2",
+					"pivot": [0, 17, 0],
+					"rotation": [-180, 0, 0],
+					"cubes": [
+						{"origin": [15, 17, 0], "size": [3, 0, 1], "pivot": [0, 17, 0], "rotation": [0, 3, 0], "uv": [25, 1]},
+						{"origin": [15, 17, 0], "size": [3, 0, 1], "pivot": [0, 17, 0], "rotation": [0, 6, 0], "uv": [25, 2]},
+						{"origin": [15, 17, 0], "size": [3, 0, 1], "pivot": [0, 17, 0], "rotation": [0, 9, 0], "uv": [25, 3]},
+						{"origin": [15, 17, 0], "size": [3, 0, 1], "pivot": [0, 17, 0], "rotation": [0, 12, 0], "uv": [25, 4]},
+						{"origin": [15, 17, 0], "size": [3, 0, 1], "pivot": [0, 17, 0], "rotation": [0, 15, 0], "uv": [25, 5]},
+						{"origin": [15, 17, 0], "size": [3, 0, 1], "pivot": [0, 17, 0], "rotation": [0, 18, 0], "uv": [25, 6]},
+						{"origin": [15, 17, 0], "size": [3, 0, 1], "pivot": [0, 17, 0], "rotation": [0, 21, 0], "uv": [25, 7]},
+						{"origin": [15, 17, 0], "size": [3, 0, 1], "pivot": [0, 17, 0], "rotation": [0, 24, 0], "uv": [25, 8]},
+						{"origin": [15, 17, 0], "size": [3, 0, 1], "pivot": [0, 17, 0], "rotation": [0, 27, 0], "uv": [25, 9]},
+						{"origin": [15, 17, 0], "size": [3, 0, 1], "pivot": [0, 17, 0], "rotation": [0, 30, 0], "uv": [25, 10]},
+						{"origin": [15, 17, 0], "size": [3, 0, 1], "pivot": [0, 17, 0], "rotation": [0, 33, 0], "uv": [25, 11]},
+						{"origin": [15, 17, 0], "size": [3, 0, 1], "pivot": [0, 17, 0], "rotation": [0, 36, 0], "uv": [25, 12]},
+						{"origin": [15, 17, 0], "size": [3, 0, 1], "pivot": [0, 17, 0], "rotation": [0, 39, 0], "uv": [25, 13]},
+						{"origin": [15, 17, 0], "size": [3, 0, 1], "pivot": [0, 17, 0], "rotation": [0, 42, 0], "uv": [25, 14]},
+						{"origin": [15, 17, 0], "size": [3, 0, 1], "pivot": [0, 17, 0], "rotation": [0, 45, 0], "uv": [25, 15]}
+					]
+				},
+				{
+					"name": "Ring_Set_5",
+					"parent": "Ring2",
+					"pivot": [0, 17, 0],
+					"rotation": [0, 90, 0],
+					"cubes": [
+						{"origin": [15, 17, 0], "size": [3, 0, 1], "pivot": [0, 17, 0], "rotation": [0, 3, 0], "uv": [25, 1]},
+						{"origin": [15, 17, 0], "size": [3, 0, 1], "pivot": [0, 17, 0], "rotation": [0, 6, 0], "uv": [25, 2]},
+						{"origin": [15, 17, 0], "size": [3, 0, 1], "pivot": [0, 17, 0], "rotation": [0, 9, 0], "uv": [25, 3]},
+						{"origin": [15, 17, 0], "size": [3, 0, 1], "pivot": [0, 17, 0], "rotation": [0, 12, 0], "uv": [25, 4]},
+						{"origin": [15, 17, 0], "size": [3, 0, 1], "pivot": [0, 17, 0], "rotation": [0, 15, 0], "uv": [25, 5]},
+						{"origin": [15, 17, 0], "size": [3, 0, 1], "pivot": [0, 17, 0], "rotation": [0, 18, 0], "uv": [25, 6]},
+						{"origin": [15, 17, 0], "size": [3, 0, 1], "pivot": [0, 17, 0], "rotation": [0, 21, 0], "uv": [25, 7]},
+						{"origin": [15, 17, 0], "size": [3, 0, 1], "pivot": [0, 17, 0], "rotation": [0, 24, 0], "uv": [25, 8]},
+						{"origin": [15, 17, 0], "size": [3, 0, 1], "pivot": [0, 17, 0], "rotation": [0, 27, 0], "uv": [25, 9]},
+						{"origin": [15, 17, 0], "size": [3, 0, 1], "pivot": [0, 17, 0], "rotation": [0, 30, 0], "uv": [25, 10]},
+						{"origin": [15, 17, 0], "size": [3, 0, 1], "pivot": [0, 17, 0], "rotation": [0, 33, 0], "uv": [25, 11]},
+						{"origin": [15, 17, 0], "size": [3, 0, 1], "pivot": [0, 17, 0], "rotation": [0, 36, 0], "uv": [25, 12]},
+						{"origin": [15, 17, 0], "size": [3, 0, 1], "pivot": [0, 17, 0], "rotation": [0, 39, 0], "uv": [25, 13]},
+						{"origin": [15, 17, 0], "size": [3, 0, 1], "pivot": [0, 17, 0], "rotation": [0, 42, 0], "uv": [25, 14]},
+						{"origin": [15, 17, 0], "size": [3, 0, 1], "pivot": [0, 17, 0], "rotation": [0, 45, 0], "uv": [25, 15]}
+					]
+				},
+				{
+					"name": "Ring_Set_6",
+					"parent": "Ring2",
+					"pivot": [0, 17, 0],
+					"rotation": [0, -90, 0],
+					"cubes": [
+						{"origin": [15, 17, 0], "size": [3, 0, 1], "pivot": [0, 17, 0], "rotation": [0, 3, 0], "uv": [25, 1]},
+						{"origin": [15, 17, 0], "size": [3, 0, 1], "pivot": [0, 17, 0], "rotation": [0, 6, 0], "uv": [25, 2]},
+						{"origin": [15, 17, 0], "size": [3, 0, 1], "pivot": [0, 17, 0], "rotation": [0, 9, 0], "uv": [25, 3]},
+						{"origin": [15, 17, 0], "size": [3, 0, 1], "pivot": [0, 17, 0], "rotation": [0, 12, 0], "uv": [25, 4]},
+						{"origin": [15, 17, 0], "size": [3, 0, 1], "pivot": [0, 17, 0], "rotation": [0, 15, 0], "uv": [25, 5]},
+						{"origin": [15, 17, 0], "size": [3, 0, 1], "pivot": [0, 17, 0], "rotation": [0, 18, 0], "uv": [25, 6]},
+						{"origin": [15, 17, 0], "size": [3, 0, 1], "pivot": [0, 17, 0], "rotation": [0, 21, 0], "uv": [25, 7]},
+						{"origin": [15, 17, 0], "size": [3, 0, 1], "pivot": [0, 17, 0], "rotation": [0, 24, 0], "uv": [25, 8]},
+						{"origin": [15, 17, 0], "size": [3, 0, 1], "pivot": [0, 17, 0], "rotation": [0, 27, 0], "uv": [25, 9]},
+						{"origin": [15, 17, 0], "size": [3, 0, 1], "pivot": [0, 17, 0], "rotation": [0, 30, 0], "uv": [25, 10]},
+						{"origin": [15, 17, 0], "size": [3, 0, 1], "pivot": [0, 17, 0], "rotation": [0, 33, 0], "uv": [25, 11]},
+						{"origin": [15, 17, 0], "size": [3, 0, 1], "pivot": [0, 17, 0], "rotation": [0, 36, 0], "uv": [25, 12]},
+						{"origin": [15, 17, 0], "size": [3, 0, 1], "pivot": [0, 17, 0], "rotation": [0, 39, 0], "uv": [25, 13]},
+						{"origin": [15, 17, 0], "size": [3, 0, 1], "pivot": [0, 17, 0], "rotation": [0, 42, 0], "uv": [25, 14]},
+						{"origin": [15, 17, 0], "size": [3, 0, 1], "pivot": [0, 17, 0], "rotation": [0, 45, 0], "uv": [25, 15]}
+					]
+				},
+				{
+					"name": "Ring_Set_7",
+					"parent": "Ring2",
+					"pivot": [0, 17, 0],
+					"rotation": [0, 0, -180],
+					"cubes": [
+						{"origin": [15, 17, 0], "size": [3, 0, 1], "pivot": [0, 17, 0], "rotation": [0, 3, 0], "uv": [25, 1]},
+						{"origin": [15, 17, 0], "size": [3, 0, 1], "pivot": [0, 17, 0], "rotation": [0, 6, 0], "uv": [25, 2]},
+						{"origin": [15, 17, 0], "size": [3, 0, 1], "pivot": [0, 17, 0], "rotation": [0, 9, 0], "uv": [25, 3]},
+						{"origin": [15, 17, 0], "size": [3, 0, 1], "pivot": [0, 17, 0], "rotation": [0, 12, 0], "uv": [25, 4]},
+						{"origin": [15, 17, 0], "size": [3, 0, 1], "pivot": [0, 17, 0], "rotation": [0, 15, 0], "uv": [25, 5]},
+						{"origin": [15, 17, 0], "size": [3, 0, 1], "pivot": [0, 17, 0], "rotation": [0, 18, 0], "uv": [25, 6]},
+						{"origin": [15, 17, 0], "size": [3, 0, 1], "pivot": [0, 17, 0], "rotation": [0, 21, 0], "uv": [25, 7]},
+						{"origin": [15, 17, 0], "size": [3, 0, 1], "pivot": [0, 17, 0], "rotation": [0, 24, 0], "uv": [25, 8]},
+						{"origin": [15, 17, 0], "size": [3, 0, 1], "pivot": [0, 17, 0], "rotation": [0, 27, 0], "uv": [25, 9]},
+						{"origin": [15, 17, 0], "size": [3, 0, 1], "pivot": [0, 17, 0], "rotation": [0, 30, 0], "uv": [25, 10]},
+						{"origin": [15, 17, 0], "size": [3, 0, 1], "pivot": [0, 17, 0], "rotation": [0, 33, 0], "uv": [25, 11]},
+						{"origin": [15, 17, 0], "size": [3, 0, 1], "pivot": [0, 17, 0], "rotation": [0, 36, 0], "uv": [25, 12]},
+						{"origin": [15, 17, 0], "size": [3, 0, 1], "pivot": [0, 17, 0], "rotation": [0, 39, 0], "uv": [25, 13]},
+						{"origin": [15, 17, 0], "size": [3, 0, 1], "pivot": [0, 17, 0], "rotation": [0, 42, 0], "uv": [25, 14]},
+						{"origin": [15, 17, 0], "size": [3, 0, 1], "pivot": [0, 17, 0], "rotation": [0, 45, 0], "uv": [25, 15]}
+					]
+				},
+				{
+					"name": "Ring_Set_8",
+					"parent": "Ring2",
+					"pivot": [0, 17, 0],
+					"rotation": [0, 180, 0],
+					"cubes": [
+						{"origin": [15, 17, 0], "size": [3, 0, 1], "pivot": [0, 17, 0], "rotation": [0, 3, 0], "uv": [25, 1]},
+						{"origin": [15, 17, 0], "size": [3, 0, 1], "pivot": [0, 17, 0], "rotation": [0, 6, 0], "uv": [25, 2]},
+						{"origin": [15, 17, 0], "size": [3, 0, 1], "pivot": [0, 17, 0], "rotation": [0, 9, 0], "uv": [25, 3]},
+						{"origin": [15, 17, 0], "size": [3, 0, 1], "pivot": [0, 17, 0], "rotation": [0, 12, 0], "uv": [25, 4]},
+						{"origin": [15, 17, 0], "size": [3, 0, 1], "pivot": [0, 17, 0], "rotation": [0, 15, 0], "uv": [25, 5]},
+						{"origin": [15, 17, 0], "size": [3, 0, 1], "pivot": [0, 17, 0], "rotation": [0, 18, 0], "uv": [25, 6]},
+						{"origin": [15, 17, 0], "size": [3, 0, 1], "pivot": [0, 17, 0], "rotation": [0, 21, 0], "uv": [25, 7]},
+						{"origin": [15, 17, 0], "size": [3, 0, 1], "pivot": [0, 17, 0], "rotation": [0, 24, 0], "uv": [25, 8]},
+						{"origin": [15, 17, 0], "size": [3, 0, 1], "pivot": [0, 17, 0], "rotation": [0, 27, 0], "uv": [25, 9]},
+						{"origin": [15, 17, 0], "size": [3, 0, 1], "pivot": [0, 17, 0], "rotation": [0, 30, 0], "uv": [25, 10]},
+						{"origin": [15, 17, 0], "size": [3, 0, 1], "pivot": [0, 17, 0], "rotation": [0, 33, 0], "uv": [25, 11]},
+						{"origin": [15, 17, 0], "size": [3, 0, 1], "pivot": [0, 17, 0], "rotation": [0, 36, 0], "uv": [25, 12]},
+						{"origin": [15, 17, 0], "size": [3, 0, 1], "pivot": [0, 17, 0], "rotation": [0, 39, 0], "uv": [25, 13]},
+						{"origin": [15, 17, 0], "size": [3, 0, 1], "pivot": [0, 17, 0], "rotation": [0, 42, 0], "uv": [25, 14]},
+						{"origin": [15, 17, 0], "size": [3, 0, 1], "pivot": [0, 17, 0], "rotation": [0, 45, 0], "uv": [25, 15]}
+					]
+				},
+				{
+					"name": "Ring_Set_9",
+					"parent": "Ring2",
+					"pivot": [0, 17, 0],
+					"rotation": [0, -90, -180],
+					"cubes": [
+						{"origin": [15, 17, 0], "size": [3, 0, 1], "pivot": [0, 17, 0], "rotation": [0, 3, 0], "uv": [25, 1]},
+						{"origin": [15, 17, 0], "size": [3, 0, 1], "pivot": [0, 17, 0], "rotation": [0, 6, 0], "uv": [25, 2]},
+						{"origin": [15, 17, 0], "size": [3, 0, 1], "pivot": [0, 17, 0], "rotation": [0, 9, 0], "uv": [25, 3]},
+						{"origin": [15, 17, 0], "size": [3, 0, 1], "pivot": [0, 17, 0], "rotation": [0, 12, 0], "uv": [25, 4]},
+						{"origin": [15, 17, 0], "size": [3, 0, 1], "pivot": [0, 17, 0], "rotation": [0, 15, 0], "uv": [25, 5]},
+						{"origin": [15, 17, 0], "size": [3, 0, 1], "pivot": [0, 17, 0], "rotation": [0, 18, 0], "uv": [25, 6]},
+						{"origin": [15, 17, 0], "size": [3, 0, 1], "pivot": [0, 17, 0], "rotation": [0, 21, 0], "uv": [25, 7]},
+						{"origin": [15, 17, 0], "size": [3, 0, 1], "pivot": [0, 17, 0], "rotation": [0, 24, 0], "uv": [25, 8]},
+						{"origin": [15, 17, 0], "size": [3, 0, 1], "pivot": [0, 17, 0], "rotation": [0, 27, 0], "uv": [25, 9]},
+						{"origin": [15, 17, 0], "size": [3, 0, 1], "pivot": [0, 17, 0], "rotation": [0, 30, 0], "uv": [25, 10]},
+						{"origin": [15, 17, 0], "size": [3, 0, 1], "pivot": [0, 17, 0], "rotation": [0, 33, 0], "uv": [25, 11]},
+						{"origin": [15, 17, 0], "size": [3, 0, 1], "pivot": [0, 17, 0], "rotation": [0, 36, 0], "uv": [25, 12]},
+						{"origin": [15, 17, 0], "size": [3, 0, 1], "pivot": [0, 17, 0], "rotation": [0, 39, 0], "uv": [25, 13]},
+						{"origin": [15, 17, 0], "size": [3, 0, 1], "pivot": [0, 17, 0], "rotation": [0, 42, 0], "uv": [25, 14]},
+						{"origin": [15, 17, 0], "size": [3, 0, 1], "pivot": [0, 17, 0], "rotation": [0, 45, 0], "uv": [25, 15]}
+					]
+				}
+			]
+		}
+	]
+}

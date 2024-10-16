@@ -26,6 +26,7 @@ public class ActionRegistry extends CustomAkomiRegistry<Action> {
         HelixAAssembly.init();
         HelixBAssembly.init();
         SpawnerAAssembly.init();
+        RocketAAssembly.init();
         super.registerTo(bus);
     }
 
@@ -69,6 +70,8 @@ public class ActionRegistry extends CustomAkomiRegistry<Action> {
     public static class ShurikenAssembly {
         //public static final Supplier<Action> RANDOM_SPIN_BASE = (Math.random() <= 0.5) ?
         public static final Supplier<Action> SPIN_UP = INSTANCE.register("shuriken_assembly_spin_base", () -> new Action(RawAnimation.begin().thenPlay("animation.four_rod.Shuriken_A_0"), 20, false));
+        public static final Supplier<Action> ASSEMBLY = INSTANCE.register("shuriken_assembly_assembly", () -> new Action(RawAnimation.begin().thenPlay("animation.four_rod.Shuriken_A_assembly"), 40, false));
+
 
         public static void init() {
         }
@@ -104,6 +107,15 @@ public class ActionRegistry extends CustomAkomiRegistry<Action> {
         public static final Supplier<Action> CLOSED_BASE = INSTANCE.register("spawner_a_closed_base", () -> new Action(RawAnimation.begin().thenPlay("animation.spawner_a_closed"), 10, false));
         public static final Supplier<Action> SPAWNING_BASE = INSTANCE.register("spawner_a_spawning_base", () -> new Action(RawAnimation.begin().thenPlay("animation.spawner_a_spawning"), 10, false));
         public static final Supplier<Action> ASSEMBLY = INSTANCE.register("spawner_a_assembly", () -> new Action(RawAnimation.begin().thenPlay("animation.spawner_a_assembly"), 40, false));
+
+        public static void init() {
+        }
+    }
+
+    public static class RocketAAssembly {
+        public static final Supplier<Action> IDLE_BASE = INSTANCE.register("rocket_a_idle_base", () -> new Action(RawAnimation.begin().thenPlay("animation.rocket_a_idle"), 20, false));
+        public static final Supplier<Action> FLY_BASE = INSTANCE.register("rocket_a_fly_base", () -> new Action(RawAnimation.begin().thenPlay("animation.rocket_a_shooting"), 20, false));
+        public static final Supplier<Action> ASSEMBLY = INSTANCE.register("rocket_a_assembly", () -> new Action(RawAnimation.begin().thenPlay("animation.rocket_a_assembly"), 50, false));
 
         public static void init() {
         }

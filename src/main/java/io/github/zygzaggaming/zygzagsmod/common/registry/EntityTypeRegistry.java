@@ -152,6 +152,14 @@ public class EntityTypeRegistry extends AkomiRegistry<EntityType<?>> {
                     .sized(1.3f, 4f)
                     .build("spawner_assembly_a")
     );
+
+    public static final Supplier<EntityType<RocketAAssembly>> ROCKET_ASSEMBLY_A = INSTANCE.register(
+            "rocket_assembly_a",
+            () -> EntityType.Builder.<RocketAAssembly>of((type, level) -> new RocketAAssembly(type, level, 12, 30), MobCategory.MISC)
+                    .fireImmune()
+                    .sized(4.2f, 1.5f)
+                    .build("rocket_assembly_a")
+    );
     public EntityTypeRegistry(DeferredRegister<EntityType<?>> register) {
         super(register);
     }

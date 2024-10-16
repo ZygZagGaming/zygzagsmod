@@ -40,6 +40,7 @@ public class ClientModEventHandler {
         event.registerEntityRenderer(EntityTypeRegistry.HELIX_ASSEMBLY_A.get(), HelixAAssemblyRenderer::new);
         event.registerEntityRenderer(EntityTypeRegistry.HELIX_ASSEMBLY_B.get(), HelixBAssemblyRenderer::new);
         event.registerEntityRenderer(EntityTypeRegistry.SPAWNER_ASSEMBLY_A.get(), SpawnerAAssemblyRenderer::new);
+        event.registerEntityRenderer(EntityTypeRegistry.ROCKET_ASSEMBLY_A.get(), RocketAAssemblyRenderer::new);
         event.registerBlockEntityRenderer(BlockItemEntityRegistry.SUSPICIOUS_END_SAND.getBlockEntityType(), CustomBrushableBlockRenderer::new);
         event.registerBlockEntityRenderer(BlockItemEntityRegistry.RED_NETHER_BRICK_CACHE.getBlockEntityType(), CacheRenderer::new);
     }
